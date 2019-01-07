@@ -1,0 +1,170 @@
+---
+title: "Imageability_Analysis"
+author: "Jason Zhou"
+date: "11 July 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+
+setwd('C:/Users/jasonz1/Documents/R/image-analysis')
+
+dataset <- read.csv("imageability.csv", na.strings = " NA")
+dataset$recog_rating <- as.factor(dataset$recog_rating) #Confidence Ratings are Discrete
+
+# Set up all the different dataset subsets
+
+#Group Level
+# No Recognition Foils 
+dataset.no.na <- dataset[dataset$type!=' FOIL', ]
+
+# Stimulus only, conditioned on imageability+concreteness ratings
+dataset.low <- dataset.no.na[dataset.no.na$condition == ' LOW', ]
+dataset.high <- dataset.no.na[dataset.no.na$condition == ' HIGH', ]
+
+
+#Individual Level
+#participants = c("p1","p3","p5") 
+#for (i in participants){
+#sprintf("%s_%s.csv",i)
+#  }
+
+dataset.p1 <- dataset[dataset$participant=='p1', ]
+dataset.p2 <- dataset[dataset$participant=='p2', ]
+dataset.p3 <- dataset[dataset$participant=='p3', ]
+dataset.p4 <- dataset.no.na[dataset.no.na$participant=='p4', ]
+dataset.p5 <- dataset.no.na[dataset.no.na$participant=='p5', ]
+
+
+#recognition ratings
+dataset.recog_1 <- dataset.no.na[dataset.no.na$recog_rating==1, ]
+dataset.recog_2 <- dataset.no.na[dataset.no.na$recog_rating==2, ]
+dataset.recog_3 <- dataset.no.na[dataset.no.na$recog_rating==3, ]
+dataset.recog_4 <- dataset.no.na[dataset.no.na$recog_rating==4, ]
+dataset.recog_5 <- dataset.no.na[dataset.no.na$recog_rating==5, ]
+dataset.recog_6 <- dataset.no.na[dataset.no.na$recog_rating==6, ]
+
+#cumulative recognition ratings
+dataset.2inc <- 
+  rbind(dataset.recog_2,dataset.recog_3,dataset.recog_4,dataset.recog_5,
+        dataset.recog_6)
+dataset.3inc <- 
+  rbind(dataset.recog_3,dataset.recog_4,dataset.recog_5,dataset.recog_6)
+dataset.4inc <- 
+  rbind(dataset.recog_4,dataset.recog_5,dataset.recog_6)
+dataset.5inc <- 
+  rbind(dataset.recog_5,dataset.recog_6)
+
+#Conditions
+dataset.6.low <- dataset.recog_6[dataset.recog_6$condition == ' LOW', ]
+dataset.6.high <- dataset.recog_6[dataset.recog_6$condition == ' HIGH', ]
+```
+
+```{r}
+# Now, do all the basic boi descriptives
+
+# Recognition Confidence Ratings Across Conditions
+all_conditions.ratings <- ggplot(dataset, aes(x = recog_rating)) + geom_bar() +   facet_wrap(~dataset$condition + type)
+ 
+across_conditions.ratings <- ggplot(dataset.no.na, aes(x = recog_rating)) + geom_bar() + facet_wrap(~dataset.no.na$condition)
+
+
+cond.ratings.p4 <- ggplot(dataset.p4, aes(x = recog_rating)) + geom_bar() +   facet_wrap(~dataset.p4$condition)
+
+cond.ratings.p5 <- ggplot(dataset.p5, aes(x = recog_rating)) + geom_bar() +   facet_wrap(~dataset.p5$condition)
+
+# Recognition RTs conditioned on Recognition Ratings
+rt.by.rating.plot <- 
+  ggplot(dataset.no.na, 
+         aes(group=recog_rating, x=recog_rating, y=recog_RT)) + 
+     geom_violin() + geom_jitter(alpha=0.1)
+
+cond.rt.by.rating.plot<- 
+     ggplot(dataset.no.na, 
+            aes(group=recog_rating, x=recog_rating, y=recog_RT)) + 
+     geom_violin() + geom_jitter(alpha=0.1) + facet_wrap(~dataset.no.na$condition)
+
+
+# RT Density Plots
+rt.density <- ggplot(dataset.no.na, aes(x = recog_RT)) + geom_density() + facet_wrap(~dataset.no.na$condition)
+
+# Source Memory Response Error conditioned on Recognition Confidence Rating
+
+
+source_error.by.rating <-
+  ggplot(dataset.no.na, 
+         aes(group=recog_rating, x=recog_rating, y=abs(response_error))) + 
+     geom_violin() 
+
+source_error.by.rating.by.p <-
+  ggplot(dataset.no.na, 
+         aes(group=recog_rating, x=recog_rating, y=abs(response_error))) + 
+     geom_violin() + facet_wrap(~dataset.no.na$participant)
+
+
+cond.source_error.by.rating <-
+  ggplot(dataset.no.na, 
+         aes(group=recog_rating, x=recog_rating, y=abs(response_error))) + 
+     geom_violin() + facet_wrap(~dataset.no.na$condition)
+
+
+
+
+#Sort by Participant
+
+cond.source_error.by.rating.by.p <-
+  ggplot(dataset.no.na, 
+         aes(group=recog_rating, x=recog_rating, y=abs(response_error))) + 
+     geom_violin() + facet_wrap(dataset.no.na$participant~dataset.no.na$condition)
+
+cond.source_error.p4 <-
+  ggplot(dataset.p4, 
+         aes(group=recog_rating, x=recog_rating, y=abs(response_error))) + 
+     geom_violin() + facet_wrap(~dataset.p4$condition)
+
+cond.source_error.p5 <-
+  ggplot(dataset.p5, 
+         aes(group=recog_rating, x=recog_rating, y=abs(response_error))) + 
+     geom_violin() + facet_wrap(~dataset.p5$condition)
+
+```
+```{r, echo=FALSE}
+#Source Histograms
+all_ratings.error.hist <- 
+  ggplot (data=dataset.no.na, aes(dataset.no.na$response_error)) +   geom_histogram(bins=100)
+
+recog_rating_2_6.error.hist <- ggplot (data=dataset.2inc, aes(dataset.2inc$response_error)) +   geom_histogram(bins=100)
+
+recog_rating_3_6.error.hist <- ggplot (data=dataset.3inc, aes(dataset.3inc$response_error)) +   geom_histogram(bins=100)
+
+recog_rating_4_6.error.hist <- ggplot (data=dataset.4inc, aes(dataset.4inc$response_error)) +   geom_histogram(bins=100)
+
+recog_rating_5_6.error.hist <- ggplot (data=dataset.5inc, aes(dataset.5inc$response_error)) +   geom_histogram(bins=100)
+
+recog_rating_6.error.hist <- ggplot (data=dataset.recog_6, aes(dataset.recog_6$response_error)) +   geom_histogram(bins=100)
+
+
+```
+## Plots
+
+```{r, echo=FALSE}
+
+ggsave(all_conditions.ratings, filename= (sprintf("%s_all_conditions_ratings.png",subjects[[s]])))
+ggsave(across_conditions.ratings, filename= (sprintf("%s_across_conditions_ratings.png",subjects[[s]])))
+ggsave(rt.by.rating.plot, filename= (sprintf("%s_rt_by_rating.png",subjects[[s]])))
+ggsave(rt.density, filename= (sprintf("%s_rt_density.png",subjects[[s]])))
+ggsave(cond.source_error.by.rating, filename= (sprintf("%s_cond_source_error.png",subjects[[s]])))
+
+all_conditions.ratings
+across_conditions.ratings
+rt.density
+rt.by.rating.plot
+cond.rt.by.rating.plot
+source_error.by.rating
+cond.source_error.by.rating
+```

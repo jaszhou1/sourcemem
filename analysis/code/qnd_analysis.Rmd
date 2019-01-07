@@ -1,0 +1,60 @@
+---
+title: "Imageability_Analysis"
+author: "Jason Zhou"
+date: "11 July 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+
+setwd('C:/Users/jasonz1/Documents/R/image-analysis')
+
+dataset <- read.csv("imageability.csv", na.strings = " NA")
+dataset$recog_rating <- as.factor(dataset$recog_rating) #Confidence Ratings are Discrete
+
+# Set up all the different dataset subsets
+
+#Group Level
+# No Recognition Foils 
+dataset.no.na <- dataset[dataset$type!=' FOIL', ]
+
+# Stimulus only, conditioned on imageability+concreteness ratings
+dataset.low <- dataset.no.na[dataset.no.na$condition == ' LOW', ]
+dataset.high <- dataset.no.na[dataset.no.na$condition == ' HIGH', ]
+
+
+#Individual Level
+#participants = c("p1","p3","p5") 
+#for (i in participants){
+#sprintf("%s_%s.csv",i)
+#  }
+
+dataset.p1 <- dataset[dataset$participant=='p1', ]
+dataset.p3 <- dataset[dataset$participant=='p3', ]
+dataset.p5 <- dataset[dataset$participant=='p5', ]
+```
+
+```{r}
+all_conditions.ratings <- ggplot(dataset, aes(x = recog_rating)) + geom_bar() +   facet_wrap(~dataset$type + participant)
+
+cond.source_error.by.rating <-
+  ggplot(dataset.no.na, 
+         aes(group=recog_rating, x=recog_rating, y=abs(response_error))) + 
+     geom_violin() + geom_jitter(alpha=0.1) + facet_wrap(~dataset.no.na$participant)
+```
+
+```{r}
+all_conditions.ratings
+cond.source_error.by.rating
+```
+
+```{r}
+ggsave(all_conditions.ratings, filename="recog_ratings.png")
+ggsave(cond.source_error.by.rating, filename="error_by_rating.png")
+
+```

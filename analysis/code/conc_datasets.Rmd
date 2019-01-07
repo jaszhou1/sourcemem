@@ -1,0 +1,39 @@
+---
+title: "ConcSession"
+author: "Jason Zhou"
+date: "5 July 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+
+setwd('C:/Users/jasonz1/Documents/R/image-analysis/Data')
+dataset <- data.frame()
+
+participants = c("p1","p2","p3","p4","p4","p5","p6","p7","p8","p9","p10","p11","p12","p13","p15","p16","p17","p18","p19","p20") 
+
+#participants = c("p1","p2","p3","p4","p4","p5","p6","p7","p8","p9","p10","p11","p12",
+                 #"p13","p14","p15","p16","p17","p18","p19","p20") #c is vector, list is v general
+for (i in participants){
+  participant_dataset <- data.frame()
+  for (j in 1:4){
+    sessions = c("1","2","3","4")
+    s <- j
+    this_session_dataset <- read.csv(sprintf("%s_%s.csv",i,sessions[j]))
+    participant_dataset <- rbind(participant_dataset,this_session_dataset)
+  }
+  participant_dataset$participant <- i
+  dataset <- rbind(dataset,participant_dataset) #could have done this with lists, but because its all the same, we are doing it with one big dataset, added a new variable that identifies.
+}
+
+# Write CSV in R
+write.csv(dataset, file = "imageability.csv")
+
+```
+
