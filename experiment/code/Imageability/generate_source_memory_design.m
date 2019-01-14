@@ -72,6 +72,15 @@ foil_shuffle = foil_words(foil_idx, :);
 % Add angles to word list. 
 stim_cells = cell(total_num_stim, 4);
 stim_cells(:, 1) = stim_shuffle(:,1);
+recog_list = cell(num_blocks, 1);
+test_list = cell(num_blocks, 1); 
+num_words = num_encode_trials;
+recog_words_total = num_words * 2;
+
+for i = 1:num_blocks
+    
+    word_offset = (i - 1) * num_encode_trials;
+%     word_limit = i * num_encode_trials;
 stim_cells(:, 2) = num2cell(2 * pi * rand(total_num_stim, 1) - pi);
 stim_cells(:, 3) = repmat({'STIM'}, [total_num_stim, 1]);
 stim_cells(:, 4) = stim_shuffle(:,2);
@@ -85,15 +94,6 @@ foil_cells(:, 4) = foil_shuffle(:,2);
 
 % For each block, generate an encode list and a test list.
 encode_list = cell(num_blocks, 1); % this was 1
-recog_list = cell(num_blocks, 1);
-test_list = cell(num_blocks, 1); 
-num_words = num_encode_trials;
-recog_words_total = num_words * 2;
-
-for i = 1:num_blocks
-    
-    word_offset = (i - 1) * num_encode_trials;
-%     word_limit = i * num_encode_trials;
     
 %   Encode Words  
     encode_word_idx = (word_offset+1):(word_offset + num_words);

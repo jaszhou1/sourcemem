@@ -21,43 +21,43 @@ pthetaa = Pred{3}(2,:);
 thetab = Pred{4}(1,:);
 pthetab = Pred{4}(2,:);
 
-%Accuracy long
+%Accuracy Low Imageability
 axes(axhandle(1))
 histogram(Theta1, 50, 'Normalization', 'pdf', 'BinLimits', [-pi,pi]);
 set(gca, 'Xlim', [-pi, pi])
 set(gca, 'Ylim', [0, 1.2])
 xlabel('Response Error')
 ylabel('Probability density')
-label(gca, .7, .9, 'Long');
+label(gca, .7, .9, 'Low');
 hold
 plot(thetaa, pthetaa, 'Linewidth', 2);
 
-% Accuracy short
+% Accuracy High Imageability
 axes(axhandle(2));
 histogram(Theta2, 50, 'Normalization', 'pdf', 'BinLimits', [-pi,pi]);
 set(gca, 'Xlim', [-pi, pi])
 set(gca, 'Ylim', [0, 1.2])
 xlabel('Response Error')
-label(gca, .7, .9, 'Short');
+label(gca, .7, .9, 'High');
 hold
 plot(thetab, pthetab, 'Linewidth', 2);
 
-% RT long
+% RT low
 axes(axhandle(3));
 histogram(Rt1, 50, 'Normalization', 'pdf', 'BinLimits', [0,3.0]);
 xlabel('Response Time (s)')
 set(gca, 'Ylim', [0, 3.0])
-label(gca, .7, .9, 'Long');
+label(gca, .7, .9, 'Low');
 hold
 ylabel('Probability density')
 plot(ta, gtam, 'Linewidth', 2);
 
-% RT short
+% RT high
 axes(axhandle(4));
 histogram(Rt2, 50, 'Normalization', 'pdf', 'BinLimits', [0,3.0]);
 xlabel('Response Time (s)')
 set(gca, 'Ylim', [0, 3.0])
-label(gca, .7, .9, 'Short');
+label(gca, .7, .9, 'High');
 hold
 plot(tb, gtbm, 'Linewidth', 2);
 

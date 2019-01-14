@@ -1,4 +1,4 @@
-function [ll,bic,Pred] = fitmixture3(Pvar, Pfix, Sel, Data, trace)
+function [ll,bic,Pred] = fitmixture3(Pvar, Pfix, Sel, Data, nlow, nhigh) %unsure what trace does
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task.
 % Mixture of memory based and guessing based process with different 
@@ -18,8 +18,8 @@ errmg3 = 'Data should be a 1 x 2 cell array from <makelike>...';
 
 tmax = 3.0; 
 np = 11;
-nlong = 320;
-nshort = 360;
+% nlow = 280;
+% nhigh = 280;
 epsx = 1e-9;
 cden = 0.05;  % Contaminant density.
 % These used by Matlab version of vdcircle by not the C version.
@@ -118,11 +118,15 @@ else
    ll0b = log(l0b);
    % Minimize sum of minus LL's across two conditions.
    ll = sum(-ll0a) + sum(-ll0b);
-   bic = 2 * ll + sum(Sel) * log(nshort + nlong);
-   if trace
-      Vala = [Data{1}, l0a, ixa]
-      Valb = [Data{2}, l0b, ixb]
-   end
+   bic = 2 * ll + sum(Sel) * log(nhigh + nlow);
+
+   %What does this do? When i try to add more input arguments into this
+   %function, it breaks because of trace, yet as far as I can tell, it was
+   %never handed in the first place, but still worked in earlier versions
+   %    if trace       
+%       Vala = [Data{1}, l0a, ixa]
+%       Valb = [Data{2}, l0b, ixb]
+%    end
 
    % Predictions for plot
    gtam = sum(gtlong) * w;

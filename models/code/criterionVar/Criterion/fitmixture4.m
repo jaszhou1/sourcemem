@@ -1,4 +1,4 @@
-function [ll,bic,Pred] = fitmixture4(Pvar, Pfix, Sel, Data, trace)
+function [ll,bic,Pred] = fitmixture4(Pvar, Pfix, Sel, Data, nlow, nhigh)
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task.
 % Across-trial variability in criterion.
@@ -20,8 +20,8 @@ errmg3 = 'Data should be a 1 x 2 cell array from <makelike>...';
 tmax = 3.0; 
 np = 12;
 %nt = 300;
-nlong = 320;
-nshort = 360;
+% nlong = 320;
+% nshort = 360;
 epsx = 1e-9;
 epsilon = 0.0001;
 cden = 0.05;  % Contaminant density.
@@ -124,10 +124,10 @@ else
    % Minimize sum of minus LL's across two conditions.
    ll = sum(-ll0a) + sum(-ll0b);
    bic = 2 * ll + sum(Sel) * log(nshort + nlong);
-   if trace
-      Vala = [Data{1}, l0a, ixa]
-      Valb = [Data{2}, l0b, ixb]
-   end
+%    if trace
+%       Vala = [Data{1}, l0a, ixa]
+%       Valb = [Data{2}, l0b, ixb]
+%    end
 
    % Predictions for plot
    gtam = sum(gtlong) * w;
