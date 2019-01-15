@@ -1,4 +1,4 @@
-function [ll,bic,Pred] = fitdcircle(Pvar, Pfix, Sel, Data, nlow, nhigh)
+function [ll,bic,Pred] = fitdcircle(Pvar, Pfix, Sel, Data, nlow, nhigh, trace)
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task.
 %    [ll,bic,Pred] = fitdcircle(Pvar, Pfix, Sel, Data)
@@ -23,7 +23,7 @@ nw = 50;
 h = tmax / 300; 
 w = 2 * pi / nw; 
 
-if nargin < 5
+if nargin < 7
     trace = 0;
 end
 lp = length(Pvar) + length(Pfix);
@@ -104,10 +104,10 @@ else
    % Minimize sum of minus LL's across two conditions.
    ll = sum(-ll0a) + sum(-ll0b);
    bic = 2 * ll + sum(Sel) * log(nhigh + nlow);
-%    if trace
-%       Vala = [Data{1}, l0a, ixa]
-%       Valb = [Data{2}, l0b, ixb]
-%    end
+   if trace
+      Vala = [Data{1}, l0a, ixa]
+      Valb = [Data{2}, l0b, ixb]
+   end
 
    % Predictions for plot
    gtam = sum(gta) * w;

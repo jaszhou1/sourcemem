@@ -18,42 +18,21 @@ Ter = normrnd(0.15,0.1);
 
 %% Set Parameter upper and lower bounds
 
-% v1aMin
-% v1aMax
-% v2aMin
-% v2aMax
-% v1bMin
-% v1bMax
-% v2bMin
-% v2bMax
-% eta1Min
-% eta1Max
-% eta2Min
-% eta2Max
-% a1Min
-% a1Max
-% a2Min
-% a2Max
-% pi1Min
-% pi1Max
-% pi2Min
-% pi1Max
-% TerMin
-% TerMax
+
 
 %% Need to filter the parameter values
 
-% v1a
-% v2a 
-% v1b
-% v2b 
-% eta1 
-% eta2 
-% a1
-% a2
-% pi1
-% pi2 
-% Ter 
+v1a = normrnd(3,1);
+v2a = normrnd(0.01,0.05);
+v1b = normrnd(4,1);
+v2b = normrnd(0.01,0.05);
+eta1 = 0;
+eta2 
+a1
+a2
+pi1
+pi2 
+Ter 
 
 %% 
 P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter];
