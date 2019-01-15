@@ -1,5 +1,4 @@
 function [Fit_Data] = Treatment_Simple()
-%MEMORY_FIXATION Display a fixation cross for orienting the participant.
 %   Data Treatment script to make EXPSOURCE model fitting code cooperate with
 %   EXPIMG data
 %
