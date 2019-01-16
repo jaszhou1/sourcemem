@@ -10,7 +10,7 @@ ntrials2 = size2;
 Data1 = zeros(ntrials1, 6);
 Data2 = zeros(ntrials2, 6);
 
-t1 = 1;
+t1 =  1;
 t2 = 1;
 sz = size(Alldata);
 for i = 1:sz(1)
