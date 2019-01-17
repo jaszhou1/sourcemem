@@ -89,7 +89,7 @@ else
        U = ones(n_sz_step, 1); 
        Rmass = U / n_sz_step ; 
        Rstep = [-(n_sz_step-1)/2:(n_sz_step-1)/2]' / (n_sz_step-1);        
-       A = a + Rstep * sa; %was sz
+       A = a + Rstep * sa; %used to be sz
        gta = zeros(nw+1, nt);
        gtb = zeros(nw+1, nt);
        pthetaa = zeros(1, nw+1);
