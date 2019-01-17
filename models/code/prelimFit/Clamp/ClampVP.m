@@ -1,4 +1,4 @@
-function [ll, bic, Pred, pest] = FitVP(data)
+function [ll, bic, Pred, pest] = ClampVP(data, Sel)
 
 % Jason Zhou <jasonz1 AT student DOT unimelb DOT edu DOT au>
 
@@ -99,7 +99,7 @@ Ter = normrnd(0.15,0.1);
 P = [v1a, v2a, v1b, v2b, eta1a, eta2a, eta1b, eta2b, a, Ter];
 nlow = length(data{1,1});
 nhigh = length(data{1,2});
-Sel = ones(1,10); %this is what fixes/frees the parameters)
+%Sel = ones(1,10); This has been commented for clamping test
 pest = fminsearch(@fitdcircle, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhigh, false);
 
 P(Sel== 1) = pest; 

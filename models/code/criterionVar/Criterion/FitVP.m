@@ -15,18 +15,18 @@ v1a = normrnd(1,1);
 v2a = normrnd(0.01,0.1);
 v1b = normrnd(1.5,1);
 v2b = normrnd(0.01,0.1);
-eta1a = normrnd(1.5,1);
-eta2a = normrnd(0.5,0.5);
-eta1b = normrnd(1.5,1);
-eta2b = normrnd(0.1,0.1);
+eta1 = normrnd(1.5,1);
+eta2 = normrnd(0.5,0.5);
 a = normrnd(1.25,1);
 Ter = normrnd(0.15,0.1);
+sa = normrnd(1.25,1);
 
 
-P = [v1a, v2a, v1b, v2b, eta1a, eta2a, eta1b, eta2b, a, Ter];
+P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, sa];
+
 nlow = length(data{1,1});
 nhigh = length(data{1,2});
-Sel = ones(1,10);
+Sel = ones(1,9);
 pest = fminsearch(@fitdcircle4, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhigh);
 
 P(Sel== 1) = pest; 

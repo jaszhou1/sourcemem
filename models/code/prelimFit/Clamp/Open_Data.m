@@ -1,0 +1,1 @@
+data = load('Jindiv_Simple.mat');

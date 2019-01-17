@@ -1,31 +1,27 @@
-function [ll,bic,Pred] = fitdcircle4(Pvar, Pfix, Sel, Data, nlow, nhigh)
+function [ll,bic,Pred] = fitdcircle3(Pvar, Pfix, Sel, Data, trace)
 % ========================================================================
-% Circular diffusion with drift variability for Jason's source memory task
-% with across-trial variability in criterion
+% Circular diffusion with drift variability for Jason's source memory task.
 % Assumes the eta components in the x and y directions are the
 % same.
 %    [ll,bic,Pred] = fitdcircle3(Pvar, Pfix, Sel, Data)
-%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, sa]
-%          1    2    3    4    5      6   7   8   9
+%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter]
+%          1    2    3    4    5      6   7   8
 %    'Data' is cell array structure created by <makelike>
 % ========================================================================
-name = 'FITDCIRCLE4: ';
+name = 'FITDCIRCLE3: ';
 errmg1 = 'Incorrect number of parameters for model, exiting...';
 errmg2 = 'Incorrect length selector vector, exiting...';
 errmg3 = 'Data should be a 1 x 2 cell array from <makelike>...';
 
 tmax = 3.0;
-nt = 300;
-np = 9;
-n_sz_step =  11; % Criterion variability.
-% nlong = 320;
-% nshort = 360;
+np = 8;
+nlong = 320;
+nshort = 360;
 epsx = 1e-9;
 cden = 0.05;  % Contaminant density.
-epsilon = 0.0001;
 % These used by Matlab version of vdcircle by not the C version.
 nw = 50;
-h = tmax / nt; 
+h = tmax / 300; 
 w = 2 * pi / nw; 
 
 if nargin < 5
@@ -55,7 +51,7 @@ eta1 = P(5);
 eta2 = P(6);
 a= P(7);
 ter = P(8);
-sa = P(9);
+
 sigma = 1.0;
 eta1a = eta1;
 eta2a = eta1;
@@ -69,63 +65,27 @@ if lowerbounderror > 0
    bic = 0;
    Pred = [];
 else
-    % Parameters for long.
-    Pa = [v1a, v2a, eta1a, eta2a, sigma, a, ter];
-    % Parameters for short.
-    Pb = [v1b, v2b, eta1b, eta2b, sigma, a, ter];
+   % Parameters for long
+   Pa = [v1a, v2a, eta1a, eta2a, sigma, a];
+   % Parameters for short
+   Pb = [v1b, v2b, eta1b, eta2b, sigma, a];
 
+   % Slow code uses Matlab. 
+   [ta, gta, thetaa, pthetaa, mta] = vdcircle3(Pa, nw, h, tmax, 5);
+   [tb, gtb, thetab, pthetab, mtb] = vdcircle3(Pb, nw, h, tmax, 5);
 
-
-
-   if sa < epsilon % No criterion variability
-       % Parameters for long
-       Pa = [v1a, v2a, eta1a, eta2a, sigma, a];
-       % Parameters for short
-       Pb = [v1b, v2b, eta1b, eta2b, sigma, a];
-       [ta, gta, thetaa, pthetaa, mta] = vdcircle300cls(Pa, tmax, 5);
-       [tb, gtb, thetab, pthetab, mtb] = vdcircle300cls(Pb, tmax, 5);
-   else  % Criterion variability
-       % Rectangular mass for starting point variability.
-       U = ones(n_sz_step, 1); 
-       Rmass = U / n_sz_step ; 
-       Rstep = [-(n_sz_step-1)/2:(n_sz_step-1)/2]' / (n_sz_step-1);        
-       A = a + Rstep * sa; %was sz
-       gta = zeros(nw+1, nt);
-       gtb = zeros(nw+1, nt);
-       pthetaa = zeros(1, nw+1);
-       pthetab = zeros(1, nw+1);
-       mta = zeros(1, nw+1);
-       mtb = zeros(1, nw+1);
-       for i = 1:n_sz_step
-           Pai = [v1a, v2a, eta1a, eta2a, sigma, A(i)];
-           Pbi = [v1b, v2b, eta1b, eta2b, sigma, A(i)];
-           [ta, gtai, thetaa, pthetaai, mtai] = vdcircle300cls(Pai, tmax, 5);
-           [tb, gtbi, thetab, pthetabi, mtbi] = vdcircle300cls(Pbi, tmax, 5);         
-           gta = gta + gtai;
-           gtb = gtb + gtbi;
-           pthetaa = pthetaa + pthetaai; 
-           pthetab = pthetab + pthetabi;
-           mta = mta + pthetaai .* mtai;
-           mtb = mtb + pthetabi .* mtbi;
-      end
-      gta = gta / n_sz_step;
-      gtb = gtb / n_sz_step;
-      mta = mta ./ pthetaa;
-      mtb = mtb ./ pthetab;
-      pthetaa = pthetaa / n_sz_step;
-      pthetab = pthetab / n_sz_step;
-   end;
+   % Fast code needs a C compiler and Gnu math library 
+   %[ta, gta, thetaa, pthetaa, mta] = vdcircle300(Pa, tmax, 5);
+   %[tb, gtb, thetab, pthetab, mtb] = vdcircle300(Pb, tmax, 5);
    % Filter zeros
    gta = max(gta, epsx);
    gtb = max(gtb, epsx);
-   %plot(ta, gta);
    % Add nondecision times
    ta = ta + ter;
    tb = tb + ter;
    % Create mesh for interpolation
    [anglea,timea]=meshgrid(ta, thetaa);
    [angleb,timeb]=meshgrid(tb, thetab);
-
    % Interpolate in joint density to get likelihoods of each data point.
    % 1 is long, 2 is short
    l0a = interp2(anglea, timea, gta, Data{1}(:,2),Data{1}(:,1), 'linear');
@@ -141,11 +101,11 @@ else
    ll0b = log(l0b);
    % Minimize sum of minus LL's across two conditions.
    ll = sum(-ll0a) + sum(-ll0b);
-   bic = 2 * ll + sum(Sel) * log(nlow + nhigh);
-%    if trace
-%       Vala = [Data{1}, l0a, ixa]
-%       Valb = [Data{2}, l0b, ixb]
-%    end
+   bic = 2 * ll + sum(Sel) * log(nshort + nlong);
+   if trace
+      Vala = [Data{1}, l0a, ixa]
+      Valb = [Data{2}, l0b, ixb]
+   end
 
    % Predictions for plot
    gtam = sum(gta) * w;

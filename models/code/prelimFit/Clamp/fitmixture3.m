@@ -1,29 +1,26 @@
-function [ll,bic,Pred] = fitmixture4(Pvar, Pfix, Sel, Data, nlow, nhigh)
+function [ll,bic,Pred] = fitmixture3(Pvar, Pfix, Sel, Data, nlow, nhigh) %unsure what trace does
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task.
-% Across-trial variability in criterion.
 % Mixture of memory based and guessing based process with different 
 % criteria. Assumes the eta components in the x and y directions are the
 % same.
-%    [ll,bic,Pred] = fitmixture4(Pvar, Pfix, Sel, Data)
-%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter  sa]
-%          1    2    3    4    5      6    7   8   9   10    11  12
+%    [ll,bic,Pred] = fitmixture3(Pvar, Pfix, Sel, Data)
+%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter]
+%          1    2    3    4    5      6    7   8   9   10    11
 %    a1, a2 are criteria for memory and guessing process, pi1, pi2 are 
 %    mixing proportions for long and short.
 %    'Data' is cell array structure created by <makelike>
 % ========================================================================
-name = 'FITMIXTURE4: ';
+name = 'FITMIXTURE3: ';
 errmg1 = 'Incorrect number of parameters for model, exiting...';
 errmg2 = 'Incorrect length selector vector, exiting...';
 errmg3 = 'Data should be a 1 x 2 cell array from <makelike>...';
 
 tmax = 3.0; 
-np = 12;
-%nt = 300;
-% nlong = 320;
-% nshort = 360;
+np = 11;
+% nlow = 280;
+% nhigh = 280;
 epsx = 1e-9;
-epsilon = 0.0001;
 cden = 0.05;  % Contaminant density.
 % These used by Matlab version of vdcircle by not the C version.
 nw = 50;
@@ -61,7 +58,6 @@ a2 = P(8);
 pi1 = P(9);
 pi2 = P(10); 
 ter = P(11);
-sa = P(12);
 
 % Components of drift variability.
 eta1a = eta1;
@@ -76,35 +72,34 @@ lowerbounderror = sum(min(P(5:length(P)) - zeros(1,length(P)-4), 0).^2);
 if lowerbounderror > 0
    ll = 1e5 + 1e3 * lowerbounderror;
    bic = 0;
-elseif sa / 2 >= a1
-    disp('Criterion range error')
-    ll = 1e5;
 else
-    % Memory-based process
-    % Parameters for long
-    Pa = [v1a, v2a, eta1a, eta2a, sigma, a1, sa];
-    % Parameters for short
-    Pb = [v1b, v2b, eta1b, eta2b, sigma, a1, sa];
-    [ta, gta, thetaa, pthetaa, mta] = mvdcircle3cls(Pa, nw, h, tmax);
-    [tb, gtb, thetab, pthetab, mtb] = mvdcircle3cls(Pb, nw, h, tmax);
-    % Parameters for guessing process - zero drift, different criterion
-    Pc = [0, 0, 0, 0, sigma, a2];
-    Pd = [0, 0, 0, 0, sigma, a2];
-    [tc, gtc, thetac, pthetac, mtc] = vdcircle300cls(Pc, tmax, 5);
-    [td, gtd, thetad, pthetad, mtd] = vdcircle300cls(Pd, tmax, 5);
- 
-   % Mixture of memory-based processes and guesses
-    gtlong =  pi1 * gta + (1 - pi1) * gtc;
-    gtshort = pi2 * gtb + (1 - pi2) * gtd;
-    % Add nondecision times
-     ta = ta + ter;
-    tb = tb + ter;
-    pthetalong =  pi1 * pthetaa + (1 - pi1) * pthetac;
-    pthetashort = pi2 * pthetab + (1 - pi2) * pthetad;
+   % Parameters for long
+   Pa = [v1a, v2a, eta1a, eta2a, sigma, a1];
+   % Parameters for short
+   Pb = [v1b, v2b, eta1b, eta2b, sigma, a1];
 
-    % Filter zeros
-    gtlong = max(gtlong, epsx);
-    gtshort = max(gtshort, epsx);
+   % Parameters for guessing process - zero drift, different criterion
+   Pc = [0, 0, 0, 0, sigma, a2];
+   Pd = [0, 0, 0, 0, sigma, a2];
+
+   % Slow code uses Matlab (Need C for vdcircle300) 
+   [ta, gta, thetaa, pthetaa, mta] = vdcircle3(Pa, nw, h, tmax, 5);
+   [tb, gtb, thetab, pthetab, mtb] = vdcircle3(Pb, nw, h, tmax, 5);
+   [tc, gtc, thetac, pthetac, mtc] = vdcircle3(Pc, nw, h, tmax, 5);
+   [td, gtd, thetad, pthetad, mtd] = vdcircle3(Pd, nw, h, tmax, 5);
+ 
+  % Mixture of memory-based processes and guesses
+   gtlong =  pi1 * gta + (1 - pi1) * gtc;
+   gtshort = pi2 * gtb + (1 - pi2) * gtd;
+   pthetalong =  pi1 * pthetaa + (1 - pi1) * pthetac;
+   pthetashort = pi2 * pthetab + (1 - pi2) * pthetad;
+
+   % Filter zeros
+   gtlong = max(gtlong, epsx);
+   gtshort = max(gtshort, epsx);
+   % Add nondecision times
+   ta = ta + ter;
+   tb = tb + ter;
    % Create mesh for interpolation
    [anglea,timea]=meshgrid(ta, thetaa);
    [angleb,timeb]=meshgrid(tb, thetab);
@@ -123,8 +118,12 @@ else
    ll0b = log(l0b);
    % Minimize sum of minus LL's across two conditions.
    ll = sum(-ll0a) + sum(-ll0b);
-   bic = 2 * ll + sum(Sel) * log(nlow + nhigh);
-%    if trace
+   bic = 2 * ll + sum(Sel) * log(nhigh + nlow);
+
+   %What does this do? When i try to add more input arguments into this
+   %function, it breaks because of trace, yet as far as I can tell, it was
+   %never handed in the first place, but still worked in earlier versions
+   %    if trace       
 %       Vala = [Data{1}, l0a, ixa]
 %       Valb = [Data{2}, l0b, ixb]
 %    end

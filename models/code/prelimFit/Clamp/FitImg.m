@@ -58,27 +58,27 @@ MX_LL_Preds_Unrecognised{i,3} = Pred;
 MX_LL_Preds_Unrecognised{i,4} = pest;
 end
 
-% %% Plot Fits superimposed on Data, and save.
-% % Plot 
-% % fitplot(Recognised {1}, Pred);
-% for i = participants
-%     filename = ['drawVP_Recog',num2str(i),'.png'];
-%     fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
-%     saveas(gcf,filename);
-%     
-%     filename = ['drawVP_Unrecog',num2str(i),'.png'];
-%     fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
-%     saveas(gcf,filename);
-%     
-%     filename = ['drawMX_Recog',num2str(i),'.png'];
-%     fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
-%     saveas(gcf,filename);
-%     
-%     filename = ['drawMX_Unrecog',num2str(i),'.png'];
-%     fitplot(Unrecognised {i}, MX_LL_Preds_Unrecognised{i,3});
-%     saveas(gcf,filename);
-% end    
-% 
+%% Plot Fits superimposed on Data, and save.
+% Plot 
+% fitplot(Recognised {1}, Pred);
+for i = participants
+    filename = ['drawVP_Recog',num2str(i),'.png'];
+    fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+    saveas(gcf,filename);
+    
+    filename = ['drawVP_Unrecog',num2str(i),'.png'];
+    fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
+    saveas(gcf,filename);
+    
+    filename = ['drawMX_Recog',num2str(i),'.png'];
+    fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+    saveas(gcf,filename);
+    
+    filename = ['drawMX_Unrecog',num2str(i),'.png'];
+    fitplot(Unrecognised {i}, MX_LL_Preds_Unrecognised{i,3});
+    saveas(gcf,filename);
+end    
+
 
 %%
 %%% The thing I want at the end is...

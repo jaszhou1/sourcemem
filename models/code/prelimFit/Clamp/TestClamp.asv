@@ -1,14 +1,19 @@
-function [ll, bic, Pred, pest] = FitVP(data)
+%% Test Clamp
+% Just trying to test each parameters "good place" values
 
-% Jason Zhou <jasonz1 AT student DOT unimelb DOT edu DOT au>
+Fit_Data = Treatment_Simple;
 
-%testing fitting continuous (VP) model to EXPIMG data
-setopt;
-%Starting parameters for P?)
-%    [ll,bic,Pred] = fitdcircle(Pvar, Pfix, Sel, Data)
-%    P = [v1a, v2a, v1b, v2b, eta1a, eta2a, eta1b, eta2b, a, Ter]
-%          1    2    3    4     5      6      7      8    9   10
+Recognised = Fit_Data(:,1);
+Unrecognised = Fit_Data(:,2);
 
+%Fit the data, generate predictions.
+
+participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
+
+p = 1;
+Sel = [1,1,1,1,1,1,1,1,1,0];
+
+data = Recognised {p};
 %% Raw Parameter Settings
 
 v1a = normrnd(1,1);
@@ -40,7 +45,7 @@ Ter = normrnd(0.15,0.1);
 % eta1aMin = 0;
 % eta1aMax = 5;
 % 
-% eta2aMin
+% eta2aMin =
 % eta2aMax
 % 
 % eta1bMin
@@ -52,8 +57,8 @@ Ter = normrnd(0.15,0.1);
 % aMin = 0;
 % aMax = 2;
 % 
-% TerMin = 0;
-% TerMax = .15;
+TerMin = 0;
+TerMax = .30;
 
 %% Calculate Summed Distance from Boundaries
 
@@ -96,13 +101,16 @@ Ter = normrnd(0.15,0.1);
 
 
 %% Hand into fminsearch
+
+setopt;
+
 P = [v1a, v2a, v1b, v2b, eta1a, eta2a, eta1b, eta2b, a, Ter];
 nlow = length(data{1,1});
 nhigh = length(data{1,2});
-Sel = ones(1,10); %this is what fixes/frees the parameters)
 pest = fminsearch(@fitdcircle, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhigh, false);
 
 P(Sel== 1) = pest; 
 [ll,bic,Pred] = fitdcircle(P(Sel==1), P(Sel==0), Sel, data, nlow, nhigh);
-%fitplot(data, Pred);
-end
+fitplot(data, Pred);
+
+

@@ -26,69 +26,75 @@ a = normrnd(1.25,1);
 Ter = normrnd(0.15,0.1);
 
 
-%% Set Parameter upper and lower bounds
+%% Cla
 
-v1aMin = 0;
-v1aMax = 
+% Set Parameter upper and lower bounds
+% 
+% v1aMin = 0;
+% v1aMax = 5;
+% 
+% v2aMin = 0;
+% v2aMax = 5;
+% 
+% v1bMin = 0;
+% v1bMax = 5;
+% 
+% v2bMin = 0;
+% v2bMax = 5;
+% 
+% eta1aMin = 0;
+% eta1aMax = 5;
+% 
+% eta2aMin
+% eta2aMax
+% 
+% eta1bMin
+% eta1bMax
+% 
+% eta2bMin
+% eta2bMax = 
+% 
+% aMin = 0;
+% aMax = 2;
+% 
+% TerMin = 0;
+% TerMax = .15;
+% 
+% %% Filter the parameter values
+% 
+% v1a = min(v1a,v1aMax);
+% v1a = max(v1a,v1aMin);
+% 
+% v2a = min(v2a,v2aMax);
+% v2a = max(v2a,v2aMin);
+% 
+% v1b = min(v1b,v1bMax);
+% v1b = max(v1b,v1bMin);
+% 
+% v2b = min(v2b,v2bMax);
+% v2b = max(v2b,v2bMin);
+% 
+% eta1a = min(eta1a,eta1aMax);
+% eta1a = max(eta1a,eta1aMin);
+% 
+% eta2a = min(eta2a,eta2aMax);
+% eta2a = max(eta2a,eta2aMin);
+% 
+% eta1b = min(eta1b,eta1bMax);
+% eta1b = max(eta1b,eta1bMin);
+% 
+% eta2b = min(eta2b,eta1aMax);
+% eta2b = max(eta2b,eta1aMin);
+% 
+% a = min(a,aMax);
+% a = max(a,aMin);
+% 
+% Ter = min(Ter,TerMax);
+% Ter = max(Ter,TerMin);
 
-v2aMin
-v2aMax
+%% Summed Distance Penalty
+% Sum up all the distances for parameter estimates that 
 
-v1bMin
-v1bMax
-
-v2bMin
-v2bMax
-
-eta1aMin
-eta1aMax
-
-eta2aMin
-eta2aMax
-
-eta1bMin
-eta1bMax
-
-eta2bMin
-eta2bMax
-
-aMin
-aMax
-
-TerMin
-TerMax
-
-%% Filter the parameter values
-
-v1a = min(v1a,v1aMax);
-v1a = max(v1a,v1aMin);
-
-v2a = min(v2a,v2aMax);
-v2a = max(v2a,v2aMin);
-
-v1b = min(v1b,v1bMax);
-v1b = max(v1b,v1bMin);
-
-v2b = min(v2b,v2bMax);
-v2b = max(v2b,v2bMin);
-
-eta1a = min(eta1a,eta1aMax);
-eta1a = max(eta1a,eta1aMin);
-
-eta2a = min(eta2a,eta2aMax);
-eta2a = max(eta2a,eta2aMin);
-
-eta1b = min(eta1b,eta1bMax);
-eta1b = max(eta1b,eta1bMin);
-
-eta2b = min(eta2b,eta1aMax);
-eta2b = max(eta2b,eta1aMin);
-
-a = min(a,aMax);
-a = max(a,aMin);
-
-Ter = min(Ter,TerMax);
-Ter = max(Ter,TerMin);
 
 %% Hand into fminsearch
 P = [v1a, v2a, v1b, v2b, eta1a, eta2a, eta1b, eta2b, a, Ter];
