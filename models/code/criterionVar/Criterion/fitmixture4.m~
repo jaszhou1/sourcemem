@@ -75,10 +75,8 @@ sigma = 1.0;
 %% Set boundaries
 
 % Criterion Variability
-saUpper = a1*2 - 0.01; %This seems hacky, pls check later
-saLower = 0.01;
+saUpper = a1*2;
 sa = min(sa, saUpper);
-sa = max(sa, saLower);
 
 
 %% Ensure etas, ter, and a are positive.

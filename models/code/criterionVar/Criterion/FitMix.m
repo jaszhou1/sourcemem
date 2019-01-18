@@ -15,16 +15,17 @@ a2 = normrnd(1,1);
 pi1 = norm(0.5,0.25);
 pi2 = normrnd(0.5,0.25);
 Ter = normrnd(0.15,0.1);
+sa = normrnd(1.25,1);
 
 
-P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter];
+P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter,sa];
 
-Sel = [1,1,1,1,0,0,1,1,1,1,1];  % all parameters free
+Sel = [1,1,1,1,1,1,1,1,1,1,1,1];  % all parameters free
 nlow = length(data{1,1});
 nhigh = length(data{1,2});
 
 pest = fminsearch(@fitmixture4, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhigh);
 P(Sel==1) = pest;
-[ll,bic,Pred] = fitmixture4(P(Sel==1), P(Sel==0), Sel, data, nlow, nhigh);
+[ll,bic,Pred] = fitmixture4(P(Sel==1), P(Sel==0), Sel, data, nlow, nhigh); %Criterion Range Error
 %fitplot(D11, Pred);
 end
