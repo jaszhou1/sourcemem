@@ -85,8 +85,8 @@ sigma = 1.0;
 %          1    2    3    4    5      6    7   8   9   10    11  12
 P_Upper = [4, 4, 4, 4, 1, 1, 4, 2, 0.7, 0.7, 0.5, a1*2 - epsilon];
 P_Lower = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1, epsilon];
-P_In = zeros(1,12); %The ones that will actually get used
-P_pen = zeros(1,12); %Penalty to be summed for parameters exceeding bounds
+P_In = zeros(1,); %The ones that will actually get used
+P_pen = zeros(1,9); %Penalty to be summed for parameters exceeding bounds
 P_All = [P;P_Upper;P_Lower;P_In;P_pen];
 
 
@@ -155,11 +155,6 @@ else
    ll0b = log(l0b);
    % Minimize sum of minus LL's across two conditions.
    ll = sum(-ll0a) + sum(-ll0b);
-      
-   %% Penalise
-   ll = ll + pen^2 * 1000;
-      %% 
-   
    bic = 2 * ll + sum(Sel) * log(nlow + nhigh);
 %    if trace
 %       Vala = [Data{1}, l0a, ixa]
