@@ -50,6 +50,32 @@ P = zeros(1,np);
 P(Sel==1) = Pvar;
 P(Sel==0) = Pfix;
 
+
+%% Set boundaries
+
+%Specify Boundaries
+%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter  sa]
+%          1    2    3    4    5      6    7   8   9   10    11  12
+P_Upper = [4, 4, 4, 4, 1, 1, 4, 2, 0.7, 0.7, 0.5, P(7)*2 - epsilon];
+P_Lower = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.1, epsilon];
+P_In = zeros(1,12); %The ones that will actually get used
+P_pen = zeros(1,12); %Penalty to be summed for parameters exceeding bounds
+P_All = [P;P_Upper;P_Lower;P_In;P_pen];
+
+
+parameters = [1,2,3,4,5,6,7,8,9,10,11,12];
+    for i = parameters
+    P_All(4,i) = min(P_All(1,i),P_All(2,i)); %Clamp to upperbound
+    P_All(4,i) = max(P_All(4,i),P_All(3,i));
+    P_All(5,i) = abs(P_All(4,i) - P_All(1,i));
+    end
+%Calculate Distances
+pen = sum(P_All(5,:)); %Penalty summed across parameters, to be applied to LL
+
+%Clamp Parameter Values
+P = P_All(4,:);
+P
+
 v1a = P(1);
 v2a = P(2);
 v1b = P(3);
@@ -62,55 +88,22 @@ pi1 = P(9);
 pi2 = P(10); 
 ter = P(11);
 sa = P(12);
+sigma = 1.0;
 
-% Components of drift variability.
 eta1a = eta1;
 eta2a = eta1;
 eta1b = eta2;
 eta2b = eta2;
-
-sigma = 1.0;
-
-
-%% Set boundaries
-
-% % Criterion Variability
-% saUpper = a1*2 - 0.01; %This seems hacky, pls check later
-% saLower = 0.01;
-% sa = min(sa, saUpper);
-% sa = max(sa, saLower);
-
-%Specify Boundaries
-%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter  sa]
-%          1    2    3    4    5      6    7   8   9   10    11  12
-P_Upper = [4, 4, 4, 4, 1, 1, 4, 2, 0.7, 0.7, 0.5, a1*2 - epsilon];
-P_Lower = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1, epsilon];
-P_In = zeros(1,12); %The ones that will actually get used
-P_pen = zeros(1,12); %Penalty to be summed for parameters exceeding bounds
-P_All = [P;P_Upper;P_Lower;P_In;P_pen];
-
-
-parameters = [1,2,3,4,5,6,7,8,9,10,11,12];
-    for i = parameters
-    P_All(4,i) = min(P_All(1,i),P_All(2,i)); %Clamp to upperbound
-    P_All(4,i) = max(P_All(1,i),P_All(3,i));
-    P_All(5,i) = abs(P_All(4,i) - P_All(1,i));
-    end
-%Calculate Distances
-pen = sum(P_All(5,:)); %Penalty summed across parameters, to be applied to LL
-
-%Clamp Parameter Values
-P = P_All(4,:);
-
 
 %% Ensure etas, ter, and a are positive.
 lowerbounderror = sum(min(P(5:length(P)) - zeros(1,length(P)-4), 0).^2);
 if lowerbounderror > 0
    ll = 1e5 + 1e3 * lowerbounderror;
    bic = 0;
-elseif sa / 2 >= a1 %If half (why half?) of the value of boundary variability is greater or equal to boundary
+elseif sa / 2 >= a1 %If half of the value of boundary variability is greater or equal to boundary
     disp('Criterion range error')
     ll = 1e5;
+    bic = 0;
 else
     % Memory-based process
     % Parameters for long
