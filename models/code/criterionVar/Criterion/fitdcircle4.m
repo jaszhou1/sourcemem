@@ -56,8 +56,8 @@ P(Sel==0) = Pfix;
 %Specify Boundaries
 %    P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, sa]
 %          1    2    3    4    5      6   7   8   9
-P_Upper = [3, 3, 3, 3, 2.5, 2.5, 2, 0.350, P(7)*2 - epsilon];
-P_Lower = [-1, -1, -1, -1, 0.1, 0.1, 0.1, 0.1, epsilon];
+P_Upper = [3, 3, 3, 3, 2.5, 2.5, 5, 0.4, P(7)*2 - epsilon];
+P_Lower = [-1, -1, -1, -1, 0.1, 0.1, 0.2, 0.1, epsilon];
 P_In = zeros(1,9); %The ones that will actually get used
 P_pen = zeros(1,9); %Penalty to be summed for parameters exceeding bounds
 P_All = [P;P_Upper;P_Lower;P_In;P_pen];
