@@ -64,19 +64,19 @@ end
 % % Plot 
 % fitplot(Recognised {1}, Pred);
 for i = participants
-    filename = ['critVP_Recog',num2str(i),'.png'];
+    filename = ['2VP_Recog',num2str(i),'.png'];
     fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
     saveas(gcf,filename);
     
-    filename = ['critVP_Unrecog',num2str(i),'.png'];
+    filename = ['2VP_Unrecog',num2str(i),'.png'];
     fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
     saveas(gcf,filename);
     
-    filename = ['critMX_Recog',num2str(i),'.png'];
+    filename = ['2MX_Recog',num2str(i),'.png'];
     fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
     saveas(gcf,filename);
     
-    filename = ['critMX_Unrecog',num2str(i),'.png'];
+    filename = ['2MX_Unrecog',num2str(i),'.png'];
     fitplot(Unrecognised {i}, MX_LL_Preds_Unrecognised{i,3});
     saveas(gcf,filename);
 end    

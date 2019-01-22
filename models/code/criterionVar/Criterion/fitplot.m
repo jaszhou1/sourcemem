@@ -28,7 +28,8 @@ set(gca, 'Xlim', [-pi, pi])
 set(gca, 'Ylim', [0, 1.2])
 xlabel('Response Error')
 ylabel('Probability density')
-label(gca, .7, .9, 'Low');
+% label(gca, .7, .9, 'Low');
+title('Low')
 hold
 plot(thetaa, pthetaa, 'Linewidth', 2);
 
@@ -38,7 +39,8 @@ histogram(Theta2, 50, 'Normalization', 'pdf', 'BinLimits', [-pi,pi]);
 set(gca, 'Xlim', [-pi, pi])
 set(gca, 'Ylim', [0, 1.2])
 xlabel('Response Error')
-label(gca, .7, .9, 'High');
+% label(gca, .7, .9, 'High');
+title('High')
 hold
 plot(thetab, pthetab, 'Linewidth', 2);
 
@@ -47,7 +49,8 @@ axes(axhandle(3));
 histogram(Rt1, 50, 'Normalization', 'pdf', 'BinLimits', [0,3.0]);
 xlabel('Response Time (s)')
 set(gca, 'Ylim', [0, 3.0])
-label(gca, .7, .9, 'Low');
+% label(gca, .7, .9, 'Low');
+title('Low')
 hold
 ylabel('Probability density')
 plot(ta, gtam, 'Linewidth', 2);
@@ -57,7 +60,8 @@ axes(axhandle(4));
 histogram(Rt2, 50, 'Normalization', 'pdf', 'BinLimits', [0,3.0]);
 xlabel('Response Time (s)')
 set(gca, 'Ylim', [0, 3.0])
-label(gca, .7, .9, 'High');
+% label(gca, .7, .9, 'High');
+title('High')
 hold
 plot(tb, gtbm, 'Linewidth', 2);
 
