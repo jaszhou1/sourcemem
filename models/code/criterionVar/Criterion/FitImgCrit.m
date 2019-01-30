@@ -64,7 +64,6 @@ end
 % % Plot 
 % fitplot(Recognised {1}, Pred);
 for i = participants
-
     filename = ['tVP_Recog',num2str(i),'.png'];
     fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
     saveas(gcf,filename);
