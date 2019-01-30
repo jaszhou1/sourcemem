@@ -1,4 +1,4 @@
-function [ll,bic,Pred] = fitdcircle4(Pvar, Pfix, Sel, Data, nlow, nhigh)
+function [ll,bic,Pred] = fitdcircle4(Pvar, Pfix, Sel, Data, nlow, nhigh, trace)
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task
 % with across-trial variability in criterion
@@ -32,7 +32,7 @@ nw = 50;
 h = tmax / nt; 
 w = 2 * pi / nw; 
 
-if nargin < 5
+if nargin < 7
     trace = 0;
 end;
 lp = length(Pvar) + length(Pfix);
@@ -51,29 +51,9 @@ P = zeros(1,np);
 P(Sel==1) = Pvar;
 P(Sel==0) = Pfix;
 
-%% Set Boundaries for Parameters
-
-%Specify Boundaries
-%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, sa]
-%          1    2    3    4    5      6   7   8   9
-P_Upper = [3, 3, 3, 3, 2.5, 2.5, 5, 0.4, P(7)*2 - epsilon];
-P_Lower = [-1, -1, -1, -1, 0.1, 0.1, 0.2, 0.1, epsilon];
-P_In = zeros(1,9); %The ones that will actually get used
-P_pen = zeros(1,9); %Penalty to be summed for parameters exceeding bounds
-P_All = [P;P_Upper;P_Lower;P_In;P_pen];
-
-
-parameters = [1,2,3,4,5,6,7,8,9];
-    for i = parameters
-    P_All(4,i) = min(P_All(1,i),P_All(2,i)); %Clamp to upperbound
-    P_All(4,i) = max(P_All(4,i),P_All(3,i));
-    P_All(5,i) = abs(P_All(4,i) - P_All(1,i));
-    end
-%Calculate Distances
-pen = sum(P_All(5,:)); %Penalty summed across parameters, to be applied to LL
-
-%Clamp Parameter Values
-P = P_All(4,:);
+% Save on each iteration - 30/1/19
+Ptemp = P;
+save Ptemp Ptemp
 
 %% 
 v1a = P(1);
@@ -91,6 +71,39 @@ eta2a = eta1;
 eta1b = eta2;
 eta2b = eta2;
 
+%% Transplanting the fitmixture4x penalties into fitdcircle
+
+% Cleaned up penalty calculation, hard and soft bounds - 30/1/19
+
+% ---------------------------------------------------------------------------
+%   v1a, v2a, v1b, v2b, eta1, eta2,      a1, a2,       pi1, pi2,    Ter  sa]
+% ---------------------------------------------------- ----------------------
+ 
+Ub= [ 7.0*ones(1,4),  4.0*ones(1,2),  5.0*ones(1,2),    ones(1,2),   1.0,  3.0]; 
+Lb= [-7.0*ones(1,4),  0.0*ones(1,2),  0.5*ones(1,2),    zeros(1,2),   0,     0];
+Pub=[ 6.5*ones(1,4),  3.5*ones(1,2),  4.5*ones(1,2), 0.9*ones(1,2),  0.8,  2.8]; 
+Plb=[-6.5*ones(1,4),  0.0*ones(1,2),  0.7*ones(1,2), 0.05*ones(1,2), 0.01, 0.1];
+Pred = cell(1,4);
+if any(P - Ub > 0) | any(Lb - P > 0)
+   ll = 1e7 + ...
+        1e3 * (sum(max(P - Ub, 0).^2) + sum(max(Ub - P).^2));
+   bic = 0;
+   return
+   if trace
+       max(P - Ub, 0)
+       max(Lb - P, 0)
+   end
+else
+   penalty =  1e3 * (sum(max(P - Pub, 0).^2) + sum(max(Plb - P, 0).^2));
+   if trace
+       max(P - Pub, 0)
+       max(Plb - P, 0)
+        penalty
+   end
+end   
+
+
+%% Resume
 % Ensure etas, ter, and a are positive.
 lowerbounderror = sum(min(P(5:length(P)) - zeros(1,length(P)-4), 0).^2);
 if lowerbounderror > 0
@@ -169,9 +182,6 @@ else
    % Minimize sum of minus LL's across two conditions.
    ll = sum(-ll0a) + sum(-ll0b);
  
-   %% Apply penalties for initial parameters that missed boundaries
-%    
-   ll = ll + pen^2 * 1000;
    
    %% Resume with Fit statistics 
  

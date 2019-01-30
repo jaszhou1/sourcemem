@@ -117,6 +117,7 @@ if lowerbounderror > 0
 elseif sz / 2 >= a1
     disp('Criterion range error')
     ll = 1e5;
+    bic = 0;
 else
    if sz < epsilon % No criterion variability
        % Memory-based process
@@ -132,8 +133,8 @@ else
        Rmass = U / n_sz_step ; 
        Rstep = [-(n_sz_step-1)/2:(n_sz_step-1)/2]' / (n_sz_step-1); 
        A = a1 + Rstep * sz;
-       gta = zeros(nw+1, nt);
-       gtb = zeros(nw+1, nt);
+       gta = zeros(nw+1, nt+1);
+       gtb = zeros(nw+1, nt+1);
        pthetaa = zeros(1, nw+1);
        pthetab = zeros(1, nw+1);
        mta = zeros(1, nw+1);

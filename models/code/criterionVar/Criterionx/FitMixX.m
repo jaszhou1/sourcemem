@@ -24,8 +24,8 @@ Sel = [1,1,1,1,1,1,1,1,1,1,1,1];  % all parameters free
 nlow = length(data{1,1});
 nhigh = length(data{1,2});
 
-pest = fminsearch(@fitmixture4, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhigh);
+pest = fminsearch(@fitmixture4x, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhigh);
 P(Sel==1) = pest;
-[ll,bic,Pred] = fitmixture4(P(Sel==1), P(Sel==0), Sel, data, nlow, nhigh); %Criterion Range Error
+[ll,bic,Pred] = fitmixture4x(P(Sel==1), P(Sel==0), Sel, data, nlow, nhigh); %Criterion Range Error
 %fitplot(D11, Pred);
 end
