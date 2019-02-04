@@ -52,17 +52,17 @@ MX_LL_Preds_Unrecognised{i,4} = pest;
 end
 
 for i = participants
-%     filename = ['1VP_Recog',num2str(i),'.png'];
-%     fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
-%     saveas(gcf,filename);
+    filename = ['1VP_Recog',num2str(i),'.png'];
+    fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+    saveas(gcf,filename);
 %     
 %     filename = ['1VP_Unrecog',num2str(i),'.png'];
 %     fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
 %     saveas(gcf,filename);
     
-    filename = ['2MX_Recog',num2str(i),'.png'];
-    fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
-    saveas(gcf,filename);
+%     filename = ['2MX_Recog',num2str(i),'.png'];
+%     fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+%     saveas(gcf,filename);
     
 %     filename = ['2MX_Unrecog',num2str(i),'.png'];
 %     fitplot(Unrecognised {i}, MX_LL_Preds_Unrecognised{i,3});
