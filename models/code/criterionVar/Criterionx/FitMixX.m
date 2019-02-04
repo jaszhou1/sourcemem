@@ -12,8 +12,8 @@ eta1 = normrnd(0, 0.01);
 eta2 = normrnd(0,0.01);
 a1 = normrnd(1,0.5);
 a2 = normrnd(1,0.5);
-pi1 = norm(0.5,0.25);
-pi2 = normrnd(0.5,0.25);
+pi1 = norm(0.7,0.5);
+pi2 = normrnd(0.7,0.5);
 Ter = normrnd(0.2,0.1);
 sa = normrnd(1,0.5);
 
