@@ -1,0 +1,105 @@
+---
+title: "AngleRTQplot"
+author: "jason"
+date: "February 6, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+```{r}
+
+setwd('C:/Users/jason/Documents/GitHub/sourcemem/analysis/data')
+
+dataset <- read.csv("dataset.csv", na.strings = " NA")
+
+dataset <- dataset[,-1] #removes the first variable, which are these weird row labels
+dataset[,3] <- as.numeric(factor(dataset$condition, levels=c(' LOW', ' HIGH')))
+dataset$recog_rating <- as.factor(dataset$recog_rating) #Confidence Ratings are Discrete
+
+
+
+# Set up all the different dataset subsets
+
+#Group Level
+# No Recognition Foils 
+dataset.no.na <- dataset[dataset$type!=' FOIL', ]
+dataset.na <- dataset[dataset$type==' FOIL', ]
+
+
+# Stimulus only, conditioned on imageability+concreteness ratings
+dataset.low <- dataset.no.na[dataset.no.na$condition == 1, ]
+dataset.high <- dataset.no.na[dataset.no.na$condition == 2, ]
+
+participants = c("1","2","3","4","5","6","7","8","9","10","11","12","13","15","16","17","18","19","20") 
+
+#recognition ratings
+dataset.recog_1 <- dataset.no.na[dataset.no.na$recog_rating==1, ]
+dataset.recog_2 <- dataset.no.na[dataset.no.na$recog_rating==2, ]
+dataset.recog_3 <- dataset.no.na[dataset.no.na$recog_rating==3, ]
+dataset.recog_4 <- dataset.no.na[dataset.no.na$recog_rating==4, ]
+dataset.recog_5 <- dataset.no.na[dataset.no.na$recog_rating==5, ]
+dataset.recog_6 <- dataset.no.na[dataset.no.na$recog_rating==6, ]
+
+dataset.unrecognised <- rbind(dataset.recog_1, dataset.recog_2, dataset.recog_3)
+
+dataset.recognised <- rbind(dataset.recog_4, dataset.recog_5, dataset.recog_6)
+
+dataset.recognised <- dataset.recognised[!(dataset.recognised$response_RT>10),]
+
+```
+
+```{r}
+bin.edge.right <- seq(-pi, pi, length.out = 10)
+bin.edge.right <- bin.edge.right[-1]
+
+bin.edge.left <- c(-pi, bin.edge.right[1:(length(bin.edge.right)-1)])
+
+n.bins <- length(bin.edge.right)
+
+RTQ <- data.frame(matrix(ncol=0,nrow=0))
+#Within those quantile bins, work out the RT quantiles
+for(i in 1:n.bins) {
+  this.min <- bin.edge.left[i]
+  this.max <- bin.edge.right[i]
+  this.subset <- dataset.recognised[(dataset.recognised$response_error >= this.min)&(dataset.recognised$response_error < this.max), ]
+   this.RTQuantile<- quantile(this.subset$response_RT, 
+                            probs=c(0.1, 0.3, 0.5, 0.7, 0.9))
+   RTQ <- rbind(RTQ,this.RTQuantile)
+  #data.subset <- rbind(data.subset,this.subset)
+}
+```
+
+```{r}
+All.Q <- data.frame(matrix(ncol=4,nrow=45))
+All.Q[,1] <- rep(c(1:9),each = 5)
+All.Q[1:20,2] <- rep(bin.edge.left[1:4],each = 5)
+All.Q[21:25,2]<- rep(0)
+All.Q[26:45,2] <- rep(bin.edge.right[6:9],each = 5)
+All.Q[,3] <- c(.1,.3,.5,.7,.9)
+
+#Had a bit of difficulty getting the third column (Actual RTs) in- this is my shoddy workaround
+RTtrans <- t(RTQ)
+All.Q[,4] <- c(RTtrans)
+
+colnames(All.Q) <- c("Error_Bin","Error","RT_Quantile","RT")
+
+All.Q$RT_Quantile <- as.factor(All.Q$RT_Quantile)
+
+```
+
+```{r}
+# The palette with grey:
+cbPalette <- c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#D55E00", "#CC79A7")
+
+QPP <- ggplot(data = All.Q,aes(x=All.Q$Error, y=All.Q$RT, group=All.Q$RT_Quantile, colour = RT_Quantile)) + geom_point() + geom_smooth(se=FALSE) + labs(title ="Response Time Quantiles by Error", x = "Response Error (degrees)", y = "Response Time (s)") + scale_colour_manual(values=cbPalette)
+
+QPP
+```
+
+```{r}
+ggsave("RTQ.jpeg", plot = QPP)
+```
