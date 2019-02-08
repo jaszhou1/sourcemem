@@ -4,6 +4,8 @@ J1 = J1(J1(:,8)~=9,:);
 J1 = J1(J1(:,8)~=13,:);
 J1 = J1(J1(:,8)~=15,:);
 J1 = J1(J1(:,8)~=17,:);
+
+J1 = J1(J1(:,7)>0.25,:);
 %Split high and low recog conf
 
 %Split by Confidence
