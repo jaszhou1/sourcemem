@@ -1,4 +1,4 @@
-load('groupData.mat');
+load('groupData2.mat');
 
 VP_LL_Preds_Recognised = cell(1,4);
 [ll, bic, Pred, pest] = FitVPx(groupRecognised);
