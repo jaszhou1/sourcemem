@@ -1,6 +1,6 @@
 %Group Fits
 load('groupFits.mat')
-load('groupData.mat')
+load('groupData2.mat')
 
 filename = 'groupVP_Recog.png';
     fitplot(groupRecognised, VP_LL_Preds_Recognised{1,3});
