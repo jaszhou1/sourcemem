@@ -1,5 +1,9 @@
 load('Jindiv_Simple.mat');
-
+J1 = J1(J1(:,8)~=1,:);
+J1 = J1(J1(:,8)~=9,:);
+J1 = J1(J1(:,8)~=13,:);
+J1 = J1(J1(:,8)~=15,:);
+J1 = J1(J1(:,8)~=17,:);
 %Split high and low recog conf
 
 %Split by Confidence
