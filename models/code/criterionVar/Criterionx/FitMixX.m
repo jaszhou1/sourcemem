@@ -4,17 +4,17 @@ function [ll, bic, Pred, pest] = FitMixX(data)
 %          1    2    3    4    5      6    7   8   9   10    11
 setopt;
 
-v1a = normrnd(4,1);
+v1a = normrnd(2.5,0.5);
 v2a = normrnd(0.01,0.5);
-v1b = normrnd(3,1);
+v1b = normrnd(0.5,0.2);
 v2b = normrnd(0.01,0.5);
 eta1 = normrnd(0, 0.01);
 eta2 = normrnd(0,0.01);
-a1 = normrnd(1,0.5);
-a2 = normrnd(1,0.5);
+a1 = normrnd(2,0.5);
+a2 = normrnd(1.5,0.5);
 pi1 = norm(0.7,0.5);
 pi2 = normrnd(0.7,0.5);
-Ter = normrnd(0.2,0.1);
+Ter = normrnd(0.15,0.05);
 sa = normrnd(1,0.5);
 
 

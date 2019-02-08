@@ -34,7 +34,7 @@ w = 2 * pi / nw;
 
 
 % Set manually if needed - 30/1/19
-badix = 25; 
+badix = 5; 
 
 
 if nargin < 7
