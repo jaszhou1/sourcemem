@@ -16,12 +16,12 @@ v1a = normrnd(2,0.5);
 v2a = normrnd(0.01,0.02);
 v1b = normrnd(2,0.5);
 v2b = normrnd(0.5,0.2);
-eta1 = normrnd(0.6,0.1);
-eta2 = normrnd(0.6,0.1);
+eta1 = normrnd(0.6,0.05);
+eta2 = normrnd(0.6,0.5);
 a = normrnd(1.25,0.5);
-Ter = normrnd(0.10,0.8);
+Ter = normrnd(0.10,0.05);
 
-sa = normrnd(0.5,0.5);
+sa = normrnd(1.25,0.5);
 
 
 P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, sa];
