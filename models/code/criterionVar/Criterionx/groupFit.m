@@ -1,7 +1,7 @@
 load('groupData3.mat');
 
 VP_LL_Preds_Recognised = cell(1,4);
-[ll, bic, Pred, pest] = FitVPx(groupRecognised);
+[ll, bic, Pred, pest] = FitVP(groupRecognised);
 VP_LL_Preds_Recognised{1,1} = ll;
 VP_LL_Preds_Recognised{1,2} = bic;
 VP_LL_Preds_Recognised{1,3} = Pred;
@@ -19,7 +19,7 @@ VP_LL_Preds_Recognised{1,4} = pest;
 
 MX_LL_Preds_Recognised = cell(1,4);
 
-[ll, bic, Pred, pest] = FitMixX(groupRecognised);
+[ll, bic, Pred, pest] = FitMix(groupRecognised);
 MX_LL_Preds_Recognised{1,1} = ll;
 MX_LL_Preds_Recognised{1,2} = bic;
 MX_LL_Preds_Recognised{1,3} = Pred;

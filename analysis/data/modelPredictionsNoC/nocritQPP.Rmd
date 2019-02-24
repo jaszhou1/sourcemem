@@ -1,0 +1,95 @@
+---
+title: "nocritQPP"
+author: "jason"
+date: "February 8, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+```{r}
+setwd("~/GitHub/sourcemem/analysis/data/modelPredictionsNoC")
+Mix <- read.csv("mixCum.csv", header = FALSE)
+VP <- read.csv("vpCum.csv", header = FALSE)
+time <- read.csv("time.csv", header = FALSE)
+theta <- read.csv("theta.csv", header = FALSE)
+```
+
+```{r}
+angles <- theta[1,]
+ys <- time[1,]
+nrows <- nrow(Mix)
+Q <- data.frame(matrix(ncol=0,nrow=0))
+for (i in 1:nrows){
+  xs <- Mix[i,]
+  this.Quantile<- approx(xs, ys, c(0.1, 0.3, 0.7))
+  #this.Quantile<- interp[["y"]]
+   Q <- rbind(Q,this.Quantile)
+}
+
+#QPP <- ggplot(data = Q,aes(x=, y=, group=, colour = )) + geom_point() + geom_smooth(se=FALSE) + labs(title ="Response Time Quantiles by Error", x = "Response Error (degrees)", y = "Response Time (s)") + scale_colour_manual(values=cbPalette)
+
+```
+
+```{r}
+plotQ = data.frame(matrix(ncol=3,nrow=150))
+angles <- t(angles)
+plotQ[,1]=rep(angles[,1],each=3)
+plotQ[,2]=Q[,1]
+plotQ[,3]=Q[,2]
+
+colnames(plotQ) <- c("Error","RT_Quantile","RT")
+
+plotQ$RT_Quantile <- as.factor(plotQ$RT_Quantile)
+
+cbPalette <- c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#D55E00", "#CC79A7")
+
+MixQPP <- ggplot(data = plotQ,aes(x=plotQ$Error, y=plotQ$RT, group=plotQ$RT_Quantile, colour = RT_Quantile)) + geom_line() + labs(title ="Response Time Quantiles by Error", x = "Response Error (degrees)", y = "Response Time (s)") + scale_colour_manual(values=cbPalette)
+```
+
+```{r}
+MixQPP
+ggsave("Mix.jpeg", plot = MixQPP)
+```
+
+
+```{r} 
+#Same but with VP
+angles <- theta[1,]
+ys <- time[1,]
+nrows <- nrow(VP)
+Q <- data.frame(matrix(ncol=0,nrow=0))
+for (i in 1:nrows){
+  xs <- VP[i,]
+  this.Quantile<- approx(xs, ys, c(0.1, 0.3, 0.7))
+  #this.Quantile<- interp[["y"]]
+   Q <- rbind(Q,this.Quantile)
+}
+
+#QPP <- ggplot(data = Q,aes(x=, y=, group=, colour = )) + geom_point() + geom_smooth(se=FALSE) + labs(title ="Response Time Quantiles by Error", x = "Response Error (degrees)", y = "Response Time (s)") + scale_colour_manual(values=cbPalette)
+
+```
+
+```{r}
+plotQ = data.frame(matrix(ncol=3,nrow=150))
+angles <- t(angles)
+plotQ[,1]=rep(angles[,1],each=3)
+plotQ[,2]=Q[,1]
+plotQ[,3]=Q[,2]
+
+colnames(plotQ) <- c("Error","RT_Quantile","RT")
+
+plotQ$RT_Quantile <- as.factor(plotQ$RT_Quantile)
+
+cbPalette <- c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#D55E00", "#CC79A7")
+
+VPQPP <- ggplot(data = plotQ,aes(x=plotQ$Error, y=plotQ$RT, group=plotQ$RT_Quantile, colour = RT_Quantile)) + geom_line() + labs(title ="Response Time Quantiles by Error", x = "Response Error (degrees)", y = "Response Time (s)") + scale_colour_manual(values=cbPalette)
+```
+
+```{r}
+VPQPP
+ggsave("VP.jpeg", plot = VPQPP)
+```
