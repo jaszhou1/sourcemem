@@ -4,16 +4,16 @@ function [ll, bic, Pred, pest] = fitGVM(data)
 %          1    2    3    4    5      6    7   8   9   10    11
 setopt;
 
-nunorm1 = normrnd(2,1);
-nunorm2 = normrnd(2,1);
-kappa1 = normrnd(5,1);
-kappa2 = normrnd(5,1);
-eta = normrnd(0.5, 0.05);
-rho = normrnd(0.05,0.01);
-a = normrnd(2.8,0.3);
-Ter = normrnd(-0.2,0.03);
-st = normrnd(0.05,0.01);
-sa = normrnd(1,0.3);
+nunorm1 = normrnd(2,1.5);
+nunorm2 = normrnd(2,1.5);
+kappa1 = normrnd(5,2);
+kappa2 = normrnd(5,2);
+eta = normrnd(0.5, 0.2);
+rho = normrnd(0.5,0.2);
+a = normrnd(3,0.5);
+Ter = normrnd(-0.2,0.3);
+st = normrnd(0.05,0.1);
+sa = normrnd(1,0.8);
 
 P=[nunorm1, nunorm2, kappa1, kappa2, eta, rho, a, Ter, st, sa];
 
