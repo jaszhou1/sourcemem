@@ -3,9 +3,9 @@ function [Fit_Data] = Treatment_Simple()
 % Jason Zhou <jasonz1 AT student DOT unimelb DOT edu DOT au>
 
 %Read Data in
-%[J1, J2, J3] = xlsread(data); %J2 and J3 are auxiliary, tells you what the column headers are.
+[J1, J2, J3] = xlsread("stimulus.xlsx"); %J2 and J3 are auxiliary, tells you what the column headers are.
 % MATLAB doesnt like having strings and numbers together)
-load('Jindiv_Simple.mat');
+%load('Jindiv_Simple.mat');
 
 %Split high and low recog conf
 

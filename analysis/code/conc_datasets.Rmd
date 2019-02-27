@@ -7,13 +7,13 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
 
 
 ```{r}
-
-setwd('C:/Users/jasonz1/Documents/R/image-analysis/Data')
+setwd('C:/Users/jason/Documents/GitHub/sourcemem/analysis/data/')
 dataset <- data.frame()
 
 participants = c("p1","p2","p3","p4","p4","p5","p6","p7","p8","p9","p10","p11","p12","p13","p15","p16","p17","p18","p19","p20") 
@@ -25,15 +25,31 @@ for (i in participants){
   for (j in 1:4){
     sessions = c("1","2","3","4")
     s <- j
-    this_session_dataset <- read.csv(sprintf("%s_%s.csv",i,sessions[j]))
+    this_session_dataset <- read.csv(paste(i,"_",j,".csv",sep=""))
     participant_dataset <- rbind(participant_dataset,this_session_dataset)
+    
+    participant_dataset$response_RT <- as.numeric(as.vector(participant_dataset$response_RT))
+
+    #Filter out the slowest RTs for each participant 27/02    
+     participant_dataset<-participant_dataset[!(as.numeric(as.vector(participant_dataset$response_RT))>3*(median(as.numeric(as.vector(participant_dataset$response_RT)),na.rm=TRUE))), ]
+    
   }
   participant_dataset$participant <- i
   dataset <- rbind(dataset,participant_dataset) #could have done this with lists, but because its all the same, we are doing it with one big dataset, added a new variable that identifies.
 }
 
+
+#dataset <- dataset[,-1] #removes the first variable, which are these weird row labels
+#dataset[,3] <- as.numeric(factor(dataset$condition, levels=c(' LOW', ' HIGH')))
+#dataset$recog_rating <- as.factor(dataset$recog_rating) #Confidence Ratings are Discrete
+#dataset.no.na <- dataset[dataset$type!=' FOIL', ]
+#dataset.na <- dataset[dataset$type==' FOIL', ]
+
+
+
+
 # Write CSV in R
-write.csv(dataset, file = "imageability.csv")
+#write.csv(dataset, file = "dataFiltered.csv")
 
 ```
 

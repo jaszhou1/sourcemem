@@ -1,0 +1,85 @@
+---
+title: "ConcSession2"
+author: "Jason Zhou"
+date: "5 July 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+
+
+```{r}
+setwd('C:/Users/jason/Documents/GitHub/sourcemem/analysis/data/')
+dataset <- data.frame()
+
+participants = c("p1","p2","p3","p4","p4","p5","p6","p7","p8","p9","p10","p11","p12","p13","p15","p16","p17","p18","p19","p20") 
+
+#participants = c("p1","p2","p3","p4","p4","p5","p6","p7","p8","p9","p10","p11","p12",
+                 #"p13","p14","p15","p16","p17","p18","p19","p20") #c is vector, list is v general
+for (i in participants){
+  participant_dataset <- data.frame()
+  for (j in 1:4){
+    sessions = c("1","2","3","4")
+    s <- j
+    this_session_dataset <- read.csv(paste(i,"_",j,".csv",sep=""))
+    participant_dataset <- rbind(participant_dataset,this_session_dataset)
+    
+    participant_dataset <- participant_dataset[participant_dataset$type!=' FOIL', ]
+    
+    
+    participant_dataset$response_RT <- as.numeric(as.vector(participant_dataset$response_RT))
+
+    #Filter out the slowest RTs for each participant 27/02    
+     participant_dataset<-participant_dataset[!(participant_dataset$response_RT>3*(median(participant_dataset$response_RT,na.rm=TRUE))), ]
+    
+  }
+  participant_dataset$participant <- i
+  dataset <- rbind(dataset,participant_dataset) #could have done this with lists, but because its all the same, we are doing it with one big dataset, added a new variable that identifies.
+}
+
+#Cleaning up the dataset
+
+dataset <- dataset[,-1] #removes the first variable, which are these weird row labels
+dataset <- dataset[,-1] #removes STIM/FOIL label
+
+
+#Recoding Participant 
+dataset$participant[dataset$participant=="p1"]<-1
+dataset$participant[dataset$participant=="p2"]<-2
+dataset$participant[dataset$participant=="p3"]<-3
+dataset$participant[dataset$participant=="p4"]<-4
+dataset$participant[dataset$participant=="p5"]<-5
+dataset$participant[dataset$participant=="p6"]<-6
+dataset$participant[dataset$participant=="p7"]<-7
+dataset$participant[dataset$participant=="p8"]<-8
+dataset$participant[dataset$participant=="p9"]<-9
+dataset$participant[dataset$participant=="p10"]<-10
+dataset$participant[dataset$participant=="p11"]<-11
+dataset$participant[dataset$participant=="p12"]<-12
+dataset$participant[dataset$participant=="p13"]<-13
+dataset$participant[dataset$participant=="p15"]<-15
+dataset$participant[dataset$participant=="p16"]<-16
+dataset$participant[dataset$participant=="p17"]<-17
+dataset$participant[dataset$participant=="p18"]<-18
+dataset$participant[dataset$participant=="p19"]<-19
+dataset$participant[dataset$participant=="p20"]<-20
+
+#Recoding Low/High
+dataset$condition <- relevel(dataset$condition," LOW")
+dataset$condition <- as.numeric(factor(dataset$condition))
+#dataset$recog_rating <- as.factor(dataset$recog_rating) #Confidence Ratings are Discrete
+#dataset.no.na <- dataset[dataset$type!=' FOIL', ]
+#dataset.na <- dataset[dataset$type==' FOIL', ]
+
+
+
+
+# Write CSV in R
+write.csv(dataset, file = "dataFiltered.csv")
+
+```
+

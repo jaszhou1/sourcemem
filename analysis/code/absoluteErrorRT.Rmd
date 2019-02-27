@@ -1,0 +1,67 @@
+---
+title: "absoluteErrorRT"
+author: "jason"
+date: "February 25, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+```{r}
+
+setwd("~/GitHub/sourcemem/analysis/data")
+
+dataset <- read.csv("dataset.csv", na.strings = " NA")
+
+dataset <- dataset[,-1] #removes the first variable, which are these weird row labels
+dataset[,3] <- as.numeric(factor(dataset$condition, levels=c(' LOW', ' HIGH')))
+dataset$recog_rating <- as.factor(dataset$recog_rating) #Confidence Ratings are Discrete
+
+
+
+# Set up all the different dataset subsets
+
+#Group Level
+# No Recognition Foils 
+dataset.no.na <- dataset[dataset$type!=' FOIL', ]
+dataset.na <- dataset[dataset$type==' FOIL', ]
+
+
+# Stimulus only, conditioned on imageability+concreteness ratings
+dataset.low <- dataset.no.na[dataset.no.na$condition == 1, ]
+dataset.high <- dataset.no.na[dataset.no.na$condition == 2, ]
+
+participants = c("1","2","3","4","5","6","7","8","9","10","11","12","13","15","16","17","18","19","20") 
+
+#recognition ratings
+dataset.recog_1 <- dataset.no.na[dataset.no.na$recog_rating==1, ]
+dataset.recog_2 <- dataset.no.na[dataset.no.na$recog_rating==2, ]
+dataset.recog_3 <- dataset.no.na[dataset.no.na$recog_rating==3, ]
+dataset.recog_4 <- dataset.no.na[dataset.no.na$recog_rating==4, ]
+dataset.recog_5 <- dataset.no.na[dataset.no.na$recog_rating==5, ]
+dataset.recog_6 <- dataset.no.na[dataset.no.na$recog_rating==6, ]
+
+dataset.unrecognised <- rbind(dataset.recog_1, dataset.recog_2, dataset.recog_3)
+
+dataset.recognised <- rbind(dataset.recog_4, dataset.recog_5, dataset.recog_6)
+
+dataset.recognised <- dataset.recognised[!(dataset.recognised$response_RT>10),]
+dataset.recognised <- dataset.recognised[!(dataset.recognised$response_RT<0.2),]
+
+```
+
+
+```{r}
+
+i <- 4
+
+data <- dataset.recognised[dataset.recognised$participant==i, ]
+  
+
+plot <- ggplot(data, aes(x=data$response_angle, y=abs(data$response_error))) + geom_point() + labs(title =paste("Absolute Error by Response Angle, Participant No. ",i,sep = " "), x = "Response Angle (rads)", y = "Absolute Error (rads)")
+plot
+
+```
