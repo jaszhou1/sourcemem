@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 setwd('C:/Users/jason/Documents/GitHub/sourcemem/analysis/data/')
-dataset_raw <- data.frame()
+dataset <- data.frame()
 
 participants = c("p1","p2","p3","p4","p4","p5","p6","p7","p8","p9","p10","p11","p12","p13","p15","p16","p17","p18","p19","p20") 
 
@@ -37,18 +37,14 @@ for (i in participants){
      #participant_dataset<-participant_dataset[!(participant_dataset$response_RT>(3*(mad(participant_dataset$response_RT, center = median(participant_dataset$response_RT,na.rm=TRUE))) - median(participant_dataset$response_RT,na.rm=TRUE))), ]
     
   }
-  participant_dataset<-participant_dataset[!(participant_dataset$response_RT>(3*(sd(participant_dataset$response_RT)) + median(participant_dataset$response_RT,na.rm=TRUE))), ]
+  #participant_dataset<-participant_dataset[!(participant_dataset$response_RT>(3*(sd(participant_dataset$response_RT)) + median(participant_dataset$response_RT,na.rm=TRUE))), ]
   
   participant_dataset$participant <- i
   
   name <- paste(i,"data",sep="_")
   assign(name,participant_dataset)
-  dataset_raw <- rbind(dataset_raw,participant_dataset) #could have done this with lists, but because its all the same, we are doing it with one big dataset, added a new variable that identifies.
+  dataset <- rbind(dataset,participant_dataset) #could have done this with lists, but because its all the same, we are doing it with one big dataset, added a new variable that identifies.
 }
-
-# 3* (mad(participant_dataset$response_RT, center = median(participant_dataset$response_RT,na.rm=TRUE)))
-
-#(3*(mad(participant_dataset$response_RT, center = median(participant_dataset$response_RT,na.rm=TRUE))) - median(participant_dataset$response_RT,na.rm=TRUE))
 
 
 #Cleaning up the dataset
@@ -89,7 +85,7 @@ dataset$condition <- as.numeric(factor(dataset$condition))
 
 
 # Write CSV in R
-write.csv(dataset, file = "filteredData.csv")
+#write.csv(dataset, file = "filteredData.csv")
 
 ```
 
