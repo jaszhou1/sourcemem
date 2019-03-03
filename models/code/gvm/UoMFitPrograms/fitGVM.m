@@ -13,11 +13,12 @@ rho = normrnd(0.5,0.2);
 a = normrnd(3,0.5);
 Ter = normrnd(-0.2,0.3);
 st = normrnd(0.05,0.1);
-sa = normrnd(1,0.8);
+sa = 0;
+%sa = normrnd(1,0.8);
 
 P=[nunorm1, nunorm2, kappa1, kappa2, eta, rho, a, Ter, st, sa];
 
-Sel = [1,1,1,1,1,1,1,1,1,1];  % all parameters free
+Sel = [1,1,1,1,1,1,1,1,1,0];  % all parameters free
 nlow = length(data{1,1});
 nhigh = length(data{1,2});
 

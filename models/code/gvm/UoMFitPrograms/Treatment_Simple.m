@@ -8,7 +8,7 @@ function [Fit_Data] = Treatment_Simple()
 % J3(:,1)=[];
 % MATLAB doesnt like having strings and numbers together)
 load('Jindiv_Filtered.mat');
-
+J1(:,1) = [];
 %Split high and low recog conf
 
 %Split
