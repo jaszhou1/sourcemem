@@ -7,8 +7,9 @@ function [Fit_Data] = Treatment_Simple()
 % J1(:,1)=[];
 % J3(:,1)=[];
 % MATLAB doesnt like having strings and numbers together)
-load('Jindiv_Filtered.mat');
-J1(:,1) = [];
+%load('Jindiv_Filtered.mat'); % Filtered version
+load('Jindiv_Simple.mat');
+%J1(:,1) = [];
 %Split high and low recog conf
 
 %Split
@@ -31,6 +32,7 @@ J_LC = J1(J1(:,2)<3,:);
 participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
 Subject = cell(length(participants),4);
 for i = participants
+    %disp(size(J_HC))
     ntrials_Y_LOW = length(J_HC(J_HC(:,1)==1&J_HC(:,8)==i,:)); %recognised (>=3) and Low Imageability condition
     ntrials_Y_HIGH = length(J_HC(J_HC(:,1)==2&J_HC(:,8)==i,:));
     ntrials_N_LOW = length(J_LC(J_LC(:,1)==1&J_LC(:,8)==i,:));
