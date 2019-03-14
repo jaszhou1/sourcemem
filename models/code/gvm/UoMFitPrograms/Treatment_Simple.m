@@ -13,8 +13,8 @@ J1(:,1) = [];
 %Split high and low recog conf
 
 %Split
-%J_HC = J1(J1(:,2)>=3,:);
-%J_LC = J1(J1(:,2)<3,:);
+% J_HC = J1(J1(:,2)>=3,:);
+% J_LC = J1(J1(:,2)<3,:);
 
 %For the highest recognition, 14/03
 J_HC = J1(J1(:,2)==6,:);
