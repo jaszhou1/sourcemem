@@ -17,8 +17,8 @@ pest = fminsearch(@fitgvm6x, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhi
 P(Sel==1) = pest;
 [ll,bic,Pred, Gstuff] = fitgvm6x(P(Sel==1), P(Sel==0), Sel, data, nlow, nhigh); %Criterion Range Error
 
-    filename = ['GVM_QxQ',num2str(i),'.png'];
-    qplotsrc(@fitmixture6x, P(Sel==1), P(Sel==0), Sel, data)
-    saveas(gcf,filename);
-%fitplot(D11, Pred);
+%    filename = ['GVM_QxQ',num2str(i),'.png'];
+%    qplotsrc(@fitmixture6x, P(Sel==1), P(Sel==0), Sel, data)
+%    saveas(gcf,filename);
+
 end
