@@ -5,35 +5,35 @@ function [ll, bic, Pred, pest] = fitGVM(data,i)
 setopt;
 %% Normal Fit
 
-% nunorm1 = normrnd(3,0.5);
-% nunorm2 = normrnd(3,0.5);
-% kappa1 = normrnd(3,0.2);
-% kappa2 = normrnd(3,0.2);
-% eta = normrnd(1, 0.3);
-% rho = normrnd(0.1,0.1);
-% a = normrnd(3.5,0.5);
-% Ter = normrnd(-0.2,0.3);
-% st = normrnd(0.05,0.1);
-% sa = 0;
-% %sa = normrnd(1,0.8);
-% 
-% P=[nunorm1, nunorm2, kappa1, kappa2, eta, rho, a, Ter, st, sa];
-% 
-% Sel = [1,1,1,1,1,1,1,1,1,0];  % all parameters free
-% %Sel = [0,0,0,0,0,0,0,0,0,0]; 
-% nlow = length(data{1,1});
-% nhigh = length(data{1,2});
+nunorm1 = normrnd(3,0.5);
+nunorm2 = normrnd(3,0.5);
+kappa1 = normrnd(3,0.2);
+kappa2 = normrnd(3,0.2);
+eta = normrnd(1, 0.3);
+rho = normrnd(0.1,0.1);
+a = normrnd(3.5,0.5);
+Ter = normrnd(-0.2,0.3);
+st = normrnd(0.05,0.1);
+sa = 0;
+%sa = normrnd(1,0.8);
+
+P=[nunorm1, nunorm2, kappa1, kappa2, eta, rho, a, Ter, st, sa];
+
+Sel = [1,1,1,1,1,1,1,1,1,0];  % all parameters free
+%Sel = [0,0,0,0,0,0,0,0,0,0]; 
+nlow = length(data{1,1});
+nhigh = length(data{1,2});
 
 
 %% Use Set of Parameters
-load("Good_StartingParam");
-%P=[nunorm1, nunorm2, kappa1, kappa2, eta, rho, a, Ter, st, sa];
-P = Starting_Preds{i,4};
-P(1,10) = 0; %TURN THIS OFF 
-Sel = [1,1,1,1,1,1,1,1,1,0];  % all parameters free
-%Sel = [0,0,0,0,0,0,0,0,0,0]; %all parameters fixed
-nlow = length(data{1,1});
-nhigh = length(data{1,2});
+% load("Good_StartingParam");
+% %P=[nunorm1, nunorm2, kappa1, kappa2, eta, rho, a, Ter, st, sa];
+% P = Starting_Preds{i,4};
+% P(1,10) = 0; %TURN THIS OFF 
+% Sel = [1,1,1,1,1,1,1,1,1,0];  % all parameters free
+% %Sel = [0,0,0,0,0,0,0,0,0,0]; %all parameters fixed
+% nlow = length(data{1,1});
+% nhigh = length(data{1,2});
 %% 
 pest = fminsearch(@fitgvm6x, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhigh);
 P(Sel==1) = pest;

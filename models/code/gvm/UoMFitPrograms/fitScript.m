@@ -33,13 +33,7 @@ end
 % %% Plot Fits superimposed on Data, and save.
 % % Plot 
 % fitplot(Recognised {1}, Pred);
-for i = participants
-   
-    filename = ['GVM_RecogHigh',num2str(i),'.png'];
-    fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
-    %saveas(gcf,filename);
-    
-end    
+
 
 %% Unrecognised
 
@@ -55,12 +49,19 @@ end
 
 for i = participants
    
-    filename = ['GVM_Unrecog',num2str(i),'.png'];
+    filename = ['GVM_Recog',num2str(i),'.png'];
     fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
-    %saveas(gcf,filename);
+    saveas(gcf,filename);
     
 end    
 
+for i = participants
+   
+    filename = ['GVM_Unrecog',num2str(i),'.png'];
+    fitplot(Unrecognised {i}, GVM_LL_Preds_Unrecognised{i,3});
+    saveas(gcf,filename);
+    
+end    
 %%
 %%% The thing I want at the end is...
 % full_data = open_data(filename)
