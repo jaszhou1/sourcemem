@@ -37,7 +37,7 @@ for (i in participants){
      #participant_dataset<-participant_dataset[!(participant_dataset$response_RT>(3*(mad(participant_dataset$response_RT, center = median(participant_dataset$response_RT,na.rm=TRUE))) - median(participant_dataset$response_RT,na.rm=TRUE))), ]
     
   }
-  #participant_dataset<-participant_dataset[!(participant_dataset$response_RT>(3*(sd(participant_dataset$response_RT)) + median(participant_dataset$response_RT,na.rm=TRUE))), ]
+  participant_dataset<-participant_dataset[!(participant_dataset$response_RT>(3*(sd(participant_dataset$response_RT)) + median(participant_dataset$response_RT,na.rm=TRUE))), ]
   
   participant_dataset$participant <- i
   

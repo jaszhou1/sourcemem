@@ -19,4 +19,4 @@ filename = [num2str(i),'jointDist','.csv'];
 csvwrite(filename,joint_distribution);
 
 end
-%contour(theta_density(1, :), time_density(1, :), (joint_distribution ./ max(joint_distribution, 1))')
+contour(theta_density(1, :), time_density(1, :), (joint_distribution ./ max(joint_distribution, 1))')

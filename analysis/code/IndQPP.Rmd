@@ -153,6 +153,6 @@ rtPlot <- ggplot(data = All.Q,aes(x=All.Q$Error, y=All.Q$RT, group=All.Q$RT_Quan
 
 assign(name,rtPlot)
 
-ggsave(rtPlot, filename= (sprintf("%s_rtQuant.png",participants[[i]])))
+#ggsave(rtPlot, filename= (sprintf("%s_rtQuant.png",participants[[i]])))
 
 ```

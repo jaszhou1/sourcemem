@@ -1,0 +1,40 @@
+---
+title: "paramAnalysis"
+author: "jason"
+date: "March 14, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/analysis/data/parameterEstimates")
+library(ggplot2)
+```
+
+```{r}
+Recog <- read.csv("recognisedParams.csv", header = FALSE)
+Unrecog <- read.csv("unrecognisedParams.csv", header = FALSE)
+High <- read.csv("highParams.csv", header = FALSE)
+
+colnames(Recog) <- c("nunorm1", "nunorm2", "kappa1", "kappa2", "eta", "rho", "a", "Ter", "st")
+colnames(Unrecog) <- c("nunorm1", "nunorm2", "kappa1", "kappa2", "eta", "rho", "a", "Ter", "st")
+colnames(High) <- c("nunorm1", "nunorm2", "kappa1", "kappa2", "eta", "rho", "a", "Ter", "st")
+```
+
+```{r}
+recogPlot <- ggplot(Recog,aes(x = Recog$kappa1, y = Recog$rho)) + geom_point(color = "blue") + geom_text(label=rownames(High), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Recognised", x = "kappa1", y = "rho")
+
+highPlot1 <- ggplot(High,aes(x = High$kappa1, y = High$rho)) + geom_point(color = "red") + geom_text(label=rownames(High), nudge_x = 0.05, nudge_y = 0.05)+ labs(title ="Recognised High Confidence (Low Img)", x = "kappa1", y = "rho")
+
+highPlot2 <- ggplot(High,aes(x = High$kappa2, y = High$rho)) + geom_point(color = "red") + geom_text(label=rownames(High), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Recognised High Confidence (High Img)", x = "kappa2", y = "rho")
+
+
+unrecogPlot <- ggplot(Unrecog,aes(x = Unrecog$kappa1, y = Unrecog$rho)) + geom_point(colour = "green") + geom_text(label=rownames(Unrecog), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Unrecognised", x = "kappa1", y = "rho")
+```
+
+```{r}
+recogPlot
+highPlot1
+highPlot2
+unrecogPlot
+```
