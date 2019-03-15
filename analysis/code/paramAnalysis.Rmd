@@ -12,7 +12,7 @@ library(ggplot2)
 ```
 
 ```{r}
-Recog <- read.csv("recognisedParams.csv", header = FALSE)
+Recog <- read.csv("recogParams2.csv", header = FALSE)
 Unrecog <- read.csv("unrecognisedParams.csv", header = FALSE)
 High <- read.csv("highParams.csv", header = FALSE)
 
@@ -22,19 +22,25 @@ colnames(High) <- c("nunorm1", "nunorm2", "kappa1", "kappa2", "eta", "rho", "a",
 ```
 
 ```{r}
-recogPlot <- ggplot(Recog,aes(x = Recog$kappa1, y = Recog$rho)) + geom_point(color = "blue") + geom_text(label=rownames(High), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Recognised", x = "kappa1", y = "rho")
+recogPlot1 <- ggplot(Recog,aes(x = Recog$kappa1, y = Recog$rho)) + geom_point(color = "blue", size = .5) + geom_text(label=rownames(High), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Recognised (Low Img)", x = "kappa1", y = "rho")
+
+recogPlot2 <- ggplot(Recog,aes(x = Recog$kappa2, y = Recog$rho)) + geom_point(color = "blue") + geom_text(label=rownames(High), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Recognised (High Img)", x = "kappa2", y = "rho")
 
 highPlot1 <- ggplot(High,aes(x = High$kappa1, y = High$rho)) + geom_point(color = "red") + geom_text(label=rownames(High), nudge_x = 0.05, nudge_y = 0.05)+ labs(title ="Recognised High Confidence (Low Img)", x = "kappa1", y = "rho")
 
 highPlot2 <- ggplot(High,aes(x = High$kappa2, y = High$rho)) + geom_point(color = "red") + geom_text(label=rownames(High), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Recognised High Confidence (High Img)", x = "kappa2", y = "rho")
 
 
-unrecogPlot <- ggplot(Unrecog,aes(x = Unrecog$kappa1, y = Unrecog$rho)) + geom_point(colour = "green") + geom_text(label=rownames(Unrecog), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Unrecognised", x = "kappa1", y = "rho")
+unrecogPlot1 <- ggplot(Unrecog,aes(x = Unrecog$kappa1, y = Unrecog$rho)) + geom_point(colour = "green") + geom_text(label=rownames(Unrecog), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Unrecognised (Low Img)", x = "kappa1", y = "rho")
+
+unrecogPlot2 <- ggplot(Unrecog,aes(x = Unrecog$kappa2, y = Unrecog$rho)) + geom_point(colour = "green") + geom_text(label=rownames(Unrecog), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Unrecognised (High Img)", x = "kappa2", y = "rho")
 ```
 
 ```{r}
-recogPlot
+recogPlot1
+recogPlot2
 highPlot1
 highPlot2
-unrecogPlot
+unrecogPlot1
+unrecogPlot2
 ```
