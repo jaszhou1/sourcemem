@@ -1,4 +1,4 @@
-function qplotsrc(fitfunc, Pvar, Pfix, Sel, Data);
+function qplotsrc(fitfunc, Pvar, Pfix, Sel, Data, nlow, nhigh);
 % ----------------------------------------------------------------------
 % Empirical and RT fitted RT quantiles as a function of theta.
 % for source memory experiment.
@@ -29,7 +29,7 @@ function qplotsrc(fitfunc, Pvar, Pfix, Sel, Data);
     massm = 1.0/nmass; % 10 bins
 
     % Generic fit function call.
-    [ll,bic,Pred,Gstuff] = fitfunc(Pvar, Pfix, Sel, Data)
+    [ll,bic,Pred,Gstuff] = fitfunc(Pvar, Pfix, Sel, Data, nlow, nhigh)
 
     ta = Gstuff{1,1};
     thetaa = Gstuff{2,1};
@@ -128,7 +128,10 @@ eps = 0.0001;
 ntheta = 7;
 %ntheta = 9;
 lnd = length(Data);
-thetabin = round(lnd * [0.1429, 0.2857, 0.4286,  0.5714, 0.7143, 0.8571, 1.0000]);
+upper_bin_edge = linspace(0, 1, ntheta + 1);
+upper_bin_edge = upper_bin_edge(2:end);
+thetabin = round(lnd * upper_bin_edge);
+%thetabin = round(lnd * [0.1429, 0.2857, 0.4286,  0.5714, 0.7143, 0.8571, 1.0000]);
 %thetabin = round(lnd * [0.1111, 0.2222, 0.3333,  0.4444, 0.5556, 0.6667, 0.7778, 0.8889, 1.0000])
 
 BinRT = zeros(110, ntheta);

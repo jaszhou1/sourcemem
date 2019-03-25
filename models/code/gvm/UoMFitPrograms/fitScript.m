@@ -49,7 +49,7 @@ end
 
 for i = participants
    
-    filename = ['GVM_Recog',num2str(i),'.png'];
+    filename = ['GVM_RecogCrit',num2str(i),'.png'];
     fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
     saveas(gcf,filename);
     
@@ -57,7 +57,7 @@ end
 
 for i = participants
    
-    filename = ['GVM_Unrecog',num2str(i),'.png'];
+    filename = ['GVM_UnrecogCrit',num2str(i),'.png'];
     fitplot(Unrecognised {i}, GVM_LL_Preds_Unrecognised{i,3});
     saveas(gcf,filename);
     

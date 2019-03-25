@@ -19,7 +19,7 @@ sa = 0;
 
 P=[nunorm1, nunorm2, kappa1, kappa2, eta, rho, a, Ter, st, sa];
 
-Sel = [1,1,1,1,1,1,1,1,1,0];  % all parameters free
+Sel = [1,1,1,1,1,1,1,1,1,1];  % all parameters free
 %Sel = [0,0,0,0,0,0,0,0,0,0]; 
 nlow = length(data{1,1});
 nhigh = length(data{1,2});
