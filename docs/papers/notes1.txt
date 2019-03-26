@@ -1,0 +1,24 @@
+Elaborate the hautus paragraph, figure out where it goes
+
+describe the models, how they are diagnostic
+
+explain the data in discussion
+
+generate and describe data
+
+finish discussion.
+
+
+write up a page-long cover letter.
+1. Paragraph summarising what we did, even briefer than an abstract
+2. Recommend editors, what kind of data (RTs) hit the key things we use
+3. Potential reviewers. 
+	List of reviewers, what university theyre at, and why recco
+		Goshen-Gottstein (continuous report)
+			Conditioning on recog, heavy tail.
+	List of reviewers you *dont* want to review
+		Ken Malmbuerg? seems bad 
+4. Key words
+5. Sometimes they ask to attach figures seperately, just leave it in text.
+	Don't remove them from the body of the text.
+6. Submit as word doc, PDF preferred.

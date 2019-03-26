@@ -60,27 +60,53 @@ MX_LL_Preds_Unrecognised{i,3} = Pred;
 MX_LL_Preds_Unrecognised{i,4} = pest;
 end
 
+%% Fit VP + Mix Model
+
+HY_LL_Preds_Recognised = cell(length(participants),4);
+for i = participants
+    i
+[ll, bic, Pred, pest] = FitVPMix(Recognised {i});
+HY_LL_Preds_Recognised{i,1} = ll;
+HY_LL_Preds_Recognised{i,2} = bic;
+HY_LL_Preds_Recognised{i,3} = Pred;
+HY_LL_Preds_Recognised{i,4} = pest;
+end
+
+HY_LL_Preds_Unrecognised = cell(length(participants),4);
+for i = participants
+    i
+[ll, bic, Pred, pest] = FitVPMix(Unrecognised {i});
+HY_LL_Preds_Unrecognised{i,1} = ll;
+HY_LL_Preds_Unrecognised{i,2} = bic;
+HY_LL_Preds_Unrecognised{i,3} = Pred;
+HY_LL_Preds_Unrecognised{i,4} = pest;
+end
+
+%% 
+
+
+
 % %% Plot Fits superimposed on Data, and save.
 % % Plot 
 % fitplot(Recognised {1}, Pred);
-for i = participants
-    filename = ['tVP_Recog',num2str(i),'.png'];
-    fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
-    saveas(gcf,filename);
-    
-    filename = ['tVP_Unrecog',num2str(i),'.png'];
-    fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
-    saveas(gcf,filename);
-    
-    filename = ['tMX_Recog',num2str(i),'.png'];
-    fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
-    saveas(gcf,filename);
-    
-    filename = ['tMX_Unrecog',num2str(i),'.png'];
-    fitplot(Unrecognised {i}, MX_LL_Preds_Unrecognised{i,3});
-    saveas(gcf,filename);
-end    
-
+% for i = participants
+%     filename = ['tVP_Recog',num2str(i),'.png'];
+%     fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+%     saveas(gcf,filename);
+%     
+%     filename = ['tVP_Unrecog',num2str(i),'.png'];
+%     fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
+%     saveas(gcf,filename);
+%     
+%     filename = ['tMX_Recog',num2str(i),'.png'];
+%     fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+%     saveas(gcf,filename);
+%     
+%     filename = ['tMX_Unrecog',num2str(i),'.png'];
+%     fitplot(Unrecognised {i}, MX_LL_Preds_Unrecognised{i,3});
+%     saveas(gcf,filename);
+% end    
+% 
 
 %%
 %%% The thing I want at the end is...
