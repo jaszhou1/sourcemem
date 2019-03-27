@@ -1,4 +1,3 @@
-
 %% Open Data
 
 %Opens and organises the data into recognised/unrecognised and low/high imageability
@@ -15,33 +14,68 @@ Unrecognised = Fit_Data(:,2);
 %Fit the data, generate predictions.
 
 participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
+%% Fit Variable Precision (Continuous model)
+
+% %Empty array for Log Likelihoods and Predictions to live.
+VP_LL_Preds_Recognised = cell(length(participants),4);
+for i = participants
+    i
+[ll, bic, Pred, pest] = FitVPx(Recognised {i});
+VP_LL_Preds_Recognised{i,1} = ll;
+VP_LL_Preds_Recognised{i,2} = bic;
+VP_LL_Preds_Recognised{i,3} = Pred;
+VP_LL_Preds_Recognised{i,4} = pest;
+end
+
+VP_LL_Preds_Unrecognised = cell(length(participants),4);
+for i = participants
+    i
+[ll, bic, Pred, pest] = FitVPx(Unrecognised {i});
+VP_LL_Preds_Unrecognised{i,1} = ll;
+VP_LL_Preds_Unrecognised{i,2} = bic;
+VP_LL_Preds_Unrecognised{i,3} = Pred;
+VP_LL_Preds_Unrecognised{i,4} = pest;
+end
+%% Fit Mixture Model (Threshold model)
 
 %Empty array for Log Likelihoods and Predictions to live.
-GVM_LL_Preds_Recognised = cell(length(participants),4);
+MX_LL_Preds_Recognised = cell(length(participants),4);
 for i = participants
-   
-[ll, bic, Pred, pest] = fitGVM(Recognised {i});
-GVM_LL_Preds_Recognised{i,1} = ll;
-GVM_LL_Preds_Recognised{i,2} = bic;
-GVM_LL_Preds_Recognised{i,3} = Pred;
-GVM_LL_Preds_Recognised{i,4} = pest;
+    i
+[ll, bic, Pred, pest] = FitMix(Recognised {i});
+MX_LL_Preds_Recognised{i,1} = ll;
+MX_LL_Preds_Recognised{i,2} = bic;
+MX_LL_Preds_Recognised{i,3} = Pred;
+MX_LL_Preds_Recognised{i,4} = pest;
+end
+
+MX_LL_Preds_Unrecognised = cell(length(participants),4);
+for i = participants
+    i
+[ll, bic, Pred, pest] = FitMix(Unrecognised {i});
+MX_LL_Preds_Unrecognised{i,1} = ll;
+MX_LL_Preds_Unrecognised{i,2} = bic;
+MX_LL_Preds_Unrecognised{i,3} = Pred;
+MX_LL_Preds_Unrecognised{i,4} = pest;
 end
 
 % %% Plot Fits superimposed on Data, and save.
 % % Plot 
 % fitplot(Recognised {1}, Pred);
 for i = participants
-    
-    filename = ['gvm_Recog',num2str(i),'.png'];
-    fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
+    filename = ['tVP_Recog',num2str(i),'.png'];
+    fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
     saveas(gcf,filename);
     
+    filename = ['tVP_Unrecog',num2str(i),'.png'];
+    fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
+    saveas(gcf,filename);
+    
+    filename = ['tMX_Recog',num2str(i),'.png'];
+    fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+    saveas(gcf,filename);
+    
+    filename = ['tMX_Unrecog',num2str(i),'.png'];
+    fitplot(Unrecognised {i}, MX_LL_Preds_Unrecognised{i,3});
+    saveas(gcf,filename);
 end    
-
-
-%%
-%%% The thing I want at the end is...
-% full_data = open_data(filename)
-% data = split_data(full_data)
-% fit_data(data, starting_preds)
-% plot_data_preds(plot_filename, data, preds)
