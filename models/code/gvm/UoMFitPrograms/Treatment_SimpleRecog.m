@@ -1,4 +1,4 @@
-function [Fit_Data] = Treatment_Simple()
+function [Fit_Data] = Treatment_SimpleRecog()
 %
 % Jason Zhou <jasonz1 AT student DOT unimelb DOT edu DOT au>
 
@@ -12,13 +12,10 @@ load('Jindiv_Filtered.mat'); % Filtered version
 J1(:,1) = [];
 %Split high and low recog conf
 
-%Split
- J_HC = J1(J1(:,2)>=3,:);
- J_LC = J1(J1(:,2)<3,:);
+%Split - For Recognised
+J_HC = J1(J1(:,2)>=3,:);
+J_LC = J1(J1(:,2)<3,:);
 
-%For the highest recognition, 14/03
-%J_HC = J1(J1(:,2)==6,:);
-%J_LC = J1(J1(:,2)<3,:);
 
 %Conditions: 1 is LOW, 2 is HIGH
 
