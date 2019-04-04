@@ -1,0 +1,59 @@
+---
+title: "rayleighs"
+author: "jason"
+date: "March 30, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/analysis/data")
+library(circular)
+```
+
+```{r}
+
+dataset <- read.csv("imageability.csv", na.strings = " NA")
+#dataset$recog_rating <- as.factor(dataset$recog_rating) #Confidence Ratings are Discrete
+
+
+
+#Group Level
+# No Recognition Foils 
+dataset.no.na <- dataset[dataset$type!=' FOIL', ]
+
+#Filter out
+
+dataset.no.na <- dataset.no.na[!(dataset.no.na$response_RT>10),]
+dataset.no.na <- dataset.no.na[!(dataset.no.na$response_RT<.25),]
+
+
+# Confidence
+dataset.unrecog <- dataset.no.na[dataset.no.na$recog_rating<3, ]
+
+
+# Stimulus only, conditioned on imageability+concreteness ratings
+dataset.low <- dataset.no.na[dataset.no.na$condition == ' LOW', ]
+dataset.high <- dataset.no.na[dataset.no.na$condition == ' HIGH', ]
+
+
+#Individual Level
+#participants = c("p1","p3","p5") 
+#for (i in participants){
+#sprintf("%s_%s.csv",i)
+#  }
+
+participants<-c('p1','p2','p3','p4','p5','p6','p7','p8','p9','p10','p11','p12','p13','p15','p16','p17','p18','p19','p20')
+
+rayleigh<-data.frame(participant=character(0),
+                     statistic=numeric(0), 
+                     p.value=numeric(0))
+for(p in participants){
+ this.rayleigh<-rayleigh.test(dataset.unrecog[dataset.unrecog$participant==p,]$response_error)
+ rayleigh <- rbind(rayleigh,
+                   data.frame(participant = p,
+                              statistic = this.rayleigh$statistic,
+                              p.value = this.rayleigh$p.value))
+}
+
+```
