@@ -7,10 +7,10 @@
 %have Jindiv_simple for my data set. For future use, switch this on, and
 %the following line off. You will need to do this in Treatment_Simple as
 %well.
-Fit_Data = Treatment_Simple;
-
-Recognised = Fit_Data(:,1);
-Unrecognised = Fit_Data(:,2);
+% Fit_Data = Treatment_Simple;
+% 
+% Recognised = Fit_Data(:,1);
+% Unrecognised = Fit_Data(:,2);
 
 %Fit the data, generate predictions.
 
