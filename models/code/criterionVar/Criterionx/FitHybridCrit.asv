@@ -61,14 +61,14 @@ MX_LL_Preds_Unrecognised{i,2} = bic;
 MX_LL_Preds_Unrecognised{i,3} = Pred;
 MX_LL_Preds_Unrecognised{i,4} = pest;
 MX_LL_Preds_Unrecognised{i,5} = Gstuff;
-MX_LL_Preds_Unrecognised{i,6} = Unrecognised {i};
+MX_LL_Preds_Unecognised{i,6} = Unrecognised {i};
 end
 
 %% Fit VP + Mix Model
 
 HY_LL_Preds_Recognised = cell(length(participants),6);
 for i = participants
-[ll, bic, Pred, pest,Gstuff] = FitVPMix(Recognised {i});
+[ll, bic, Pred, pest] = FitVPMix(Recognised {i});
 HY_LL_Preds_Recognised{i,1} = ll;
 HY_LL_Preds_Recognised{i,2} = bic;
 HY_LL_Preds_Recognised{i,3} = Pred;
@@ -79,40 +79,36 @@ end
 
 HY_LL_Preds_Unrecognised = cell(length(participants),4);
 for i = participants
-[ll, bic, Pred, pest,Gstuff] = FitVPMix(Unrecognised {i});
+    i
+[ll, bic, Pred, pest] = FitVPMix(Unrecognised {i});
 HY_LL_Preds_Unrecognised{i,1} = ll;
 HY_LL_Preds_Unrecognised{i,2} = bic;
 HY_LL_Preds_Unrecognised{i,3} = Pred;
 HY_LL_Preds_Unrecognised{i,4} = pest;
-HY_LL_Preds_Recognised{i,5} = Gstuff;
-HY_LL_Preds_Recognised{i,6} = Unrecognised {i};
 end
 
-%% Plot Fits superimposed on Data, and save.
+%% 
+
+
+
+% %% Plot Fits superimposed on Data, and save.
 % % Plot 
+% fitplot(Recognised {1}, Pred);
 % for i = participants
-%     filename = ['Cont_Recog',num2str(i),'.png'];
+%     filename = ['tVP_Recog',num2str(i),'.png'];
 %     fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
 %     saveas(gcf,filename);
 %     
-%     filename = ['Cont_Unrecog',num2str(i),'.png'];
+%     filename = ['tVP_Unrecog',num2str(i),'.png'];
 %     fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
 %     saveas(gcf,filename);
 %     
-%     filename = ['Thresh_Recog',num2str(i),'.png'];
+%     filename = ['tMX_Recog',num2str(i),'.png'];
 %     fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
 %     saveas(gcf,filename);
 %     
-%     filename = ['Thresh_Unrecog',num2str(i),'.png'];
+%     filename = ['tMX_Unrecog',num2str(i),'.png'];
 %     fitplot(Unrecognised {i}, MX_LL_Preds_Unrecognised{i,3});
-%     saveas(gcf,filename);
-%
-%     filename = ['Hybrid_Recog',num2str(i),'.png'];
-%     fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
-%     saveas(gcf,filename);
-%     
-%     filename = ['Hybrid_Unrecog',num2str(i),'.png'];
-%     fitplot(Unrecognised {i}, HY_LL_Preds_Unrecognised{i,3});
 %     saveas(gcf,filename);
 % end    
 % 

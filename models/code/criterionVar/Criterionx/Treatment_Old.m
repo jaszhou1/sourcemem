@@ -3,22 +3,15 @@ function [Fit_Data] = Treatment_Simple()
 % Jason Zhou <jasonz1 AT student DOT unimelb DOT edu DOT au>
 
 %Read Data in
-% [J1, J2, J3] = xlsread("imgFiltered.csv"); %J2 and J3 are auxiliary, tells you what the column headers are.
-% J1(:,1)=[];
-% J3(:,1)=[];
+[J1, J2, J3] = xlsread("stimulus.xlsx"); %J2 and J3 are auxiliary, tells you what the column headers are.
 % MATLAB doesnt like having strings and numbers together)
-load('Jindiv_Filtered.mat'); % Filtered version
 %load('Jindiv_Simple.mat');
-J1(:,1) = [];
+
 %Split high and low recog conf
 
 %Split
 J_HC = J1(J1(:,2)>=3,:);
 J_LC = J1(J1(:,2)<3,:);
-
-%For the highest recognition, 14/03
-% J_HC = J1(J1(:,2)==6,:);
-% J_LC = J1(J1(:,2)<3,:);
 
 %Conditions: 1 is LOW, 2 is HIGH
 
@@ -36,7 +29,6 @@ J_LC = J1(J1(:,2)<3,:);
 participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
 Subject = cell(length(participants),4);
 for i = participants
-    %disp(size(J_HC))
     ntrials_Y_LOW = length(J_HC(J_HC(:,1)==1&J_HC(:,8)==i,:)); %recognised (>=3) and Low Imageability condition
     ntrials_Y_HIGH = length(J_HC(J_HC(:,1)==2&J_HC(:,8)==i,:));
     ntrials_N_LOW = length(J_LC(J_LC(:,1)==1&J_LC(:,8)==i,:));
