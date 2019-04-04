@@ -15,14 +15,21 @@ Unrecognised = Fit_Data(:,2);
 %Fit the data, generate predictions.
 
 participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
-%% Fit Variable Precision (Continuous model)
+
+%% Load Parameter Estimates
+load('gvm_crit3.mat');
+
+
+%% Call Fit Function
 
 % %Empty array for Log Likelihoods and Predictions to live.
 
 %Empty array for Log Likelihoods and Predictions to live.
-Fixed_Preds = cell(length(participants),5);
+Fixed_Preds = cell(length(participants),6);
 for i = participants
-[ll, bic, Pred, pest, Gstuff] = fitGVM_fixed(Recognised {i}, i);
+P = GVM_LL_Preds_Recognised{i,4}; 
+P(10) = 0;
+[ll, bic, Pred, pest, Gstuff] = fitGVM_fixed(P,Recognised {i}, i);
 Fixed_Preds{i,1} = ll;
 Fixed_Preds{i,2} = bic;
 Fixed_Preds{i,3} = Pred;
@@ -31,7 +38,7 @@ Fixed_Preds{i,5} = Gstuff;
 Fixed_Preds{i,6} = Recognised{i,1}; %the data
 end
 
-save("gvmHigh_GSTUFF")
+%save("gvmRecog_GSTUFF")
 
 
 %%

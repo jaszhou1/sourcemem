@@ -49,9 +49,9 @@ end
 
 for i = participants
    
-    filename = ['GVM_RecogCrit',num2str(i),'.png'];
+    filename = ['GVM_RecogCrit3',num2str(i),'.png'];
     fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
-    saveas(gcf,filename);
+    %saveas(gcf,filename);
     
 end    
 
