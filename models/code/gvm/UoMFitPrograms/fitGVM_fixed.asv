@@ -7,7 +7,7 @@ function [ll, bic, Pred, pest, Gstuff] = fitGVM_fixed(data, i)
 load('gvmfit_nocrit_high.mat');
 %P=[nunorm1, nunorm2, kappa1, kappa2, eta, rho, a, Ter, st, sa];
 P = GVM_LL_Preds_Recognised{i,4};
-P(1,10) = 0; %so the number of parameters is correct for Sel
+%P(1,10) = 0;
 Sel = [1,1,1,1,1,1,1,1,1,0];  % all parameters free
 %Sel = [0,0,0,0,0,0,0,0,0,0]; %all parameters fixed
 nlow = length(data{1,1});
@@ -15,7 +15,7 @@ nhigh = length(data{1,2});
 
 %pest = fminsearch(@fitgvm6x, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhigh);
 %P(Sel==1) = pest;
-[ll,bic,Pred, Gstuff] = fitgvm6x(P(Sel==1), P(Sel==0), Sel, data, nlow, nhigh);
+[ll,bic,Pred, Gstuff] = fitgvm6x(P(Sel==1), P(Sel==0), Sel, data, nlow, nhigh); %Criterion Range Error
 
 %    filename = ['GVM_QxQ',num2str(i),'.png'];
 %    qplotsrc(@fitmixture6x, P(Sel==1), P(Sel==0), Sel, data)

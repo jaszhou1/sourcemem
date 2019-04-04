@@ -22,26 +22,16 @@ participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
 %Empty array for Log Likelihoods and Predictions to live.
 Fixed_Preds = cell(length(participants),5);
 for i = participants
-    i
 [ll, bic, Pred, pest, Gstuff] = fitGVM_fixed(Recognised {i}, i);
 Fixed_Preds{i,1} = ll;
 Fixed_Preds{i,2} = bic;
 Fixed_Preds{i,3} = Pred;
 Fixed_Preds{i,4} = pest;
 Fixed_Preds{i,5} = Gstuff;
+Fixed_Preds{i,6} = Recognised{i,1}; %the data
 end
 
-save("gvmfit_crit2")
-% %% Plot Fits superimposed on Data, and save.
-% % Plot 
-
-for i = participants
-   
-    filename = ['GVM_Recog',num2str(i),'.png'];
-    fitplot(Recognised {i}, Fixed_Preds{i,3});
-    saveas(gcf,filename);
-    
-end    
+save("gvmHigh_GSTUFF")
 
 
 %%
