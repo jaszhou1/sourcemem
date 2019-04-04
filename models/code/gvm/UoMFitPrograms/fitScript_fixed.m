@@ -17,7 +17,7 @@ Unrecognised = Fit_Data(:,2);
 participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
 
 %% Load Parameter Estimates
-load('gvm_crit3.mat');
+load('gvm_crit4.mat');
 
 
 %% Call Fit Function
