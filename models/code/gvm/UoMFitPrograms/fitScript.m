@@ -65,7 +65,6 @@ for i = participants
     saveas(gcf,filename);
     
 end    
-=======
 % for i = participants
 %    
 %     filename = ['GVM_RecogCrit3',num2str(i),'.png'];
@@ -81,7 +80,7 @@ end
 %     saveas(gcf,filename);
 %     
 % end    
->>>>>>> 0a2f86ebf1828f7292af4b0fc34474907a8d00d9
+
 %%
 %%% The thing I want at the end is...
 % full_data = open_data(filename)
