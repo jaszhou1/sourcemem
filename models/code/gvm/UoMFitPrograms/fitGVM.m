@@ -13,13 +13,13 @@ eta = normrnd(1, 0.3);
 rho = normrnd(0.1,0.1);
 a = normrnd(3.5,0.5);
 Ter = normrnd(-0.2,0.3);
-st = normrnd(0.05,0.1);
-sa = 0;
-%sa = normrnd(1,0.8);
+st = abs(normrnd(0.05,0.01));
+%sa = 0;
+sa = abs(normrnd(1,0.5));
 
 P=[nunorm1, nunorm2, kappa1, kappa2, eta, rho, a, Ter, st, sa];
 
-Sel = [1,1,1,1,1,1,1,1,1,0];  % all parameters free except criterion variability
+Sel = [1,1,1,1,1,1,1,1,1,1];  % all parameters free except criterion variability
 %Sel = [0,0,0,0,0,0,0,0,0,0]; 
 nlow = length(data{1,1});
 nhigh = length(data{1,2});
