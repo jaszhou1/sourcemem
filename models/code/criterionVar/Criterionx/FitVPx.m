@@ -19,7 +19,7 @@ v2b = normrnd(0.5,0.2);
 eta1 = normrnd(2.5,0.5);
 eta2 = normrnd(2.5,0.5);
 a = normrnd(1.6,0.3);
-Ter = normrnd(0.10,0.02);
+Ter = normrnd(0.10,0.05);
 
 sa = normrnd(1.5,0.5);
 

@@ -14,7 +14,7 @@ a1 = normrnd(1.25,1);
 a2 = normrnd(1,1);
 pi1 = norm(0.5,0.25);
 pi2 = normrnd(0.5,0.25);
-Ter = normrnd(0.15,0.1);
+Ter = normrnd(0.10,0.05);
 sa = normrnd(1.25,1);
 
 
