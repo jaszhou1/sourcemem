@@ -8,9 +8,6 @@ v1a = normrnd(3,1);
 v2a = normrnd(0.01,0.05);
 v1b = normrnd(4,1);
 v2b = normrnd(0.01,0.05);
-%I want hybrid "VP+Mix" Model
-% eta1 = 0;
-% eta2 = 0;
 eta1 = normrnd(1.5,1);
 eta2 = normrnd(0.5,0.5);
 a1 = normrnd(1.25,1);
