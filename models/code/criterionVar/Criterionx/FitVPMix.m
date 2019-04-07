@@ -4,18 +4,19 @@ function [ll, bic, Pred, pest] = FitVPMix(data)
 %          1    2    3    4    5      6    7   8   9   10    11  12
 setopt;
 
-v1a = normrnd(1,0.5);
+v1a = normrnd(5,0.5);
 v2a = normrnd(0.1,0.05);
-v1b = normrnd(1,0.5);
+v1b = normrnd(4,0.5);
 v2b = normrnd(0.1,0.05);
 eta1 = normrnd(1,0.5);
 eta2 = normrnd(1,0.5);
-a1 = normrnd(1.25,1);
+a1 = normrnd(3,1);
 a2 = normrnd(1,1);
-pi1 = norm(0.5,0.3);
-pi2 = normrnd(0.5,0.3);
+pi1 = norm(0.5,0.5);
+pi2 = normrnd(0.5,0.5);
 Ter = normrnd(0.10,0.10);
-sa = normrnd(0.5,0.5);
+sa = normrnd(1,0.5);
+
 
 P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter,sa];
 
