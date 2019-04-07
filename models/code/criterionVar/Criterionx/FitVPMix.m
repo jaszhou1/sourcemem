@@ -14,9 +14,8 @@ a1 = normrnd(1.25,1);
 a2 = normrnd(1,1);
 pi1 = norm(0.5,0.3);
 pi2 = normrnd(0.5,0.3);
-Ter = normrnd(0.10,0.05);
+Ter = normrnd(0.10,0.10);
 sa = normrnd(0.5,0.5);
-
 
 P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter,sa];
 

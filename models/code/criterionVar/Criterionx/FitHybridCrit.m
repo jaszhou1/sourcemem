@@ -24,8 +24,6 @@ for i = participants
     VP_LL_Preds_Recognised{i,1} = -1; %sometimes log likelihood goes negative. re-run if this happens
     VP_LL_Preds_Recognised{i,2} = 0; %make it automatically repeat if BIC is zero (fminsearch blew up)
     while (VP_LL_Preds_Recognised{i,2} == 0 || VP_LL_Preds_Recognised{i,1} < 0)
-	disp('VP')
-	disp(i)
         [ll, bic, Pred, pest] = FitVPx(Recognised {i});
         VP_LL_Preds_Recognised{i,1} = ll;
         VP_LL_Preds_Recognised{i,2} = bic;
@@ -58,8 +56,6 @@ for i = participants
     MX_LL_Preds_Recognised{i,1} = -1;
     MX_LL_Preds_Recognised{i,2} = 0;
     while (MX_LL_Preds_Recognised{i,2} == 0 || MX_LL_Preds_Recognised{i,1} < 0)
-	disp('MX')
-	disp(i)
         [ll, bic, Pred, pest] = FitMix(Recognised {i});
         MX_LL_Preds_Recognised{i,1} = ll;
         MX_LL_Preds_Recognised{i,2} = bic;
@@ -92,8 +88,6 @@ for i = participants
     HY_LL_Preds_Recognised{i,1} = -1;
     HY_LL_Preds_Recognised{i,2} = 0;
     while (HY_LL_Preds_Recognised{i,2} == 0 || HY_LL_Preds_Recognised{i,1} < 0)
-	disp('Hybrid')
-	disp(i)
         [ll, bic, Pred, pest] = FitVPMix(Recognised {i});
         HY_LL_Preds_Recognised{i,1} = ll;
         HY_LL_Preds_Recognised{i,2} = bic;
