@@ -57,7 +57,7 @@ MX_LL_Preds_Recognised = cell(length(participants),4);
 for i = participants
     MX_LL_Preds_Recognised{i,1} = -1;
     MX_LL_Preds_Recognised{i,2} = 0;
-    while (MX_LL_Preds_Recognised{i,2} > 3000 || MX_LL_Preds_Recognised{i,2} == 0 || MX_LL_Preds_Recognised{i,1} < 0)
+    while (MX_LL_Preds_Recognised{i,2} == 0 || MX_LL_Preds_Recognised{i,1} < 0)
 	disp('MX')
 	disp(i)
         [ll, bic, Pred, pest] = FitMix(Recognised {i});
@@ -91,7 +91,7 @@ HY_LL_Preds_Recognised = cell(length(participants),4);
 for i = participants
     HY_LL_Preds_Recognised{i,1} = -1;
     HY_LL_Preds_Recognised{i,2} = 0;
-    while (HY_LL_Preds_Recognised{i,2} > 3000 || HY_LL_Preds_Recognised{i,2} == 0 || HY_LL_Preds_Recognised{i,1} < 0)
+    while (HY_LL_Preds_Recognised{i,2} == 0 || HY_LL_Preds_Recognised{i,1} < 0)
 	disp('Hybrid')
 	disp(i)
         [ll, bic, Pred, pest] = FitVPMix(Recognised {i});
