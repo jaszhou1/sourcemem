@@ -14,9 +14,7 @@ Unrecognised = Fit_Data(:,2);
 
 %Fit the data, generate predictions.
 
-%participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
-
-participants = [1,3,4,6,7,9,10,11,12,13,15,17,19,20];
+participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
 
 % %% Fit Variable Precision (Continuous model)
 %
@@ -59,7 +57,7 @@ MX_LL_Preds_Recognised = cell(length(participants),4);
 for i = participants
     MX_LL_Preds_Recognised{i,1} = -1;
     MX_LL_Preds_Recognised{i,2} = 0;
-    while (MX_LL_Preds_Recognised{i,2} == 0 || MX_LL_Preds_Recognised{i,1} < 0)
+    while (MX_LL_Preds_Recognised{i,2} > 3000 || MX_LL_Preds_Recognised{i,2} == 0 || MX_LL_Preds_Recognised{i,1} < 0)
 	disp('MX')
 	disp(i)
         [ll, bic, Pred, pest] = FitMix(Recognised {i});
@@ -93,7 +91,7 @@ HY_LL_Preds_Recognised = cell(length(participants),4);
 for i = participants
     HY_LL_Preds_Recognised{i,1} = -1;
     HY_LL_Preds_Recognised{i,2} = 0;
-    while (HY_LL_Preds_Recognised{i,2} == 0 || HY_LL_Preds_Recognised{i,1} < 0)
+    while (HY_LL_Preds_Recognised{i,2} > 3000 || HY_LL_Preds_Recognised{i,2} == 0 || HY_LL_Preds_Recognised{i,1} < 0)
 	disp('Hybrid')
 	disp(i)
         [ll, bic, Pred, pest] = FitVPMix(Recognised {i});
