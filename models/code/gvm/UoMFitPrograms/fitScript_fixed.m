@@ -38,7 +38,7 @@ Fixed_Preds{i,5} = Gstuff;
 Fixed_Preds{i,6} = Recognised{i,1}; %the data
 end
 
-%save("gvmRecog_GSTUFF")
+save("gvm_crit_Gstuff")
 
 
 %%

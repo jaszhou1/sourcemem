@@ -1,4 +1,4 @@
-function [ll, bic, Pred, pest] = FitMix(data)
+function [ll, bic, Pred, pest, Gstuff] = FitMix(data)
 %    [ll,bic,Pred] = fitmixture3(Pvar, Pfix, Sel, Data)
 %    P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter, sa]
 %          1    2    3    4    5      6    7   8   9   10    11  12
@@ -25,6 +25,6 @@ nhigh = length(data{1,2});
 
 pest = fminsearch(@fitmixture4x, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhigh);
 P(Sel==1) = pest;
-[ll,bic,Pred] = fitmixture4x(P(Sel==1), P(Sel==0), Sel, data, nlow, nhigh); %Criterion Range Error
+[ll,bic,Pred, Gstuff] = fitmixture4x(P(Sel==1), P(Sel==0), Sel, data, nlow, nhigh); %Criterion Range Error
 %fitplot(D11, Pred);
 end

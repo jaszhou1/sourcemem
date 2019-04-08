@@ -1,4 +1,4 @@
-function [ll,bic,Pred] = fitdcircle4x(Pvar, Pfix, Sel, Data, nlow, nhigh, trace)
+function [ll,bic,Pred, Gstuff] = fitdcircle4x(Pvar, Pfix, Sel, Data, nlow, nhigh, trace)
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task
 % with across-trial variability in criterion
@@ -93,6 +93,7 @@ if any(P - Ub > 0) | any(Lb - P > 0)
    ll = 1e7 + ...
         1e3 * (sum(max(P - Ub, 0).^2) + sum(max(Ub - P).^2));
    bic = 0;
+   Gstuff = cell(3,2);
    return
    if trace
        max(P - Ub, 0)
@@ -175,7 +176,17 @@ else
    % 1 is long, 2 is short
    l0a = interp2(anglea, timea, gta, Data{1}(:,2),Data{1}(:,1), 'linear');
    l0b = interp2(angleb, timeb, gtb, Data{2}(:,2),Data{2}(:,1), 'linear');
-
+   
+   
+  % Pass out joint density for use in quantile plot 8/4
+   Gstuff = cell(3,2);
+   Gstuff{1,1} = ta;
+   Gstuff{2,1} = thetaa;
+   Gstuff{3,1} = gta;
+   Gstuff{1,2} = tb;
+   Gstuff{2,2} = thetab;
+   Gstuff{3,2} = gtb;
+   
    % Out of range values returned as NaN's. Treat as contaminants - set small.
    ixa = isnan(l0a);
    l0a(ixa) = cden;

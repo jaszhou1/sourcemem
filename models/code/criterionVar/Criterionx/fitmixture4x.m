@@ -1,4 +1,4 @@
-function [ll,bic,Pred] = fitmixture4x(Pvar, Pfix, Sel, Data, nlow, nhigh, trace)
+function [ll,bic,Pred, Gstuff] = fitmixture4x(Pvar, Pfix, Sel, Data, nlow, nhigh, trace)
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task.
 % Across-trial variability in criterion.
@@ -95,6 +95,7 @@ if any(P - Ub > 0) | any(Lb - P > 0)
    ll = 1e7 + ...
         1e3 * (sum(max(P - Ub, 0).^2) + sum(max(Ub - P).^2));
    bic = 0;
+   Gstuff = cell(3,2);
    return
    if trace
        max(P - Ub, 0)
@@ -192,6 +193,17 @@ else
    % Log-likelihoods.
    ll0a = log(l0a);
    ll0b = log(l0b);
+  
+   
+  % Pass out joint density for use in quantile plot 
+   Gstuff = cell(3,2);
+   Gstuff{1,1} = ta;
+   Gstuff{2,1} = thetaa;
+   Gstuff{3,1} = gta;
+   Gstuff{1,2} = tb;
+   Gstuff{2,2} = thetab;
+   Gstuff{3,2} = gtb;
+   
    % Minimize sum of minus LL's across two conditions. Added penalty term 30/1/19
    ll = sum(-ll0a) + sum(-ll0b) + penalty;
    bic = 2 * ll + sum(Sel) * log(nhigh + nlow);

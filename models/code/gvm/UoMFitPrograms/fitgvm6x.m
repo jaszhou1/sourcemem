@@ -84,6 +84,7 @@ if any(P - Ub > 0) | any(Lb - P > 0)
    ll = 1e7 + ...
         1e3 * (sum(max(P - Ub, 0).^2) + sum(max(Ub - P).^2));
    bic = 0;
+   Gstuff = cell(3,2);
    if trace
        max(P - Ub, 0)
        max(Lb - P, 0)
