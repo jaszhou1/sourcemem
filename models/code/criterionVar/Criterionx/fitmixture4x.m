@@ -89,7 +89,7 @@ sigma = 1.0;
 Ub= [ 7.0*ones(1,4),  4.0*ones(1,2),  5.0*ones(1,2),    ones(1,2),   1.0,  3.0]; 
 Lb= [-7.0*ones(1,4),  0.0*ones(1,2),  0.5*ones(1,2),    zeros(1,2),   -0.35,     0];
 Pub=[ 6.5*ones(1,4),  3.5*ones(1,2),  4.5*ones(1,2), 0.9*ones(1,2),  0.8,  2.8]; 
-Plb=[-6.5*ones(1,4),  0.0*ones(1,2),  0.7*ones(1,2), 0.05*ones(1,2), 0.001, 0.1];
+Plb=[-6.5*ones(1,4),  0.0*ones(1,2),  0.7*ones(1,2), 0.05*ones(1,2), -0.3, 0.1];
 Pred = cell(1,4);
 if any(P - Ub > 0) | any(Lb - P > 0)
    ll = 1e7 + ...
@@ -115,10 +115,12 @@ lowerbounderror = sum(min(P(5:length(P)) - zeros(1,length(P)-4), 0).^2);
 if lowerbounderror > 0
    ll = 1e5 + 1e3 * lowerbounderror;
    bic = 0;
+   Gstuff = cell(3,2);
 elseif sz / 2 >= a1
     disp('Criterion range error')
     ll = 1e5;
     bic = 0;
+    Gstuff = cell(3,2);
 else
    if sz < epsilon % No criterion variability
        % Memory-based process

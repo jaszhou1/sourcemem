@@ -34,6 +34,7 @@ for i = participants
         VP_LL_Preds_Recognised{i,4} = pest;
         VP_LL_Preds_Recognised{i,5} = Gstuff;
         VP_LL_Preds_Recognised{i,6} = Recognised {i};
+        fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
     end
 end
 
@@ -66,6 +67,7 @@ for i = participants
         MX_LL_Preds_Recognised{i,4} = pest;
         MX_LL_Preds_Recognised{i,5} = Gstuff;
         MX_LL_Preds_Recognised{i,6} = Recognised {i};
+        fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
     end
 end
 
@@ -99,6 +101,7 @@ for i = participants
         HY_LL_Preds_Recognised{i,4} = pest;
         HY_LL_Preds_Recognised{i,5} = Gstuff;
         HY_LL_Preds_Recognised{i,6} = Recognised {i};
+        fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
     end
 end
 
