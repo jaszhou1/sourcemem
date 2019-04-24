@@ -1,0 +1,68 @@
+---
+title: "marginalFit"
+author: "jason"
+date: "April 9, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/models/figures/gvmFits")
+```
+
+```{r}
+GVM_Crit <- read.csv('GVM_crit_marginal.csv')
+
+#LOW condition
+low <- GVM_Crit[GVM_Crit$is_high == ' false',]
+
+#Thetas
+low_theta <- low[low$is_theta == ' true',]
+#data
+dlow_theta <- low_theta[low_theta$is_model == ' false',]
+#model
+mlow_theta <- low_theta[low_theta$is_model == ' true',]
+
+
+#plot
+
+#ggplot() + geom_line(data = dlow_theta[dlow_theta$participant==8,], aes(x=dlow_theta[dlow_theta$participant==8,]$value,y=dlow_theta[dlow_theta$participant==8,]$prob)) + geom_line(data = mlow_theta[mlow_theta$participant==8,], aes(x=mlow_theta[mlow_theta$participant==8,]$value,y=mlow_theta[mlow_theta$participant==8,]$prob, colour = 'red')) + theme_classic()  
+  
+plotLowTheta<- ggplot() + geom_line(data = dlow_theta, aes(x=dlow_theta$value,y=dlow_theta$prob)) + geom_line(data = mlow_theta, aes(x=mlow_theta$value,y=mlow_theta$prob, colour = 'red')) + facet_wrap(~participant, ncol = 4) + theme_classic()  
+
+#RTs
+low_RT <- low[low$is_theta == ' false',]
+#data
+dlow_RT <- low_RT[low_RT$is_model == ' false',]
+#model
+mlow_RT <- low_RT[low_RT$is_model == ' true',]
+
+plotLowRT<- ggplot() + geom_line(data = dlow_RT, aes(x=dlow_RT$value,y=dlow_RT$prob)) + geom_line(data = mlow_RT, aes(x=mlow_RT$value,y=mlow_RT$prob, colour = 'red')) + facet_wrap(~participant, ncol = 4) + xlim(-0.15,3) + theme_classic()  
+
+
+
+#HIGH condition
+high <- GVM_Crit[GVM_Crit$is_high == ' true',]
+
+#Thetas
+high_theta <- high[high$is_theta == ' true',]
+#data
+dhigh_theta <- high_theta[high_theta$is_model == ' false',]
+#model
+mhigh_theta <- high_theta[high_theta$is_model == ' true',]
+
+plotHighTheta<- ggplot() + geom_line(data = dhigh_theta, aes(x=dhigh_theta$value,y=dhigh_theta$prob)) + geom_line(data = mhigh_theta, aes(x=mhigh_theta$value,y=mhigh_theta$prob, colour = 'red')) + facet_wrap(~participant, ncol = 4) + theme_classic()  
+
+#RTs
+#RTs
+high_RT <- high[high$is_theta == ' false',]
+#data
+dhigh_RT <- high_RT[high_RT$is_model == ' false',]
+#model
+mhigh_RT <- high_RT[high_RT$is_model == ' true',]
+
+plotHighRT<- ggplot() + geom_line(data = dhigh_RT, aes(x=dhigh_RT$value,y=dhigh_RT$prob)) + geom_line(data = mhigh_RT, aes(x=mhigh_RT$value,y=mhigh_RT$prob, colour = 'red')) + facet_wrap(~participant, ncol = 4) + xlim(-0.15,3)+ theme_classic()
+
+
+
+```

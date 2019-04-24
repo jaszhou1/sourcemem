@@ -1,0 +1,51 @@
+---
+title: "Real_QxQ"
+author: "jason"
+date: "April 8, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#dataset <- read.csv('GVM_High.csv', sep = ",") #.1, .3, .5, .7, .9 quantiles
+#dataset <- read.csv('GVM_high_3quant.csv', sep = ",") #.1, .5, .9 quantiles
+dataset <- read.csv('GVM_high_3quant2.csv', sep = ",") #.3, .5, .7 quantiles
+
+dataset$quantile_idx <- as.factor(dataset$quantile_idx)
+
+
+#Here, I am trying to cut off the model beyond where there furthest x-axis response error quantiles are. Philip does something similar so the model doesn't look like its just totally missing. Doesn't seem to work though, STOP 8/4/19
+
+
+#participants<-c(1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20)
+#for (i in participants){
+#dataset_b<- dataset[abs(dataset[(dataset$participant == i) & (dataset$is_model == ' true'),]$theta) < max(abs(dataset[(dataset$participant == i)&(dataset$is_model== ' false'),]$theta)),]
+#} 
+
+dataset_b <- dataset
+
+data_low <- dataset_b[(dataset_b$is_model==' false') & (dataset_b$is_high==' false'),]
+
+model_low <- dataset_b[(dataset_b$is_model==' true') & (dataset_b$is_high==' false'),]
+
+data_high <- dataset_b[(dataset_b$is_model==' false') & (dataset_b$is_high==' true'),]
+
+model_high <- dataset_b[(dataset_b$is_model==' true') & (dataset_b$is_high==' true'),]
+
+```
+
+```{r}
+#High imageability
+High_QxQ <- ggplot(data = model_high,aes(x=model_high$theta, y=model_high$rt, group=model_high$quantile_idx, colour = quantile_idx)) + geom_smooth(se=FALSE) + geom_point(data = data_high, aes(x=data_high$theta, y=data_high$rt, group=data_high$quantile_idx, colour = quantile_idx)) + facet_wrap(~participant, ncol = 4, scale = "free") + scale_y_continuous(limits=c(0, 3)) + labs(title ="Response Time Quantiles by Error, High Imageability", x = "Response Error (degrees)", y = "Response Time (s)")
+
+#Low imageability
+Low_QxQ <- ggplot(data = model_low,aes(x=model_low$theta, y=model_low$rt, group=model_low$quantile_idx, colour = quantile_idx)) + geom_smooth(se=FALSE) + geom_point(data = data_low, aes(x=data_low$theta, y=data_low$rt, group=data_low$quantile_idx, colour = quantile_idx)) + facet_wrap(~participant, ncol = 4,scale = "free") + scale_y_continuous(limits=c(0, 3)) + labs(title ="Response Time Quantiles by Error, High Imageability", x = "Response Error (degrees)", y = "Response Time (s)")
+
+
+
+High_QxQ
+Low_QxQ
+```

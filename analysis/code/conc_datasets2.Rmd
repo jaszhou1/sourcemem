@@ -50,7 +50,7 @@ for (i in participants){
 #Cleaning up the dataset
 
 dataset <- dataset[,-1] #removes the first variable, which are these weird row labels
-dataset <- dataset[,-1] #removes STIM/FOIL label
+#dataset <- dataset[,-1] #removes STIM/FOIL label
 
 
 #Recoding Participant 
@@ -78,10 +78,25 @@ dataset$participant[dataset$participant=="p20"]<-20
 dataset$condition <- relevel(dataset$condition," LOW")
 dataset$condition <- as.numeric(factor(dataset$condition))
 #dataset$recog_rating <- as.factor(dataset$recog_rating) #Confidence Ratings are Discrete
-#dataset.no.na <- dataset[dataset$type!=' FOIL', ]
-#dataset.na <- dataset[dataset$type==' FOIL', ]
 
 
+dataset$response_error <- as.numeric(as.character(dataset$response_error))
+dataset.no.na <- dataset[dataset$type!=' FOIL', ]
+dataset.na <- dataset[dataset$type==' FOIL', ]
+
+recog <- dataset.no.na[dataset$recog_rating > 3, ]
+unrecog <- dataset.no.na[dataset$recog_rating <= 3, ]
+high <- dataset.no.na[dataset$recog_rating == 6, ]
+
+
+allHist<- ggplot(data = dataset.no.na, aes(x = dataset.no.na$response_error)) + geom_histogram(bins = 100) + scale_y_continuous(limits=c(0, 700)) + labs(title ="All Recognition Ratings", x = "Response Error (radians)", y = "Frequency") + theme_classic()
+
+unrecogHist<- ggplot(data = unrecog, aes(x = unrecog$response_error)) + geom_histogram(bins = 100) + scale_y_continuous(limits=c(0, 700)) + labs(title ="Unrecognized Items", x = "Response Error (radians)", y = "Frequency") + theme_classic()
+
+
+recogHist<- ggplot(data = recog, aes(x = recog$response_error)) + geom_histogram(bins = 100) + scale_y_continuous(limits=c(0, 700)) + labs(title ="Recognized Items", x = "Response Error (radians)", y = "Frequency") + theme_classic()
+
+highHist<- ggplot(data = high, aes(x = high$response_error)) + geom_histogram(bins = 100)+ scale_y_continuous(limits=c(0, 700)) + labs(title ="Highlt Recognized Items", x = "Response Error (radians)", y = "Frequency") + theme_classic()
 
 
 # Write CSV in R

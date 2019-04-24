@@ -1,0 +1,58 @@
+---
+title: "hitRates"
+author: "jason"
+date: "April 9, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/analysis/data/")
+```
+
+```{r}
+rawData <- read.csv('dataset.csv')
+LowData <- rawData[rawData$condition==' LOW',]
+HighData <- rawData[rawData$condition==' HIGH',]
+```
+
+```{r}
+participants = c(1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20) 
+
+lowRate <- data.frame(matrix(nrow=19,ncol=4))
+colnames(lowRate) <- c("hitRate", "Misses", "falseAlarms","correctRejections")
+highRate <- data.frame(matrix(nrow=19,ncol=4))
+colnames(highRate) <- c("hitRate", "Misses", "falseAlarms","correctRejections")
+for (i in participants){
+  thisLowData<- LowData[LowData$participant == i,]
+  thisHighData<- HighData[HighData$participant == i,]
+  
+    stim <- nrow(thisLowData[(thisLowData$type==' STIM'),])
+    foil <- nrow(thisLowData[(thisLowData$type==' FOIL'),])
+
+    hits <- nrow(thisLowData[(thisLowData$type==' STIM') & (thisLowData$recog_rating>3),])/stim
+    misses <- nrow(thisLowData[(thisLowData$type==' STIM') & (thisLowData$recog_rating<=3),])/stim
+
+    falseAlarm <- nrow(thisLowData[(thisLowData$type==' FOIL') & (thisLowData$recog_rating>3),])/foil
+    correctReject <- nrow(thisLowData[(thisLowData$type==' FOIL') & (thisLowData$recog_rating<=3),])/foil
+
+    stim_h <- nrow(thisHighData[(thisHighData$type==' STIM'),])
+    foil_h <- nrow(thisHighData[(thisHighData$type==' FOIL'),])
+
+    hits_h <- nrow(thisHighData[(thisHighData$type==' STIM') & (thisHighData$recog_rating>3),])/stim_h
+    misses_h <- nrow(thisHighData[(thisHighData$type==' STIM') & (thisHighData$recog_rating<=3),])/stim_h
+
+    falseAlarm_h <- nrow(thisHighData[(thisHighData$type==' FOIL') & (thisHighData$recog_rating>3),])/foil_h
+    correctReject_h <- nrow(thisHighData[(thisHighData$type==' FOIL') & (thisHighData$recog_rating<=3),])/foil_h
+    
+    
+thisLow <- data.frame(hits,misses,falseAlarm,correctReject)
+thisHigh <- data.frame(hits_h,misses_h,falseAlarm_h,correctReject_h)
+
+lowRate[i,] <- thisLow
+highRate[i,] <- thisHigh
+}
+highRate <- highRate[-c(14),]
+lowRate <- lowRate[-c(14),]
+
+```

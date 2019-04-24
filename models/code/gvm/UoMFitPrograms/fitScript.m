@@ -27,8 +27,8 @@ GVM_LL_Preds_Recognised{i,1} = ll;
 GVM_LL_Preds_Recognised{i,2} = bic;
 GVM_LL_Preds_Recognised{i,3} = Pred;
 GVM_LL_Preds_Recognised{i,4} = pest;
-%GVM_LL_Preds_Recognised{i,5} = Gstuff;
-%GVM_LL_Preds_Recognised{i,6} = Recognised {i};
+GVM_LL_Preds_Recognised{i,5} = Gstuff;
+GVM_LL_Preds_Recognised{i,6} = Recognised {i};
 end
 
 % %% Plot Fits superimposed on Data, and save.
@@ -45,8 +45,8 @@ GVM_LL_Preds_Unrecognised{i,1} = ll;
 GVM_LL_Preds_Unrecognised{i,2} = bic;
 GVM_LL_Preds_Unrecognised{i,3} = Pred;
 GVM_LL_Preds_Unrecognised{i,4} = pest;
-%GVM_LL_Preds_Unrecognised{i,5} = Gstuff;
-%GVM_LL_Preds_Unrecognised{i,6} = Unrecognised {i};
+GVM_LL_Preds_Unrecognised{i,5} = Gstuff;
+GVM_LL_Preds_Unrecognised{i,6} = Unrecognised {i};
 end
 
 for i = participants

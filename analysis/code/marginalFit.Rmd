@@ -1,0 +1,263 @@
+---
+title: "marginalFit"
+author: "jason"
+date: "April 9, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+rm(list = ls())
+
+knitr::opts_chunk$set(echo = TRUE)
+
+knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/models/figures/gvmFits")
+
+library(tidyverse)
+```
+
+```{r}
+GVM_Crit <- read.csv('GVM_crit_marginal.csv')
+
+# Initialise columns 
+GVM_Crit$model <- matrix(NA, dim(GVM_Crit)[1])
+GVM_Crit$cond <- matrix(NA, dim(GVM_Crit)[1])
+GVM_Crit$theta <- matrix(NA, dim(GVM_Crit)[1])
+
+# Find all instances of model, high and theta
+GVM_Crit$model[which(GVM_Crit$is_model == ' true')] <- 1 # model 
+GVM_Crit$model[which(GVM_Crit$is_model == ' false')] <- 0 # not ya model 
+
+GVM_Crit$cond[which(GVM_Crit$is_high == ' true')] <- 1 # high 
+GVM_Crit$cond[which(GVM_Crit$is_high == ' false')] <- 0 # low 
+
+GVM_Crit$theta[which(GVM_Crit$is_theta == ' true')] <- 1 # theta
+GVM_Crit$theta[which(GVM_Crit$is_theta == ' false')] <- 0 # not ya theta 
+
+gvm_crit <- tibble(modelName = GVM_Crit$model_name,
+                   participant = GVM_Crit$participant,
+                   model = as.factor(GVM_Crit$model),
+                   cond = as.factor(GVM_Crit$cond),
+                   theta = as.factor(GVM_Crit$theta),
+                   value = GVM_Crit$value,
+                   prob = GVM_Crit$prob)
+
+head(gvm_crit)
+```
+
+```{r}
+
+# Create a new variable to label the subject numbers as strings 
+gvm_crit$subjString <- NA
+
+# Get a list of subjects 
+data.subjList <- unique(gvm_crit$participant)
+
+# Custom function to create new variable labels 
+create.subj.string <- function(subjNo, dataset){
+  
+  dataset[dataset$participant==subjNo, 'subjString'] <- sprintf('Subject %d', subjNo)
+  
+  return(dataset)
+}
+
+# Run through loop - don't use lapply or map because subject numbers not in order 
+for (sub in 1:length(data.subjList)){
+  
+  # Get the subject number 
+  subjNo <- data.subjList[sub]
+  
+  # Run function, return data frame (dataset)
+  gvm_crit <- create.subj.string(subjNo, gvm_crit)
+  
+}
+
+# Create as factor for plotting and also include levels so the order is correct 
+gvm_crit$subjString <- factor(gvm_crit$subjString, 
+                                levels = unique(gvm_crit$subjString))
+
+gvm_crit$participant <- factor(gvm_crit$participant, levels = unique(gvm_crit$participant))
+
+# Get a list of the subject strings you created just to double check 
+gvm_crit.subjString <- unique(gvm_crit$subjString)
+
+```
+
+```{r}
+
+
+# Get low and high conditions out 
+low <- gvm_crit[gvm_crit$cond == 0,]
+
+high <- gvm_crit[gvm_crit$cond == 1,]
+
+# Thetas 
+low_theta <- low[low$theta == 1,]
+
+high_theta <- high[high$theta == 1,]
+
+# RTs 
+low_RT <- low[low$theta == 0,]
+
+high_RT <- high[high$theta == 0,]
+
+# Model Theta 
+mlow_theta <- low_theta[low_theta$model == 1,]
+
+mhigh_theta <- high_theta[high_theta$model == 1,]
+
+# Data Theta
+dlow_theta <- low_theta[low_theta$model == 0,]
+
+dhigh_theta <- high_theta[high_theta$model == 0,]
+
+# model predicted RT data 
+mRT_low <- low_RT[low_RT$model == 1, ]
+
+mRT_high <- high_RT[high_RT$model == 1, ]
+
+# RT data 
+dRT_low <- low_RT[low_RT$model == 0, ]
+
+dRT_high <- high_RT[high_RT$model == 0, ]
+
+```
+
+```{r}
+
+# The palette with grey:
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+# The palette with black:
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+# Setup equally spaced colours around wheel 
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+n = 3
+cols = gg_color_hue(n)
+
+
+```
+
+# Theta data
+```{r}
+
+# -------- LOW IMAGINABILITY CONDITION -------------------
+plotThetaLow<-
+# ------ Data ---------------------
+ggplot(data = dlow_theta, aes(x = value, y = prob)) + 
+  geom_point(size = 0.4) +
+  # ------ Model --------
+geom_line(data = mlow_theta, aes(x = value, prob), size = 0.5, colour = "red") +  
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+  xlab("Response Error (radians)") + 
+  scale_x_continuous(name ="Response Error (radians)", # also x axis name 
+                     breaks = c(-2, 0, 2),
+                     labels = c(expression(-pi), "0", expression(pi))) + 
+  scale_colour_manual(values=c("red","black")) +
+  ylab("Probability \n Density") + 
+  ggtitle("Low Imageability Condition") +   
+  theme(
+    # x axis label
+    # Theme asthetics to make the plot look nicer 
+    axis.text.x = element_text(size=10),  # size of text on the x axis 
+    axis.text.y = element_text(size=10),  # size of text on the y axis 
+    plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
+    plot.subtitle = element_text(hjust = 0.5), # subtitle settiings (note, centering requires h = 0.5)
+    plot.caption = element_text(hjust = 0, face = "italic"), # caption settings 
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), 
+    axis.line = element_line(colour = "black")
+  )
+
+
+# -------- HIGH IMAGINABILITY CONDITION -------------------
+plotThetaHigh<-
+# ------ Data ---------------------
+ggplot(data = dhigh_theta, aes(x = value, y = prob)) + 
+  geom_point(size = 0.4) +
+  # ------ Model --------
+geom_line(data = mhigh_theta, aes(x = value, prob), size = 0.5, colour = "red") +  
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+  xlab("Theta (radians)") + 
+  scale_x_continuous(name ="Response Error (radians)", # also x axis name 
+                     breaks = c(-2, 0, 2),
+                     labels = c(expression(-pi), "0", expression(pi))) + 
+  scale_colour_manual(values=c("red","black")) +
+  ylab("Probability \n Density") + 
+  ggtitle("High Imageability Condition") +   
+  theme(
+    # x axis label
+    # Theme asthetics to make the plot look nicer 
+    axis.text.x = element_text(size=10),  # size of text on the x axis 
+    axis.text.y = element_text(size=10),  # size of text on the y axis 
+    plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
+    plot.subtitle = element_text(hjust = 0.5), # subtitle settiings (note, centering requires h = 0.5)
+    plot.caption = element_text(hjust = 0, face = "italic"), # caption settings 
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), 
+    axis.line = element_line(colour = "black")
+  )
+```
+
+# RT data 
+```{r}
+
+# -------- HIGH IMAGINABILITY CONDITION -------------------
+plotRThigh<-
+# ------ Data ---------------------
+ggplot(data = dRT_high, aes(x = value, y = prob)) + 
+  geom_point(size = 0.4) +
+  # ------ Model --------
+geom_line(data = mRT_high, aes(x = value, prob), size = 0.5, colour = "red") +  
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+  xlab("Response Time (seconds)") + 
+  ylab("Probability \n Density") + 
+  ggtitle("RT Density by \n High Imageability Condition") +   
+  theme(
+    # x axis label
+    # Theme asthetics to make the plot look nicer 
+    axis.text.x = element_text(size=10),  # size of text on the x axis 
+    axis.text.y = element_text(size=10),  # size of text on the y axis 
+    plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
+    plot.subtitle = element_text(hjust = 0.5), # subtitle settiings (note, centering requires h = 0.5)
+    plot.caption = element_text(hjust = 0, face = "italic"), # caption settings 
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), 
+    axis.line = element_line(colour = "black")
+  )
+
+# -------- LOW IMAGINABILITY CONDITION -------------------
+plotRTlow<-
+# ------ Data ---------------------
+ggplot(data = dRT_low, aes(x = value, y = prob)) + 
+  geom_point(size = 0.4) +
+  # ------ Model --------
+geom_line(data = mRT_low, aes(x = value, prob), size = 0.5, colour = "red") +  
+facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+  xlab("Response Time (seconds)") + 
+  ylab("Probability \n Density") + 
+  ggtitle("RT Density by \n Low Imageability Condition") +   
+  theme(
+    # x axis label
+    # Theme asthetics to make the plot look nicer 
+    legend.background = element_blank(),
+    axis.text.x = element_text(size=10),  # size of text on the x axis 
+    axis.text.y = element_text(size=10),  # size of text on the y axis 
+    plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
+    plot.subtitle = element_text(hjust = 0.5), # subtitle settiings (note, centering requires h = 0.5)
+    plot.caption = element_text(hjust = 0, face = "italic"), # caption settings 
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), 
+    axis.line = element_line(colour = "black")
+  )
+
+```
+

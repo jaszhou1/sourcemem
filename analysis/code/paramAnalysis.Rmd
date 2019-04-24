@@ -26,9 +26,9 @@ recogPlot1 <- ggplot(Recog,aes(x = Recog$kappa1, y = Recog$rho)) + geom_point(co
 
 recogPlot2 <- ggplot(Recog,aes(x = Recog$kappa2, y = Recog$rho)) + geom_point(color = "blue") + geom_text(label=rownames(High), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Recognised (High Img)", x = "kappa2", y = "rho")
 
-highPlot1 <- ggplot(High,aes(x = High$kappa1, y = High$rho)) + geom_point(color = "red") + geom_text(label=rownames(High), nudge_x = 0.05, nudge_y = 0.05)+ labs(title ="Recognised High Confidence (Low Img)", x = "kappa1", y = "rho")
+highPlot1 <- ggplot(High,aes(x = High$kappa1, y = High$rho)) + geom_point(color = "red") + geom_text(label=rownames(High), nudge_x = 0.05, nudge_y = 0.05)+ labs(title ="Recognised High Confidence (Low Img)", x = "kappa1", y = "rho") 
 
-highPlot2 <- ggplot(High,aes(x = High$kappa2, y = High$rho)) + geom_point(color = "red") + geom_text(label=rownames(High), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Recognised High Confidence (High Img)", x = "kappa2", y = "rho")
+highPlot2 <- ggplot(High,aes(x = High$kappa2, y = High$rho)) + geom_point(color = "red") + geom_text(label=rownames(High), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Recognised High Confidence (High Img)", x = "kappa2", y = "rho") + theme_classic() 
 
 
 unrecogPlot1 <- ggplot(Unrecog,aes(x = Unrecog$kappa1, y = Unrecog$rho)) + geom_point(colour = "green") + geom_text(label=rownames(Unrecog), nudge_x = 0.05, nudge_y = 0.05) + labs(title ="Unrecognised (Low Img)", x = "kappa1", y = "rho")
