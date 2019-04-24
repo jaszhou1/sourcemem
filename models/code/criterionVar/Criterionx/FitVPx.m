@@ -12,16 +12,16 @@ setopt;
 %    P = [v1a, v2a, v1b, v2b, eta1a, eta2a, eta1b, eta2b, a, Ter]
 %          1    2    3    4     5      6      7      8    9   10
     
-v1a = normrnd(3,0.3);
-v2a = normrnd(0.01,0.02);
-v1b = normrnd(2,0.3);
-v2b = normrnd(0.5,0.2);
-eta1 = normrnd(2.5,0.5);
-eta2 = normrnd(2.5,0.5);
-a = normrnd(1.6,0.3);
-Ter = normrnd(0.10,0.05);
+v1a = normrnd(3,1);
+v2a = normrnd(0.01,0.05);
+v1b = normrnd(2,1);
+v2b = normrnd(0.5,0.5);
+eta1 = normrnd(2.5,1);
+eta2 = normrnd(2.5,1);
+a = normrnd(1.6,0.4);
+Ter = normrnd(0.05,0.15);
 
-sa = normrnd(1.5,0.5);
+sa = normrnd(1,1);
 
 
 P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, sa];

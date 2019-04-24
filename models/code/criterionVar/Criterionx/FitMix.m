@@ -12,10 +12,10 @@ eta1 = 0;
 eta2 = 0;
 a1 = normrnd(3,1);
 a2 = normrnd(1,1);
-pi1 = norm(0.3,0.5);
-pi2 = normrnd(0.3,0.5);
-Ter = normrnd(0,0.2);
-sa = normrnd(1,0.5);
+pi1 = norm(0.5,0.5);
+pi2 = normrnd(0.5,0.5);
+Ter = normrnd(0.1,0.5);
+sa = normrnd(1,1);
 
 P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter,sa];
 
