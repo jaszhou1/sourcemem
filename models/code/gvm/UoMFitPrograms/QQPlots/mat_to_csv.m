@@ -8,7 +8,7 @@ function [] = mat_to_csv(filename, model_string, input_cells)
 %   Philip's code.
 
   %% Parameters for the plots.
-  time_quantiles = [0.3, 0.5, 0.7];
+  time_quantiles = [0.1, 0.5, 0.9];
   n_theta_obs_quantiles = 7;
   time_step = 0.01;
   min_rt_filter = 0.15;

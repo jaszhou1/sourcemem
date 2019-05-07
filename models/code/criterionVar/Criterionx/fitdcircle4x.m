@@ -69,7 +69,8 @@ eta1 = P(5);
 eta2 = P(6);
 a= P(7);
 ter = P(8);
-sa = P(9);
+st = P(9);
+sa = P(10);
 sigma = 1.0;
 eta1a = eta1;
 eta2a = eta1;
@@ -168,6 +169,24 @@ else
    % Add nondecision times
    ta = ta + ter;
    tb = tb + ter;
+   
+   
+   % --------------------
+   % Convolve with Ter(Added from fitgvm, 07/05)
+   % --------------------
+   h = ta(2) - ta(1);
+   if st > 2 * h
+       m = round(st/h);
+       n = length(ta);
+       fe = ones(1, m) / m;
+       for i = 1:nw + 1
+           gti = conv(gta(i, :), fe);
+           gta(i,:) = gti(1:n);
+           gti = conv(gtb(i, :), fe);
+           gtb(i,:) = gti(1:n);
+       end
+   end
+   
    % Create mesh for interpolation
    [anglea,timea]=meshgrid(ta, thetaa);
    [angleb,timeb]=meshgrid(tb, thetab);

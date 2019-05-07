@@ -17,7 +17,7 @@ library(tidyverse)
 ```
 
 ```{r}
-GVM_Crit <- read.csv('GVM_crit_marginal.csv')
+GVM_Crit <- read.csv('gvmCritHigh.csv')
 
 # Initialise columns 
 GVM_Crit$model <- matrix(NA, dim(GVM_Crit)[1])

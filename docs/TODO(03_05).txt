@@ -1,0 +1,15 @@
+censor RT data at 5 seconds (in conjunction w median)
+
+OR Group percentile, see what the percentile if you exclude up to a limit
+
+Putting in variable non-decision times for all models (take it from the GVM [power von Mises])
+
+Checking on the bad IX (it cuts off the far left, if there is a big spike then should have more bad IX if criterion is >4)
+
+go back to histograms for all the plots
+
+Go back to truncate 10% beyond the range of the data for QxQ
+
+
+
+

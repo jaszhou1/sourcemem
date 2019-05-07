@@ -20,11 +20,11 @@ eta1 = normrnd(2.5,1);
 eta2 = normrnd(2.5,1);
 a = normrnd(1.6,0.4);
 Ter = normrnd(0.05,0.15);
-
+st = normrnd(0.5,0.5);
 sa = normrnd(1,1);
 
 
-P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, sa];
+P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, st, sa];
 
 nlow = length(data{1,1});
 nhigh = length(data{1,2});

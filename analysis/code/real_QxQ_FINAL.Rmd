@@ -16,9 +16,10 @@ library("tidyverse")
 ```
 
 ```{r}
+setwd("~/GitHub/sourcemem/models/code/gvm/UoMFitPrograms/QQPlots")
 #dataset <- read.csv('GVM_High.csv', sep = ",") #.1, .3, .5, .7, .9 quantiles
-#dataset <- read.csv('GVM_high_3quant.csv', sep = ",") #.1, .5, .9 quantiles
-dataset <- read.csv('GVM_high_3quant2.csv', sep = ",") #.3, .5, .7 quantiles
+dataset <- read.csv('Thresh_3quant.csv', sep = ",") #.1, .5, .9 quantiles
+#dataset <- read.csv('GVM_high_3quant2.csv', sep = ",") #.3, .5, .7 quantiles
 
 dataset$quantile_idx <- as.factor(dataset$quantile_idx)
 
@@ -112,7 +113,7 @@ High_QxQ <- ggplot(data = model_high,
                        y = model_high$rt, 
                        group = model_high$quantile_idx,  # group points according to quantiles 
                        colour = quantile_idx)) + 
-  geom_line(linemitre = 4) + geom_point() + 
+  geom_line(linemitre = 4) + #geom_point() + 
   # ------------ Plot Data ---------------------------------
 # Plot data as POINTS ONLY
 geom_point(data = data_high, 
@@ -131,7 +132,7 @@ facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale =
   ylab("Response Time (s)") + 
   scale_color_manual(name = "Predicted \nQuantiles",
                      values = cols,  # cbPalette[c(1,2,3)], 
-                     labels = c("0.3", "0.5", "0.7")) + 
+                     labels = c("0.1", "0.5", "0.9")) + 
   # ------------ Change Theme Settings  ----------------
 ggtitle("Response Time Quantiles by Error \n High Imageability Condition") + 
   theme(
@@ -160,9 +161,9 @@ High_QxQ # display the plot
 # Note: Device to use. Can be either be a device function (e.g. png()), 
 # or one of "eps", "ps", "tex" (pictex), "pdf", "jpeg", "tiff", "png", 
 # "bmp", "svg" or "wmf" (windows only).
-ggsave('HighQQ', plot = High_QxQ, device = "eps", path = NULL,
-       width = 20, height = 20, 
-       scale = 1, dpi = 800, limitsize = TRUE) # 
+#ggsave('HighQQ', plot = High_QxQ, device = "eps", path = NULL,
+       #width = 20, height = 20, 
+       #scale = 1, dpi = 800, limitsize = TRUE) # 
 
 ```
 
@@ -175,7 +176,7 @@ Low_QxQ <- ggplot(data = model_low,
                        y = model_low$rt, 
                        group = model_low$quantile_idx,  # group points according to quantiles 
                        colour = quantile_idx)) + 
-  geom_line(linemitre = 4) + geom_point() + 
+  geom_line(linemitre = 4) + #geom_point() + 
   # ------------ Plot Data ---------------------------------
 # Plot data as POINTS ONLY
 geom_point(data = data_low, 
@@ -194,7 +195,7 @@ facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale =
   ylab("Response Time (s)") + 
   scale_color_manual(name = "Predicted \nQuantiles",
                      values = cols,  # cbPalette[c(1,2,3)], 
-                     labels = c("0.3", "0.5", "0.7")) + 
+                     labels = c("0.1", "0.5", "0.9")) + 
   # ------------ Change Theme Settings  ----------------
 ggtitle("Response Time Quantiles by Error \n Low Imageability Condition") + 
   theme(
