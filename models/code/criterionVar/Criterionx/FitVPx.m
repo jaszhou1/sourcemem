@@ -28,7 +28,7 @@ P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, st, sa];
 
 nlow = length(data{1,1});
 nhigh = length(data{1,2});
-Sel = ones(1,9);
+Sel = ones(1,10);
 pest = fminsearch(@fitdcircle4x, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhigh);
 
 P(Sel== 1) = pest; 
