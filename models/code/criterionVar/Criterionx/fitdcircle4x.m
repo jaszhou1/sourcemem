@@ -5,8 +5,8 @@ function [ll,bic,Pred, Gstuff] = fitdcircle4x(Pvar, Pfix, Sel, Data, nlow, nhigh
 % Assumes the eta components in the x and y directions are the
 % same.
 %    [ll,bic,Pred] = fitdcircle3(Pvar, Pfix, Sel, Data)
-%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, sa]
-%          1    2    3    4    5      6   7   8   9
+%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, st,sa]
+%          1    2    3    4    5      6   7   8   9   10
 %    'Data' is cell array structure created by <makelike>
 % ========================================================================
 name = 'FITDCIRCLE4: ';
@@ -20,7 +20,7 @@ nt = 301; %gta and gtab uses NT to make a zeroes matrix of 51x300 in line 93.
            %come out of vdcircle300cls as 51x301, and so trying to sum
            %these matrices returns an error. I am not sure what any of
            %these actually represent - 17/01 Stop
-np = 9;
+np = 10;
 n_sz_step =  11; % Criterion variability.
 % nlong = 320;
 % nshort = 360;

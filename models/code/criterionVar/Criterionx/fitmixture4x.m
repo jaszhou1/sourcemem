@@ -6,8 +6,8 @@ function [ll,bic,Pred, Gstuff] = fitmixture4x(Pvar, Pfix, Sel, Data, nlow, nhigh
 % criteria. Assumes the eta components in the x and y directions are the
 % same.
 %    [ll,bic,Pred] = fitmixture4x(Pvar, Pfix, Sel, Data)
-%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter  sa]
-%          1    2    3    4    5      6    7   8   9   10    11  12
+%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter  st sa]
+%          1    2    3    4    5      6    7   8   9   10    11  12 13
 %    a1, a2 are criteria for memory and guessing process, pi1, pi2 are 
 %    mixing proportions for long and short.
 %    'Data' is cell array structure created by <makelike>
@@ -18,7 +18,7 @@ errmg2 = 'Incorrect length selector vector, exiting...';
 errmg3 = 'Data should be a 1 x 2 cell array from <makelike>...';
 
 tmax = 3.0; 
-np = 12;
+np = 13;
 nt = 300;
 %nshort and n long changed to nlow and nhigh, values now handed in rather than
 %being fixed
