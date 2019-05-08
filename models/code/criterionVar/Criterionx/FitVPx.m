@@ -9,8 +9,8 @@ function [ll, bic, Pred, pest, Gstuff] = FitVPx(data)
 setopt;
 %Starting parameters for P?)
 %    [ll,bic,Pred] = fitdcircle(Pvar, Pfix, Sel, Data)
-%    P = [v1a, v2a, v1b, v2b, eta1a, eta2a, eta1b, eta2b, a, Ter]
-%          1    2    3    4     5      6      7      8    9   10
+%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, st, sa]
+%          1    2    3    4     5      6  7   8    9   10 
     
 v1a = normrnd(3,1);
 v2a = normrnd(0.01,0.05);

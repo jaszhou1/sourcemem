@@ -1,7 +1,7 @@
 function [ll, bic, Pred, pest, Gstuff] = FitMix(data)
 %    [ll,bic,Pred] = fitmixture3(Pvar, Pfix, Sel, Data)
-%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter, sa]
-%          1    2    3    4    5      6    7   8   9   10    11  12
+%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter, st, sa]
+%          1    2    3    4    5      6    7   8   9   10    11  12  13
 setopt;
 
 v1a = normrnd(3,1);
@@ -15,9 +15,10 @@ a2 = normrnd(1,1);
 pi1 = norm(0.5,0.5);
 pi2 = normrnd(0.5,0.5);
 Ter = normrnd(0.1,0.5);
+st = normrnd(0.5,0.5);
 sa = normrnd(1,1);
 
-P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter,sa];
+P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter,st,sa];
 
 Sel = [1,1,1,1,0,0,1,1,1,1,1,1];  % all parameters free
 nlow = length(data{1,1});

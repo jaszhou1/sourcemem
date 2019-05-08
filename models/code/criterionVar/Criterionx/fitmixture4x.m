@@ -70,7 +70,8 @@ a2 = P(8);
 pi1 = P(9);
 pi2 = P(10); 
 ter = P(11);
-sz = P(12);
+st = P(12);
+sz = P(13);
 
 
 % Components of drift variability.
@@ -179,6 +180,23 @@ else
    % Add nondecision times
    ta = ta + ter;
    tb = tb + ter;
+   
+   % --------------------
+   % Convolve with Ter(Added from fitgvm, 07/05)
+   % --------------------
+   h = ta(2) - ta(1);
+   if st > 2 * h
+       m = round(st/h);
+       n = length(ta);
+       fe = ones(1, m) / m;
+       for i = 1:nw + 1
+           gti = conv(gta(i, :), fe);
+           gta(i,:) = gti(1:n);
+           gti = conv(gtb(i, :), fe);
+           gtb(i,:) = gti(1:n);
+       end
+   end
+   
    % Create mesh for interpolation
    [anglea,timea]=meshgrid(ta, thetaa);
    [angleb,timeb]=meshgrid(tb, thetab);
