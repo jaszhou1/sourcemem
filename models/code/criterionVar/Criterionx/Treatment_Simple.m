@@ -3,12 +3,11 @@ function [Fit_Data] = Treatment_Simple()
 % Jason Zhou <jasonz1 AT student DOT unimelb DOT edu DOT au>
 
 %Read Data in
-% [J1, J2, J3] = xlsread("imgFiltered.csv"); %J2 and J3 are auxiliary, tells you what the column headers are.
+% [J1, J2, J3] = xlsread("dataFiltered2.csv"); %J2 and J3 are auxiliary, tells you what the column headers are.
 % J1(:,1)=[];
 % J3(:,1)=[];
 % MATLAB doesnt like having strings and numbers together)
-load('Jindiv_Filtered.mat'); % Filtered version
-%load('Jindiv_Simple.mat');
+load('Jindiv_Filtered2.mat'); % Filtered version
 J1(:,1) = [];
 %Split high and low recog conf
 

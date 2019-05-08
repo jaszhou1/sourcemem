@@ -4,10 +4,11 @@
 %Opens and organises the data into recognised/unrecognised and low/high imageability
 %Fit_Data = Treatment_Simple('stimulus.xlsx');
 %This is real slow, so I
-%have Jindiv_simple for my data set. For future use, switch this on, and
+%have Jindiv_filtered2 for my data set. For future use, switch this on, and
 %the following line off. You will need to do this in Treatment_Simple as
 %well.
-Fit_Data = Treatment_Simple;
+Fit_Data = Treatment_Simple; 
+%Loading in dataset with RTs longer than 5s and greater than 3 sds above median after that, filtered out
 
 Recognised = Fit_Data(:,1);
 Unrecognised = Fit_Data(:,2);

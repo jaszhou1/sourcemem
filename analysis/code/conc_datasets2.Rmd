@@ -37,7 +37,14 @@ for (i in participants){
      #participant_dataset<-participant_dataset[!(participant_dataset$response_RT>(3*(mad(participant_dataset$response_RT, center = median(participant_dataset$response_RT,na.rm=TRUE))) - median(participant_dataset$response_RT,na.rm=TRUE))), ]
     
   }
+#--- FILTERING SLOW RESPONSES ---#
+
+  # 1.Filter out responses slower than 5 seconds
+  participant_dataset <- participant_dataset[!(participant_dataset$response_RT>5),]
+  
+  # 2.Filter out responses slower than three standard deviations above median RT for each participant
   participant_dataset<-participant_dataset[!(participant_dataset$response_RT>(3*(sd(participant_dataset$response_RT)) + median(participant_dataset$response_RT,na.rm=TRUE))), ]
+#---------------------------------
   
   participant_dataset$participant <- i
   
@@ -98,7 +105,7 @@ recogHist<- ggplot(data = recog, aes(x = recog$response_error)) + geom_histogram
 
 highHist<- ggplot(data = high, aes(x = high$response_error)) + geom_histogram(bins = 100)+ scale_y_continuous(limits=c(0, 700)) + labs(title ="Highlt Recognized Items", x = "Response Error (radians)", y = "Frequency") + theme_classic()
 
-
+jumboHist <- ggplot() + geom_histogram(data = dataset.no.na, aes(x = dataset.no.na$response_error, fill="All"), bins = 100) + geom_histogram(data = recog, aes(x = recog$response_error, fill="Recognized"), bins = 100) + geom_histogram(data = unrecog, aes(x = unrecog$response_error, fill="Unrecognized"), bins = 100) + theme_classic()+ labs(x = "Response Error (radians)", y = "Frequency",fill = "Recognition Rating")
 # Write CSV in R
 #write.csv(dataset, file = "filteredData.csv")
 
