@@ -32,6 +32,9 @@ nw = 50;
 h = tmax / nt; 
 w = 2 * pi / nw; 
 
+%can set manually
+badix = 2;
+
 if nargin < 7
     trace = 0;
 end;
@@ -122,8 +125,8 @@ else
        Pa = [v1a, v2a, eta1a, eta2a, sigma, a];
        % Parameters for short
        Pb = [v1b, v2b, eta1b, eta2b, sigma, a];
-       [ta, gta, thetaa, pthetaa, mta] = vdcircle300cls(Pa, tmax, 5);
-       [tb, gtb, thetab, pthetab, mtb] = vdcircle300cls(Pb, tmax, 5);
+       [ta, gta, thetaa, pthetaa, mta] = vdcircle300cls(Pa, tmax, badix);
+       [tb, gtb, thetab, pthetab, mtb] = vdcircle300cls(Pb, tmax, badix);
    else  % Criterion variability
        % Rectangular mass for starting point variability.
        U = ones(n_sz_step, 1); 
@@ -139,8 +142,8 @@ else
        for i = 1:n_sz_step
            Pai = [v1a, v2a, eta1a, eta2a, sigma, A(i)];
            Pbi = [v1b, v2b, eta1b, eta2b, sigma, A(i)];
-           [ta, gtai, thetaa, pthetaai, mtai] = vdcircle300cls(Pai, tmax, 5);
-           [tb, gtbi, thetab, pthetabi, mtbi] = vdcircle300cls(Pbi, tmax, 5);         
+           [ta, gtai, thetaa, pthetaai, mtai] = vdcircle300cls(Pai, tmax, badix);
+           [tb, gtbi, thetab, pthetabi, mtbi] = vdcircle300cls(Pbi, tmax, badix);         
            gta = gta + gtai;
            gtb = gtb + gtbi;
            pthetaa = pthetaa + pthetaai; 

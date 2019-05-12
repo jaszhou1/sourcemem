@@ -33,7 +33,9 @@ w = 2 * pi / nw;
 %h = tmax / 300; 
 
 % Set manually if needed - 30/1/19
-badix = 25; 
+%This affects the leading edge of the model RT predictions. If criterion is
+%high, then badix should increase to avoid big discontinuity at quick RT
+badix = 1; %default is 5
 
 
 if nargin < 7

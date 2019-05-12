@@ -19,9 +19,10 @@ v2b = normrnd(0.5,0.5);
 eta1 = normrnd(2.5,1);
 eta2 = normrnd(2.5,1);
 a = normrnd(1.6,0.4);
-Ter = normrnd(0.05,0.15);
-st = normrnd(0.5,0.5);
-sa = normrnd(1,1);
+Ter = normrnd(0.01,0.05);
+st = abs(normrnd(0.05,0.01));
+sa = abs(normrnd(1,0.5));
+
 
 
 P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, st, sa];
