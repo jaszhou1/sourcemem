@@ -1,4 +1,4 @@
-function [ll, bic, Pred, pest, Gstuff] = FitVPx(data)
+function [ll, bic, Pred, pest, Gstuff] = FitVPx(data, badix)
 %MEMORY_FIXATION Display a fixation cross for orienting the participant.
 %   Data Treatment script to make EXPSOURCE model fitting code cooperate with
 %   EXPIMG data
@@ -30,9 +30,9 @@ P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, st, sa];
 nlow = length(data{1,1});
 nhigh = length(data{1,2});
 Sel = ones(1,10);
-pest = fminsearch(@fitdcircle4x, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhigh);
+pest = fminsearch(@fitdcircle4x, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhigh, badix);
 
 P(Sel== 1) = pest; 
-[ll,bic,Pred,Gstuff] = fitdcircle4x(P(Sel==1), P(Sel==0), Sel, data, nlow, nhigh);
+[ll,bic,Pred,Gstuff] = fitdcircle4x(P(Sel==1), P(Sel==0), Sel, data, nlow, nhigh, badix);
 %fitplot(data, Pred);
 end

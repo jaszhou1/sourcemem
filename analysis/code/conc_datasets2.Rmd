@@ -32,9 +32,7 @@ for (i in participants){
     
     
     participant_dataset$response_RT <- as.numeric(as.vector(participant_dataset$response_RT))
-
-    #Filter out the slowest RTs for each participant 27/02    
-     #participant_dataset<-participant_dataset[!(participant_dataset$response_RT>(3*(mad(participant_dataset$response_RT, center = median(participant_dataset$response_RT,na.rm=TRUE))) - median(participant_dataset$response_RT,na.rm=TRUE))), ]
+        participant_dataset$response_angle<- as.numeric(as.vector(participant_dataset$response_angle))
     
   }
 #--- FILTERING SLOW RESPONSES ---#
@@ -57,7 +55,7 @@ for (i in participants){
 #Cleaning up the dataset
 
 dataset <- dataset[,-1] #removes the first variable, which are these weird row labels
-#dataset <- dataset[,-1] #removes STIM/FOIL label
+dataset <- dataset[,-1] #removes STIM/FOIL label
 
 
 #Recoding Participant 
@@ -107,7 +105,7 @@ highHist<- ggplot(data = high, aes(x = high$response_error)) + geom_histogram(bi
 
 jumboHist <- ggplot() + geom_histogram(data = dataset.no.na, aes(x = dataset.no.na$response_error, fill="All"), bins = 100) + geom_histogram(data = recog, aes(x = recog$response_error, fill="Recognized"), bins = 100) + geom_histogram(data = unrecog, aes(x = unrecog$response_error, fill="Unrecognized"), bins = 100) + theme_classic()+ labs(x = "Response Error (radians)", y = "Frequency",fill = "Recognition Rating")
 # Write CSV in R
-#write.csv(dataset, file = "filteredData.csv")
+write.csv(dataset, file = "dataFiltered3.csv")
 
 ```
 

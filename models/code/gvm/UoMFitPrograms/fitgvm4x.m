@@ -13,7 +13,7 @@ errmg1 = 'Incorrect number of parameters for model, exiting...';
 errmg2 = 'Incorrect length selector vector, exiting...';
 errmg3 = 'Data should be a 1 x 2 cell array from <makelike>...';
 
-tmax = 3.0; 
+tmax = 5.1; 
 n_sa_step =  11; % Criterion variability.
 np = 9;
 nt = 300;

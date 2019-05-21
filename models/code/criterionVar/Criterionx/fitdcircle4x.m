@@ -1,4 +1,4 @@
-function [ll,bic,Pred, Gstuff] = fitdcircle4x(Pvar, Pfix, Sel, Data, nlow, nhigh, trace)
+function [ll,bic,Pred, Gstuff] = fitdcircle4x(Pvar, Pfix, Sel, Data, nlow, nhigh, badix, trace)
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task
 % with across-trial variability in criterion
@@ -14,7 +14,7 @@ errmg1 = 'Incorrect number of parameters for model, exiting...';
 errmg2 = 'Incorrect length selector vector, exiting...';
 errmg3 = 'Data should be a 1 x 2 cell array from <makelike>...';
 
-tmax = 3.0;
+tmax = 5.1;
 nt = 301; %gta and gtab uses NT to make a zeroes matrix of 51x300 in line 93.
            %however, these matrices are then added to gtai and gtbi which
            %come out of vdcircle300cls as 51x301, and so trying to sum
@@ -34,10 +34,10 @@ w = 2 * pi / nw;
 
 
 % Set manually if needed - 30/1/19
-badix = 0.2; 
+%badix = 5; 
 
 
-if nargin < 7
+if nargin < 8
     trace = 0;
 end;
 lp = length(Pvar) + length(Pfix);

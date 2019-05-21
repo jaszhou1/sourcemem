@@ -1,4 +1,4 @@
-function [ll,bic,Pred, Gstuff] = fitmixture4x(Pvar, Pfix, Sel, Data, nlow, nhigh, trace)
+function [ll,bic,Pred, Gstuff] = fitmixture4x(Pvar, Pfix, Sel, Data, nlow, nhigh, badix, trace)
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task.
 % Across-trial variability in criterion.
@@ -17,7 +17,7 @@ errmg1 = 'Incorrect number of parameters for model, exiting...';
 errmg2 = 'Incorrect length selector vector, exiting...';
 errmg3 = 'Data should be a 1 x 2 cell array from <makelike>...';
 
-tmax = 3.0; 
+tmax = 5.1; 
 np = 13;
 nt = 300;
 %nshort and n long changed to nlow and nhigh, values now handed in rather than
@@ -35,10 +35,10 @@ w = 2 * pi / nw;
 % Set manually if needed - 30/1/19
 %This affects the leading edge of the model RT predictions. If criterion is
 %high, then badix should increase to avoid big discontinuity at quick RT
-badix = 1; %default is 5
+%badix = 5; %default is 5
 
 
-if nargin < 7
+if nargin < 8 %putting badix in arguments to be handed in
     trace = 0;
 end;
 lp = length(Pvar) + length(Pfix);

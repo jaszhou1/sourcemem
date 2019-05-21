@@ -17,7 +17,7 @@ library(tidyverse)
 ```
 
 ```{r}
-dataset <- read.csv('diffusion.csv')
+dataset <- read.csv('criterion_filtered.csv')
 names(dataset)[1] <- "model_name"
 
 continuous<- dataset[dataset$model_name == 'Continuous', ]
@@ -103,8 +103,8 @@ hybrid <- tibble(modelName = hybrid$model_name,
 continuous$subjString <- NA
 
 # Get a list of subjects 
-#data.subjList <- unique(continuous$participant)
-data.subjList <- c(1,2,3,4)
+data.subjList <- unique(continuous$participant)
+#data.subjList <- c(1,2,3,4)
 
 # Custom function to create new variable labels 
 create.subj.string <- function(subjNo, dataset){
@@ -182,8 +182,8 @@ dRT_continuous_high <- continuous_high_RT[continuous_high_RT$model == 0, ]
 threshold$subjString <- NA
 
 # Get a list of subjects 
-#data.subjList <- unique(threshold$participant)
-data.subjList <- c(1,2,3,4)
+data.subjList <- unique(threshold$participant)
+#data.subjList <- c(1,2,3,4)
 
 # Custom function to create new variable labels 
 create.subj.string <- function(subjNo, dataset){
@@ -260,8 +260,8 @@ dRT_threshold_high <- threshold_high_RT[threshold_high_RT$model == 0, ]
 hybrid$subjString <- NA
 
 # Get a list of subjects 
-#data.subjList <- unique(hybrid$participant)
-data.subjList <- c(1,2,3,4)
+data.subjList <- unique(hybrid$participant)
+#data.subjList <- c(1,2,3,4)
 
 # Custom function to create new variable labels 
 create.subj.string <- function(subjNo, dataset){

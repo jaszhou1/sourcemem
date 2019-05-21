@@ -2,11 +2,6 @@
 %% Open Data
 
 %Opens and organises the data into recognised/unrecognised and low/high imageability
-%Fit_Data = Treatment_Simple('stimulus.xlsx');
-%This is real slow, so I
-%have Jindiv_filtered2 for my data set. For future use, switch this on, and
-%the following line off. You will need to do this in Treatment_Simple as
-%well.
 Fit_Data = Treatment_Simple; 
 %Loading in dataset with RTs longer than 5s and greater than 3 sds above median after that, filtered out
 
@@ -16,6 +11,18 @@ Unrecognised = Fit_Data(:,2);
 %Fit the data, generate predictions.
 
 participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
+
+%%% BADIX CHANGE, 21/05 %%%
+% badix (appears in lower level fit functions, e.g. fitdcircle4x.m)
+% controls for model's early RT predictions. It has a default value of 5,
+% but needs to be higher for participants who have a high value for
+% parameter sa, criterion variability, otherwise sharp discontinuities
+% appear in the RT predictions. This needs to vary between participants,
+% and so I have brought it up through the function levels to here, where
+% a badix value specific to the individual is passed down through to the
+% fitting procedure.
+
+badixs = [5,5,5,5,5,5,5,2,5,1,5,5,5,0,5,5,5,5,2,2];
 
 % %% Fit Variable Precision (Continuous model)
 % [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
@@ -27,8 +34,9 @@ VP_LL_Preds_Recognised = cell(length(participants),6);
 for i = participants
     VP_LL_Preds_Recognised{i,1} = -1; %sometimes log likelihood goes negative. re-run if this happens
     VP_LL_Preds_Recognised{i,2} = 0; %make it automatically repeat if BIC is zero (fminsearch blew up)
+    badix = badixs(i);
     while (VP_LL_Preds_Recognised{i,2} == 0 || VP_LL_Preds_Recognised{i,1} < 0)
-        [ll, bic, Pred, pest, Gstuff] = FitVPx(Recognised {i});
+        [ll, bic, Pred, pest, Gstuff] = FitVPx(Recognised {i},badix);
         VP_LL_Preds_Recognised{i,1} = ll;
         VP_LL_Preds_Recognised{i,2} = bic;
         VP_LL_Preds_Recognised{i,3} = Pred;
@@ -43,8 +51,9 @@ VP_LL_Preds_Unrecognised = cell(length(participants),6);
 for i = participants
     VP_LL_Preds_Unrecognised{i,1} = -1;
     VP_LL_Preds_Unrecognised{i,2} = 0;
+    badix = badixs(i);
     while (VP_LL_Preds_Unrecognised{i,2} == 0 || VP_LL_Preds_Unrecognised{i,1} < 0)
-        [ll, bic, Pred, pest,Gstuff] = FitVPx(Unrecognised {i});
+        [ll, bic, Pred, pest,Gstuff] = FitVPx(Unrecognised {i},badix);
         VP_LL_Preds_Unrecognised{i,1} = ll;
         VP_LL_Preds_Unrecognised{i,2} = bic;
         VP_LL_Preds_Unrecognised{i,3} = Pred;
@@ -60,8 +69,9 @@ MX_LL_Preds_Recognised = cell(length(participants),6);
 for i = participants
     MX_LL_Preds_Recognised{i,1} = -1;
     MX_LL_Preds_Recognised{i,2} = 0;
+    badix = badixs(i);
     while (MX_LL_Preds_Recognised{i,2} == 0 || MX_LL_Preds_Recognised{i,1} < 0)
-        [ll, bic, Pred, pest, Gstuff] = FitMix(Recognised {i});
+        [ll, bic, Pred, pest, Gstuff] = FitMix(Recognised {i},badix);
         MX_LL_Preds_Recognised{i,1} = ll;
         MX_LL_Preds_Recognised{i,2} = bic;
         MX_LL_Preds_Recognised{i,3} = Pred;
@@ -76,8 +86,9 @@ MX_LL_Preds_Unrecognised = cell(length(participants),6);
 for i = participants
     MX_LL_Preds_Unrecognised{i,1} = -1;
     MX_LL_Preds_Unrecognised{i,2} = 0;
+    badix = badixs(i);
     while (MX_LL_Preds_Unrecognised{i,2} == 0 || MX_LL_Preds_Unrecognised{i,1} < 0)
-        [ll, bic, Pred, pest, Gstuff] = FitMix(Unrecognised {i});
+        [ll, bic, Pred, pest, Gstuff] = FitMix(Unrecognised {i},badix);
         MX_LL_Preds_Unrecognised{i,1} = ll;
         MX_LL_Preds_Unrecognised{i,2} = bic;
         MX_LL_Preds_Unrecognised{i,3} = Pred;
@@ -94,8 +105,9 @@ HY_LL_Preds_Recognised = cell(length(participants),6);
 for i = participants
     HY_LL_Preds_Recognised{i,1} = -1;
     HY_LL_Preds_Recognised{i,2} = 0;
+    badix = badixs(i);
     while (HY_LL_Preds_Recognised{i,2} > 3000 || HY_LL_Preds_Recognised{i,2} == 0 || HY_LL_Preds_Recognised{i,1} < 0)
-        [ll, bic, Pred, pest, Gstuff] = FitVPMix(Recognised {i});
+        [ll, bic, Pred, pest, Gstuff] = FitVPMix(Recognised {i},badix);
         HY_LL_Preds_Recognised{i,1} = ll;
         HY_LL_Preds_Recognised{i,2} = bic;
         HY_LL_Preds_Recognised{i,3} = Pred;
@@ -110,8 +122,9 @@ HY_LL_Preds_Unrecognised = cell(length(participants),6);
 for i = participants
     HY_LL_Preds_Unrecognised{i,1} = -1;
     HY_LL_Preds_Unrecognised{i,2} = 0;
+    badix = badixs(i);
     while (HY_LL_Preds_Unrecognised{i,2} == 0|| HY_LL_Preds_Unrecognised{i,1} < 0)
-        [ll, bic, Pred, pest, Gstuff] = FitVPMix(Unrecognised {i});
+        [ll, bic, Pred, pest, Gstuff] = FitVPMix(Unrecognised {i},badix);
         HY_LL_Preds_Unrecognised{i,1} = ll;
         HY_LL_Preds_Unrecognised{i,2} = bic;
         HY_LL_Preds_Unrecognised{i,3} = Pred;
@@ -121,7 +134,7 @@ for i = participants
     end
 end
 
-save('CritVarFits')
+save('UpdatedCritFits')
 
 %% Plot Fits superimposed on Data, and save.
 % % Plot
