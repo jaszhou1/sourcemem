@@ -138,31 +138,31 @@ save('Censored2')
 
 %% Plot Fits superimposed on Data, and save.
 % % Plot
-% for i = participants
-%    filename = ['Cont_Recog',num2str(i),'.png'];
-%    fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
-%    saveas(gcf,filename);
-% 
-%    filename = ['Cont_Unrecog',num2str(i),'.png'];
-%    fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
-%    saveas(gcf,filename);
-% 
-%    filename = ['Thresh_Recog',num2str(i),'.png'];
-%    fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
-%    saveas(gcf,filename);
-% 
-%    filename = ['Thresh_Unrecog',num2str(i),'.png'];
-%    fitplot(Unrecognised {i}, MX_LL_Preds_Unrecognised{i,3});
-%    saveas(gcf,filename);
-% 
-%    filename = ['Hybrid_Recog',num2str(i),'.png'];
-%    fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
-%    saveas(gcf,filename);
-% 
-%    filename = ['Hybrid_Unrecog',num2str(i),'.png'];
-%    fitplot(Unrecognised {i}, HY_LL_Preds_Unrecognised{i,3});
-%    saveas(gcf,filename);
-% end
+for i = participants
+   filename = ['Cont_Recog',num2str(i),'.png'];
+   fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+   saveas(gcf,filename);
+
+   filename = ['Cont_Unrecog',num2str(i),'.png'];
+   fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
+   saveas(gcf,filename);
+
+   filename = ['Thresh_Recog',num2str(i),'.png'];
+   fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+   saveas(gcf,filename);
+
+   filename = ['Thresh_Unrecog',num2str(i),'.png'];
+   fitplot(Unrecognised {i}, MX_LL_Preds_Unrecognised{i,3});
+   saveas(gcf,filename);
+
+   filename = ['Hybrid_Recog',num2str(i),'.png'];
+   fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
+   saveas(gcf,filename);
+
+   filename = ['Hybrid_Unrecog',num2str(i),'.png'];
+   fitplot(Unrecognised {i}, HY_LL_Preds_Unrecognised{i,3});
+   saveas(gcf,filename);
+end
 
 
 %%
