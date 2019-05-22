@@ -43,7 +43,7 @@ for i = participants
         VP_LL_Preds_Recognised{i,4} = pest;
         VP_LL_Preds_Recognised{i,5} = Gstuff;
         VP_LL_Preds_Recognised{i,6} = Recognised {i};
-%        fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+        fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
     end
 end
 
@@ -78,7 +78,7 @@ for i = participants
         MX_LL_Preds_Recognised{i,4} = pest;
         MX_LL_Preds_Recognised{i,5} = Gstuff;
         MX_LL_Preds_Recognised{i,6} = Recognised {i};
- %       fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+        fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
     end
 end
 
@@ -114,7 +114,7 @@ for i = participants
         HY_LL_Preds_Recognised{i,4} = pest;
         HY_LL_Preds_Recognised{i,5} = Gstuff;
         HY_LL_Preds_Recognised{i,6} = Recognised {i};
-  %      fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
+        fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
     end
 end
 
@@ -139,27 +139,27 @@ save('Censored2')
 %% Plot Fits superimposed on Data, and save.
 % % Plot
 for i = participants
-   filename = ['Cont_Recog',num2str(i),'.png'];
+   filename = ['_Cont_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
    fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
    saveas(gcf,filename);
 
-   filename = ['Cont_Unrecog',num2str(i),'.png'];
+   filename = ['Cont_Unrecog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
    fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
    saveas(gcf,filename);
 
-   filename = ['Thresh_Recog',num2str(i),'.png'];
+   filename = ['Thresh_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
    fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
    saveas(gcf,filename);
 
-   filename = ['Thresh_Unrecog',num2str(i),'.png'];
+   filename = ['Thresh_Unrecog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
    fitplot(Unrecognised {i}, MX_LL_Preds_Unrecognised{i,3});
    saveas(gcf,filename);
 
-   filename = ['Hybrid_Recog',num2str(i),'.png'];
+   filename = ['Hybrid_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
    fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
    saveas(gcf,filename);
 
-   filename = ['Hybrid_Unrecog',num2str(i),'.png'];
+   filename = ['Hybrid_Unrecog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
    fitplot(Unrecognised {i}, HY_LL_Preds_Unrecognised{i,3});
    saveas(gcf,filename);
 end
