@@ -1,4 +1,4 @@
-function [] = marginal_mat_to_csv(filename, model_string, input_cells)
+function [] = marginal_mat_to_csv(filename, model_string, input_cells, input_cells2)
 %MAT_TO_CSV Output a CSV file from .MAT structure with diffusion runs
 %   Generate a CSV file at the given output which contains the model
 %   probability density estimates for response angles and the kernel density estimate of the
@@ -8,7 +8,7 @@ function [] = marginal_mat_to_csv(filename, model_string, input_cells)
 fp = fopen(filename, 'w');
 
 %% Extract the required quantities from the cell array.
-data_cells = input_cells(:, 6);
+data_cells = input_cells2(:, 6);
 model_cells = input_cells(:, 3);
 
 header_line = 'model_name, participant, is_model, is_high, is_theta, value, prob';
