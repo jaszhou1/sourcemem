@@ -56,17 +56,17 @@ end
    
     %% Plot
 %     
-%     for i = participants
-%         
-%         filename = ['GVM_UnrecogCrit',num2str(i),'.png'];
+    for i = participants
+        
+%         filename = ['GVM_UnrecogCrit',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
 %         fitplot(Unrecognised {i}, GVM_LL_Preds_Unrecognised{i,3});
 %         saveas(gcf,filename);
 %         
-%         filename = ['GVM_RecogCrit',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-%         fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
-%         saveas(gcf,filename);
-%         
-%     end
+        filename = ['GVM_RecogCrit',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+        fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
+        saveas(gcf,filename);
+        
+    end
 % %     
     %%
     %%% The thing I want at the end is...
