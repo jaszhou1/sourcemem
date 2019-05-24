@@ -28,7 +28,7 @@ w = 2 * pi / nw;
 %h = tmax / 300; 
 
 % Set manually if needed - 30/1/19
-badix = 3; 
+badix = 2; 
 
 
 if nargin < 7
