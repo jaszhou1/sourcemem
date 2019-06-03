@@ -1,4 +1,4 @@
-function [] = mat_to_csv(filename, model_string, input_cells,input_cells2)
+function [] = mat_to_csv(filename, model_string, input_cells)
 %MAT_TO_CSV Output a CSV file from .MAT structure with diffusion runs
 %   Generate a CSV file at the given output (as well as the table for
 %   the CSV as the returned output of this function) from the .MAT
@@ -17,7 +17,7 @@ function [] = mat_to_csv(filename, model_string, input_cells,input_cells2)
   fp = fopen(filename, 'w');
   
   %% Extract the required quantities from the cell array.
-  data_cells = input_cells2(:, 6);
+  data_cells = input_cells(:, 6);
   model_cells = input_cells(:, 5);
   
   %% Print the header line in the CSV.
@@ -36,6 +36,11 @@ function [] = mat_to_csv(filename, model_string, input_cells,input_cells2)
     end
       
     %% Get the appropriate data and models.
+    
+    %troubleshooting
+    disp(n_observers);
+    %
+    
     this_data_cell = data_cells{i, :};
     this_model_cell = model_cells{i, :};
 

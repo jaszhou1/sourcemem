@@ -30,6 +30,8 @@ for i = 1:(n_theta_steps-1)  % The last row is not reflective of the dist
     if min(diff(stable_dist)) <= 0
         error 'Cannot compute distribution quantiles';
     end
+    disp(i)
+    disp(size(stable_dist))
     qlines_res(i, :) = interp1(stable_dist', stable_time', time_quantiles);
 end
 
