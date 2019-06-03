@@ -21,6 +21,8 @@ dataset <- read.csv('dataFiltered3.csv')
 # Create a new variable to label the subject numbers as strings 
 dataset$subjString <- NA
 
+dataset <- dataset[!(dataset$participant== 1),]
+dataset <- dataset[!(dataset$participant== 13),]
 # Get a list of subjects 
 data.subjList <- unique(dataset$participant)
 #data.subjList <- c(1,2,3,4)
@@ -60,6 +62,11 @@ highdata <- recogdata[recogdata$condition==2,]
 ```{r}
 
 density <- read.csv('Censored_Crit_Fits.csv')
+
+#exclude participants 1 and 13, who are non-sig on Rayleigh Test
+density <- density[!(density$participant== 1),]
+density <- density[!(density$participant== 13),]
+
 names(density)[1] <- "model_name"
 
 continuous<- density[density$model_name == 'Continuous', ]
@@ -405,26 +412,26 @@ ggplot(data=lowdata,aes(x=lowdata$response_error, ..density..)) + geom_histogram
   # ------ Model --------
   # Continuous
 geom_line(data = mcontinuous_low_theta, aes(x = value, prob), size = 0.75, colour = "red") +  
-  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Response Error (radians)") + 
   
   # Threshold
   geom_line(data = mthreshold_low_theta, aes(x = value, prob), size = 0.75, colour = "blue") +  
-  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Response Error (radians)") +
   
   #Hybrid
   geom_line(data = mhybrid_low_theta, aes(x = value, prob), size = 0.75, colour = "green") +  
-  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Response Error (radians)") +
   
   #Misc
   scale_x_continuous(name ="Response Error (radians)", # also x axis name 
                      breaks = c(-2, 0, 2),
                      labels = c(expression(-pi), "0", expression(pi))) + 
-  scale_colour_manual(values=c("red","black")) +
+  scale_colour_manual(values=c("red","blue","green")) +
   ylab("Probability \n Density") + 
-  ggtitle("Low Imageability Condition") +   
+  ggtitle("Response Error by Subject\n Low Imageability Condition") +   
   theme(
     # x axis label
     # Theme asthetics to make the plot look nicer 
@@ -447,15 +454,15 @@ ggplot(data=highdata,aes(x=highdata$response_error, ..density..)) + geom_histogr
   # ------ Model --------
   #Continuous
 geom_line(data = mcontinuous_high_theta, aes(x = value, prob), size = 0.75, colour = "red") +  
-  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Theta (radians)") + 
   #Threshold
 geom_line(data = mthreshold_high_theta, aes(x = value, prob), size = 0.75, colour = "blue") +  
-  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Theta (radians)") + 
   #Hybrid
 geom_line(data = mhybrid_high_theta, aes(x = value, prob), size = 0.75, colour = "green") +  
-  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Theta (radians)") + 
   #Misc
   scale_x_continuous(name ="Response Error (radians)", # also x axis name 
@@ -463,7 +470,7 @@ geom_line(data = mhybrid_high_theta, aes(x = value, prob), size = 0.75, colour =
                      labels = c(expression(-pi), "0", expression(pi))) + 
   scale_colour_manual(values=c("red","black")) +
   ylab("Probability \n Density") + 
-  ggtitle("High Imageability Condition") +   
+  ggtitle("Response Error by Subject\n High Imageability Condition") +   
   theme(
     # x axis label
     # Theme asthetics to make the plot look nicer 
@@ -489,20 +496,20 @@ ggplot(data=highdata,aes(x=highdata$response_RT, ..density..)) + geom_histogram(
   # ------ Model --------
   #Continuous
 geom_line(data = mRT_continuous_high, aes(x = value, prob), size = 0.75, colour = "red") +  
-  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") +
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   
   #Threshold
 geom_line(data = mRT_threshold_high, aes(x = value, prob), size = 0.75, colour = "blue") +  
-  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") +
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
 
   #Hybrid
 geom_line(data = mRT_hybrid_high, aes(x = value, prob), size = 0.75, colour = "green") +  
-  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") +
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   
   #Misc
   xlab("Response Time (seconds)") + 
   ylab("Probability \n Density") + 
-  ggtitle("RT Density by \n High Imageability Condition") +   
+  ggtitle("Response Time by Subject\n High Imageability Condition") +   
   theme(
     # x axis label
     # Theme asthetics to make the plot look nicer 
@@ -524,18 +531,18 @@ ggplot(data=lowdata,aes(x=lowdata$response_RT, ..density..)) + geom_histogram(bi
   # ------ Model --------
   #Continuous
 geom_line(data = mRT_continuous_low, aes(x = value, prob), size = 0.75, colour = "red") +  
-facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") +
+facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   
   #Threshold
 geom_line(data = mRT_threshold_low, aes(x = value, prob), size = 0.75, colour = "blue") +  
-facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") +
+facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   #Threshold
 geom_line(data = mRT_hybrid_low, aes(x = value, prob), size = 0.75, colour = "green") +  
-facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") +
+facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   #Misc
   xlab("Response Time (seconds)") + 
   ylab("Probability \n Density") + 
-  ggtitle("RT Density by \n Low Imageability Condition") +   
+  ggtitle("Response Time by Subject\n Low Imageability Condition") +   
   theme(
     # x axis label
     # Theme asthetics to make the plot look nicer 

@@ -17,7 +17,56 @@ library(tidyverse)
 ```
 
 ```{r}
-GVM_Crit <- read.csv('gvmCritHigh.csv')
+dataset <- read.csv('dataFiltered3.csv')
+
+# Create a new variable to label the subject numbers as strings 
+dataset$subjString <- NA
+
+dataset <- dataset[!(dataset$participant== 1),]
+dataset <- dataset[!(dataset$participant== 13),]
+# Get a list of subjects 
+data.subjList <- unique(dataset$participant)
+#data.subjList <- c(1,2,3,4)
+
+# Custom function to create new variable labels 
+create.subj.string <- function(subjNo, dataset){
+  
+  dataset[dataset$participant==subjNo, 'subjString'] <- sprintf('Subject %d', subjNo)
+  
+  return(dataset)
+}
+
+# Run through loop - don't use lapply or map because subject numbers not in order 
+for (sub in 1:length(data.subjList)){
+  
+  # Get the subject number 
+  subjNo <- data.subjList[sub]
+  
+  # Run function, return data frame (dataset)
+  dataset <- create.subj.string(subjNo, dataset)
+  
+}
+
+# Create as factor for plotting and also include levels so the order is correct 
+dataset$subjString <- factor(dataset$subjString, 
+                                levels = unique(dataset$subjString))
+
+dataset$participant <- factor(dataset$participant, levels = unique(dataset$participant))
+
+
+recogdata <- dataset[dataset$recog_rating>=3,]
+lowdata <- recogdata[recogdata$condition==1,]
+highdata <- recogdata[recogdata$condition==2,]
+
+```
+
+
+```{r}
+GVM_Crit <- read.csv('PVM_censor3.csv')
+
+
+GVM_Crit <- GVM_Crit[!(GVM_Crit$participant== 1),]
+GVM_Crit <- GVM_Crit[!(GVM_Crit$participant== 13),]
 
 # Initialise columns 
 GVM_Crit$model <- matrix(NA, dim(GVM_Crit)[1])
@@ -148,11 +197,10 @@ cols = gg_color_hue(n)
 # -------- LOW IMAGINABILITY CONDITION -------------------
 plotThetaLow<-
 # ------ Data ---------------------
-ggplot(data = dlow_theta, aes(x = value, y = prob)) + 
-  geom_point(size = 0.4) +
+ggplot(data=lowdata,aes(x=lowdata$response_error, ..density..)) + geom_histogram(bins = 75) +
   # ------ Model --------
-geom_line(data = mlow_theta, aes(x = value, prob), size = 0.5, colour = "red") +  
-  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+geom_line(data = mlow_theta, aes(x = value, prob), size = 0.75, colour = "red") +  
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Response Error (radians)") + 
   scale_x_continuous(name ="Response Error (radians)", # also x axis name 
                      breaks = c(-2, 0, 2),
@@ -178,11 +226,10 @@ geom_line(data = mlow_theta, aes(x = value, prob), size = 0.5, colour = "red") +
 # -------- HIGH IMAGINABILITY CONDITION -------------------
 plotThetaHigh<-
 # ------ Data ---------------------
-ggplot(data = dhigh_theta, aes(x = value, y = prob)) + 
-  geom_point(size = 0.4) +
+ggplot(data=highdata,aes(x=highdata$response_error, ..density..)) + geom_histogram(bins = 75) +
   # ------ Model --------
-geom_line(data = mhigh_theta, aes(x = value, prob), size = 0.5, colour = "red") +  
-  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+geom_line(data = mhigh_theta, aes(x = value, prob), size = 0.75, colour = "red") +  
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Theta (radians)") + 
   scale_x_continuous(name ="Response Error (radians)", # also x axis name 
                      breaks = c(-2, 0, 2),
@@ -211,10 +258,9 @@ geom_line(data = mhigh_theta, aes(x = value, prob), size = 0.5, colour = "red") 
 # -------- HIGH IMAGINABILITY CONDITION -------------------
 plotRThigh<-
 # ------ Data ---------------------
-ggplot(data = dRT_high, aes(x = value, y = prob)) + 
-  geom_point(size = 0.4) +
+ggplot(data=highdata,aes(x=highdata$response_RT, ..density..)) + geom_histogram(bins = 75)  +
   # ------ Model --------
-geom_line(data = mRT_high, aes(x = value, prob), size = 0.5, colour = "red") +  
+geom_line(data = mRT_high, aes(x = value, prob), size = 0.75, colour = "red") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
   xlab("Response Time (seconds)") + 
   ylab("Probability \n Density") + 
@@ -236,10 +282,9 @@ geom_line(data = mRT_high, aes(x = value, prob), size = 0.5, colour = "red") +
 # -------- LOW IMAGINABILITY CONDITION -------------------
 plotRTlow<-
 # ------ Data ---------------------
-ggplot(data = dRT_low, aes(x = value, y = prob)) + 
-  geom_point(size = 0.4) +
+ggplot(data=lowdata,aes(x=lowdata$response_RT, ..density..)) + geom_histogram(bins = 75) +
   # ------ Model --------
-geom_line(data = mRT_low, aes(x = value, prob), size = 0.5, colour = "red") +  
+geom_line(data = mRT_low, aes(x = value, prob), size = 0.75, colour = "red") +  
 facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
   xlab("Response Time (seconds)") + 
   ylab("Probability \n Density") + 
