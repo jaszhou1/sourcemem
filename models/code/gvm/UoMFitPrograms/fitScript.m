@@ -32,7 +32,7 @@ for i = participants
         GVM_LL_Preds_Recognised{i,4} = pest;
         GVM_LL_Preds_Recognised{i,5} = Gstuff;
         GVM_LL_Preds_Recognised{i,6} = Recognised {i};
-        fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
+%        fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
     end
 end
     

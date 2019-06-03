@@ -5,13 +5,13 @@ function [ll, bic, Pred, pest,Gstuff] = fitGVM(data,i)
 setopt;
 %% Normal Fit
 
-nunorm1 = normrnd(3,0.5);
-nunorm2 = normrnd(3,0.5);
-kappa1 = normrnd(3,0.2);
-kappa2 = normrnd(3,0.2);
-eta = normrnd(1, 0.3);
-rho = normrnd(0.1,0.1);
-a = normrnd(3.5,0.5);
+nunorm1 = normrnd(3,0.7);
+nunorm2 = normrnd(3,0.7);
+kappa1 = normrnd(3,0.5);
+kappa2 = normrnd(3,0.5);
+eta = normrnd(1, 0.5);
+rho = normrnd(0.1,0.2);
+a = normrnd(3.5,0.75);
 Ter = normrnd(-0.2,0.3);
 st = abs(normrnd(0.05,0.01));
 %sa = 0;
