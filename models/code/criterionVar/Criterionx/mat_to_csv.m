@@ -38,7 +38,8 @@ function [] = mat_to_csv(filename, model_string, input_cells)
     %% Get the appropriate data and models.
     
     %troubleshooting
-    disp(n_observers);
+    disp('Participant')
+    disp(i);
     %
     
     this_data_cell = data_cells{i, :};

@@ -116,7 +116,7 @@ for i = participants
         HY_LL_Preds_Recognised{i,6} = Recognised {i};
      %   fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
     end
-    fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
+   % fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
 end
 
 HY_LL_Preds_Unrecognised = cell(length(participants),6);
@@ -135,26 +135,26 @@ for i = participants
     end
 end
 
-save('Censored6')
+save('HybridCensored6')
 
 %% Plot Fits superimposed on Data, and save.
 % % Plot
 for i = participants
-   filename = ['_Cont_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-   fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
-   saveas(gcf,filename);
-
-   filename = ['Cont_Unrecog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-   fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
-   saveas(gcf,filename);
-
-   filename = ['Thresh_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-   fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
-   saveas(gcf,filename);
-
-   filename = ['Thresh_Unrecog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-   fitplot(Unrecognised {i}, MX_LL_Preds_Unrecognised{i,3});
-   saveas(gcf,filename);
+%    filename = ['_Cont_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+%    fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+%    saveas(gcf,filename);
+% 
+%    filename = ['Cont_Unrecog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+%    fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
+%    saveas(gcf,filename);
+% 
+%    filename = ['Thresh_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+%    fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+%    saveas(gcf,filename);
+% 
+%    filename = ['Thresh_Unrecog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+%    fitplot(Unrecognised {i}, MX_LL_Preds_Unrecognised{i,3});
+%    saveas(gcf,filename);
 
    filename = ['Hybrid_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
    fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
