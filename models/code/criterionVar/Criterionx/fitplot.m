@@ -25,7 +25,7 @@ pthetab = Pred{4}(2,:);
 axes(axhandle(1))
 histogram(Theta1, 50, 'Normalization', 'pdf', 'BinLimits', [-pi,pi]);
 set(gca, 'Xlim', [-pi, pi])
-set(gca, 'Ylim', [0, 1.2])
+set(gca, 'Ylim', [0, 1.5])
 xlabel('Response Error')
 ylabel('Probability density')
 % label(gca, .7, .9, 'Low');
@@ -37,7 +37,7 @@ plot(thetaa, pthetaa, 'Linewidth', 2);
 axes(axhandle(2));
 histogram(Theta2, 50, 'Normalization', 'pdf', 'BinLimits', [-pi,pi]);
 set(gca, 'Xlim', [-pi, pi])
-set(gca, 'Ylim', [0, 1.2])
+set(gca, 'Ylim', [0, 1.5])
 xlabel('Response Error')
 % label(gca, .7, .9, 'High');
 title('High')
