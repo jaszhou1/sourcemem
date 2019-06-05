@@ -33,7 +33,7 @@ for i = participants
         GVM_LL_Preds_Recognised{i,4} = pest;
         GVM_LL_Preds_Recognised{i,5} = Gstuff;
         GVM_LL_Preds_Recognised{i,6} = Recognised {i};
-%        fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
+        fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
     end
 end
     
@@ -63,7 +63,7 @@ end
 %         fitplot(Unrecognised {i}, GVM_LL_Preds_Unrecognised{i,3});
 %         saveas(gcf,filename);
 %         
-        filename = ['GVM_RecogCrit',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+        filename = ['PVM_RecogCrit',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
         fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
         saveas(gcf,filename);
         
