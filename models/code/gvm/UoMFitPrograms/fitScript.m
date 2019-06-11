@@ -14,8 +14,8 @@ Unrecognised = Fit_Data(:,2);
 
 %Fit the data, generate predictions.
 
-%participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
-participants = [1,5,11,18];
+participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
+%participants = [1,5,11,18];
 %% Fit Variable Precision (Continuous model)
 
 % %Empty array for Log Likelihoods and Predictions to live.
@@ -33,7 +33,7 @@ for i = participants
         GVM_LL_Preds_Recognised{i,4} = pest;
         GVM_LL_Preds_Recognised{i,5} = Gstuff;
         GVM_LL_Preds_Recognised{i,6} = Recognised {i};
-        fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
+        %fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
     end
 end
     
@@ -54,7 +54,8 @@ end
         GVM_LL_Preds_Unrecognised{i,5} = Gstuff;
         GVM_LL_Preds_Unrecognised{i,6} = Unrecognised {i};
     end
-   
+       
+    save('NoCritPVM')
     %% Plot
 %     
     for i = participants
@@ -63,11 +64,14 @@ end
 %         fitplot(Unrecognised {i}, GVM_LL_Preds_Unrecognised{i,3});
 %         saveas(gcf,filename);
 %         
-        filename = ['PVM_RecogCrit',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+        filename = ['PVM_NoCrit',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
         fitplot(Recognised {i}, GVM_LL_Preds_Recognised{i,3});
         saveas(gcf,filename);
         
     end
+    
+    save('NoCritPVM')
+    close all
 % %     
     %%
     %%% The thing I want at the end is...
