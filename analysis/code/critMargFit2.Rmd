@@ -21,8 +21,8 @@ dataset <- read.csv('dataFiltered3.csv')
 # Create a new variable to label the subject numbers as strings 
 dataset$subjString <- NA
 
-dataset <- dataset[!(dataset$participant== 1),]
-dataset <- dataset[!(dataset$participant== 13),]
+#dataset <- dataset[!(dataset$participant== 1),]
+#dataset <- dataset[!(dataset$participant== 13),]
 # Get a list of subjects 
 data.subjList <- unique(dataset$participant)
 #data.subjList <- c(1,2,3,4)
@@ -61,11 +61,15 @@ highdata <- recogdata[recogdata$condition==2,]
 
 ```{r}
 
-density <- read.csv('Censored_Crit_Fits.csv')
+Cont <- read.csv('Cont2.csv')
+Thresh <- read.csv('Thresh2.csv')
+Hybrid <- read.csv('hybrid2.csv')
+
+density <- rbind(Cont,Thresh,Hybrid)
 
 #exclude participants 1 and 13, who are non-sig on Rayleigh Test
-density <- density[!(density$participant== 1),]
-density <- density[!(density$participant== 13),]
+#density <- density[!(density$participant== 1),]
+#density <- density[!(density$participant== 13),]
 
 names(density)[1] <- "model_name"
 
