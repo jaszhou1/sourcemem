@@ -112,7 +112,7 @@ end
 
 %% Resume
 % Ensure etas, ter, and a are positive.
-lowerbounderror = sum(min(P(5:length(P)) - zeros(1,length(P)-4), 0).^2);
+lowerbounderror = sum(min(P(5:7) - zeros(1,length(P)-7), 0).^2);
 if lowerbounderror > 0
    ll = 1e5 + 1e3 * lowerbounderror;
    bic = 0;

@@ -90,9 +90,9 @@ sigma = 1.0;
 % ---------------------------------------------------- ----------------------
  
 Ub= [ 7.0*ones(1,4),  4.0*ones(1,2),  5.0*ones(1,2),    ones(1,2),   1.0, 0.7, 3.0]; 
-Lb= [-7.0*ones(1,4),  0.0*ones(1,2),  0.5*ones(1,2),    zeros(1,2),   -0.5, 0,    0];
+Lb= [-7.0*ones(1,4),  0.0*ones(1,2),  0.3*ones(1,2),    zeros(1,2),   -0.5, 0,    0];
 Pub=[ 6.5*ones(1,4),  3.5*ones(1,2),  4.5*ones(1,2), 0.9*ones(1,2),  0.8, 0.65, 2.8]; 
-Plb=[-6.5*ones(1,4),  0.0*ones(1,2),  0.7*ones(1,2), 0.05*ones(1,2), -0.4, 0.01, 0.1];
+Plb=[-6.5*ones(1,4),  0.0*ones(1,2),  0.4*ones(1,2), 0.05*ones(1,2), -0.4, 0, 0];
 Pred = cell(1,4);
 if any(P - Ub > 0) | any(Lb - P > 0)
    ll = 1e7 + ...
@@ -114,7 +114,9 @@ else
 end   
 
 % Ensure etas, ter, and a are positive.
-lowerbounderror = sum(min(P(5:length(P)) - zeros(1,length(P)-4), 0).^2);
+% Removed Ter from being considered as we are allowing Ter to be negative.
+%lowerbounderror = sum(min(P(5:length(P)) - zeros(1,length(P)-4), 0).^2);
+lowerbounderror = sum(min(P(5:10) - zeros(1,length(P)-7), 0).^2);
 if lowerbounderror > 0
    ll = 1e5 + 1e3 * lowerbounderror;
    bic = 0;

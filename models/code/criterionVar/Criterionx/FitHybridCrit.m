@@ -25,8 +25,7 @@ participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
 badixs = [15,5,15,10,5,5,5,10,5,1,5,5,3,0,5,5,5,5,5,5];
 
 % %% Fit Variable Precision (Continuous model)
-% [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
-
+% [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];\
 % %% Fit Variable Precision (Continuous model)
 %
 % % %Empty array for Log Likelihoods and Predictions to live.
@@ -78,7 +77,7 @@ for i = participants
         MX_LL_Preds_Recognised{i,4} = pest;
         MX_LL_Preds_Recognised{i,5} = Gstuff;
         MX_LL_Preds_Recognised{i,6} = Recognised {i};
-        fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+%        fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
     end
 end
 
@@ -114,7 +113,7 @@ for i = participants
         HY_LL_Preds_Recognised{i,4} = pest;
         HY_LL_Preds_Recognised{i,5} = Gstuff;
         HY_LL_Preds_Recognised{i,6} = Recognised {i};
-        fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
+%        fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
     end
    % fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
 end
@@ -135,7 +134,7 @@ for i = participants
     end
 end
 
-save('Censored7')
+save('Censored8')
 
 %% Plot Fits superimposed on Data, and save.
 % % Plot
