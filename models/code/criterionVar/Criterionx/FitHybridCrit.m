@@ -134,7 +134,7 @@ for i = participants
     end
 end
 
-save('Censored8')
+save('NewCensored1')
 
 %% Plot Fits superimposed on Data, and save.
 % % Plot
