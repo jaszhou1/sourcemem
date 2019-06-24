@@ -6,7 +6,7 @@ setopt;
 
 v1a = normrnd(3,1);
 v2a = 0;
-v1b = normrnd(2,1);
+v1b = normrnd(3,1);
 v2b = 0;
 eta1 = 0;
 eta2 = 0;
