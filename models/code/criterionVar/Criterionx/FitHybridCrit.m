@@ -42,7 +42,7 @@ for i = participants
         VP_LL_Preds_Recognised{i,4} = pest;
         VP_LL_Preds_Recognised{i,5} = Gstuff;
         VP_LL_Preds_Recognised{i,6} = Recognised {i};
-      %  fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+        fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
     end
 end
 
@@ -77,7 +77,7 @@ for i = participants
         MX_LL_Preds_Recognised{i,4} = pest;
         MX_LL_Preds_Recognised{i,5} = Gstuff;
         MX_LL_Preds_Recognised{i,6} = Recognised {i};
-%        fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+    %    fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
     end
 end
 
@@ -98,7 +98,7 @@ for i = participants
     end
 end
 
-%% Fit VP + Mix Model
+% Fit VP + Mix Model
 
 HY_LL_Preds_Recognised = cell(length(participants),6);
 for i = participants
@@ -113,7 +113,7 @@ for i = participants
         HY_LL_Preds_Recognised{i,4} = pest;
         HY_LL_Preds_Recognised{i,5} = Gstuff;
         HY_LL_Preds_Recognised{i,6} = Recognised {i};
-%        fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
+        fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
     end
    % fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
 end
@@ -134,7 +134,7 @@ for i = participants
     end
 end
 
-save('NewCensored1')
+save('2019-06-22.mat')
 
 %% Plot Fits superimposed on Data, and save.
 % % Plot
@@ -163,7 +163,7 @@ for i = participants
    fitplot(Unrecognised {i}, HY_LL_Preds_Unrecognised{i,3});
    saveas(gcf,filename);
 end
-
+close all
 
 %%
 %%% The thing I want at the end is...

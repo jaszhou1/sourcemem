@@ -14,13 +14,13 @@ a1 = normrnd(3,1);
 a2 = normrnd(1,1);
 pi1 = norm(0.5,0.5);
 pi2 = normrnd(0.5,0.5);
-Ter = normrnd(-.1,0.5);
+Ter = normrnd(-.1,0.2);
 st = abs(normrnd(0.05,0.01));
 sa = abs(normrnd(1,0.5));
 
 P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter,st,sa];
 %P = [0.0034,0,0.0893,0,0.0048,0.0007,1.4763,0.6994,0.2203,0.1499,-0.0266,0];
-Sel = [1,1,1,1,1,1,1,1,1,1,1,1,1];  
+Sel = [1,1,1,1,0,0,1,1,1,1,1,1,1];  
 nlow = length(data{1,1});
 nhigh = length(data{1,2});
 
