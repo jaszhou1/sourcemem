@@ -12,24 +12,25 @@ setopt;
 %    P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, st, sa]
 %          1    2    3    4     5      6  7   8    9   10 
     
-v1a = normrnd(3,1);
+v1a = normrnd(0,0.5);
 v2a = normrnd(0.01,0.05);
-v1b = normrnd(2,1);
-v2b = normrnd(0.5,0.5);
+v1b = normrnd(0,0.5);
+v2b = normrnd(0,0.05);
 eta1 = normrnd(2.5,1);
 eta2 = normrnd(2.5,1);
 a = normrnd(1.6,0.4);
-Ter = normrnd(0.01,0.05);
+Ter = normrnd(-0.15,0.05);
 st = abs(normrnd(0.05,0.01));
 sa = 0;
 
 
 
 P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, st, sa];
+Sel = [1,1,1,1,1,1,1,1,1,0]; 
 
 nlow = length(data{1,1});
 nhigh = length(data{1,2});
-Sel = [1,1,1,1,1,1,1,1,1,0];
+
 pest = fminsearch(@fitdcircle4x, P(Sel==1), options, P(Sel==0), Sel, data, nlow, nhigh, badix);
 
 P(Sel== 1) = pest; 

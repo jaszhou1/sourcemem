@@ -85,10 +85,10 @@ eta2b = eta2;
 %   v1a, v2a, v1b, v2b, eta1, eta2,   a,    Ter  st sa]
 % ---------------------------------------------------- ----------------------
  
-Ub= [ 7.0*ones(1,4),  4.0*ones(1,2),  5.0, 1.0, 0.7, 3.0]; 
-Lb= [-7.0*ones(1,4),  0.0*ones(1,2),  0.5, -0.35, 0,  0];
-Pub=[ 6.5*ones(1,4),  3.5*ones(1,2),  4.5, 0.8, 0.65, 2.8]; 
-Plb=[-6.5*ones(1,4),  0.0*ones(1,2),  0.7, -0.40, 0.01 0.1];
+Ub= [ 7.0*ones(1,4),  4.0*ones(1,2),  0.01, 1.0, 0.7, 3.0]; 
+Lb= [-7.0*ones(1,4),  0.0*ones(1,2),  0, -0.35, 0,  0];
+Pub=[ 6.5*ones(1,4),  3.5*ones(1,2),  0.05, 0.8, 0.65, 2.8]; 
+Plb=[-6.5*ones(1,4),  0.0*ones(1,2),  0, -0.40, 0.01 0.1];
 Pred = cell(1,4);
 if any(P - Ub > 0) | any(Lb - P > 0)
    ll = 1e7 + ...
@@ -112,7 +112,7 @@ end
 
 %% Resume
 % Ensure etas, ter, and a are positive.
-lowerbounderror = sum(min(P(5:length(P)) - zeros(1,length(P)-4), 0).^2);
+lowerbounderror = sum(min(P(5:7) - zeros(1,length(P)-7), 0).^2);
 if lowerbounderror > 0
    ll = 1e5 + 1e3 * lowerbounderror;
    bic = 0;

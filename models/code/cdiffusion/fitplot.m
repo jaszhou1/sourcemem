@@ -48,7 +48,7 @@ plot(thetab, pthetab, 'Linewidth', 2);
 axes(axhandle(3));
 histogram(Rt1, 50, 'Normalization', 'pdf', 'BinLimits', [0,3.0]);
 xlabel('Response Time (s)')
-set(gca, 'Ylim', [0, 3.0])
+set(gca, 'Ylim', [0, 3.5])
 % label(gca, .7, .9, 'Low');
 title('Low')
 hold

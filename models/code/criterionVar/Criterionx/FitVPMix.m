@@ -4,9 +4,9 @@ function [ll, bic, Pred, pest, Gstuff] = FitVPMix(data, badix)
 %          1    2    3    4    5      6    7   8   9   10    11  12  13
 setopt;
 % 
-v1a = normrnd(3,1);
+v1a = normrnd(0.5,0.5);
 v2a = normrnd(0.01,0.05);
-v1b = normrnd(2,1);
+v1b = normrnd(0.5,0.5);
 v2b = normrnd(0.01,0.05);
 eta1 = normrnd(1,0.7);
 eta2 = normrnd(1,0.7);
