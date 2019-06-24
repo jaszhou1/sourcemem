@@ -24,7 +24,7 @@ participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
 % a badix value specific to the individual is passed down through to the
 % fitting procedure.
 
-badixs = [15,5,15,10,5,5,5,10,5,1,5,5,3,0,5,5,5,5,5,5];
+badixs = [5,5,15,10,5,5,5,10,5,5,5,5,3,5,5,5,5,5,5,5];
 
 % %% Fit Variable Precision (Continuous model)
 % [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];\
