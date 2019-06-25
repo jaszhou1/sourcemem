@@ -61,9 +61,9 @@ highdata <- recogdata[recogdata$condition==2,]
 
 ```{r}
 
-Cont <- read.csv('Cont2.csv')
-Thresh <- read.csv('Thresh2.csv')
-Hybrid <- read.csv('hybrid2.csv')
+Cont <- read.csv('continuous-25-06.csv')
+Thresh <- read.csv('threshold-25-06.csv')
+Hybrid <- read.csv('hybrid-25-06.csv')
 
 density <- rbind(Cont,Thresh,Hybrid)
 
@@ -73,8 +73,8 @@ density <- rbind(Cont,Thresh,Hybrid)
 
 names(density)[1] <- "model_name"
 
-continuous<- density[density$model_name == 'Continuous', ]
-threshold<- density[density$model_name == 'Threshold', ]
+continuous<- density[density$model_name == 'Cont', ]
+threshold<- density[density$model_name == 'Thresh', ]
 hybrid<- density[density$model_name == 'Hybrid', ]
 
 # -------- CONTINUOUS MODEL -------------------

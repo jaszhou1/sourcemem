@@ -14,11 +14,11 @@ library("ggplot2")
 library("plyr")
 library("tidyverse")
 library(readr)
-setwd("~/GitHub/sourcemem/models/figures/critVarFits/")
+knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/models/figures/critVarFits")
 ```
 
 ```{r}
-dataset <- read_csv("~/GitHub/sourcemem/models/figures/critVarFits/Thresh7QQ.csv")
+dataset <- read.csv("continuousQQ-24-06.csv")
 
 dataset$quantile_idx <- as.factor(dataset$quantile_idx)
 
