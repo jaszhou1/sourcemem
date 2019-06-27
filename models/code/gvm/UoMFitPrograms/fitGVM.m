@@ -1,7 +1,5 @@
 function [ll, bic, Pred, pest,Gstuff] = fitGVM(data,i)
 %    [ll,bic,Pred] = fitmixture3(Pvar, Pfix, Sel, Data)
-%    P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter]
-%          1    2    3    4    5      6    7   8   9   10    11
 setopt;
 %% Normal Fit
 

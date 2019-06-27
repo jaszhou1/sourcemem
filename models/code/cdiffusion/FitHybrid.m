@@ -24,7 +24,7 @@ participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
 % a badix value specific to the individual is passed down through to the
 % fitting procedure.
 
-badixs = [5,5,15,10,5,5,5,10,5,5,5,5,3,5,5,5,5,5,5,5];
+badixs = [5,5,5,10,5,5,5,10,5,5,5,5,3,5,5,5,5,5,5,5];
 
 % %% Fit Variable Precision (Continuous model)
 % [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];\
@@ -44,7 +44,7 @@ for i = participants
         VP_LL_Preds_Recognised{i,4} = pest;
         VP_LL_Preds_Recognised{i,5} = Gstuff;
         VP_LL_Preds_Recognised{i,6} = Recognised {i};
-        %   fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+        fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
     end
 end
 
@@ -79,7 +79,7 @@ for i = participants
         MX_LL_Preds_Recognised{i,4} = pest;
         MX_LL_Preds_Recognised{i,5} = Gstuff;
         MX_LL_Preds_Recognised{i,6} = Recognised {i};
-        %   fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+         fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
     end
 end
 
@@ -115,7 +115,7 @@ for i = participants
         HY_LL_Preds_Recognised{i,4} = pest;
         HY_LL_Preds_Recognised{i,5} = Gstuff;
         HY_LL_Preds_Recognised{i,6} = Recognised {i};
-        %   fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
+           fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
     end
     % fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
 end
@@ -146,7 +146,7 @@ for i = participants
     NL_LL_Preds_Recognised{i,4} = pest;
     NL_LL_Preds_Recognised{i,5} = Gstuff;
     NL_LL_Preds_Recognised{i,6} = Recognised {i};
-    %fitplot(Recognised {i}, NL_LL_Preds_Recognised{i,3});
+    fitplot(Recognised {i}, NL_LL_Preds_Recognised{i,3});
 end
 
 NL_LL_Preds_Unrecognised = cell(length(participants),6);
