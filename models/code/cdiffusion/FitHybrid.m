@@ -139,6 +139,13 @@ end
 NL_LL_Preds_Recognised = cell(length(participants),6);
 
 for i = participants
+   filename = ['_Cont_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+   fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+   saveas(gcf,filename);
+
+%    filename = ['Cont_Unrecog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+%    fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
+%    saveas(gcf,filename);
     [ll, bic, Pred, pest, Gstuff] = FitNull(Recognised{i},badix);
     NL_LL_Preds_Recognised{i,1} = ll;
     NL_LL_Preds_Recognised{i,2} = bic;
@@ -159,9 +166,6 @@ for i = participants
     NL_LL_Preds_Unrecognised{i,5} = Gstuff;
     NL_LL_Preds_Unrecognised{i,6} = Recognised {i};
 end
-
-
-save('2019-06-24(noCrit).mat')
 
 %% Plot Fits superimposed on Data, and save.
 % % Plot
