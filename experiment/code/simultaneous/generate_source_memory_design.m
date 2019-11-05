@@ -29,7 +29,7 @@ num_words_high = size(word_list_high(:,1), 1);
 num_words = num_words_low + num_words_high;
 total_num_stim = num_blocks * num_encode_trials;
 total_num_foil = total_num_stim;
-total_num = total_num_stim + total_num_foil; % I know this seems dumb, but i thought it would be consistent
+total_num = total_num_stim + total_num_foil; 
 
 % Number of each type of word
 num_low_stim = total_num_stim/2;
