@@ -61,9 +61,9 @@ highdata <- recogdata[recogdata$condition==2,]
 
 ```{r}
 
-Cont <- read.csv('continuous-25-06.csv')
-Thresh <- read.csv('threshold-25-06.csv')
-Hybrid <- read.csv('hybrid-25-06.csv')
+Cont <- read.csv('2019-07-09_cont.csv')
+Thresh <- read.csv('2019-07-09_thresh.csv')
+Hybrid <- read.csv('2019-07-09_hybrid.csv')
 
 density <- rbind(Cont,Thresh,Hybrid)
 
@@ -73,8 +73,8 @@ density <- rbind(Cont,Thresh,Hybrid)
 
 names(density)[1] <- "model_name"
 
-continuous<- density[density$model_name == 'Cont', ]
-threshold<- density[density$model_name == 'Thresh', ]
+continuous<- density[density$model_name == 'Continuous', ]
+threshold<- density[density$model_name == 'Threshold', ]
 hybrid<- density[density$model_name == 'Hybrid', ]
 
 # -------- CONTINUOUS MODEL -------------------
@@ -540,7 +540,7 @@ facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale =
   #Threshold
 geom_line(data = mRT_threshold_low, aes(x = value, prob), size = 0.75, colour = "blue") +  
 facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
-  #Threshold
+  #Hybrid
 geom_line(data = mRT_hybrid_low, aes(x = value, prob), size = 0.75, colour = "green") +  
 facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   #Misc

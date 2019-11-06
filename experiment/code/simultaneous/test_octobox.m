@@ -8,6 +8,7 @@ function [] = test_octobox(word)
 %   eight sectors which determine which part of the text box to use to position
 %   the word relative to the circle.
 %%
+Screen('Preference', 'SkipSyncTests', 1);
 screen = init_ptb('max', 128, false);
 % Colour parameters.
 %
@@ -63,7 +64,7 @@ elseif (secbound(4) > angle) && (angle >= secbound (3))
     word_centre_y = cross_centre_y;
 elseif (secbound(5) > angle) && (angle >= secbound (4))
     word_centre_x = cross_centre_x;
-    word_centre_y = cross_centre_y +(wordHeight/2); 
+    word_centre_y = cross_centre_y; %+ wordHeight;  
 elseif (secbound(6) > angle) && (angle >= secbound (5))
     word_centre_x = cross_centre_x;
     word_centre_y = cross_centre_y + wordHeight;

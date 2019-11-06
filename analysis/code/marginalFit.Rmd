@@ -63,7 +63,7 @@ highdata <- recogdata[recogdata$condition==2,]
 
 ```{r}
 #GVM_Crit <- read.csv('PVM_censor3.csv')
-GVM_Crit <- read.csv('PVM_Recog.csv')
+GVM_Crit <- read.csv('2019-07-09_gvm.csv')
 
 #GVM_Crit <- GVM_Crit[!(GVM_Crit$participant== 1),]
 #GVM_Crit <- GVM_Crit[!(GVM_Crit$participant== 13),]

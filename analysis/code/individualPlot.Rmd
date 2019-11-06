@@ -1,0 +1,19 @@
+---
+title: "individualPlot"
+author: "jason"
+date: "July 13, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/analysis/data")
+library(ggplot2)
+library(tidyverse)
+```
+
+```{r}
+#Read in all required data
+
+
+```
