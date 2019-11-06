@@ -73,7 +73,7 @@ pi1 = P(9);
 pi2 = P(10); 
 ter = P(11);
 st = P(12);
-sz = P(13);
+sa = P(13);
 
 
 % Components of drift variability.
@@ -86,13 +86,13 @@ sigma = 1.0;
 % Cleaned up penalty calculation, hard and soft bounds - 30/1/19
 
 % ---------------------------------------------------------------------------
-%   v1a, v2a, v1b, v2b, eta1, eta2,      a1, a2,       pi1, pi2,    Ter  sa]
+%   v1a, v2a, v1b, v2b, eta1, eta2,      a1, a2,       pi1, pi2,    Ter  st, sa]
 % ---------------------------------------------------- ----------------------
  
-Ub= [ 8.0*ones(1,4),  4.0*ones(1,2),  5.0*ones(1,2),    ones(1,2),   1.0, 0.8, 3.0]; 
-Lb= [-7.0*ones(1,4),  0.0*ones(1,2),  0.3*ones(1,2),    zeros(1,2),   -0.5, 0,    0];
-Pub=[ 7*ones(1,4),  3.5*ones(1,2),  4.5*ones(1,2), 0.9*ones(1,2),  0.8, 0.7, 2.8]; 
-Plb=[-6.5*ones(1,4),  0.0*ones(1,2),  0.4*ones(1,2), 0.05*ones(1,2), -0.4, 0, 0];
+Ub= [ 8.0*ones(1,4),  4.0*ones(1,2),  7*ones(1,2),    ones(1,2),   1.0, 0.8, 0]; 
+Lb= [-7.0*ones(1,4),  -0.1*ones(1,2),  0.3*ones(1,2),    zeros(1,2),   -0.5, 0, 0];
+Pub=[ 7*ones(1,4),  3.5*ones(1,2),  6*ones(1,2), 0.9*ones(1,2),  0.8, 0.7, 0]; 
+Plb=[-6.5*ones(1,4),  0*ones(1,2),  0.4*ones(1,2), 0.05*ones(1,2), -0.4, 0, 0];
 Pred = cell(1,4);
 if any(P - Ub > 0) | any(Lb - P > 0)
    ll = 1e7 + ...
@@ -121,13 +121,13 @@ if lowerbounderror > 0
    ll = 1e5 + 1e3 * lowerbounderror;
    bic = 0;
    Gstuff = cell(3,2);
-% elseif sz / 2 >= a1 Commented out as a1 == 0 for no criteria variability
+% elseif sa / 2 >= a1 Commented out as a1 == 0 for no criteria variability
 %     disp('Criterion range error')
 %     ll = 1e5;
 %     bic = 0;
 %     Gstuff = cell(3,2);
 else
-   if sz < epsilon % No criterion variability
+   if sa < epsilon % No criterion variability
        % Memory-based process
        % Parameters for long
        Pa = [v1a, v2a, eta1a, eta2a, sigma, a1];
@@ -140,7 +140,7 @@ else
        U = ones(n_sz_step, 1); 
        Rmass = U / n_sz_step ; 
        Rstep = [-(n_sz_step-1)/2:(n_sz_step-1)/2]' / (n_sz_step-1); 
-       A = a1 + Rstep * sz;
+       A = a1 + Rstep * sa;
        gta = zeros(nw+1, nt+1);
        gtb = zeros(nw+1, nt+1);
        pthetaa = zeros(1, nw+1);
