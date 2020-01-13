@@ -44,7 +44,7 @@ for i = participants
         VP_LL_Preds_Recognised{i,4} = pest;
         VP_LL_Preds_Recognised{i,5} = Gstuff;
         VP_LL_Preds_Recognised{i,6} = Recognised {i};
-        fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+        %fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
     end
 end
 
@@ -79,7 +79,7 @@ for i = participants
         MX_LL_Preds_Recognised{i,4} = pest;
         MX_LL_Preds_Recognised{i,5} = Gstuff;
         MX_LL_Preds_Recognised{i,6} = Recognised {i};
-         fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+       %  fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
     end
 end
 
@@ -115,9 +115,9 @@ for i = participants
         HY_LL_Preds_Recognised{i,4} = pest;
         HY_LL_Preds_Recognised{i,5} = Gstuff;
         HY_LL_Preds_Recognised{i,6} = Recognised {i};
-           fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
+      %     fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
     end
-     %fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
+    
 end
 
 HY_LL_Preds_Unrecognised = cell(length(participants),6);
@@ -136,36 +136,36 @@ for i = participants
     end
 end
 
-NL_LL_Preds_Recognised = cell(length(participants),6);
-
-for i = participants
-   filename = ['_Cont_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-   fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
-   saveas(gcf,filename);
-
-%    filename = ['Cont_Unrecog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-%    fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
-%    saveas(gcf,filename);
-    [ll, bic, Pred, pest, Gstuff] = FitNull(Recognised{i},badix);
-    NL_LL_Preds_Recognised{i,1} = ll;
-    NL_LL_Preds_Recognised{i,2} = bic;
-    NL_LL_Preds_Recognised{i,3} = Pred;
-    NL_LL_Preds_Recognised{i,4} = pest;
-    NL_LL_Preds_Recognised{i,5} = Gstuff;
-    NL_LL_Preds_Recognised{i,6} = Recognised {i};
-    fitplot(Recognised {i}, NL_LL_Preds_Recognised{i,3});
-end
-
-NL_LL_Preds_Unrecognised = cell(length(participants),6);
-for i = participants
-    [ll, bic, Pred, pest, Gstuff] = FitNull(Recognised{i},badix);
-    NL_LL_Preds_Unrecognised{i,1} = ll;
-    NL_LL_Preds_Unrecognised{i,2} = bic;
-    NL_LL_Preds_Unrecognised{i,3} = Pred;
-    NL_LL_Preds_Unrecognised{i,4} = pest;
-    NL_LL_Preds_Unrecognised{i,5} = Gstuff;
-    NL_LL_Preds_Unrecognised{i,6} = Recognised {i};
-end
+% NL_LL_Preds_Recognised = cell(length(participants),6);
+% 
+% for i = participants
+% %    filename = ['_Cont_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+% %    fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+% %    saveas(gcf,filename);
+% 
+% %    filename = ['Cont_Unrecog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+% %    fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
+% %    saveas(gcf,filename);
+%     [ll, bic, Pred, pest, Gstuff] = FitNull(Recognised{i},badix);
+%     NL_LL_Preds_Recognised{i,1} = ll;
+%     NL_LL_Preds_Recognised{i,2} = bic;
+%     NL_LL_Preds_Recognised{i,3} = Pred;
+%     NL_LL_Preds_Recognised{i,4} = pest;
+%     NL_LL_Preds_Recognised{i,5} = Gstuff;
+%     NL_LL_Preds_Recognised{i,6} = Recognised {i};
+%     fitplot(Recognised {i}, NL_LL_Preds_Recognised{i,3});
+% end
+% 
+% NL_LL_Preds_Unrecognised = cell(length(participants),6);
+% for i = participants
+%     [ll, bic, Pred, pest, Gstuff] = FitNull(Recognised{i},badix);
+%     NL_LL_Preds_Unrecognised{i,1} = ll;
+%     NL_LL_Preds_Unrecognised{i,2} = bic;
+%     NL_LL_Preds_Unrecognised{i,3} = Pred;
+%     NL_LL_Preds_Unrecognised{i,4} = pest;
+%     NL_LL_Preds_Unrecognised{i,5} = Gstuff;
+%     NL_LL_Preds_Unrecognised{i,6} = Recognised {i};
+% end
 
 %% Plot Fits superimposed on Data, and save.
 % % Plot
@@ -183,6 +183,9 @@ for i = participants
     saveas(gcf,filename);
     
 end
+
+save(datestr(now,'dd_mm_yy_HH_MM'))
+
 close all
 
 %%

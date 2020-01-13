@@ -5,9 +5,9 @@ function [ll, bic, Pred, pest, Gstuff] = FitVPMix(data, badix)
 setopt;
 % 
 v1a = normrnd(5,0.5);
-v2a = normrnd(0.01,0.05);
+v2a = 0;
 v1b = normrnd(4,0.5);
-v2b = normrnd(0.01,0.05);
+v2b = 0;
 eta1 = normrnd(0.6,0.2);
 eta2 = normrnd(0.6,0.2);
 a1 = normrnd(5,0.5);
@@ -23,7 +23,7 @@ P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter,st,sa];
 %P = [0.0034,0,0.0893,0,0.0048,0.0007,1.4763,0.6994,0.2203,0.1499,-0.0266,0];
 % P =[0.9773,0,1.1281,0,0.0039,0.4812,1.3530,0.6573,0.3313,0.3566,-0.0433,0];
 
-Sel = [1,1,1,1,1,1,1,1,1,1,1,1,0];  % all parameters free
+Sel = [1,0,1,0,1,1,1,1,1,1,1,1,0];  % all parameters free
 nlow = length(data{1,1});
 nhigh = length(data{1,2});
 
