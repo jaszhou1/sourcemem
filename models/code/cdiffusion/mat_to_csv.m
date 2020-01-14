@@ -18,6 +18,7 @@ function [] = mat_to_csv(filename, model_string, input_cells)
   
   %% Extract the required quantities from the cell array.
   data_cells = input_cells(:, 6);
+  
   model_cells = input_cells(:, 5);
   
   %% Print the header line in the CSV.
