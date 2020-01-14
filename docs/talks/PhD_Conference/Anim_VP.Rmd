@@ -1,0 +1,67 @@
+---
+title: "Anim_VP"
+author: "jason"
+date: "November 14, 2019"
+output: html_document
+---
+
+```{r}
+
+rm(list = ls()) # remove everything from workspace
+
+library(ggplot2)
+library(gganimate)
+library(gifski)
+library(png)
+library(transformr)
+
+```
+
+```{r}
+
+# Colourblind palettes
+
+# The palette with grey:
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+# The palette with black:
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+
+```
+
+```{r}
+
+# Create data
+ ks <- c(100,50,1)
+
+exp <- data.frame(
+  x = c(seq(-pi, pi, length=100)), y= dvonmises(exp$x, 100, FALSE))
+
+  
+p <- ggplot(data=exp, aes(x=exp$x, y=exp$y, group=exp$k)) +
+  geom_line(linetype="dashed", color="blue", size=1.2)+
+  geom_point(color="red", size=3) 
+
+
+
+
+exp <- list()
+
+exp$n.obvs <- 100 # how many observations
+exp$k <- c(15, 30, 50) # possible values of kappa we want to use
+exp$mu <- rep(0) # mu is constant
+
+# Create a data frame for several von mises distributions with the same mu but different kappa
+exp$dist <- data.frame(
+  obvs = rep(1:exp$n.obvs, 3),
+  mean = rep(exp$mu, exp$n.obvs*3),
+  sd = c(rep(exp$sd[1], exp$n.obvs),
+         rep(exp$sd[2], exp$n.obvs),
+         rep(exp$sd[3], exp$n.obvs)),
+  sample = c(rnorm(exp$n.obvs, mean = exp$mu, exp$k[1]),
+             rnorm(exp$n.obvs, mean = exp$mu, exp$k[2]),
+             rnorm(exp$n.obvs, mean = exp$mu, exp$k[3]))
+)
+
+```

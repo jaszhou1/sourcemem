@@ -1,0 +1,289 @@
+---
+title: "Pooled_QxQ"
+author: "jason"
+date: "December 20, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+rm(list = ls())
+# knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(plyr)
+library(tidyverse)
+library(readr)
+library(abind)
+knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/models/figures/cDiffusionFits")
+```
+
+```{r}
+dataset <- read.csv("2020-01-02_NoCritQQ_Hybrid.csv")
+
+dataset$quantile_idx <- as.factor(dataset$quantile_idx)
+
+```
+
+```{r}
+
+# Create a new variable to label the subject numbers as strings 
+dataset$subjString <- NA
+# Get a list of subjects 
+data.subjList <- unique(dataset$participant)
+
+# Custom function to create new variable labels 
+create.subj.string <- function(n, dataset){
+  dataset[dataset$participant==n, 'subjString'] <- sprintf("Subject %d", n)
+  return(dataset)
+}
+
+# Run through loop - don't use lapply or map because subject numbers not in order 
+for (sub in 1:length(data.subjList)){
+  
+  # Get the subject number 
+  subjNo <- data.subjList[sub]
+  
+  # Run function, return data frame (dataset)
+  dataset <- create.subj.string(subjNo, dataset)
+  
+}
+
+# Create as factor for plotting and also include levels so the order is correct 
+dataset$subjString <- factor(dataset$subjString, 
+                                levels = unique(dataset$subjString))
+
+# Get a list of the subject strings you created just to double check 
+data.subjString <- unique(dataset$subjString)
+
+
+```
+
+```{r}
+
+#Custom function to subset model predictions within the minimum and maximum bin of response
+
+truncate.model <-function(dataset){
+  res <- data.frame()
+  participants <- unique(dataset$participant)
+  for(p in participants) {
+    min.error <- min(dataset[(dataset$participant == p) &
+                               (dataset$is_model == " false"), 'theta'])
+    max.error <- max(dataset[(dataset$participant == p) &
+                               (dataset$is_model == " false"), 'theta'])
+    res <- rbind(res,
+                 dataset[(dataset$participant == p) & 
+                           (dataset$is_model == " false"), ])
+    res <- rbind(res,
+                 dataset[(dataset$participant == p) & 
+                           (dataset$is_model == " true") & 
+                           (dataset$theta < max.error) & 
+                           (dataset$theta > min.error), ])
+  }
+  res
+}
+
+dataset_b <- truncate.model(dataset)
+```
+
+```{r}
+
+data_low <- dataset_b[(dataset_b$is_model==' false') & (dataset_b$is_high==' false'),]
+
+model_low <- dataset_b[(dataset_b$is_model==' true') & (dataset_b$is_high==' false'),]
+
+data_high <- dataset_b[(dataset_b$is_model==' false') & (dataset_b$is_high==' true'),]
+
+model_high <- dataset_b[(dataset_b$is_model==' true') & (dataset_b$is_high==' true'),]
+
+
+```
+
+```{r}
+#Find means across high and low imageability conditions
+data <- setNames(data.frame(matrix(ncol = 7, nrow = nrow(data_low))),
+                 c("participant","subjString", "theta_high","theta_low", 
+                   "rt_high","rt_low","quantile_idx"))
+#Data
+data$participant <- data_high$participant
+data$subjString <- data_high$subjString
+data$theta_high <- data_high$theta
+data$theta_low <- data_low$theta
+data$rt_high <- data_high$rt
+data$rt_low <- data_low$rt
+data$quantile_idx <- data_high$quantile_idx
+
+data$theta_mean <- rowMeans(data[c('theta_high', 'theta_low')], na.rm=TRUE)
+data$rt_mean <- rowMeans(data[c('rt_high', 'rt_low')], na.rm=TRUE)
+
+#Hybrid Model
+#model <- model_high
+
+```
+
+
+
+```{r}
+#Convert to Absolute
+data$theta_mean <- abs(dataset$theta_mean)
+#Split dataframe by subject
+
+
+#splitData<- split(data, data$participant)
+
+# Custom function to convert QxQ data into absolute (average absolute theta, average rt) 
+#to.absolute <- function(dataset){
+#  dataset$theta_mean <- abs(dataset$theta_mean)
+#}
+
+  
+#splitData <- lapply(splitData, to.absolute)
+#data.new <- unsplit(splitData)
+
+```
+
+```{r}
+#testing data to absolute data conversion
+# DELETE Later
+
+
+test <- data[data$subjString == 'Subject 1',]
+
+#Clean up unneeded columns
+test$theta_high <- NULL
+test$theta_low <- NULL
+test$rt_high <- NULL
+test$rt_low <- NULL
+
+test$theta_mean <- abs(test$theta_mean)
+
+abs.test <- setNames(data.frame(matrix(ncol = 4, nrow = 9)),
+                 c("subject", "quantile_idx", "theta", "rt"))
+
+#I should loop through the quantiles, but I am getting confused with the nested loops. 
+#0.1 Quantile
+abs.test[1,] <- test[3,]
+
+abs.test[2,1] <- test[2,1]
+abs.test[2,2] <- test[2,2]
+abs.test[2,3] <- mean(test[2,3],test[4,3])
+abs.test[2,4] <- mean(test[2,4],test[4,4])
+
+abs.test[3,1] <- test[3,1]
+abs.test[3,2] <- test[3,2]
+abs.test[3,3] <- mean(test[1,3],test[1,3])
+abs.test[3,4] <- mean(test[1,4],test[1,4])
+
+#0.5 Quantile
+abs.test[4,] <- test[8,]
+
+abs.test[5,1] <- test[7,1]
+abs.test[5,2] <- test[7,2]
+abs.test[5,3] <- mean(test[7,3],test[9,3])
+abs.test[5,4] <- mean(test[7,4],test[9,4])
+
+abs.test[6,1] <- test[6,1]
+abs.test[6,2] <- test[6,2]
+abs.test[6,3] <- mean(test[6,3],test[10,3])
+abs.test[6,4] <- mean(test[6,4],test[10,4])
+
+
+#0.9 Quantile
+abs.test[7,] <- test[13,]
+
+abs.test[8,1] <- test[12,1]
+abs.test[8,2] <- test[12,2]
+abs.test[8,3] <- mean(test[12,3],test[14,3])
+abs.test[8,4] <- mean(test[12,4],test[14,4])
+
+abs.test[9,1] <- test[11,1]
+abs.test[9,2] <- test[11,2]
+abs.test[9,3] <- mean(test[11,3],test[15,3])
+abs.test[9,4] <- mean(test[11,4],test[15,4])
+
+  
+#test.QxQ <- ggplot() +
+geom_point(data = abs.test, 
+           aes(x = abs.test$theta, 
+               y = abs.test$rt, 
+               group = abs.test$quantile_idx, 
+               colour = quantile_idx)) 
+
+
+```
+
+```{r}
+
+# The palette with grey:
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+# The palette with black:
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+# Setup equally spaced colours around wheel 
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+n = 3
+cols = gg_color_hue(n)
+
+
+```
+ 
+```{r}
+# ------------ Plot Data ---------------------------------
+QxQ <- ggplot() +
+# Plot data as POINTS ONLY
+geom_point(data = data, 
+           aes(x = data$theta_mean, 
+               y = data$rt_mean, 
+               group = data$quantile_idx, 
+               colour = quantile_idx)) +
+
+# ---------- Plot Model Predictions ----------------------
+# Plot the model predictions as LINES
+
+# Continuous
+
+# Threshold
+
+# Hybrid
+
+# Theme
+  # ------------ Group plot by participant -----------------
+facet_wrap(~subject, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+  # ------------ Change some axes settings  ----------------
+#scale_y_continuous(limits=c(0, 3)) + 
+  scale_x_continuous(name ="Response Error (degrees)", # also x axis name 
+                     breaks = c(-2, 0, 2),
+                     labels = c(expression(-pi), "0", expression(pi))) + 
+  xlab("Response Error (degrees)") + # just in case remove scale x continuous 
+  ylab("Response Time (s)") + 
+  scale_color_manual(name = "Predicted \nQuantiles",
+                     values = cols,  # cbPalette[c(1,2,3)], 
+                     labels = c("0.1", "0.5", "0.9")) + 
+  # ------------ Change Theme Settings  ----------------
+ggtitle("Response Time Quantiles by Error") + 
+  theme(
+    
+    # Legend settings 
+    #legend.justification = c(1, 1), legend.position = c(0.90, 1.09),
+    legend.background = element_blank(),
+    
+    # Axis settingd 
+    axis.text.x = element_text(size=7),  # size of text on the x axis 
+    axis.text.y = element_text(size=7),  # size of text on the y axis 
+    
+    # Plot title settings 
+    plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
+    plot.subtitle = element_text(hjust = 0.5), # subtitle settiings (note, centering requires h = 0.5)
+    plot.caption = element_text(hjust = 0, face = "italic"), # caption settings 
+    
+    # Get rid of background panel grid 
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), 
+    axis.line = element_line(colour = "black"))
+
+```

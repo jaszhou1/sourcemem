@@ -1,0 +1,35 @@
+---
+title: "sourceError_by_recog"
+author: "jason"
+date: "November 13, 2019"
+output: html_document
+---
+```{r setup, include=FALSE}
+
+rm(list = ls())
+
+knitr::opts_chunk$set(echo = TRUE)
+
+knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/analysis/data/")
+library(ggplot2)
+library(dplyr)
+```
+```{r}
+dataset <- read.csv('dataFiltered3.csv')
+dataset <- dataset[,-1] #Remove first column, which is not needed 
+
+dataset$conf_group<- case_when(
+        dataset$recog_rating >= 4 ~ 1,
+        dataset$recog_rating <= 3 ~ 2)
+
+
+p <- ggplot(dataset, aes(x=dataset$response_error, fill=as.factor(dataset$conf_group))) +
+    geom_histogram(binwidth=.5, alpha=.8, position="identity") + theme(legend.title = element_blank()) 
+
+g <- ggplot(dataset, aes(x=dataset$response_error)) +
+    geom_histogram(binwidth=.5, alpha=.8, position="identity") + theme(legend.title = element_blank(), axis.text.x = element_text(size=10), axis.text.y = element_text(size=10)) 
+
+
+
+
+```

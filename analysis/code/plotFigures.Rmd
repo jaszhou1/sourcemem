@@ -1,0 +1,107 @@
+---
+title: "plotFigures"
+author: "jason"
+date: "November 21, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+rm(list = ls())
+
+knitr::opts_chunk$set(echo = TRUE)
+
+#knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/models/figures/critVarFits")
+knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/models/figures/cDiffusionFits")
+
+library(tidyverse)
+```
+
+```{r}
+# READ DATA IN
+dataset <- read.csv('dataFiltered3.csv')
+
+# Create a new variable to label the subject numbers as strings 
+dataset$subjString <- NA
+
+#dataset <- dataset[!(dataset$participant== 1),]
+#dataset <- dataset[!(dataset$participant== 13),]
+# Get a list of subjects 
+data.subjList <- unique(dataset$participant)
+#data.subjList <- c(1,2,3,4)
+
+# Custom function to create new variable labels 
+create.subj.string <- function(subjNo, dataset){
+  
+  dataset[dataset$participant==subjNo, 'subjString'] <- sprintf('Subject %d', subjNo)
+  
+  return(dataset)
+}
+
+# Run through loop - don't use lapply or map because subject numbers not in order 
+for (sub in 1:length(data.subjList)){
+  
+  # Get the subject number 
+  subjNo <- data.subjList[sub]
+  
+  # Run function, return data frame (dataset)
+  dataset <- create.subj.string(subjNo, dataset)
+  
+}
+
+# Create as factor for plotting and also include levels so the order is correct 
+dataset$subjString <- factor(dataset$subjString, 
+                                levels = unique(dataset$subjString))
+
+dataset$participant <- factor(dataset$participant, levels = unique(dataset$participant))
+
+
+recogdata <- dataset[dataset$recog_rating>3,]
+lowdata <- recogdata[recogdata$condition==1,]
+highdata <- recogdata[recogdata$condition==2,]
+
+```
+
+```{r}
+# PLOTTING 
+# The palette with grey:
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+# The palette with black:
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+```
+
+```{r}
+# Circular Diffusion Models with NO Criterion Variability
+
+# Models
+
+# Marginal Plots
+
+# Quantile Plots
+
+```
+
+
+```{r}
+# Circular Diffusion Models WITH Criterion Variability
+
+# Models
+
+# Marginal Plots
+
+# Quantile Plots
+
+```
+
+```{r}
+# Generalised Von Mises Model
+
+# Models
+
+# Marginal Plots
+
+# Quantile Plots
+
+```
+

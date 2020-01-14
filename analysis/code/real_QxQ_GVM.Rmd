@@ -18,8 +18,8 @@ library("tidyverse")
 ```{r}
 setwd("~/GitHub/sourcemem/models/code/gvm/UoMFitPrograms/QQPlots")
 #dataset <- read.csv('GVM_High.csv', sep = ",") #.1, .3, .5, .7, .9 quantiles
-dataset <- read.csv('Thresh_3quant.csv', sep = ",") #.1, .5, .9 quantiles
-#dataset <- read.csv('GVM_high_3quant2.csv', sep = ",") #.3, .5, .7 quantiles
+#dataset <- read.csv('Thresh_3quant.csv', sep = ",") #.1, .5, .9 quantiles
+dataset <- read.csv('GVM_high_3quant2.csv', sep = ",") #.3, .5, .7 quantiles
 
 dataset$quantile_idx <- as.factor(dataset$quantile_idx)
 
@@ -58,6 +58,32 @@ data.subjString <- unique(dataset$subjString)
 
 
 ```
+```{r}
+
+#Custom function to subset model predictions within the minimum and maximum bin of response
+
+truncate.model <-function(dataset){
+  res <- data.frame()
+  participants <- unique(dataset$participant)
+  for(p in participants) {
+    min.error <- min(dataset[(dataset$participant == p) &
+                               (dataset$is_model == " false"), 'theta'])
+    max.error <- max(dataset[(dataset$participant == p) &
+                               (dataset$is_model == " false"), 'theta'])
+    res <- rbind(res,
+                 dataset[(dataset$participant == p) & 
+                           (dataset$is_model == " false"), ])
+    res <- rbind(res,
+                 dataset[(dataset$participant == p) & 
+                           (dataset$is_model == " true") & 
+                           (dataset$theta < max.error) & 
+                           (dataset$theta > min.error), ])
+  }
+  res
+}
+
+dataset_b <- truncate.model(dataset)
+```
 
 ```{r}
 
@@ -69,7 +95,6 @@ data.subjString <- unique(dataset$subjString)
 #dataset_b<- dataset[abs(dataset[(dataset$participant == i) & (dataset$is_model == ' true'),]$theta) < max(abs(dataset[(dataset$participant == i)&(dataset$is_model== ' false'),]$theta)),]
 #} 
 
-dataset_b <- dataset
 
 data_low <- dataset_b[(dataset_b$is_model==' false') & (dataset_b$is_high==' false'),]
 

@@ -1,0 +1,16 @@
+---
+title: "descriptiveStats"
+author: "jason"
+date: "November 25, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+rm(list = ls())
+
+knitr::opts_chunk$set(echo = TRUE)
+
+setwd("~/GitHub/sourcemem/analysis/data")
+
+dataset <- read.csv('dataFiltered3.csv')
+```
