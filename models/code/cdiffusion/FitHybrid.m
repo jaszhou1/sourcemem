@@ -25,124 +25,146 @@ participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
 % fitting procedure.
 
 badixs = [5,5,5,10,5,5,5,10,5,5,5,5,3,5,5,5,5,5,5,5];
+nruns = 10; %Number of times I want to run fits on each participant to find the best fit
 
 % %% Fit Variable Precision (Continuous model)
 % [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];\
 % %% Fit Variable Precision (Continuous model)
 %
 % % %Empty array for Log Likelihoods and Predictions to live.
-VP_LL_Preds_Recognised = cell(length(participants),6);
+VP_LL_Preds_Recognised = cell(length(participants),7);
 for i = participants
-    VP_LL_Preds_Recognised{i,1} = -1; %sometimes log likelihood goes negative. re-run if this happens
-    VP_LL_Preds_Recognised{i,2} = 0; %make it automatically repeat if BIC is zero (fminsearch blew up)
+    
+    ll = 1e7;
     badix = badixs(i);
-    while (VP_LL_Preds_Recognised{i,2} == 0 || VP_LL_Preds_Recognised{i,1} < 0)
-        [ll, bic, Pred, pest, Gstuff] = FitVPx(Recognised{i},badix);
-        VP_LL_Preds_Recognised{i,1} = ll;
-        VP_LL_Preds_Recognised{i,2} = bic;
-        VP_LL_Preds_Recognised{i,3} = Pred;
-        VP_LL_Preds_Recognised{i,4} = pest;
-        VP_LL_Preds_Recognised{i,5} = Gstuff;
-        VP_LL_Preds_Recognised{i,6} = Recognised {i};
-        fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+    % Multiple Starts
+    for j = 1:nruns
+        [llnew, bic, Pred, pest, Gstuff, penalty] = FitVPx(Recognised{i},badix);
+        disp(i);
+        
+        if llnew < ll
+            ll = llnew;
+            VP_LL_Preds_Recognised{i,1} = ll;
+            VP_LL_Preds_Recognised{i,2} = bic;
+            VP_LL_Preds_Recognised{i,3} = Pred;
+            VP_LL_Preds_Recognised{i,4} = pest;
+            VP_LL_Preds_Recognised{i,5} = Gstuff;
+            VP_LL_Preds_Recognised{i,6} = Recognised {i};
+            VP_LL_Preds_Recognised{i,7} = penalty;
+        end
     end
+    
 end
 
-VP_LL_Preds_Unrecognised = cell(length(participants),6);
+VP_LL_Preds_Unrecognised = cell(length(participants),7);
 for i = participants
     VP_LL_Preds_Unrecognised{i,1} = -1;
     VP_LL_Preds_Unrecognised{i,2} = 0;
     badix = badixs(i);
     while (VP_LL_Preds_Unrecognised{i,2} == 0 || VP_LL_Preds_Unrecognised{i,1} < 0)
-        [ll, bic, Pred, pest,Gstuff] = FitVPx(Unrecognised{i},badix);
+        [ll, bic, Pred, pest,Gstuff,penalty] = FitVPx(Unrecognised{i},badix);
         VP_LL_Preds_Unrecognised{i,1} = ll;
         VP_LL_Preds_Unrecognised{i,2} = bic;
         VP_LL_Preds_Unrecognised{i,3} = Pred;
         VP_LL_Preds_Unrecognised{i,4} = pest;
         VP_LL_Preds_Unrecognised{i,5} = Gstuff;
         VP_LL_Preds_Unrecognised{i,6} = Unrecognised {i};
+        VP_LL_Preds_Unrecognised{i,7} = penalty;
     end
 end
 % %% Fit Mixture Model (Threshold model)
 %
 % %Empty array for Log Likelihoods and Predictions to live.
-MX_LL_Preds_Recognised = cell(length(participants),6);
+MX_LL_Preds_Recognised = cell(length(participants),7);
 for i = participants
     MX_LL_Preds_Recognised{i,1} = -1;
     MX_LL_Preds_Recognised{i,2} = 0;
     badix = badixs(i);
-    while (MX_LL_Preds_Recognised{i,2} == 0 || MX_LL_Preds_Recognised{i,1} < 0)
-        [ll, bic, Pred, pest, Gstuff] = FitMix(Recognised{i},badix);
-        MX_LL_Preds_Recognised{i,1} = ll;
-        MX_LL_Preds_Recognised{i,2} = bic;
-        MX_LL_Preds_Recognised{i,3} = Pred;
-        MX_LL_Preds_Recognised{i,4} = pest;
-        MX_LL_Preds_Recognised{i,5} = Gstuff;
-        MX_LL_Preds_Recognised{i,6} = Recognised {i};
-         fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+    
+    ll = 1e7;
+    for j=1:nruns
+        [llnew, bic, Pred, pest, Gstuff,penalty] = FitMix(Recognised{i},badix);
+        if llnew < ll
+            ll = llnew;
+            MX_LL_Preds_Recognised{i,1} = ll;
+            MX_LL_Preds_Recognised{i,2} = bic;
+            MX_LL_Preds_Recognised{i,3} = Pred;
+            MX_LL_Preds_Recognised{i,4} = pest;
+            MX_LL_Preds_Recognised{i,5} = Gstuff;
+            MX_LL_Preds_Recognised{i,6} = Recognised {i};
+            MX_LL_Preds_Recognised{i,7} = penalty;
+        end
     end
 end
 
-MX_LL_Preds_Unrecognised = cell(length(participants),6);
+MX_LL_Preds_Unrecognised = cell(length(participants),7);
 for i = participants
     MX_LL_Preds_Unrecognised{i,1} = -1;
     MX_LL_Preds_Unrecognised{i,2} = 0;
     badix = badixs(i);
     while (MX_LL_Preds_Unrecognised{i,2} == 0 || MX_LL_Preds_Unrecognised{i,1} < 0)
-        [ll, bic, Pred, pest, Gstuff] = FitMix(Unrecognised{i},badix);
+        [ll, bic, Pred, pest, Gstuff,penalty] = FitMix(Unrecognised{i},badix);
         MX_LL_Preds_Unrecognised{i,1} = ll;
         MX_LL_Preds_Unrecognised{i,2} = bic;
         MX_LL_Preds_Unrecognised{i,3} = Pred;
         MX_LL_Preds_Unrecognised{i,4} = pest;
         MX_LL_Preds_Unrecognised{i,5} = Gstuff;
         MX_LL_Preds_Unrecognised{i,6} = Unrecognised {i};
+        MX_LL_Preds_Unrecognised{i,7} = penalty;
         
     end
 end
 
 % Fit VP + Mix Model
 
-HY_LL_Preds_Recognised = cell(length(participants),6);
+HY_LL_Preds_Recognised = cell(length(participants),7);
 for i = participants
     HY_LL_Preds_Recognised{i,1} = -1;
     HY_LL_Preds_Recognised{i,2} = 0;
     badix = badixs(i);
-    while (HY_LL_Preds_Recognised{i,2} > 3000 || HY_LL_Preds_Recognised{i,2} == 0 || HY_LL_Preds_Recognised{i,1} < 0)
-        [ll, bic, Pred, pest, Gstuff] = FitVPMix(Recognised{i},badix);
-        HY_LL_Preds_Recognised{i,1} = ll;
-        HY_LL_Preds_Recognised{i,2} = bic;
-        HY_LL_Preds_Recognised{i,3} = Pred;
-        HY_LL_Preds_Recognised{i,4} = pest;
-        HY_LL_Preds_Recognised{i,5} = Gstuff;
-        HY_LL_Preds_Recognised{i,6} = Recognised {i};
-           fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
+    ll = 1e7;
+    for j = 1:nruns
+        [llnew, bic, Pred, pest, Gstuff, penalty] = FitVPMix(Recognised{i},badix);
+        if llnew < ll
+            ll = llnew;
+            HY_LL_Preds_Recognised{i,1} = ll;
+            HY_LL_Preds_Recognised{i,2} = bic;
+            HY_LL_Preds_Recognised{i,3} = Pred;
+            HY_LL_Preds_Recognised{i,4} = pest;
+            HY_LL_Preds_Recognised{i,5} = Gstuff;
+            HY_LL_Preds_Recognised{i,6} = Recognised {i};
+            HY_LL_Preds_Recognised{i,7} = penalty;
+        end
+        
     end
     
 end
 
-HY_LL_Preds_Unrecognised = cell(length(participants),6);
+HY_LL_Preds_Unrecognised = cell(length(participants),7);
 for i = participants
     HY_LL_Preds_Unrecognised{i,1} = -1;
     HY_LL_Preds_Unrecognised{i,2} = 0;
     badix = badixs(i);
+    
     while (HY_LL_Preds_Unrecognised{i,2} == 0|| HY_LL_Preds_Unrecognised{i,1} < 0)
-        [ll, bic, Pred, pest, Gstuff] = FitVPMix(Unrecognised {i},badix);
+        [ll, bic, Pred, pest, Gstuff, penalty] = FitVPMix(Unrecognised {i},badix);
         HY_LL_Preds_Unrecognised{i,1} = ll;
         HY_LL_Preds_Unrecognised{i,2} = bic;
         HY_LL_Preds_Unrecognised{i,3} = Pred;
         HY_LL_Preds_Unrecognised{i,4} = pest;
         HY_LL_Preds_Unrecognised{i,5} = Gstuff;
         HY_LL_Preds_Unrecognised{i,6} = Unrecognised {i};
+        HY_LL_Preds_Unrecognised{i,7} = penalty;
     end
 end
 
 % NL_LL_Preds_Recognised = cell(length(participants),6);
-% 
+%
 % for i = participants
 % %    filename = ['_Cont_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
 % %    fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
 % %    saveas(gcf,filename);
-% 
+%
 % %    filename = ['Cont_Unrecog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
 % %    fitplot(Unrecognised {i}, VP_LL_Preds_Unrecognised{i,3});
 % %    saveas(gcf,filename);
@@ -155,7 +177,7 @@ end
 %     NL_LL_Preds_Recognised{i,6} = Recognised {i};
 %     fitplot(Recognised {i}, NL_LL_Preds_Recognised{i,3});
 % end
-% 
+%
 % NL_LL_Preds_Unrecognised = cell(length(participants),6);
 % for i = participants
 %     [ll, bic, Pred, pest, Gstuff] = FitNull(Recognised{i},badix);
@@ -169,20 +191,20 @@ end
 
 %% Plot Fits superimposed on Data, and save.
 % % Plot
-for i = participants
-    filename = ['Cont_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-    fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
-    saveas(gcf,filename);
-    
-    filename = ['Thresh_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-    fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
-    saveas(gcf,filename);
-    
-    filename = ['Hybrid_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-    fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
-    saveas(gcf,filename);
-    
-end
+% for i = participants
+%     filename = ['Cont_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+%     fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+%     saveas(gcf,filename);
+%     
+%     filename = ['Thresh_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+%     fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+%     saveas(gcf,filename);
+%     
+%     filename = ['Hybrid_Recog',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+%     fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
+%     saveas(gcf,filename);
+%     
+% end
 
 save(datestr(now,'dd_mm_yy_HH_MM'))
 

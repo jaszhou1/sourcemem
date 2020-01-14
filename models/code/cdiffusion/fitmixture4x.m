@@ -1,4 +1,4 @@
-function [ll,bic,Pred, Gstuff] = fitmixture4x(Pvar, Pfix, Sel, Data, nlow, nhigh, badix, trace)
+function [ll,bic,Pred, Gstuff, penalty] = fitmixture4x(Pvar, Pfix, Sel, Data, nlow, nhigh, badix, trace)
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task.
 % Across-trial variability in criterion.
@@ -84,26 +84,26 @@ eta2b = eta2;
 sigma = 1.0;
 
 % Cleaned up penalty calculation, hard and soft bounds - 30/1/19
-
+penalty = 0;
 % ---------------------------------------------------------------------------
 %   v1a, v2a, v1b, v2b, eta1, eta2,      a1, a2,       pi1, pi2,    Ter  st, sa]
 % ---------------------------------------------------- ----------------------
  
-Ub= [ 8.0*ones(1,4),  4.0*ones(1,2),  7*ones(1,2),    ones(1,2),   1.0, 0.8, 0]; 
+Ub= [ 4.0*ones(1,4),  4.0*ones(1,2),  7*ones(1,2),    ones(1,2),   1.0, 0.8, 0]; 
 Lb= [-7.0*ones(1,4),  -0.1*ones(1,2),  0.3*ones(1,2),    zeros(1,2),   -0.5, 0, 0];
-Pub=[ 7*ones(1,4),  3.5*ones(1,2),  6*ones(1,2), 1*ones(1,2),  0.8, 0.7, 0]; 
+Pub=[ 3.5*ones(1,4),  3.5*ones(1,2),  6*ones(1,2), 1*ones(1,2),  0.8, 0.7, 0]; 
 Plb=[-6.5*ones(1,4),  0*ones(1,2),  0.4*ones(1,2), 0.01*ones(1,2), -0.4, 0, 0];
 Pred = cell(1,4);
 if any(P - Ub > 0) | any(Lb - P > 0)
    ll = 1e7 + ...
-        1e3 * (sum(max(P - Ub, 0).^2) + sum(max(Ub - P).^2));
+        1e3 * (sum(max(P - Ub, 0).^2) + sum(max(Lb - P, 0).^2));
    bic = 0;
    Gstuff = cell(3,2);
-   return
    if trace
        max(P - Ub, 0)
        max(Lb - P, 0)
    end
+   return
 else
    penalty =  1e3 * (sum(max(P - Pub, 0).^2) + sum(max(Plb - P, 0).^2));
    if trace
@@ -133,8 +133,8 @@ else
        Pa = [v1a, v2a, eta1a, eta2a, sigma, a1];
        % Parameters for short
        Pb = [v1b, v2b, eta1b, eta2b, sigma, a1];
-       [ta, gta, thetaa, pthetaa, mta] = vdcircle300cls(Pa, tmax, 5);
-       [tb, gtb, thetab, pthetab, mtb] = vdcircle300cls(Pb, tmax, 5);
+       [ta, gta, thetaa, pthetaa, mta] = vdcircle300cls(Pa, tmax, badix);
+       [tb, gtb, thetab, pthetab, mtb] = vdcircle300cls(Pb, tmax, badix);
    else  % Criterion variability
        % Rectangular mass for starting point variability.
        U = ones(n_sz_step, 1); 
@@ -194,10 +194,10 @@ else
        n = length(ta);
        fe = ones(1, m) / m;
        for i = 1:nw + 1
-           gti = conv(gta(i, :), fe);
-           gta(i,:) = gti(1:n);
-           gti = conv(gtb(i, :), fe);
-           gtb(i,:) = gti(1:n);
+           gti = conv(gtlong(i, :), fe);
+           gtlong(i,:) = gti(1:n);
+           gti = conv(gtshort(i, :), fe);
+           gtshort(i,:) = gti(1:n);
        end
    end
    
@@ -223,10 +223,10 @@ else
    Gstuff = cell(3,2);
    Gstuff{1,1} = ta;
    Gstuff{2,1} = thetaa;
-   Gstuff{3,1} = gta;
+   Gstuff{3,1} = gtlong;
    Gstuff{1,2} = tb;
    Gstuff{2,2} = thetab;
-   Gstuff{3,2} = gtb;
+   Gstuff{3,2} = gtshort;
    
    % Minimize sum of minus LL's across two conditions. Added penalty term 30/1/19
    ll = sum(-ll0a) + sum(-ll0b) + penalty;

@@ -1,4 +1,4 @@
-function [ll,bic,Pred, Gstuff] = fitdcircle4x(Pvar, Pfix, Sel, Data, nlow, nhigh, badix, trace)
+function [ll,bic,Pred, Gstuff, penalty] = fitdcircle4x(Pvar, Pfix, Sel, Data, nlow, nhigh, badix, trace)
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task
 % with across-trial variability in criterion
@@ -80,25 +80,26 @@ eta2b = eta2;
 %% Transplanting the fitmixture4x penalties into fitdcircle
 
 % Cleaned up penalty calculation, hard and soft bounds - 30/1/19
+penalty = 0;
 
 % ---------------------------------------------------------------------------
 %   v1a, v2a, v1b, v2b, eta1, eta2,   a,    Ter  st sa]
 % ---------------------------------------------------- ----------------------
-Ub= [ 7.0*ones(1,4),  4.0*ones(1,2),  5.0, 1.0, 0.7, 3.0]; 
+Ub= [ 3.0*ones(1,4),  3.0*ones(1,2),  5.0, 1.0, 0.7, 3.0]; 
 Lb= [-0.1*ones(1,4),  0.0*ones(1,2),  0.5, -0.35, 0,  0];
-Pub=[ 6.5*ones(1,4),  3.5*ones(1,2),  4.5, 0.8, 0.65, 2.8]; 
-Plb=[0*ones(1,4),  0.0*ones(1,2),  0.7, -0.40, 0.01 0.1];
+Pub=[ 2.5*ones(1,4),  2.5*ones(1,2),  4.5, 0.8, 0.65, 2.8]; 
+Plb=[0*ones(1,4),  0.0*ones(1,2),  0.7, -0.40, 0.01, 0];
 Pred = cell(1,4);
 if any(P - Ub > 0) | any(Lb - P > 0)
    ll = 1e7 + ...
-        1e3 * (sum(max(P - Ub, 0).^2) + sum(max(Ub - P).^2));
+        1e3 * (sum(max(P - Ub, 0).^2) + sum(max(Lb - P, 0).^2));
    bic = 0;
    Gstuff = cell(3,2);
-   return
    if trace
        max(P - Ub, 0)
        max(Lb - P, 0)
    end
+   return
 else
    penalty =  1e3 * (sum(max(P - Pub, 0).^2) + sum(max(Plb - P, 0).^2));
    if trace
