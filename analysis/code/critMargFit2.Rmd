@@ -11,10 +11,12 @@ rm(list = ls())
 
 knitr::opts_chunk$set(echo = TRUE)
 
-knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/models/figures/critVarFits")
+#knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/models/figures/critVarFits")
+knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/models/figures/cDiffusionFits")
 
 library(tidyverse)
 ```
+
 ```{r}
 dataset <- read.csv('dataFiltered3.csv')
 
@@ -53,7 +55,7 @@ dataset$subjString <- factor(dataset$subjString,
 dataset$participant <- factor(dataset$participant, levels = unique(dataset$participant))
 
 
-recogdata <- dataset[dataset$recog_rating>=3,]
+recogdata <- dataset[dataset$recog_rating>3,]
 lowdata <- recogdata[recogdata$condition==1,]
 highdata <- recogdata[recogdata$condition==2,]
 
@@ -61,9 +63,19 @@ highdata <- recogdata[recogdata$condition==2,]
 
 ```{r}
 
-Cont <- read.csv('2019-07-09_cont.csv')
-Thresh <- read.csv('2019-07-09_thresh.csv')
-Hybrid <- read.csv('2019-07-09_hybrid.csv')
+# The palette with grey:
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+# The palette with black:
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+```
+
+
+```{r}
+
+Cont <- read.csv('2020-01-02_NoCrit_Cont.csv')
+Thresh <- read.csv('2020-01-02_NoCrit_Thresh.csv')
+Hybrid <- read.csv('2020-01-02_NoCrit_Hybrid.csv')
 
 density <- rbind(Cont,Thresh,Hybrid)
 
@@ -412,28 +424,28 @@ cols = gg_color_hue(n)
 plotThetaLow<-
 # ------ Data ---------------------
 # 23/05, substitute data density estimates for histograms
-ggplot(data=lowdata,aes(x=lowdata$response_error, ..density..)) + geom_histogram(bins = 50) +
+ggplot(data=lowdata,aes(x=lowdata$response_error, ..density..)) + geom_histogram(bins = 50, color="black", fill="white") +
   # ------ Model --------
   # Continuous
-geom_line(data = mcontinuous_low_theta, aes(x = value, prob), size = 0.75, colour = "red") +  
+geom_line(data = mcontinuous_low_theta, aes(x = value, prob), size = 0.75, linetype = "dotted") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Response Error (radians)") + 
   
   # Threshold
-  geom_line(data = mthreshold_low_theta, aes(x = value, prob), size = 0.75, colour = "blue") +  
+  geom_line(data = mthreshold_low_theta, aes(x = value, prob), size = 0.75, linetype = "solid") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Response Error (radians)") +
   
   #Hybrid
-  geom_line(data = mhybrid_low_theta, aes(x = value, prob), size = 0.75, colour = "green") +  
+  geom_line(data = mhybrid_low_theta, aes(x = value, prob), size = 0.75, linetype = "dotdash") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Response Error (radians)") +
+  scale_color_manual("red","black")+ 
   
   #Misc
   scale_x_continuous(name ="Response Error (radians)", # also x axis name 
                      breaks = c(-2, 0, 2),
                      labels = c(expression(-pi), "0", expression(pi))) + 
-  scale_colour_manual(values=c("red","blue","green")) +
   ylab("Probability \n Density") + 
   ggtitle("Response Error by Subject\n Low Imageability Condition") +   
   theme(
@@ -449,23 +461,24 @@ geom_line(data = mcontinuous_low_theta, aes(x = value, prob), size = 0.75, colou
     panel.background = element_blank(), 
     axis.line = element_line(colour = "black")
   )
+```
 
-
+```{r}
 # -------- HIGH IMAGINABILITY CONDITION -------------------
 plotThetaHigh<-
 # ------ Data ---------------------
-ggplot(data=highdata,aes(x=highdata$response_error, ..density..)) + geom_histogram(bins = 50)  +
+ggplot(data=highdata,aes(x=highdata$response_error, ..density..)) + geom_histogram(bins = 50, color = "black", fill = "white")  +
   # ------ Model --------
   #Continuous
-geom_line(data = mcontinuous_high_theta, aes(x = value, prob), size = 0.75, colour = "red") +  
+geom_line(data = mcontinuous_high_theta, aes(x = value, prob), size = 0.75, linetype = "dotted") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Theta (radians)") + 
   #Threshold
-geom_line(data = mthreshold_high_theta, aes(x = value, prob), size = 0.75, colour = "blue") +  
+geom_line(data = mthreshold_high_theta, aes(x = value, prob), size = 0.75, linetype = "solid") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Theta (radians)") + 
   #Hybrid
-geom_line(data = mhybrid_high_theta, aes(x = value, prob), size = 0.75, colour = "green") +  
+geom_line(data = mhybrid_high_theta, aes(x = value, prob), size = 0.75, linetype = "dotdash") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Theta (radians)") + 
   #Misc
@@ -496,18 +509,18 @@ geom_line(data = mhybrid_high_theta, aes(x = value, prob), size = 0.75, colour =
 # -------- HIGH IMAGINABILITY CONDITION -------------------
 plotRThigh<-
 # ------ Data ---------------------
-ggplot(data=highdata,aes(x=highdata$response_RT, ..density..)) + geom_histogram(bins = 50)  +
+ggplot(data=highdata,aes(x=highdata$response_RT, ..density..)) + geom_histogram(bins = 50, color = "black", fill = "white")  +
   # ------ Model --------
   #Continuous
-geom_line(data = mRT_continuous_high, aes(x = value, prob), size = 0.75, colour = "red") +  
+geom_line(data = mRT_continuous_high, aes(x = value, prob), size = 0.75, linetype = "dotted") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   
   #Threshold
-geom_line(data = mRT_threshold_high, aes(x = value, prob), size = 0.75, colour = "blue") +  
+geom_line(data = mRT_threshold_high, aes(x = value, prob), size = 0.75, linetype = "solid") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
 
   #Hybrid
-geom_line(data = mRT_hybrid_high, aes(x = value, prob), size = 0.75, colour = "green") +  
+geom_line(data = mRT_hybrid_high, aes(x = value, prob), size = 0.75, linetype = "dotdash") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   
   #Misc
@@ -531,17 +544,17 @@ geom_line(data = mRT_hybrid_high, aes(x = value, prob), size = 0.75, colour = "g
 # -------- LOW IMAGINABILITY CONDITION -------------------
 plotRTlow<-
 # ------ Data ---------------------
-ggplot(data=lowdata,aes(x=lowdata$response_RT, ..density..)) + geom_histogram(bins = 50) +
+ggplot(data=lowdata,aes(x=lowdata$response_RT, ..density..)) + geom_histogram(bins = 50, color = "black", fill = "white") +
   # ------ Model --------
   #Continuous
-geom_line(data = mRT_continuous_low, aes(x = value, prob), size = 0.75, colour = "red") +  
+geom_line(data = mRT_continuous_low, aes(x = value, prob), size = 0.75, linetype = "dotted") +  
 facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   
   #Threshold
-geom_line(data = mRT_threshold_low, aes(x = value, prob), size = 0.75, colour = "blue") +  
+geom_line(data = mRT_threshold_low, aes(x = value, prob), size = 0.75, linetype = "solid") +  
 facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   #Hybrid
-geom_line(data = mRT_hybrid_low, aes(x = value, prob), size = 0.75, colour = "green") +  
+geom_line(data = mRT_hybrid_low, aes(x = value, prob), size = 0.75, linetype = "dotdash") +  
 facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   #Misc
   xlab("Response Time (seconds)") + 
@@ -554,8 +567,8 @@ facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale =
     axis.text.x = element_text(size=10),  # size of text on the x axis 
     axis.text.y = element_text(size=10),  # size of text on the y axis 
     plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
-    plot.subtitle = element_text(hjust = 0.5), # subtitle settiings (note, centering requires h = 0.5)
-    plot.caption = element_text(hjust = 0, face = "italic"), # caption settings 
+    plot.subtitle = element_text(hjust = 0.5, size = 13), # subtitle settiings (note, centering requires h = 0.5)
+    plot.caption = element_text(hjust = 0, face = "italic", size = 10), # caption settings 
     panel.grid.major = element_blank(), 
     panel.grid.minor = element_blank(),
     panel.background = element_blank(), 
