@@ -216,6 +216,8 @@ else
    % Log-likelihoods.
    ll0a = log(l0a);
    ll0b = log(l0b);
+   
+
    % Minimize sum of minus LL's across two conditions.
    ll = sum(-ll0a) + sum(-ll0b) + penalty;
  

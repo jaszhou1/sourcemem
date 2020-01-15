@@ -89,9 +89,9 @@ penalty = 0;
 %   v1a, v2a, v1b, v2b, eta1, eta2,      a1, a2,       pi1, pi2,    Ter  st, sa]
 % ---------------------------------------------------- ----------------------
  
-Ub= [ 4.0*ones(1,4),  4.0*ones(1,2),  7*ones(1,2),    ones(1,2),   1.0, 0.8, 0]; 
+Ub= [ 4.5*ones(1,4),  1*ones(1,2),  5*ones(1,2),    ones(1,2),   1.0, 0.8, 0]; 
 Lb= [0*ones(1,4),  0*ones(1,2),  0.3*ones(1,2),    zeros(1,2),   -0.5, 0, 0];
-Pub=[ 3.5*ones(1,4),  3.5*ones(1,2),  6*ones(1,2), 1*ones(1,2),  0.8, 0.7, 0]; 
+Pub=[ 4.0*ones(1,4),  0.7*ones(1,2),  4.5*ones(1,2), 1*ones(1,2),  0.8, 0.7, 0]; 
 Plb=[0*ones(1,4),  0*ones(1,2),  0.4*ones(1,2), 0.01*ones(1,2), -0.4, 0, 0];
 Pred = cell(1,4);
 if any(P - Ub > 0) | any(Lb - P > 0)
@@ -117,7 +117,6 @@ end
 % a penalty was applied.
 pest_penalty(1,:) = P;
 pest_penalty(2,:) = max(P - Pub, 0).^2 + max(Plb - P, 0).^2;
-
 % Ensure etas, ter, and a are positive.
 % Removed Ter from being considered as we are allowing Ter to be negative.
 %lowerbounderror = sum(min(P(5:length(P)) - zeros(1,length(P)-4), 0).^2);
@@ -232,9 +231,12 @@ else
    Gstuff{1,2} = tb;
    Gstuff{2,2} = thetab;
    Gstuff{3,2} = gtshort;
+  
    
-   % Minimize sum of minus LL's across two conditions. Added penalty term 30/1/19
+   
+    % Minimize sum of minus LL's across two conditions. Added penalty term 30/1/19
    ll = sum(-ll0a) + sum(-ll0b) + penalty;
+   
    bic = 2 * ll + sum(Sel) * log(nhigh + nlow);
    if trace > 1
       Vala = [Data{1}, l0a, ixa]
