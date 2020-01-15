@@ -32,14 +32,14 @@ nruns = 10; %Number of times I want to run fits on each participant to find the 
 % %% Fit Variable Precision (Continuous model)
 %
 % % %Empty array for Log Likelihoods and Predictions to live.
-VP_LL_Preds_Recognised = cell(length(participants),7);
+VP_LL_Preds_Recognised = cell(length(participants),8);
 for i = participants
     
     ll = 1e7;
     badix = badixs(i);
     % Multiple Starts
     for j = 1:nruns
-        [llnew, bic, Pred, pest, Gstuff, penalty] = FitVPx(Recognised{i},badix);
+        [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPx(Recognised{i},badix);
         disp(i);
         
         if llnew < ll
@@ -51,18 +51,19 @@ for i = participants
             VP_LL_Preds_Recognised{i,5} = Gstuff;
             VP_LL_Preds_Recognised{i,6} = Recognised {i};
             VP_LL_Preds_Recognised{i,7} = penalty;
+            VP_LL_Preds_Recognised{i,8} = pest_penalty;
         end
     end
     
 end
 
-VP_LL_Preds_Unrecognised = cell(length(participants),7);
+VP_LL_Preds_Unrecognised = cell(length(participants),8);
 for i = participants
     VP_LL_Preds_Unrecognised{i,1} = -1;
     VP_LL_Preds_Unrecognised{i,2} = 0;
     badix = badixs(i);
     while (VP_LL_Preds_Unrecognised{i,2} == 0 || VP_LL_Preds_Unrecognised{i,1} < 0)
-        [ll, bic, Pred, pest,Gstuff,penalty] = FitVPx(Unrecognised{i},badix);
+        [ll, bic, Pred, pest,Gstuff,penalty, pest_penalty] = FitVPx(Unrecognised{i},badix);
         VP_LL_Preds_Unrecognised{i,1} = ll;
         VP_LL_Preds_Unrecognised{i,2} = bic;
         VP_LL_Preds_Unrecognised{i,3} = Pred;
@@ -70,12 +71,13 @@ for i = participants
         VP_LL_Preds_Unrecognised{i,5} = Gstuff;
         VP_LL_Preds_Unrecognised{i,6} = Unrecognised {i};
         VP_LL_Preds_Unrecognised{i,7} = penalty;
+        VP_LL_Preds_Unrecognised{i,8} = pest_penalty;
     end
 end
 % %% Fit Mixture Model (Threshold model)
 %
 % %Empty array for Log Likelihoods and Predictions to live.
-MX_LL_Preds_Recognised = cell(length(participants),7);
+MX_LL_Preds_Recognised = cell(length(participants),8);
 for i = participants
     MX_LL_Preds_Recognised{i,1} = -1;
     MX_LL_Preds_Recognised{i,2} = 0;
@@ -83,7 +85,7 @@ for i = participants
     
     ll = 1e7;
     for j=1:nruns
-        [llnew, bic, Pred, pest, Gstuff,penalty] = FitMix(Recognised{i},badix);
+        [llnew, bic, Pred, pest, Gstuff,penalty, pest_penalty] = FitMix(Recognised{i},badix);
         if llnew < ll
             ll = llnew;
             MX_LL_Preds_Recognised{i,1} = ll;
@@ -93,17 +95,18 @@ for i = participants
             MX_LL_Preds_Recognised{i,5} = Gstuff;
             MX_LL_Preds_Recognised{i,6} = Recognised {i};
             MX_LL_Preds_Recognised{i,7} = penalty;
+            MX_LL_Preds_Recognised{i,8} = pest_penalty;
         end
     end
 end
 
-MX_LL_Preds_Unrecognised = cell(length(participants),7);
+MX_LL_Preds_Unrecognised = cell(length(participants),8);
 for i = participants
     MX_LL_Preds_Unrecognised{i,1} = -1;
     MX_LL_Preds_Unrecognised{i,2} = 0;
     badix = badixs(i);
     while (MX_LL_Preds_Unrecognised{i,2} == 0 || MX_LL_Preds_Unrecognised{i,1} < 0)
-        [ll, bic, Pred, pest, Gstuff,penalty] = FitMix(Unrecognised{i},badix);
+        [ll, bic, Pred, pest, Gstuff,penalty,pest_penalty] = FitMix(Unrecognised{i},badix);
         MX_LL_Preds_Unrecognised{i,1} = ll;
         MX_LL_Preds_Unrecognised{i,2} = bic;
         MX_LL_Preds_Unrecognised{i,3} = Pred;
@@ -111,20 +114,21 @@ for i = participants
         MX_LL_Preds_Unrecognised{i,5} = Gstuff;
         MX_LL_Preds_Unrecognised{i,6} = Unrecognised {i};
         MX_LL_Preds_Unrecognised{i,7} = penalty;
+        MX_LL_Preds_Unrecognised{i,8} = pest_penalty;
         
     end
 end
 
 % Fit VP + Mix Model
 
-HY_LL_Preds_Recognised = cell(length(participants),7);
+HY_LL_Preds_Recognised = cell(length(participants),8);
 for i = participants
     HY_LL_Preds_Recognised{i,1} = -1;
     HY_LL_Preds_Recognised{i,2} = 0;
     badix = badixs(i);
     ll = 1e7;
     for j = 1:nruns
-        [llnew, bic, Pred, pest, Gstuff, penalty] = FitVPMix(Recognised{i},badix);
+        [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPMix(Recognised{i},badix);
         if llnew < ll
             ll = llnew;
             HY_LL_Preds_Recognised{i,1} = ll;
@@ -134,20 +138,21 @@ for i = participants
             HY_LL_Preds_Recognised{i,5} = Gstuff;
             HY_LL_Preds_Recognised{i,6} = Recognised {i};
             HY_LL_Preds_Recognised{i,7} = penalty;
+            HY_LL_Preds_Recognised{i,8} = pest_penalty;
         end
         
     end
     
 end
 
-HY_LL_Preds_Unrecognised = cell(length(participants),7);
+HY_LL_Preds_Unrecognised = cell(length(participants),8);
 for i = participants
     HY_LL_Preds_Unrecognised{i,1} = -1;
     HY_LL_Preds_Unrecognised{i,2} = 0;
     badix = badixs(i);
     
     while (HY_LL_Preds_Unrecognised{i,2} == 0|| HY_LL_Preds_Unrecognised{i,1} < 0)
-        [ll, bic, Pred, pest, Gstuff, penalty] = FitVPMix(Unrecognised {i},badix);
+        [ll, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPMix(Unrecognised {i},badix);
         HY_LL_Preds_Unrecognised{i,1} = ll;
         HY_LL_Preds_Unrecognised{i,2} = bic;
         HY_LL_Preds_Unrecognised{i,3} = Pred;
@@ -155,6 +160,7 @@ for i = participants
         HY_LL_Preds_Unrecognised{i,5} = Gstuff;
         HY_LL_Preds_Unrecognised{i,6} = Unrecognised {i};
         HY_LL_Preds_Unrecognised{i,7} = penalty;
+        HY_LL_Preds_Unrecognised{i,8} = pest_penalty;
     end
 end
 
@@ -210,9 +216,24 @@ save(datestr(now,'dd_mm_yy_HH_MM'))
 
 close all
 
-%%
-%%% The thing I want at the end is...
-% full_data = open_data(filename)
-% data = split_data(full_data)
-% fit_data(data, starting_preds)
-% plot_data_preds(plot_filename, data, preds)
+
+
+%% Save csv files to use for plotting in R
+filename = [datestr(now,'dd-mm-yy-HH-MM'),'_Cont','_Marginal','.csv'];
+abs_marginal_mat_to_csv(filename, 'Cont', VP_LL_Preds_Recognised);
+
+filename = [datestr(now,'dd-mm-yy-HH-MM'),'_Thresh','_Marginal','.csv'];
+abs_marginal_mat_to_csv(filename, 'Thresh', MX_LL_Preds_Recognised);
+
+filename = [datestr(now,'dd-mm-yy-HH-MM'),'_Hybrid','_Marginal','.csv'];
+abs_marginal_mat_to_csv(filename, 'Hybrid', HY_LL_Preds_Recognised);
+
+
+filename = [datestr(now,'dd-mm-yy-HH-MM'),'_Cont','_Joint','.csv'];
+abs_mat_to_csv(filename, 'Cont', VP_LL_Preds_Recognised);
+
+filename = [datestr(now,'dd-mm-yy-HH-MM'),'_Thresh','_Joint','.csv'];
+abs_mat_to_csv(filename, 'Thresh', MX_LL_Preds_Recognised);
+
+filename = [datestr(now,'dd-mm-yy-HH-MM'),'_Hybrid','_Joint','.csv'];
+abs_mat_to_csv(filename, 'Hybrid', HY_LL_Preds_Recognised);

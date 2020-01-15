@@ -20,8 +20,8 @@ for i = 1:length(input_cells)
     %Combine Conditions
     data_cells{i,:} = vertcat(data_cells{i,1}{1,1},data_cells{i,1}{1,2});
     
-    %Make Absolute
-    data_cells{i,1}(:,1) = abs(data_cells{i,1}(:,1));
+%     %Make Absolute
+%     data_cells{i,1}(:,1) = abs(data_cells{i,1}(:,1));
 end
 
 

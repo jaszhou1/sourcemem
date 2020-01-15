@@ -1,4 +1,4 @@
-function [ll,bic,Pred, Gstuff, penalty] = fitmixture4x(Pvar, Pfix, Sel, Data, nlow, nhigh, badix, trace)
+function [ll,bic,Pred, Gstuff, penalty, pest_penalty] = fitmixture4x(Pvar, Pfix, Sel, Data, nlow, nhigh, badix, trace)
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task.
 % Across-trial variability in criterion.
@@ -90,9 +90,9 @@ penalty = 0;
 % ---------------------------------------------------- ----------------------
  
 Ub= [ 4.0*ones(1,4),  4.0*ones(1,2),  7*ones(1,2),    ones(1,2),   1.0, 0.8, 0]; 
-Lb= [-7.0*ones(1,4),  -0.1*ones(1,2),  0.3*ones(1,2),    zeros(1,2),   -0.5, 0, 0];
+Lb= [0*ones(1,4),  0*ones(1,2),  0.3*ones(1,2),    zeros(1,2),   -0.5, 0, 0];
 Pub=[ 3.5*ones(1,4),  3.5*ones(1,2),  6*ones(1,2), 1*ones(1,2),  0.8, 0.7, 0]; 
-Plb=[-6.5*ones(1,4),  0*ones(1,2),  0.4*ones(1,2), 0.01*ones(1,2), -0.4, 0, 0];
+Plb=[0*ones(1,4),  0*ones(1,2),  0.4*ones(1,2), 0.01*ones(1,2), -0.4, 0, 0];
 Pred = cell(1,4);
 if any(P - Ub > 0) | any(Lb - P > 0)
    ll = 1e7 + ...
@@ -112,6 +112,11 @@ else
         penalty
    end
 end   
+
+% Saving the full vector of parameters and an indication of whether or not
+% a penalty was applied.
+pest_penalty(1,:) = P;
+pest_penalty(2,:) = max(P - Pub, 0).^2 + max(Plb - P, 0).^2;
 
 % Ensure etas, ter, and a are positive.
 % Removed Ter from being considered as we are allowing Ter to be negative.

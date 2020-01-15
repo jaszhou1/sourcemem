@@ -1,4 +1,4 @@
-function [ll,bic,Pred, Gstuff, penalty] = fitdcircle4x(Pvar, Pfix, Sel, Data, nlow, nhigh, badix, trace)
+function [ll,bic,Pred, Gstuff, penalty, pest_penalty] = fitdcircle4x(Pvar, Pfix, Sel, Data, nlow, nhigh, badix, trace)
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task
 % with across-trial variability in criterion
@@ -86,7 +86,7 @@ penalty = 0;
 %   v1a, v2a, v1b, v2b, eta1, eta2,   a,    Ter  st sa]
 % ---------------------------------------------------- ----------------------
 Ub= [ 3.0*ones(1,4),  3.0*ones(1,2),  5.0, 1.0, 0.7, 3.0]; 
-Lb= [-0.1*ones(1,4),  0.0*ones(1,2),  0.5, -0.35, 0,  0];
+Lb= [0*ones(1,4),  0.0*ones(1,2),  0.5, -0.35, 0,  0];
 Pub=[ 2.5*ones(1,4),  2.5*ones(1,2),  4.5, 0.8, 0.65, 2.8]; 
 Plb=[0*ones(1,4),  0.0*ones(1,2),  0.7, -0.40, 0.01, 0];
 Pred = cell(1,4);
@@ -109,6 +109,8 @@ else
    end
 end   
 
+pest_penalty(1,:) = P;
+pest_penalty(2,:) = max(P - Pub, 0).^2 + max(Plb - P, 0).^2;
 
 %% Resume
 % Ensure etas, ter, and a are positive.
