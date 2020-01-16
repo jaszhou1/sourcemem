@@ -140,7 +140,7 @@ for i = participants
             HY_LL_Preds_Recognised{i,7} = penalty;
             HY_LL_Preds_Recognised{i,8} = pest_penalty;
      %   end
-        fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
+     %   fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
     end
     
 end

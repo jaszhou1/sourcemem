@@ -56,7 +56,7 @@ dataset$participant <- factor(dataset$participant, levels = unique(dataset$parti
 
 
 recogdata <- dataset[dataset$recog_rating>3,]
-recogdata$response_error <- abs(recogdata$response_error)
+#recogdata$response_error <- abs(recogdata$response_error)
 
 ```
 
@@ -72,9 +72,9 @@ cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2"
 
 ```{r}
 
-Cont <- read.csv('2020-01-14_NoCrit_Cont.csv')
-Thresh <- read.csv('2020-01-14_NoCrit_Thresh.csv')
-Hybrid <- read.csv('2020-01-14_NoCrit_Hybrid.csv')
+Cont <- read.csv('2020-01-15-19-48_Cont_Marginal_pooled.csv')
+Thresh <- read.csv('2020-01-15-19-48_Thresh_Marginal_pooled.csv')
+Hybrid <- read.csv('2020-01-15-19-48_Hybrid_Marginal_pooled.csv')
 
 density <- rbind(Cont,Thresh,Hybrid)
 
@@ -84,8 +84,8 @@ density <- rbind(Cont,Thresh,Hybrid)
 
 names(density)[1] <- "model_name"
 
-continuous<- density[density$model_name == 'Continuous', ]
-threshold<- density[density$model_name == 'Threshold', ]
+continuous<- density[density$model_name == 'Cont', ]
+threshold<- density[density$model_name == 'Thresh', ]
 hybrid<- density[density$model_name == 'Hybrid', ]
 ```
 

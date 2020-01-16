@@ -19,9 +19,9 @@ knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/models/figures/cDiffusionFit
 
 ```{r}
 data <- read.csv("QQ_data.csv")
-cont <- read.csv("QQ_cont.csv")
-thresh <- read.csv("QQ_thresh.csv")
-hybrid <- read.csv("QQ_hybrid.csv")
+cont <- read.csv("2020-01-15-19-48_Cont_Joint_pooled.csv")
+thresh <- read.csv("2020-01-15-19-48_Thresh_Joint_pooled.csv")
+hybrid <- read.csv("2020-01-15-19-48_Hybrid_Joint_pooled.csv")
 
 dataset <- rbind(data,cont,thresh,hybrid)
 dataset$quantile_idx <- as.factor(dataset$quantile_idx)
@@ -157,19 +157,19 @@ QxQ <- ggplot(data = data,
   geom_line(data = cont,
             aes(x = cont$theta,
                 y = cont$rt,
-                group = cont$quantile_idx)) +
+                group = cont$quantile_idx), size = 0.55, linetype = "dashed") +
   
   # Plot threshold model           
   geom_line(data = thresh,
             aes(x = thresh$theta,
                 y = thresh$rt,
-                group = thresh$quantile_idx)) +
+                group = thresh$quantile_idx), size = 0.55, linetype = "solid") +
   
   # Plot hybrid model           
   geom_line(data = hybrid,
             aes(x = hybrid$theta,
                 y = hybrid$rt,
-                group = hybrid$quantile_idx)) +
+                group = hybrid$quantile_idx), size = 0.55, linetype = "dotdash") +
   
    # ------------ Group plot by participant -----------------
 facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
@@ -212,62 +212,62 @@ ggtitle("Response Time Quantiles by Error") +
 
 ```{r}
   
-  ggplot(data = model, 
-                   aes(x = model$theta, 
-                       y = model$rt, 
-                       group = model$quantile_idx,  # group points according to quantiles 
-                       colour = quantile_idx)) + 
-  geom_line(linemitre = 4) + #geom_point() + 
-  # ------------ Plot Data ---------------------------------
-# Plot data as POINTS ONLY
-geom_point(data = data, 
-           aes(x = data$theta, 
-               y = data$rt, 
-               group = data$quantile_idx, 
-               colour = quantile_idx)) + 
-  # ------------ Group plot by participant -----------------
-facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
-  # ------------ Change some axes settings  ----------------
-#scale_y_continuous(limits=c(0, 3)) + 
-  scale_x_continuous(name ="Response Error (degrees)", # also x axis name 
-                     breaks = c(-2, 0, 2),
-                     labels = c(expression(-pi), "0", expression(pi))) + 
-  xlab("Response Error (degrees)") + # just in case remove scale x continuous 
-  ylab("Response Time (s)") + 
-  scale_color_manual(name = "Predicted \nQuantiles",
-                     values = cols,  # cbPalette[c(1,2,3)], 
-                     labels = c("0.1", "0.5", "0.9")) + 
-  # ------------ Change Theme Settings  ----------------
-ggtitle("Response Time Quantiles by Error") + 
-  theme(
-    
-    # Legend settings 
-    #legend.justification = c(1, 1), legend.position = c(0.90, 1.09),
-    legend.background = element_blank(),
-    
-    # Axis settingd 
-    axis.text.x = element_text(size=7),  # size of text on the x axis 
-    axis.text.y = element_text(size=7),  # size of text on the y axis 
-    
-    # Plot title settings 
-    plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
-    plot.subtitle = element_text(hjust = 0.5), # subtitle settiings (note, centering requires h = 0.5)
-    plot.caption = element_text(hjust = 0, face = "italic"), # caption settings 
-    
-    # Get rid of background panel grid 
-    panel.grid.major = element_blank(), 
-    panel.grid.minor = element_blank(),
-    panel.background = element_blank(), 
-    axis.line = element_line(colour = "black"))
-
-QxQ # display the plot 
-
-# Note: Device to use. Can be either be a device function (e.g. png()), 
+#   ggplot(data = model, 
+#                    aes(x = model$theta, 
+#                        y = model$rt, 
+#                        group = model$quantile_idx,  # group points according to quantiles 
+#                        colour = quantile_idx)) + 
+#   geom_line(linemitre = 4) + #geom_point() + 
+#   # ------------ Plot Data ---------------------------------
+# # Plot data as POINTS ONLY
+# geom_point(data = data, 
+#            aes(x = data$theta, 
+#                y = data$rt, 
+#                group = data$quantile_idx, 
+#                colour = quantile_idx)) + 
+#   # ------------ Group plot by participant -----------------
+# facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
+#   # ------------ Change some axes settings  ----------------
+# #scale_y_continuous(limits=c(0, 3)) + 
+#   scale_x_continuous(name ="Response Error (degrees)", # also x axis name 
+#                      breaks = c(-2, 0, 2),
+#                      labels = c(expression(-pi), "0", expression(pi))) + 
+#   xlab("Response Error (degrees)") + # just in case remove scale x continuous 
+#   ylab("Response Time (s)") + 
+#   scale_color_manual(name = "Predicted \nQuantiles",
+#                      values = cols,  # cbPalette[c(1,2,3)], 
+#                      labels = c("0.1", "0.5", "0.9")) + 
+#   # ------------ Change Theme Settings  ----------------
+# ggtitle("Response Time Quantiles by Error") + 
+#   theme(
+#     
+#     # Legend settings 
+#     #legend.justification = c(1, 1), legend.position = c(0.90, 1.09),
+#     legend.background = element_blank(),
+#     
+#     # Axis settingd 
+#     axis.text.x = element_text(size=7),  # size of text on the x axis 
+#     axis.text.y = element_text(size=7),  # size of text on the y axis 
+#     
+#     # Plot title settings 
+#     plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
+#     plot.subtitle = element_text(hjust = 0.5), # subtitle settiings (note, centering requires h = 0.5)
+#     plot.caption = element_text(hjust = 0, face = "italic"), # caption settings 
+#     
+#     # Get rid of background panel grid 
+#     panel.grid.major = element_blank(), 
+#     panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), 
+#     axis.line = element_line(colour = "black"))
+# 
+# QxQ # display the plot 
+# 
+# # Note: Device to use. Can be either be a device function (e.g. png()), 
 # or one of "eps", "ps", "tex" (pictex), "pdf", "jpeg", "tiff", "png", 
 # "bmp", "svg" or "wmf" (windows only).
-#ggsave('HighQQ', plot = High_QxQ, device = "eps", path = NULL,
-       #width = 20, height = 20, 
-       #scale = 1, dpi = 800, limitsize = TRUE) # 
+ggsave('ppoled_QQ', plot = QxQ, device = "eps", path = NULL,
+       width = 20, height = 20, 
+       scale = 1, dpi = 800, limitsize = TRUE) # 
 
 ```
 
