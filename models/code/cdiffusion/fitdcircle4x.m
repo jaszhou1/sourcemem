@@ -15,11 +15,7 @@ errmg2 = 'Incorrect length selector vector, exiting...';
 errmg3 = 'Data should be a 1 x 2 cell array from <makelike>...';
 
 tmax = 5.1;
-nt = 301; %gta and gtab uses NT to make a zeroes matrix of 51x300 in line 93.
-           %however, these matrices are then added to gtai and gtbi which
-           %come out of vdcircle300cls as 51x301, and so trying to sum
-           %these matrices returns an error. I am not sure what any of
-           %these actually represent - 17/01 Stop
+nt = 301; 
 np = 10;
 n_sz_step =  11; % Criterion variability.
 % nlong = 320;
