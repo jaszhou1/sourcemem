@@ -36,7 +36,7 @@ VP_LL_Preds_Recognised = cell(length(participants),8);
 for i = participants
     
     ll = 1e7;
-    badix = badixs(i);
+    badix = badixs(k);
     % Multiple Starts
     for j = 1:nruns
         [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPx_pooled(Recognised{i},badix);
@@ -81,7 +81,7 @@ MX_LL_Preds_Recognised = cell(length(participants),8);
 for i = participants
     MX_LL_Preds_Recognised{i,1} = -1;
     MX_LL_Preds_Recognised{i,2} = 0;
-    badix = badixs(i);
+    badix = badixs(k);
     
     ll = 1e7;
     for j=1:nruns
@@ -125,7 +125,7 @@ HY_LL_Preds_Recognised = cell(length(participants),8);
 for i = participants
     HY_LL_Preds_Recognised{i,1} = -1;
     HY_LL_Preds_Recognised{i,2} = 0;
-    badix = badixs(i);
+    badix = badixs(k);
     ll = 1e7;
     for j = 1:nruns
         [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPMix_pooled(Recognised{i},badix);
