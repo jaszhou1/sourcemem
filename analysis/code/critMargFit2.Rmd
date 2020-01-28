@@ -73,9 +73,9 @@ cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2"
 
 ```{r}
 
-Cont <- read.csv('2020-01-02_NoCrit_Cont.csv')
-Thresh <- read.csv('2020-01-02_NoCrit_Thresh.csv')
-Hybrid <- read.csv('2020-01-02_NoCrit_Hybrid.csv')
+Cont <- read.csv('2019-11-06_NoCrit_Cont.csv')
+Thresh <- read.csv('2019-11-06_NoCrit_Thresh.csv')
+Hybrid <- read.csv('2019-11-06_NoCrit_Hybrid.csv')
 
 density <- rbind(Cont,Thresh,Hybrid)
 
@@ -240,6 +240,7 @@ dRT_continuous_low <- continuous_low_RT[continuous_low_RT$model == 0, ]
 dRT_continuous_high <- continuous_high_RT[continuous_high_RT$model == 0, ]
 
 ```
+
 
 ```{r}
 # -------- THRESHOLD MODEL -------------------
@@ -427,17 +428,17 @@ plotThetaLow<-
 ggplot(data=lowdata,aes(x=lowdata$response_error, ..density..)) + geom_histogram(bins = 50, color="black", fill="white") +
   # ------ Model --------
   # Continuous
-geom_line(data = mcontinuous_low_theta, aes(x = value, prob), size = 0.75, linetype = "dotted") +  
+geom_line(data = mcontinuous_low_theta, aes(x = value, prob), size = 0.75, colour = "red") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Response Error (radians)") + 
   
   # Threshold
-  geom_line(data = mthreshold_low_theta, aes(x = value, prob), size = 0.75, linetype = "solid") +  
+  geom_line(data = mthreshold_low_theta, aes(x = value, prob), size = 0.75, colour = "blue") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Response Error (radians)") +
   
   #Hybrid
-  geom_line(data = mhybrid_low_theta, aes(x = value, prob), size = 0.75, linetype = "dotdash") +  
+  geom_line(data = mhybrid_low_theta, aes(x = value, prob), size = 0.75, colour = "green2") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Response Error (radians)") +
   scale_color_manual("red","black")+ 
@@ -470,15 +471,15 @@ plotThetaHigh<-
 ggplot(data=highdata,aes(x=highdata$response_error, ..density..)) + geom_histogram(bins = 50, color = "black", fill = "white")  +
   # ------ Model --------
   #Continuous
-geom_line(data = mcontinuous_high_theta, aes(x = value, prob), size = 0.75, linetype = "dotted") +  
+geom_line(data = mcontinuous_high_theta, aes(x = value, prob), size = 0.75, colour = "red") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Theta (radians)") + 
   #Threshold
-geom_line(data = mthreshold_high_theta, aes(x = value, prob), size = 0.75, linetype = "solid") +  
+geom_line(data = mthreshold_high_theta, aes(x = value, prob), size = 0.75, colour = "blue") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Theta (radians)") + 
   #Hybrid
-geom_line(data = mhybrid_high_theta, aes(x = value, prob), size = 0.75, linetype = "dotdash") +  
+geom_line(data = mhybrid_high_theta, aes(x = value, prob), size = 0.75, colour = "green2") +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Theta (radians)") + 
   #Misc
@@ -547,14 +548,14 @@ plotRTlow<-
 ggplot(data=lowdata,aes(x=lowdata$response_RT, ..density..)) + geom_histogram(bins = 50, color = "black", fill = "white") +
   # ------ Model --------
   #Continuous
-geom_line(data = mRT_continuous_low, aes(x = value, prob), size = 0.75, linetype = "dotted") +  
+geom_line(data = mRT_continuous_low, aes(x = value, prob), size = 0.75, color = "red") +  
 facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   
   #Threshold
-geom_line(data = mRT_threshold_low, aes(x = value, prob), size = 0.75, linetype = "solid") +  
+geom_line(data = mRT_threshold_low, aes(x = value, prob), size = 0.75, linetype = "blue") +  
 facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   #Hybrid
-geom_line(data = mRT_hybrid_low, aes(x = value, prob), size = 0.75, linetype = "dotdash") +  
+geom_line(data = mRT_hybrid_low, aes(x = value, prob), size = 0.75, linetype = "green2") +  
 facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
   #Misc
   xlab("Response Time (seconds)") + 

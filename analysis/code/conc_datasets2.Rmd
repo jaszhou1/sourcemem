@@ -26,6 +26,8 @@ for (i in participants){
     sessions = c("1","2","3","4")
     s <- j
     this_session_dataset <- read.csv(paste(i,"_",j,".csv",sep=""))
+    this_session_dataset$session <- j
+    this_session_dataset$session <- as.factor(this_session_dataset$session)
     participant_dataset <- rbind(participant_dataset,this_session_dataset)
     
     participant_dataset <- participant_dataset[participant_dataset$type!=' FOIL', ]
@@ -105,7 +107,102 @@ highHist<- ggplot(data = high, aes(x = high$response_error)) + geom_histogram(bi
 
 jumboHist <- ggplot() + geom_histogram(data = dataset.no.na, aes(x = dataset.no.na$response_error, fill="All"), bins = 100) + geom_histogram(data = recog, aes(x = recog$response_error, fill="Recognized"), bins = 100) + geom_histogram(data = unrecog, aes(x = unrecog$response_error, fill="Unrecognized"), bins = 100) + theme_classic()+ labs(x = "Response Error (radians)", y = "Frequency",fill = "Recognition Rating")
 # Write CSV in R
-write.csv(dataset, file = "dataFiltered3.csv")
+#write.csv(dataset, file = "dataFiltered3.csv")
+
+```
+```{r}
+
+p10_data <- p10_data[(p10_data$recog_rating > 3),]
+p10_data$recog_rating <- as.factor(p10_data$recog_rating)
+
+p10_data$responsebin <- "fast"
+p10_data[(p10_data$response_RT > 2.3),]$responsebin <- "slow"
+p10_data$response_error <- as.numeric(as.character(p10_data$response_error))
+  
+  
+
+cols = c("red","blue","green2","green")
+
+```
+```{r}
+plotTheta_RT<- ggplot(data=p10_data,aes(x=response_error)) + geom_histogram(bins = 50, color="black", fill="white") + 
+  facet_wrap(~responsebin, labeller = label_wrap_gen(width = 30), ncol = 4) +
+  xlab("Response Error") +
+  ylab("Count") +
+  ggtitle("Response Error by RT Category, Participant 10") +
+  theme(
+    # x axis label
+    # Theme asthetics to make the plot look nicer
+    legend.background = element_blank(),
+    axis.text.x = element_text(size=10),  # size of text on the x axis
+    axis.text.y = element_text(size=10),  # size of text on the y axis
+    plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
+    plot.subtitle = element_text(hjust = 0.5, size = 13), # subtitle settiings (note, centering requires h = 0.5)
+    plot.caption = element_text(hjust = 0, face = "italic", size = 10), # caption settings
+    axis.line = element_line(colour = "black")
+  )
 
 ```
 
+```{r}
+plotRT_session<- ggplot() + geom_histogram(data=p10_data,aes(x=response_RT, fill = session), color = "black", bins = 50) +  
+  facet_wrap(~session, labeller = label_wrap_gen(width = 30), ncol = 4) + 
+  xlab("Response Time (seconds)") +
+  ylab("Count") +
+  ggtitle("Response Time by Session, Participant 10") +
+  theme(
+    # x axis label
+    # Theme asthetics to make the plot look nicer
+    legend.background = element_blank(),
+    axis.text.x = element_text(size=10),  # size of text on the x axis
+    axis.text.y = element_text(size=10),  # size of text on the y axis
+    plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
+    plot.subtitle = element_text(hjust = 0.5, size = 13), # subtitle settiings (note, centering requires h = 0.5)
+    plot.caption = element_text(hjust = 0, face = "italic", size = 10), # caption settings
+    axis.line = element_line(colour = "black")
+  )
+
+# Recognition Ratings
+plotRT_conf<- ggplot() + geom_histogram(data=p10_data,aes(x=response_RT, fill = recog_rating), color = "black", bins = 50) +  
+  facet_wrap(~recog_rating, labeller = label_wrap_gen(width = 30), ncol = 4) + 
+  xlab("Response Time (seconds)") +
+  ylab("Count") +
+  ggtitle("Response Time by Session, Participant 10") +
+  theme(
+    # x axis label
+    # Theme asthetics to make the plot look nicer
+    legend.background = element_blank(),
+    axis.text.x = element_text(size=10),  # size of text on the x axis
+    axis.text.y = element_text(size=10),  # size of text on the y axis
+    plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
+    plot.subtitle = element_text(hjust = 0.5, size = 13), # subtitle settiings (note, centering requires h = 0.5)
+    plot.caption = element_text(hjust = 0, face = "italic", size = 10), # caption settings
+    axis.line = element_line(colour = "black")
+  )
+
+# Response Error bin
+
+
+
+plotRT<- ggplot() + geom_histogram(data=p10_data,aes(x=response_RT), color = "black", fill = "white",bins = 50) +
+  xlab("Response Time (seconds)") +
+  ylab("Count") +
+  ggtitle("Response Time, Participant 10") +
+  theme(
+    # x axis label
+    # Theme asthetics to make the plot look nicer
+    legend.background = element_blank(),
+    axis.text.x = element_text(size=10),  # size of text on the x axis
+    axis.text.y = element_text(size=10),  # size of text on the y axis
+    plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
+    plot.subtitle = element_text(hjust = 0.5, size = 13), # subtitle settiings (note, centering requires h = 0.5)
+    plot.caption = element_text(hjust = 0, face = "italic", size = 10), # caption settings
+    axis.line = element_line(colour = "black")
+  )
+```
+
+```{r}
+
+
+
+```

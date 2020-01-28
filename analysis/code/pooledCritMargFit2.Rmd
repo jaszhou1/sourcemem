@@ -50,7 +50,7 @@ for (sub in 1:length(data.subjList)){
 
 # Create as factor for plotting and also include levels so the order is correct 
 dataset$subjString <- factor(dataset$subjString, 
-                                levels = unique(dataset$subjString))
+                             levels = unique(dataset$subjString))
 
 dataset$participant <- factor(dataset$participant, levels = unique(dataset$participant))
 
@@ -72,9 +72,15 @@ cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2"
 
 ```{r}
 
-Cont <- read.csv('2020-01-15-19-48_Cont_Marginal_pooled.csv')
-Thresh <- read.csv('2020-01-15-19-48_Thresh_Marginal_pooled.csv')
-Hybrid <- read.csv('2020-01-15-19-48_Hybrid_Marginal_pooled.csv')
+# Cont <- read.csv('2020-01-17-10-19_Cont_Marginal_pooled.csv')
+# Thresh <- read.csv('2020-01-17-10-19_Thresh_Marginal_pooled.csv')
+# Hybrid <- read.csv('2020-01-17-10-19_Hybrid_Marginal_pooled.csv')
+
+
+Cont <- read.csv('2020-01-02_NoCrit_Cont.csv')
+Thresh <- read.csv('2020-01-02_NoCrit_Thresh.csv')
+Hybrid <- read.csv('2020-01-02_NoCrit_Hybrid.csv')
+
 
 density <- rbind(Cont,Thresh,Hybrid)
 
@@ -84,8 +90,8 @@ density <- rbind(Cont,Thresh,Hybrid)
 
 names(density)[1] <- "model_name"
 
-continuous<- density[density$model_name == 'Cont', ]
-threshold<- density[density$model_name == 'Thresh', ]
+continuous<- density[density$model_name == 'Continuous', ]
+threshold<- density[density$model_name == 'Threshold', ]
 hybrid<- density[density$model_name == 'Hybrid', ]
 ```
 
@@ -103,11 +109,11 @@ continuous$theta[which(continuous$is_theta == ' true')] <- 1 # theta
 continuous$theta[which(continuous$is_theta == ' false')] <- 0 # not ya theta 
 
 continuous <- tibble(modelName = continuous$model_name,
-                   participant = continuous$participant,
-                   model = as.factor(continuous$model),
-                   theta = as.factor(continuous$theta),
-                   value = continuous$value,
-                   prob = continuous$prob)
+                     participant = continuous$participant,
+                     model = as.factor(continuous$model),
+                     theta = as.factor(continuous$theta),
+                     value = continuous$value,
+                     prob = continuous$prob)
 
 head(continuous)
 # -------- THRESHOLD MODEL -------------------
@@ -122,11 +128,11 @@ threshold$theta[which(threshold$is_theta == ' true')] <- 1 # theta
 threshold$theta[which(threshold$is_theta == ' false')] <- 0 # not ya theta 
 
 threshold <- tibble(modelName = threshold$model_name,
-                   participant = threshold$participant,
-                   model = as.factor(threshold$model),
-                   theta = as.factor(threshold$theta),
-                   value = threshold$value,
-                   prob = threshold$prob)
+                    participant = threshold$participant,
+                    model = as.factor(threshold$model),
+                    theta = as.factor(threshold$theta),
+                    value = threshold$value,
+                    prob = threshold$prob)
 
 # -------- HYBRID MODEL -------------------
 hybrid$model <- matrix(NA, dim(hybrid)[1])
@@ -140,11 +146,11 @@ hybrid$theta[which(hybrid$is_theta == ' true')] <- 1 # theta
 hybrid$theta[which(hybrid$is_theta == ' false')] <- 0 # not ya theta 
 
 hybrid <- tibble(modelName = hybrid$model_name,
-                   participant = hybrid$participant,
-                   model = as.factor(hybrid$model),
-                   theta = as.factor(hybrid$theta),
-                   value = hybrid$value,
-                   prob = hybrid$prob)
+                 participant = hybrid$participant,
+                 model = as.factor(hybrid$model),
+                 theta = as.factor(hybrid$theta),
+                 value = hybrid$value,
+                 prob = hybrid$prob)
 ```
 
 ```{r}
@@ -212,6 +218,7 @@ d_continuous_rt <- continuous_rt[continuous_rt$model == 0, ]
 
 
 
+
 ```
 
 ```{r}
@@ -244,7 +251,7 @@ for (sub in 1:length(data.subjList)){
 
 # Create as factor for plotting and also include levels so the order is correct 
 threshold$subjString <- factor(threshold$subjString, 
-                                levels = unique(threshold$subjString))
+                               levels = unique(threshold$subjString))
 
 threshold$participant <- factor(threshold$participant, levels = unique(threshold$participant))
 
@@ -307,7 +314,7 @@ for (sub in 1:length(data.subjList)){
 
 # Create as factor for plotting and also include levels so the order is correct 
 hybrid$subjString <- factor(hybrid$subjString, 
-                                levels = unique(hybrid$subjString))
+                            levels = unique(hybrid$subjString))
 
 hybrid$participant <- factor(hybrid$participant, levels = unique(hybrid$participant))
 
@@ -338,53 +345,45 @@ m_hybrid_rt<- hybrid_rt[hybrid_rt$model == 1, ]
 # RT data 
 d_hybrid_rt <- hybrid_rt[hybrid_rt$model == 0, ]
 
+
+model_theta <- rbind(m_continuous_theta,m_threshold_theta,m_hybrid_theta)
+model_rt <- rbind(m_continuous_rt,m_threshold_rt,m_hybrid_rt)
+```
+
+```{r}
+# # The palette with grey:
+# cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+# 
+# # The palette with black:
+# cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+# 
+# # Setup equally spaced colours around wheel 
+# gg_color_hue <- function(n) {
+#   hues = seq(15, 375, length = n + 1)
+#   hcl(h = hues, l = 65, c = 100)[1:n]
+# }
+# n = 3
+# cols = gg_color_hue(n)
+cols = c("red","blue","green2")
+
 ```
 
 ```{r}
 
-# The palette with grey:
-cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
-# The palette with black:
-cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-
-# Setup equally spaced colours around wheel 
-gg_color_hue <- function(n) {
-  hues = seq(15, 375, length = n + 1)
-  hcl(h = hues, l = 65, c = 100)[1:n]
-}
-n = 3
-cols = gg_color_hue(n)
-
-
-```
-
-# Theta data
-```{r}
-
-# -------- Response Error -------------------
 plotTheta<-
-# ------ Data ---------------------
+  # ------ Data ---------------------
 # 23/05, substitute data density estimates for histograms
 ggplot(data=recogdata,aes(x=recogdata$response_error, ..density..)) + geom_histogram(bins = 50, color="black", fill="white") +
   # ------ Model --------
-  # Continuous
-geom_line(data = m_continuous_theta, aes(x = value, prob), size = 0.75, color = "red") +  
+# Continuous
+geom_line(data = model_theta, aes(x = value, prob, colour = factor(modelName)), size = 0.75) +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   xlab("Response Error (radians)") + 
   
-  # Threshold
-  geom_line(data = m_threshold_theta, aes(x = value, prob), size = 0.75, color = "blue") +  
-  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
-  xlab("Response Error (radians)") +
-  
-  #Hybrid
-  geom_line(data = m_hybrid_theta, aes(x = value, prob), size = 0.75, color = "green2") +  
-  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
-  xlab("Response Error (radians)") +
-  scale_color_manual("red","black")+ 
-  
   #Misc
+  scale_colour_manual(name="Models",values=cols) +
+  
   scale_x_continuous(name ="Response Error (radians)", # also x axis name 
                      breaks = c(-2, 0, 2),
                      labels = c(expression(-pi), "0", expression(pi))) + 
@@ -403,43 +402,123 @@ geom_line(data = m_continuous_theta, aes(x = value, prob), size = 0.75, color = 
     panel.background = element_blank(), 
     axis.line = element_line(colour = "black")
   )
+
 ```
 
 ```{r}
 
-# -------- Response Time -------------------
+
 plotRT<-
-# ------ Data ---------------------
+  # ------ Data ---------------------
+# 23/05, substitute data density estimates for histograms
 ggplot(data=recogdata,aes(x=recogdata$response_RT, ..density..)) + geom_histogram(bins = 50, color = "black", fill = "white") +
   # ------ Model --------
-  #Continuous
-geom_line(data = m_continuous_rt, aes(x = value, prob), size = 0.75, color = "red") +  
-facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
-  
-  #Threshold
-geom_line(data = m_threshold_rt, aes(x = value, prob), size = 0.75, color = "blue") +  
-facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
-  #Hybrid
-geom_line(data = m_hybrid_rt, aes(x = value, prob), size = 0.75, color = "green2") +  
-facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
+geom_line(data = model_rt, aes(x = value, prob, colour = factor(modelName)), size = 0.75) +  
+  facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
+
   #Misc
-  xlab("Response Time (seconds)") + 
-  ylab("Probability \n Density") + 
-  ggtitle("Response Time by Subject") +   
+  scale_colour_manual(name="Models",values=cols) +
+  xlab("Response Time (seconds)") +
+  ylab("Probability \n Density") +
+  ggtitle("Response Time by Subject") +
   theme(
     # x axis label
-    # Theme asthetics to make the plot look nicer 
+    # Theme asthetics to make the plot look nicer
     legend.background = element_blank(),
-    axis.text.x = element_text(size=10),  # size of text on the x axis 
-    axis.text.y = element_text(size=10),  # size of text on the y axis 
+    axis.text.x = element_text(size=10),  # size of text on the x axis
+    axis.text.y = element_text(size=10),  # size of text on the y axis
     plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
     plot.subtitle = element_text(hjust = 0.5, size = 13), # subtitle settiings (note, centering requires h = 0.5)
-    plot.caption = element_text(hjust = 0, face = "italic", size = 10), # caption settings 
-    panel.grid.major = element_blank(), 
+    plot.caption = element_text(hjust = 0, face = "italic", size = 10), # caption settings
+    panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
-    panel.background = element_blank(), 
+    panel.background = element_blank(),
     axis.line = element_line(colour = "black")
   )
+
+```
+
+# Theta data
+```{r}
+# # -------- Response Error -------------------
+# plotTheta<-
+# # ------ Data ---------------------
+# # 23/05, substitute data density estimates for histograms
+# ggplot(data=recogdata,aes(x=recogdata$response_error, ..density..)) + geom_histogram(bins = 50, color="black", fill="white") +
+#   # ------ Model --------
+#   # Continuous
+# geom_line(data = m_continuous_theta, aes(x = value, prob), size = 0.75, color = "red") +  
+#   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
+#   xlab("Response Error (radians)") + 
+#   
+#   # Threshold
+#   geom_line(data = m_threshold_theta, aes(x = value, prob), size = 0.75, color = "blue") +  
+#   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
+#   xlab("Response Error (radians)") +
+#   
+#   #Hybrid
+#   geom_line(data = m_hybrid_theta, aes(x = value, prob), size = 0.75, color = "green2") +  
+#   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
+#   xlab("Response Error (radians)") +
+#   
+#   #Misc
+#   scale_colour_manual(name="Models",values=cols) +
+#   
+#   scale_x_continuous(name ="Response Error (radians)", # also x axis name 
+#                      breaks = c(-2, 0, 2),
+#                      labels = c(expression(-pi), "0", expression(pi))) + 
+#   ylab("Probability \n Density") + 
+#   ggtitle("Response Error by Subject") +   
+#   theme(
+#     # x axis label
+#     # Theme asthetics to make the plot look nicer 
+#     axis.text.x = element_text(size=10),  # size of text on the x axis 
+#     axis.text.y = element_text(size=10),  # size of text on the y axis 
+#     plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
+#     plot.subtitle = element_text(hjust = 0.5), # subtitle settiings (note, centering requires h = 0.5)
+#     plot.caption = element_text(hjust = 0, face = "italic"), # caption settings 
+#     panel.grid.major = element_blank(), 
+#     panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), 
+#     axis.line = element_line(colour = "black")
+#   )
+```
+
+```{r}
+# 
+# # -------- Response Time -------------------
+# plotRT<-
+# # ------ Data ---------------------
+# ggplot(data=recogdata,aes(x=recogdata$response_RT, ..density..)) + geom_histogram(bins = 50, color = "black", fill = "white") +
+#   # ------ Model --------
+#   #Continuous
+# geom_line(data = m_continuous_rt, aes(x = value, prob), size = 0.75, color = "red") +  
+# facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
+#   
+#   #Threshold
+# geom_line(data = m_threshold_rt, aes(x = value, prob), size = 0.75, color = "blue") +  
+# facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
+#   #Hybrid
+# geom_line(data = m_hybrid_rt, aes(x = value, prob), size = 0.75, color = "green2") +  
+# facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") +
+#   #Misc
+#   xlab("Response Time (seconds)") + 
+#   ylab("Probability \n Density") + 
+#   ggtitle("Response Time by Subject") +   
+#   theme(
+#     # x axis label
+#     # Theme asthetics to make the plot look nicer 
+#     legend.background = element_blank(),
+#     axis.text.x = element_text(size=10),  # size of text on the x axis 
+#     axis.text.y = element_text(size=10),  # size of text on the y axis 
+#     plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
+#     plot.subtitle = element_text(hjust = 0.5, size = 13), # subtitle settiings (note, centering requires h = 0.5)
+#     plot.caption = element_text(hjust = 0, face = "italic", size = 10), # caption settings 
+#     panel.grid.major = element_blank(), 
+#     panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), 
+#     axis.line = element_line(colour = "black")
+#   )
 
 ```
 
