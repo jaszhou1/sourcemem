@@ -21,20 +21,20 @@ end
 
 %Threshold
 n_param = length(Thresh{1,4});
-params = cat(1,Thresh(:,4));
+params = cat(1,Cont(:,4));
 params = cell2mat(params);
 
 for i = (1:n_param)
-    threshAvg(1,i) = mean(params(:,i));
+    contAvg(1,i) = mean(params(:,i));
 end
 
 %Hybrid
-n_param = length(Hybrid{1,4});
-params = cat(1,Hybrid(:,4));
+n_param = length(Hy{1,4});
+params = cat(1,Cont(:,4));
 params = cell2mat(params);
 
 for i = (1:n_param)
-    hybridAvg(1,i) = mean(params(:,i));
+    contAvg(1,i) = mean(params(:,i));
 end
 %% Write parameter
 this_cont = contAvg;
