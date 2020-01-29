@@ -21,20 +21,20 @@ end
 
 %Threshold
 n_param = length(Thresh{1,4});
-params = cat(1,Cont(:,4));
+params = cat(1,Thresh(:,4));
 params = cell2mat(params);
 
 for i = (1:n_param)
-    contAvg(1,i) = mean(params(:,i));
+    threshAvg(1,i) = mean(params(:,i));
 end
 
 %Hybrid
-n_param = length(Hy{1,4});
-params = cat(1,Cont(:,4));
+n_param = length(Hybrid{1,4});
+params = cat(1,Hybrid(:,4));
 params = cell2mat(params);
 
 for i = (1:n_param)
-    contAvg(1,i) = mean(params(:,i));
+    hybridAvg(1,i) = mean(params(:,i));
 end
 %% Write parameter
 this_cont = contAvg;
@@ -52,11 +52,11 @@ fprintf(fp, [this_line '\n']);
 this_thresh = threshAvg;
 
 this_line = {'Thresh',...
-    num2str(this_thresh(1)), num2str(this_thresh(2)),...
-    num2str(this_thresh(3)),num2str(this_thresh(4)),...
-    num2str(this_thresh(5)),...
-    num2str(this_thresh(6)),num2str(this_thresh(7)),...
-    num2str(this_thresh(8)),num2str(this_thresh(9))};
+    num2str(this_thresh(1)), num2str(0),...
+    num2str(0),num2str(this_thresh(2)),...
+    num2str(this_thresh(3)),...
+    num2str(this_thresh(4)),num2str(this_thresh(5)),...
+    num2str(this_thresh(6)),num2str(0)};
 this_line = strjoin(this_line, ', ');
 fprintf(fp, [this_line '\n']);
 
@@ -64,11 +64,11 @@ fprintf(fp, [this_line '\n']);
 this_hybrid = hybridAvg;
 
 this_line = {'Hybrid',...
-    num2str(this_hybrid(1)), num2str(this_hybrid(2)),...
-    num2str(this_hybrid(3)),num2str(this_hybrid(4)),...
-    num2str(this_hybrid(5)),...
-    num2str(this_hybrid(6)),num2str(this_hybrid(7)),...
-    num2str(this_hybrid(8)),num2str(this_hybrid(9))};
+    num2str(this_hybrid(1)), num2str(0),...
+    num2str(0),num2str(this_hybrid(2)),...
+    num2str(this_hybrid(3)),...
+    num2str(this_hybrid(4)),num2str(this_hybrid(5)),...
+    num2str(this_hybrid(6)),num2str(0)};
 this_line = strjoin(this_line, ', ');
 fprintf(fp, [this_line '\n']);
 

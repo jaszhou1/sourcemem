@@ -24,9 +24,9 @@ participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
 % a badix value specific to the individual is passed down through to the
 % fitting procedure.
 
-badixs = 3:15;
+
 nruns = 10; %Number of times I want to run fits on each participant to find the best fit
-for k = badixs
+for k = 3:15
 % %% Fit Variable Precision (Continuous model)
 % [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];\
 % %% Fit Variable Precision (Continuous model)
@@ -36,7 +36,7 @@ VP_LL_Preds_Recognised = cell(length(participants),8);
 for i = participants
     
     ll = 1e7;
-    badix = badixs(k);
+    badix = k;
     % Multiple Starts
     for j = 1:nruns
         [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPx_pooled(Recognised{i},badix);
@@ -81,7 +81,7 @@ MX_LL_Preds_Recognised = cell(length(participants),8);
 for i = participants
     MX_LL_Preds_Recognised{i,1} = -1;
     MX_LL_Preds_Recognised{i,2} = 0;
-    badix = badixs(k);
+    badix = k;
     
     ll = 1e7;
     for j=1:nruns
@@ -125,7 +125,7 @@ HY_LL_Preds_Recognised = cell(length(participants),8);
 for i = participants
     HY_LL_Preds_Recognised{i,1} = -1;
     HY_LL_Preds_Recognised{i,2} = 0;
-    badix = badixs(k);
+    badix = k;
     ll = 1e7;
     for j = 1:nruns
         [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPMix_pooled(Recognised{i},badix);
@@ -217,29 +217,29 @@ end
 
 
 %% Save mat file 
-filename = [datestr(now,'yyyy_mm_dd_HH_MM'),'_pooled',sprintf('_badix_%d', badixs(k))];
+filename = [datestr(now,'yyyy_mm_dd_HH_MM'),'_pooled',sprintf('_badix_%d', k)];
 save(filename)
 %% Save csv files to use for plotting in R
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_Marginal_pooled',sprintf('_badix_%d', badixs(k)),'.csv'];
+filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_Marginal_pooled',sprintf('_badix_%d', k),'.csv'];
 abs_marginal_mat_to_csv(filename, 'Cont', VP_LL_Preds_Recognised);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Thresh','_Marginal_pooled',sprintf('_badix_%d', badixs(k)),'.csv'];
+filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Thresh','_Marginal_pooled',sprintf('_badix_%d', k),'.csv'];
 abs_marginal_mat_to_csv(filename, 'Thresh', MX_LL_Preds_Recognised);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Hybrid','_Marginal_pooled',sprintf('_badix_%d', badixs(k)),'.csv'];
+filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Hybrid','_Marginal_pooled',sprintf('_badix_%d', k),'.csv'];
 abs_marginal_mat_to_csv(filename, 'Hybrid', HY_LL_Preds_Recognised);
 
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_Joint_pooled',sprintf('_badix_%d', badixs(k)),'.csv'];
+filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_Joint_pooled',sprintf('_badix_%d', k),'.csv'];
 abs_mat_to_csv(filename, 'Cont', VP_LL_Preds_Recognised);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Thresh','_Joint_pooled',sprintf('_badix_%d', badixs(k)),'.csv'];
+filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Thresh','_Joint_pooled',sprintf('_badix_%d', k),'.csv'];
 abs_mat_to_csv(filename, 'Thresh', MX_LL_Preds_Recognised);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Hybrid','_Joint_pooled',sprintf('_badix_%d', badixs(k)),'.csv'];
+filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Hybrid','_Joint_pooled',sprintf('_badix_%d', k),'.csv'];
 abs_mat_to_csv(filename, 'Hybrid', HY_LL_Preds_Recognised);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'), '_param',sprintf('_badix_%d', badixs(k)),'.csv'];
+filename = [datestr(now,'yyyy-mm-dd-HH-MM'), '_param',sprintf('_badix_%d', k),'.csv'];
 param_to_csv(filename,participants,VP_LL_Preds_Recognised,...
     MX_LL_Preds_Recognised,HY_LL_Preds_Recognised);
 
