@@ -8,7 +8,7 @@ function [] = test_octobox(word)
 %   eight sectors which determine which part of the text box to use to position
 %   the word relative to the circle.
 %%
-Screen('Preference', 'SkipSyncTests', 1);
+% Screen('Preference', 'SkipSyncTests', 1);
 screen = init_ptb('max', 128, false);
 % Colour parameters.
 %
@@ -24,6 +24,8 @@ circle_thickness_px = 3;
 cross_size_px = 25;
 cross_thickness_px = 5;
 
+font_name = 'Courier New';
+word_size_px = 14;
 %
 secbound = linspace(-pi,pi,9);
 secbound(9) = [];
@@ -86,7 +88,6 @@ end
 % Draw initial frame to get the start of this part of the trial.
 Screen('FrameOval', screen.win, circle_colour, oval_rect, ...
     circle_thickness_px);
-
 Screen('DrawLine', screen.win, cross_colour, ...
     cross_rect(1), cross_rect(2), cross_rect(3), cross_rect(4), ...
     cross_thickness_px);
@@ -94,6 +95,8 @@ Screen('DrawLine', screen.win, cross_colour, ...
     cross_rect(3), cross_rect(2), cross_rect(1), cross_rect(4), ...
     cross_thickness_px);
 
+Screen('TextSize', screen.win, word_size_px);
+Screen('TextFont', screen.win, font_name);
 
 % Write Text in Text Box
 

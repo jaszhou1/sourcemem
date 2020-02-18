@@ -197,21 +197,20 @@ end
 
 %% Plot Fits superimposed on Data, and save.
 % % Plot
-%  for i = participants
-%     filename = ['Cont_Recog_pooled',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-%     fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
-%     saveas(gcf,filename);
-%     
-%     filename = ['Thresh_Recog_pooled',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-%     fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
-%     saveas(gcf,filename);
-%     
-%      filename = ['Hybrid_Recog_pooled',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-%      fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
-%      saveas(gcf,filename);
-%      close all
-% %     
-%  end
+ for i = participants
+    filename = ['Cont_Recog_pooled',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+    fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
+    saveas(gcf,filename);
+    
+    filename = ['Thresh_Recog_pooled',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+    fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
+    saveas(gcf,filename);
+    
+     filename = ['Hybrid_Recog_pooled',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+     fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
+     saveas(gcf,filename);
+     close all     
+ end
 
 %close all
 

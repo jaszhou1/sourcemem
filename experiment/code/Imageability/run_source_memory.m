@@ -14,7 +14,7 @@ os = getenv('OS');
 VERSION = '3.0';
 switch os
     case {'Windows_NT'}
-        ROOT_DIRECTORY = 'C:\Users\jasonz1\Documents\MATLAB\Experiment 1\Imageability';
+        ROOT_DIRECTORY = 'C:\Users\jason\Documents\GitHub\sourcemem\experiment\code\Imageability\';
         DIR_SEP = '/';
     otherwise
         error(['Unknown operating system from environment variable: ', ...

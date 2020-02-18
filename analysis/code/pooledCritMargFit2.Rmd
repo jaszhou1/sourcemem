@@ -72,14 +72,14 @@ cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2"
 
 ```{r}
 
-# Cont <- read.csv('2020-01-17-10-19_Cont_Marginal_pooled.csv')
-# Thresh <- read.csv('2020-01-17-10-19_Thresh_Marginal_pooled.csv')
-# Hybrid <- read.csv('2020-01-17-10-19_Hybrid_Marginal_pooled.csv')
+Cont <- read.csv('2020-01-29-18-00_Cont_Marginal_pooled.csv')
+Thresh <- read.csv('2020-01-29-18-00_Thresh_Marginal_pooled.csv')
+Hybrid <- read.csv('2020-01-29-18-00_Hybrid_Marginal_pooled.csv')
 
-
-Cont <- read.csv('2020-01-02_NoCrit_Cont.csv')
-Thresh <- read.csv('2020-01-02_NoCrit_Thresh.csv')
-Hybrid <- read.csv('2020-01-02_NoCrit_Hybrid.csv')
+# 
+# Cont <- read.csv('2020-01-02_NoCrit_Cont.csv')
+# Thresh <- read.csv('2020-01-02_NoCrit_Thresh.csv')
+# Hybrid <- read.csv('2020-01-02_NoCrit_Hybrid.csv')
 
 
 density <- rbind(Cont,Thresh,Hybrid)
@@ -90,8 +90,8 @@ density <- rbind(Cont,Thresh,Hybrid)
 
 names(density)[1] <- "model_name"
 
-continuous<- density[density$model_name == 'Continuous', ]
-threshold<- density[density$model_name == 'Threshold', ]
+continuous<- density[density$model_name == 'Cont', ]
+threshold<- density[density$model_name == 'Thresh', ]
 hybrid<- density[density$model_name == 'Hybrid', ]
 ```
 

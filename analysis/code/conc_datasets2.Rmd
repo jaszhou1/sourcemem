@@ -115,8 +115,8 @@ jumboHist <- ggplot() + geom_histogram(data = dataset.no.na, aes(x = dataset.no.
 p10_data <- p10_data[(p10_data$recog_rating > 3),]
 p10_data$recog_rating <- as.factor(p10_data$recog_rating)
 
-p10_data$responsebin <- "fast"
-p10_data[(p10_data$response_RT > 2.3),]$responsebin <- "slow"
+p10_data$responsebin <- "Fast"
+p10_data[(p10_data$response_RT > 2.3),]$responsebin <- "Slow"
 p10_data$response_error <- as.numeric(as.character(p10_data$response_error))
   
   
@@ -139,10 +139,14 @@ plotTheta_RT<- ggplot(data=p10_data,aes(x=response_error)) + geom_histogram(bins
     plot.title = element_text(hjust = 0.5, size = 13),  # title settings (note, centering requires h = 0.5)
     plot.subtitle = element_text(hjust = 0.5, size = 13), # subtitle settiings (note, centering requires h = 0.5)
     plot.caption = element_text(hjust = 0, face = "italic", size = 10), # caption settings
+        panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(), 
     axis.line = element_line(colour = "black")
   )
 
 ```
+
 
 ```{r}
 plotRT_session<- ggplot() + geom_histogram(data=p10_data,aes(x=response_RT, fill = session), color = "black", bins = 50) +  

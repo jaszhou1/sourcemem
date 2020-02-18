@@ -1,4 +1,4 @@
-function design = generate_source_memory_design(seed, par, word_list_low, word_list_high)
+function design = generate_source_memory_design(seed, par, word_list)
 %GENERATE_SOURCE_MEMORY_DESIGN Generate source memory design structure
 %   Generate the factorial (block and trial) structure for the source
 %   memory experiment. As we can't follow Harlow and Donaldson's design
@@ -24,27 +24,15 @@ design = struct();
 num_blocks = par.num_blocks;
 num_encode_trials = par.num_encode_trials;
 num_test_trials = par.num_test_trials;
-num_words_low = size(word_list_low(:,1), 1);
-num_words_high = size(word_list_high(:,1), 1);
-num_words = num_words_low + num_words_high;
+num_words = size(word_list(:,1), 1);
 total_num_stim = num_blocks * num_encode_trials;
 total_num_foil = total_num_stim;
 total_num = total_num_stim + total_num_foil; 
 
-% Number of each type of word
-num_low_stim = total_num_stim/2;
-num_high_stim = total_num_stim/2;
-num_low_foil = total_num_foil/2;
-num_high_foil = total_num_foil/2;
+% Shuffle the indices for the word list
+stim_index = randperm(num_words_high);
 
-% Shuffle the indices for the word list- high and low encode
-
-high_subset = randperm(num_words_high);
-low_subset = randperm(num_words_low);
-
-high_stim_index = high_subset(1:num_high_stim);
-low_stim_index = low_subset(1:num_low_stim);
-high_foil_index = high_subset(num_high_stim+1:end);
+foil_index = high_subset(num_high_stim+1:end);
     high_foil_index = high_foil_index(1:num_high_foil); % I dont need 625 foils, just 60.
 low_foil_index = low_subset(num_low_stim+1:end); 
     low_foil_index = low_foil_index(1:num_low_foil);

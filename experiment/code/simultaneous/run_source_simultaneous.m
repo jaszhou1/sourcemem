@@ -44,12 +44,8 @@ end
 TEMP_DIRECTORY = [ROOT_DIRECTORY DIR_SEP 'temp'];
 OUTPUT_DIRECTORY = [ROOT_DIRECTORY DIR_SEP 'output'];
 WORD_LIST_DIRECTORY = [ROOT_DIRECTORY DIR_SEP 'word-lists'];
-word_list_low = readtable([WORD_LIST_DIRECTORY DIR_SEP 'wordlist_low.txt']);
-word_list_high = readtable ([WORD_LIST_DIRECTORY DIR_SEP 'wordlist_high.txt']);
-word_list_low = word_list_low{:, 1};
-word_list_high = word_list_high{:, 1};
-word_list_low(:, 2) = repmat({'LOW'}, size(word_list_low, 1), 1);
-word_list_high(:, 2) = repmat({'HIGH'}, size(word_list_high, 1), 1);
+word_list = readtable([WORD_LIST_DIRECTORY DIR_SEP 'wordlist.txt']);
+word_list = word_list{:, 1};
 
 %% Show welcome banner.
 disp('Second source memory experiment for Jason Zhou''s PhD Thesis.');
@@ -64,7 +60,7 @@ date_string = datestr(now(), 'YYYY-mm-dd--HH-MM-SS');
 SEED = randseed();
 disp(['Using random seed: ' num2str(SEED) '.']);
 session_data = source_memory_experiment(SEED, subj_number, ...
-    TEMP_DIRECTORY, date_string, word_list_low, word_list_high, DIR_SEP);
+    TEMP_DIRECTORY, date_string, word_list, DIR_SEP);
 
 %% Save a final copy of the session data.
 output_filename = [OUTPUT_DIRECTORY DIR_SEP 'subj-' ...

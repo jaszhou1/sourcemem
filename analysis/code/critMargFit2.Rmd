@@ -75,7 +75,7 @@ cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2"
 
 Cont <- read.csv('2019-11-06_NoCrit_Cont.csv')
 Thresh <- read.csv('2019-11-06_NoCrit_Thresh.csv')
-Hybrid <- read.csv('2019-11-06_NoCrit_Hybrid.csv')
+Hybrid <- read.csv('2019-11-06plot_NoCrit_Hybrid.csv')
 
 density <- rbind(Cont,Thresh,Hybrid)
 
