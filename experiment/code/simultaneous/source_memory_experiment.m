@@ -28,7 +28,7 @@ test_data = [];
 
 for i = 1:par.num_blocks
     % Run the encoding phase of the experiment.
-    %source_memory_encode_intro(scr, par);
+    source_memory_encode_intro(scr, par);
     this_block_encode = design.encode_list{i};
     num_encode_trials = size(this_block_encode, 1);
     this_block_encode_data = [];

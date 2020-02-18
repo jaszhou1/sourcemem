@@ -30,11 +30,7 @@ for i = 1:par.num_blocks
     % Run the encoding phase of the experiment.
     source_memory_encode_intro(scr, par);
     this_block_encode = design.encode_list{i};
-    dddsca;
-    
-    scal
-sca
-num_encode_trials = size(this_block_encode, 1);
+    num_encode_trials = size(this_block_encode, 1);
     this_block_encode_data = [];
     for j = 1:num_encode_trials
         encode_word = this_block_encode{j, 1};
@@ -43,12 +39,11 @@ num_encode_trials = size(this_block_encode, 1);
         encode_cond = this_block_encode{j, 4};
         
         % Simultaneous vs Sequential condition goes here
-        if encode_cond == 'Sequential'
+        if strcmp(encode_cond,'SEQUENTIAL') == 1
             this_block_encode_data = [this_block_encode_data ...
                 source_memory_encode_trial_seq(scr, par, encode_word, encode_angle, encode_type, encode_cond)]; %new row for each trial
             intertrial_wait(scr, par.encode_iti_ms);
-            
-        elseif encode_cond == 'Simultaneous'
+        else
             this_block_encode_data = [this_block_encode_data ...
                 source_memory_encode_trial_sim(scr, par, encode_word, encode_angle, encode_type, encode_cond)]; %new row for each trial
             intertrial_wait(scr, par.encode_iti_ms);
@@ -105,8 +100,7 @@ num_encode_trials = size(this_block_encode, 1);
     end
     test_data = [test_data; this_block_test_data];
     
-    % Write a temporary file out.   %why and how do i shove more stuff in
-    % here
+    % Write a temporary file out.  
     save([temp_directory directory_separator 'temp-subj-' ...
         num2str(subj_number) '-block-' num2str(i) '--' ...
         date_string '.mat'], 'par', 'design', 'encode_data', ...
