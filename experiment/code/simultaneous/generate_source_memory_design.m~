@@ -31,8 +31,8 @@ total_num = total_num_stim + total_num_foil;
 
 % Shuffle the indices for the word list
 shuffle = randperm(num_words);
-stim_index = shuffle(1:total_num_stim);
-foil_index = shuffle(total_num_stim+1:end); % Indexes for words not already used to stimuli
+stim_index = shuffle(1:num_words);
+foil_index = shuffle(num_words+1:end); % Indexes for words not already used to stimuli
 foil_index = foil_index(1:total_num_foil); % Only need this many foils.
 
 % Assigning words in
@@ -42,7 +42,7 @@ foil = word_list(foil_index)';
 
 
 % Add angles to word list.
-stim_cells = cell(total_num_stim, 3);
+stim_cells = cell(total_num_stim, 4);
 stim_cells(:, 1) = stim;
 recog_list = cell(num_blocks, 1);
 test_list = cell(num_blocks, 1);
@@ -59,23 +59,24 @@ else
     cond = cond(2:end);
 end
 
-% Generate the stimuli and foil components
- stim_cells(:, 2) = num2cell(2 * pi * rand(total_num_stim, 1) - pi);
- stim_cells(:, 3) = repmat({'STIM'}, [total_num_stim, 1]);
-
-
-foil_cells = cell(total_num_foil, 4);
-foil_cells(:, 1) = foil;
-foil_cells(:, 2) = num2cell(2 * pi * rand(total_num_foil, 1) - pi); % Unneeded, but keeping dimensions same
-foil_cells(:, 3) = repmat({'FOIL'}, [total_num_foil, 1]);
-foil_cells(:, 4) = repmat({'NA'}, [total_num_foil, 1]);
-
-
-        
-for i = 1:num_blocks %Allocate in blocks
+for i = 1:num_blocks
     
     word_offset = (i - 1) * num_encode_trials;
-    %     word_limit = i * num_encode_trials;   
+    %     word_limit = i * num_encode_trials;
+    stim_cells(:, 2) = num2cell(2 * pi * rand(total_num_stim, 1) - pi);
+    stim_cells(:, 3) = repmat({'STIM'}, [total_num_stim, 1]);
+    if cond(i) == 1
+        stim_cells(:, 4) = repmat({''}, [total_num_stim, 1])%Sequential or Simultaneous
+    else
+        stim_cells(:, 4) =
+    end
+    foil_cells = cell(total_num_foil, 3);
+    foil_cells(:, 1) = foil_shuffle(:,1);
+    foil_cells(:, 2) = num2cell(2 * pi * rand(total_num_foil, 1) - pi); % Unneeded, but keeping dimensions same
+    foil_cells(:, 3) = repmat({'FOIL'}, [total_num_foil, 1]);
+    foil_cells(:, 4) = repmat({'NA'}, [total_num_foil, 1]); % These were not encoded, so no condition
+    
+    
     % For each block, generate an encode list and a test list.
     % this was 1
     
@@ -83,16 +84,8 @@ for i = 1:num_blocks %Allocate in blocks
     encode_word_idx = (word_offset+1):(word_offset + num_words);
     block_encode_words = stim_cells(encode_word_idx, :);
     
-    % Allocate Encode Condition
-    if cond(i) == 1
-        block_encode_words(:, 4) = repmat({'SEQUENTIAL'}, [num_words, 1]);%Sequential or Simultaneous
-    else
-        block_encode_words(:, 4) = repmat({'SIMULTANEOUS'}, [num_words, 1]);
-    end
-    
     % Create the encode word list.
     encode_list{i, :} = block_encode_words;
-    
     
     % Create the recognition word list
     recog_list{i, :} = [ recog_list{i, :}; block_encode_words];
