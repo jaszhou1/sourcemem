@@ -1,6 +1,6 @@
 % Screen('Preference', 'SkipSyncTests', 1);
-screen = init_ptb('max', 128, false);
-ShowCursor;
+% screen = init_ptb('max', 128, false);
+% ShowCursor;
 % Colour parameters.
 %
 word = 'TEST';
@@ -13,7 +13,7 @@ circle_colour = [64, 64, 64];
 cross_colour = [0, 0, 0];
 
 oval_rect = screen.centre_fn(circle_radius_px * 2, ...
-    circle_radius_px * 2);d
+    circle_radius_px * 2);
 % Sizing/positioning parameters.
 circle_radius_px = 191; % computed 20px as being around 6% of the circle
 circle_thickness_px = 3;

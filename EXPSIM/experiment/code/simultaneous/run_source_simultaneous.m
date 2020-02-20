@@ -22,7 +22,7 @@ if ispc
         ROOT_DIRECTORY = 'C:\Users\jasonz1\Documents\MATLAB\Experiment 1\simultaneous';
         DIR_SEP = '/';
 elseif isunix
-      ROOT_DIRECTORY = '~/sourcemem/experiment/code/simultaneous';
+      ROOT_DIRECTORY = '~/sourcemem/EXPSIM/experiment/code/simultaneous';
         DIR_SEP = '/';
 % elseif ismac
      % Code to run on Mac platform

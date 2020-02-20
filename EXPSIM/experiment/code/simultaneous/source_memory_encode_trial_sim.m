@@ -1,4 +1,4 @@
-function data = source_memory_encode_trial_seq(screen, par, word, angle, type, cond)
+function data = source_memory_encode_trial_sim(screen, par, word, angle, type, cond)
 %SOURCE_MEMORY_ENCODE_TRIAL Main function for source memory trial (encode)
 %   Provides the interface for a trial in the encode phase of the source
 %   memory experiment.
@@ -9,8 +9,9 @@ function data = source_memory_encode_trial_seq(screen, par, word, angle, type, c
 encode_fixation(screen, par);
 %% Display 
 
-% % Display the encode angle and word display.
- encode_display_time = encode_word_angle(screen, par, angle, word, false);
+% Display the encode angle and word display.
+encode_display_time = encode_word_angle(screen, par, angle, word, false);
+
 % 
 % Display the angle verification display.
 [mouse_angle, mouse_radius, response_time, ...
@@ -24,8 +25,8 @@ while need_repeat
     % Need to put an error display for the participant.
     encode_accuracy_error(screen, par);
     
-    % Repeat the angle.
-    encode_word_angle(screen, par, angle, word, true);
+    % Display the encode angle and word display.
+    encode_display_time = encode_word_angle(screen, par, angle, word, true);
     
     % Get the participant to reproduce the angle.
     [this_angle, this_radius, this_rt, ...
@@ -38,7 +39,11 @@ while need_repeat
     this_error = [angular_error, this_error];
     
     % Should we repeat again?
+    % Repeat because error too large
     need_repeat = abs(this_error) > par.max_encode_reproduction_error_rad;
+    
+    % Repeat because movement too quick
+    % Need to write this, or ask Simon about the version in his code.
 end
 
 % Package up all of the data.
@@ -48,7 +53,7 @@ data.target_angle = angle;
 data.type = type;
 data.cond = cond;
 data.encode_display_time = encode_display_time;
-data.word_display_time = word_display_time;
+data.word_display_time = encode_display_time;
 data.reproduction_angle = mouse_angle;
 data.reproduction_radius = mouse_radius;
 data.reproduction_rt = response_time;

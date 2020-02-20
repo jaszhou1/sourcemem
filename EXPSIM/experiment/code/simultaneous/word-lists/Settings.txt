@@ -1,0 +1,7 @@
+FAM 	Familiarity rating (100-700) 	    
+CONC 	Concreteness rating (100-700) 	    
+IMAG 	Imagability rating (100-700)
+
+
+Minimum letters = 4
+Maximum letters = 4

@@ -39,17 +39,17 @@ while true
     % Using KbName gave me 1! and 2@- didn't know how to get around this, so
     % this is just something that should work until I figure out something
     % better.
-    if KeyCode(49) == 1 % keys 1 to 6 (below the function keys)
+    if KeyCode(31) == 1 % keys 1 to 6 (below the function keys)
         x = 1;
-    elseif KeyCode(50) == 1
+    elseif KeyCode(32) == 1
         x = 2;
-    elseif KeyCode(51) == 1
+    elseif KeyCode(33) == 1
         x = 3;
-    elseif KeyCode(52) == 1
+    elseif KeyCode(34) == 1
         x = 4;
-    elseif KeyCode(53) == 1
+    elseif KeyCode(35) == 1
         x = 5;
-    elseif KeyCode(54) == 1
+    elseif KeyCode(36) == 1
         x = 6;
     else
         continue
