@@ -5,6 +5,9 @@ function data = source_memory_memory_trial(screen, par, word, angle, type, cond)
 %
 % Simon Lilburn <lilburns AT unimelb DOT edu DOT au>
 
+too_fast = true;
+
+while too_fast == true
 % Display a fixation cross.
 memory_fixation(screen, par);
 
@@ -13,13 +16,10 @@ word_display_time = memory_word(screen, par, word);
 
 % Obtain the recalled angle from the participant.
 [mouse_angle, mouse_radius, response_time, ...
-    angular_error, mouse_trajectory] = ...
+    angular_error, mouse_trajectory,too_fast] = ...
     memory_reproduce(screen, par, angle);
+end
 
-% Obtain a confidence rating from the participant. not collecting this for
-% source
-%[confidence_prop, conf_response_time] = ...
-    %memory_confidence(screen, par);
 
 % Package up the data.
 data = struct();

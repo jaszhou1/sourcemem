@@ -12,14 +12,22 @@ os = getenv('OS');
 
 %% Set the main parameters for running the experiment (directories, etc.)
 VERSION = '3.0';
-switch os
-    case {'Windows_NT'}
-        ROOT_DIRECTORY = 'C:\Users\jason\Documents\GitHub\sourcemem\experiment\code\Imageability\';
+
+if ispc
+        ROOT_DIRECTORY = 'C:\Users\jasonz1\Documents\MATLAB\Experiment 1';
         DIR_SEP = '/';
-    otherwise
-        error(['Unknown operating system from environment variable: ', ...
-            os]);
+elseif isunix
+      ROOT_DIRECTORY = '~/sourcemem/EXPIMG/experiment/code/Imageability';
+        DIR_SEP = '/';
+% elseif ismac
+     % Code to run on Mac platform
+else
+      error(['Unknown operating system from environment variable: ', ...
+      os]);
 end
+
+
+
 TEMP_DIRECTORY = [ROOT_DIRECTORY DIR_SEP 'temp'];
 OUTPUT_DIRECTORY = [ROOT_DIRECTORY DIR_SEP 'output'];
 WORD_LIST_DIRECTORY = [ROOT_DIRECTORY DIR_SEP 'word-lists'];

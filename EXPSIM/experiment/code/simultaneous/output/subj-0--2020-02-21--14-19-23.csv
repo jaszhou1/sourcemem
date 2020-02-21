@@ -1,0 +1,9 @@
+word, condition, recog_rating, recog_RT, target_angle, response_angle, response_error, response_RT
+LINE, STIM, 5, 0.9769, -2.8054, 0.6551, 2.8226, 0.5165
+CAFE, FOIL, 5, 0.2447, NA, NA, NA, NA
+SING, STIM, 4, 1.2326, 0.1281, 0.9189, -0.7908, 1.0830
+SLAP, FOIL, 3, 0.3937, NA, NA, NA, NA
+ONLY, STIM, 3, 1.0533, 0.0964, 3.1000, -3.0035, 9.6969
+HOWL, STIM, 2, 0.2208, -1.1633, 2.3562, 2.7637, 11.3797
+DROP, FOIL, 3, 0.2368, NA, NA, NA, NA
+PIPE, FOIL, 4, 0.0081, NA, NA, NA, NA

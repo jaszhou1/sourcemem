@@ -47,7 +47,7 @@ for i = 1:par.num_blocks
     
         %Show some instructions
         source_memory_maths_intro(scr, par);       
-        this_block_maths_data = maths_distractor(scr, 30); 
+        this_block_maths_data = maths_distractor(scr, 5); %Change back to 30 if testing 
             
         %have a maths data struc overall, append the new block at the end.
         %otherwise, at the end it would only be data from the last
