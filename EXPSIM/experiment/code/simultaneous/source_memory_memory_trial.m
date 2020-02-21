@@ -5,9 +5,7 @@ function data = source_memory_memory_trial(screen, par, word, angle, type, cond)
 %
 % Simon Lilburn <lilburns AT unimelb DOT edu DOT au>
 
-too_fast = true;
 
-while too_fast == true
 % Display a fixation cross.
 memory_fixation(screen, par);
 
@@ -18,7 +16,6 @@ word_display_time = memory_word(screen, par, word);
 [mouse_angle, mouse_radius, response_time, ...
     angular_error, mouse_trajectory,too_fast] = ...
     memory_reproduce(screen, par, angle);
-end
 
 
 % Package up the data.
@@ -33,5 +30,6 @@ data.reproduction_radius = mouse_radius;
 data.reproduction_rt = response_time;
 data.reproduction_error = angular_error;
 data.mouse_trajectory = mouse_trajectory;
+data.too_fast = too_fast;
 
 end

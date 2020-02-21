@@ -11,7 +11,7 @@ Screen('TextSize', screen.win, par.word_size_px); %doing it twice to get the sta
 Screen('TextFont', screen.win, par.font_name);
 DrawFormattedText(screen.win, 'TOO FAST', 'center', ...
 	'center', par.word_colour);
-Screen('Flip', screen.win, vbl + (par.intro_time/1000)); 
+Screen('Flip', screen.win, vbl + (5)); 
 
 end
 
