@@ -52,20 +52,6 @@ while within_bounds
     if ((vbl-trial_start) < 0.3 && mouse_dist > par.circle_radius_px/5)
         memory_reproduce_too_fast(screen,par)
         too_fast = true;
-        
-        % So there are enough outputs to go back through the loop
-        
-        mouse_angle = 1e7;
-        mouse_radius = 1e7;
-        response_time = 1e7;
-        angular_error = 1e7;
-        
-        
-        % Keep the trial, and tag the trial as a representation?
-        
-        % What should I do now? Throw away the trial? If I let them keep
-        % going, is it more untimed opportunity to think on this trial?
-        return
     else
         too_fast = false;
     end

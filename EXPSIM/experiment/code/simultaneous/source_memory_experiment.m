@@ -100,6 +100,9 @@ for i = 1:par.num_blocks
     end
     test_data = [test_data; this_block_test_data];
     
+    % Display accuracy feedback for block
+    source_memory_feedback(scr,par,this_block_test_data)
+    
     % Write a temporary file out.  
     save([temp_directory directory_separator 'temp-subj-' ...
         num2str(subj_number) '-block-' num2str(i) '--' ...

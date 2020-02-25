@@ -19,8 +19,8 @@ os = getenv('OS');
 VERSION = '1.0';
 
 if ispc
-        ROOT_DIRECTORY = 'C:\Users\jasonz1\Documents\MATLAB\Experiment 1\simultaneous';
-        DIR_SEP = '/';
+        ROOT_DIRECTORY = 'C:\Users\jason\Documents\GitHub\sourcemem\EXPSIM\experiment\code\simultaneous';
+        DIR_SEP = '\';
 elseif isunix
       ROOT_DIRECTORY = '~/sourcemem/EXPSIM/experiment/code/simultaneous';
         DIR_SEP = '/';

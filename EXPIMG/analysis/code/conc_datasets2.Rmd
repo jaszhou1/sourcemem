@@ -7,13 +7,14 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
 
 ```
 
 
 
 ```{r}
-setwd('C:/Users/jason/Documents/GitHub/sourcemem/analysis/data/')
+setwd('C:/Users/jason/Documents/GitHub/sourcemem/EXPIMG/analysis/data/')
 dataset <- data.frame()
 
 participants = c("p1","p2","p3","p4","p4","p5","p6","p7","p8","p9","p10","p11","p12","p13","p15","p16","p17","p18","p19","p20") 
