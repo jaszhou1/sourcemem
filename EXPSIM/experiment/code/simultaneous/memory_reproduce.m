@@ -50,7 +50,6 @@ while within_bounds
     
     % Is the mouse too far from the starting point before 300ms?
     if ((vbl-trial_start) < 0.3 && mouse_dist > par.circle_radius_px/5)
-        memory_reproduce_too_fast(screen,par)
         too_fast = true;
     else
         too_fast = false;
@@ -78,5 +77,9 @@ end
 ang_diff = target_angle - mouse_angle;
 angular_error = atan2(sin(ang_diff), cos(ang_diff));
 response_time = vbl - trial_start;
+
+if too_fast
+    memory_reproduce_too_fast(screen,par)
+end
 
 end

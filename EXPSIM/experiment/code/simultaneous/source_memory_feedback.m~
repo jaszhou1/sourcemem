@@ -1,0 +1,32 @@
+function [] = source_memory_feedback(screen, par, error)
+%SOURCE_MEMORY_FEEDBACK. Gives participants feedback for their performance
+% on the previous block.
+% Jason Zhou <jasonz1 AT student DOT unimelb DOT edu DOT au>
+
+% Word size and font
+Screen('TextSize', screen.win, par.word_size_px);
+Screen('TextFont', screen.win, par.font_name);
+
+%% Calculate percentage to display
+
+nnz(error(:,1)>pi/2)/
+
+%% Initial display
+
+%Display instructions
+
+DrawFormattedText(screen.win, ['Block X of X \n\n\n'...
+    'Your Accuracy on the Previous Block'...
+    error ...
+    ],...
+    'center', 'center', par.word_colour);
+trial_start = Screen('Flip', screen.win);
+vbl = trial_start;
+
+ DrawFormattedText(screen.win, ['Block X of X \n\n\n'...
+    'Your Accuracy on the Previous Block'...
+    error ...
+    ],...
+    'center', 'center', par.word_colour);
+Screen('Flip', screen.win, vbl + (par.intro_time/1000)); 
+end

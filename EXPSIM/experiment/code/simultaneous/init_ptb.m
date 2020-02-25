@@ -35,7 +35,7 @@ screen.win = win;
 screen.rect = win_rect;
 
 % Turn the cursor off.
-HideCursor();
+HideCursor(screen_number);
 
 % Get the interflip interval.
 screen.ifi = Screen('GetFlipInterval', win);

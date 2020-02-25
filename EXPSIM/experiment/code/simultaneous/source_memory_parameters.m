@@ -8,11 +8,11 @@ function res = source_memory_parameters()
 res = struct();
 
 % Structure parameters.
-res.num_blocks = 2; % 14 blocks in 50 mins
-res.num_encode_trials = 2; %10
-res.num_maths_trials = 2; %10
-res.num_recog_trials = 2; %10
-res.num_test_trials = 2; %10
+res.num_blocks = 5; % 14 blocks in 50 mins
+res.num_encode_trials = 10; %10
+res.num_maths_trials = 10; %10
+res.num_recog_trials = 10; %10
+res.num_test_trials = 10; %10
 
 
 % Timing parameters.

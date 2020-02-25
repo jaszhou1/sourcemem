@@ -99,13 +99,10 @@ for i = 1:par.num_blocks
             source_memory_memory_trial(scr, par, test_word, test_angle, test_word_type, test_word_cond)];
         intertrial_wait(scr, par.test_iti_ms);
     end
-    this_block_error = vertcat(this_block_test_data.reproduction_error);
-    this_block_error = abs(this_block_error);
     test_data = [test_data; this_block_test_data];
     
     % Display accuracy feedback for block
-
-    source_memory_feedback(scr,par,this_block_error,i)
+    source_memory_feedback(scr,par,this_block_error)
     
     % Write a temporary file out.  
     save([temp_directory directory_separator 'temp-subj-' ...
