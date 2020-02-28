@@ -9,7 +9,7 @@ Screen('TextFont', screen.win, par.font_name);
 
 %% Calculate percentage to display
 
-perc_correct = nnz(error(:,1)>pi/2)/par.num_test_trials*100;
+perc_correct = nnz(error(:,1)<pi/4)/par.num_test_trials*100;
 %% Initial display
 
 

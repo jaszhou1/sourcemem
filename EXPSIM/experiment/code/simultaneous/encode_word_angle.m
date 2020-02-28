@@ -78,11 +78,11 @@ DrawFormattedText(screen.win, word, word_centre_x, ...
 trial_start = Screen('Flip', screen.win);
 vbl = trial_start;
 
-% Display the angle until the end of the angle encoding period.
+% Display the word and angle until the end of the angle encoding period.
 if is_repeat
-    display_time = par.angle_repeat_duration_ms / 1000;
+    display_time = par.word_encoding_ms / 1000;
 else
-    display_time = par.angle_display_duration_ms / 1000;
+    display_time = par.word_encoding_ms / 1000;
 end
 
 
