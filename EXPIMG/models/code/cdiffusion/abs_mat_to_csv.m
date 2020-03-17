@@ -8,7 +8,7 @@ function [] = abs_mat_to_csv(filename, model_string, input_cells)
 
   %% Parameters for the plots.
   time_quantiles = [0.1, 0.5, 0.9];
-  n_theta_obs_quantiles = 4;
+  n_theta_obs_quantiles = 1;
   time_step = 0.01;
   min_rt_filter = 0.15;
   max_rt_filter = 5.5;
@@ -80,7 +80,7 @@ end
         fprintf(fp, [this_line '\n']);
       end
     end
-    
+%     
     
 %     % Output the observed data QxQ points.
 %     [qxq, qxq_thetas] = data_to_qxq(this_data_cell, ...

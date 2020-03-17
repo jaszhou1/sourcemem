@@ -1,8 +1,8 @@
 ---
-title: "Real_QxQ"
+title: "Group_QxQ"
 author: "jason"
-date: "April 8, 2019"
-output: pdf_document
+date: "March 9, 2020"
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -20,8 +20,8 @@ knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/EXPIMG/models/figures/cDiffu
 ```{r}
 data <- read.csv("QQ_data.csv")
 cont <- read.csv("2020_02_10_19_28_pooled_cont4q.csv")
-thresh <- read.csv("2020_02_10_19_28_pooled_threshold4q.csv") 
-hybrid <- read.csv("2020_02_10_19_28_pooled_hybrid4q.csv")
+thresh <- read.csv("2020_02_10_19_28_pooled_cont4q.csv") 
+hybrid <- read.csv("2020_02_10_19_28_pooled_cont4q.csv")
 
 dataset <- rbind(data,cont,thresh,hybrid)
 dataset$quantile_idx <- as.factor(dataset$quantile_idx)
@@ -98,10 +98,10 @@ model <- dataset_b[(dataset_b$is_model==' true'),]
 model <- model[model$theta>=0,]
 
 # Continuous
-cont <- model[model$model_name == 'Continuous',]
+cont <- model[model$model_name == 'Cont',]
 
 # Threshold
-thresh <- model[model$model_name == 'Threshold',]
+thresh <- model[model$model_name == 'Thresh',]
 
 # Continuous
 hybrid <- model[model$model_name == 'Hybrid',]

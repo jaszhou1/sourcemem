@@ -1,0 +1,43 @@
+---
+title: "RTs_over_trial"
+author: "jason"
+date: "March 12, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+
+```
+
+```{r}
+setwd("~/GitHub/sourcemem/EXPIMG/analysis/data")
+dataset <- read.csv('dataset.csv')
+dataset <- dataset[dataset$type!=' FOIL', ]
+```
+
+```{r}
+
+
+ssdata <- function(x) {
+  rts <- as.numeric(as.character(dataset[dataset$participant==x, "response_RT"]))
+  rts <- rts[rts < 1.5]
+  return(rts)
+}
+
+plot.ssdata <- function(x) {
+  png(filename=paste0("ssdata-", x, ".png"))
+  plot(ssdata(x), ylim=c(0,1.5))
+  abline(v=140, col="red")
+  abline(v=280, col="red")
+  abline(v=420, col="red")
+  abline(v=560, col="red")
+  dev.off()
+}
+```
+```{r}
+for (i in unique(dataset$participant)){
+  plot.ssdata(i)
+  print(i)
+}
+```

@@ -1,8 +1,8 @@
 ---
-title: "Real_QxQ"
+title: "Indiv_QxQ"
 author: "jason"
-date: "April 8, 2019"
-output: pdf_document
+date: "March 9, 2020"
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -18,9 +18,10 @@ knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/EXPIMG/models/figures/cDiffu
 ```
 
 ```{r}
-data <- read.csv("QQ_data.csv")
+#data <- read.csv("QQ_data.csv")
+data <- read.csv("DataOneBin.csv")
 cont <- read.csv("2020_02_10_19_28_pooled_cont4q.csv")
-thresh <- read.csv("2020_02_10_19_28_pooled_threshold4q.csv") 
+thresh <- read.csv("2020_02_10_19_28_pooled_thresh4q.csv") 
 hybrid <- read.csv("2020_02_10_19_28_pooled_hybrid4q.csv")
 
 dataset <- rbind(data,cont,thresh,hybrid)
@@ -60,6 +61,11 @@ dataset$subjString <- factor(dataset$subjString,
 data.subjString <- unique(dataset$subjString)
 
 
+participant <- 19
+
+dataset <- dataset[dataset$participant == participant, ]
+
+
 ```
 
 ```{r}
@@ -87,6 +93,8 @@ data.subjString <- unique(dataset$subjString)
  }
 
 dataset_b <- truncate.model(dataset)
+
+
 ```
 
 ```{r}
@@ -146,34 +154,21 @@ cols = gg_color_hue(n)
 
 ```{r}
 
-# ---------- Plot Model Predictions ----------------------
-# Plot the model predictions as POINTS and LINES 
+# ---------- Plot Data ----------------------
+# Plot the model predictions as POINTS 
 QxQ <- ggplot(data = data, 
             aes(x = data$theta, 
                 y = data$rt, 
                 group = data$quantile_idx, 
                 colour = quantile_idx)) + geom_point() +
+# ---------- Plot Model Predictions ----------------------
+# Plot the model predictions as LINES 
+  geom_line(data = model,
+            aes(x = model$theta,
+                y = model$rt,
+                group=interaction(model$quantile_idx, model$model_name), 
+                linetype = model$model_name)) +
   
-# Plot continuous model           
-  geom_line(data = cont,
-            aes(x = cont$theta,
-                y = cont$rt,
-                group = cont$quantile_idx), size = 0.55, linetype = "dashed") +
-  
-  # Plot threshold model           
-  geom_line(data = thresh,
-            aes(x = thresh$theta,
-                y = thresh$rt,
-                group = thresh$quantile_idx), size = 0.55, linetype = "solid") +
-  
-  # Plot hybrid model           
-  geom_line(data = hybrid,
-            aes(x = hybrid$theta,
-                y = hybrid$rt,
-                group = hybrid$quantile_idx), size = 0.55, linetype = "dotdash") +
-  
-   # ------------ Group plot by participant -----------------
-facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 
   # ------------ Change some axes settings  ----------------
 #scale_y_continuous(limits=c(0, 3)) + 
   scale_x_continuous(name ="Response Error (degrees)", # also x axis name 

@@ -1,7 +1,7 @@
 ---
-title: "poolCritMargFit2"
+title: "RTQuantiles"
 author: "jason"
-date: "Feb 23, 2020"
+date: "Mar 11, 2020"
 output: html_document
 ---
 
@@ -11,7 +11,6 @@ rm(list = ls())
 
 knitr::opts_chunk$set(echo = TRUE)
 
-#knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/models/figures/critVarFits")
 knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/EXPIMG/models/figures/cDiffusionFits")
 
 library(tidyverse)
@@ -58,15 +57,17 @@ dataset$participant <- factor(dataset$participant, levels = unique(dataset$parti
 recogdata <- dataset[dataset$recog_rating>3,]
 #recogdata$response_error <- abs(recogdata$response_error)
 
+RTfiltered <- dataset[dataset$response_RT<1.5,]
+
 ```
 
 ```{r}
 RTquantiles <- data.frame()
 
 #Find quantiles for RT data
-for (sub in 1:length(data.subjList)){
+for (sub in 1:20){
   
-quantiles <- unname(quantile(recogdata[recogdata$subString == sub,]$response_RT, probs = c(0.1,0.5,0.9)))
+quantiles <- unname(quantile(recogdata[recogdata$participant == sub,]$response_RT, probs = c(0.1,0.5,0.9)))
 
 this.quant <- data.frame()
 this.quant[1,1] <- quantiles[1]
@@ -76,12 +77,28 @@ this.quant[2,2] <- 0.5
 this.quant[3,1] <- quantiles[3]
 this.quant[3,2] <- 0.9
 
-this.quant[,3] <- unique(recogdata$subjString)[sub]
+this.quant[,3] <- sub
 
 
 RTquantiles <- rbind(RTquantiles,this.quant)
 }
 colnames(RTquantiles) <- c("value", "quantile","participant")
+
+for (sub in 1:length(data.subjList)){
+  
+  # Get the subject number 
+  subjNo <- data.subjList[sub]
+  
+  # Run function, return data frame (dataset)
+  RTquantiles <- create.subj.string(subjNo, RTquantiles)
+  
+}
+
+# Create as factor for plotting and also include levels so the order is correct 
+RTquantiles$subjString <- factor(RTquantiles$subjString, 
+                             levels = unique(RTquantiles$subjString))
+
+RTquantiles <- RTquantiles[!RTquantiles$participant == 14,]
 ```
 
 ```{r}
@@ -222,7 +239,6 @@ continuous.subjString <- unique(continuous$subjString)
 
 # Thetas 
 continuous_theta <- continuous[continuous$theta == 1,]
-
 
 # RTs 
 continuous_rt <- continuous[continuous$theta == 0,]
@@ -436,6 +452,11 @@ plotRT<-
   # ------ Data ---------------------
 # 23/05, substitute data density estimates for histograms
 ggplot(data=recogdata,aes(x=recogdata$response_RT, ..density..)) + geom_histogram(bins = 50, color = "black", fill = "white") +
+  
+  # ----Plot RT data quantiles ------
+geom_vline(xintercept = 3, linetype="dotted", 
+                color = "blue", size=1.5)
+
   # ------ Model --------
 geom_line(data = model_rt, aes(x = value, prob, colour = factor(modelName)), size = 0.75) +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
