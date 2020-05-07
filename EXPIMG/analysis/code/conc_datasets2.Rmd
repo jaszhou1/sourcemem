@@ -19,68 +19,20 @@ dataset <- data.frame()
 
 participants = c("p1","p2","p3","p4","p4","p5","p6","p7","p8","p9","p10","p11","p12","p13","p15","p16","p17","p18","p19","p20") 
 
-#participants = c("p1","p2","p3","p4","p4","p5","p6","p7","p8","p9","p10","p11","p12",
-                 #"p13","p14","p15","p16","p17","p18","p19","p20") #c is vector, list is v general
 for (i in participants){
   participant_dataset <- data.frame()
   for (j in 1:4){
     sessions = c("1","2","3","4")
     s <- j
     this_session_dataset <- read.csv(paste(i,"_",j,".csv",sep=""))
-    this_session_dataset$session <- j
-    this_session_dataset$session <- as.factor(this_session_dataset$session)
     participant_dataset <- rbind(participant_dataset,this_session_dataset)
-    
-    participant_dataset <- participant_dataset[participant_dataset$type!=' FOIL', ]
-    
-    
-    participant_dataset$response_RT <- as.numeric(as.vector(participant_dataset$response_RT))
-        participant_dataset$response_angle<- as.numeric(as.vector(participant_dataset$response_angle))
-    
-  }
-#--- FILTERING SLOW RESPONSES ---#
 
-  # 1.Filter out responses slower than 5 seconds
-  participant_dataset <- participant_dataset[!(participant_dataset$response_RT>5),]
-  
-  # 2.Filter out responses slower than three standard deviations above median RT for each participant
-  participant_dataset<-participant_dataset[!(participant_dataset$response_RT>(3*(sd(participant_dataset$response_RT)) + median(participant_dataset$response_RT,na.rm=TRUE))), ]
-#---------------------------------
-  
+  }
   participant_dataset$participant <- i
-  
-  name <- paste(i,"data",sep="_")
-  assign(name,participant_dataset)
   dataset <- rbind(dataset,participant_dataset) #could have done this with lists, but because its all the same, we are doing it with one big dataset, added a new variable that identifies.
 }
 
 
-#Cleaning up the dataset
-
-dataset <- dataset[,-1] #removes the first variable, which are these weird row labels
-dataset <- dataset[,-1] #removes STIM/FOIL label
-
-
-#Recoding Participant 
-dataset$participant[dataset$participant=="p1"]<-1
-dataset$participant[dataset$participant=="p2"]<-2
-dataset$participant[dataset$participant=="p3"]<-3
-dataset$participant[dataset$participant=="p4"]<-4
-dataset$participant[dataset$participant=="p5"]<-5
-dataset$participant[dataset$participant=="p6"]<-6
-dataset$participant[dataset$participant=="p7"]<-7
-dataset$participant[dataset$participant=="p8"]<-8
-dataset$participant[dataset$participant=="p9"]<-9
-dataset$participant[dataset$participant=="p10"]<-10
-dataset$participant[dataset$participant=="p11"]<-11
-dataset$participant[dataset$participant=="p12"]<-12
-dataset$participant[dataset$participant=="p13"]<-13
-dataset$participant[dataset$participant=="p15"]<-15
-dataset$participant[dataset$participant=="p16"]<-16
-dataset$participant[dataset$participant=="p17"]<-17
-dataset$participant[dataset$participant=="p18"]<-18
-dataset$participant[dataset$participant=="p19"]<-19
-dataset$participant[dataset$participant=="p20"]<-20
 
 #Recoding Low/High
 dataset$condition <- relevel(dataset$condition," LOW")
@@ -92,9 +44,9 @@ dataset$response_error <- as.numeric(as.character(dataset$response_error))
 dataset.no.na <- dataset[dataset$type!=' FOIL', ]
 dataset.na <- dataset[dataset$type==' FOIL', ]
 
-recog <- dataset.no.na[dataset$recog_rating > 3, ]
-unrecog <- dataset.no.na[dataset$recog_rating <= 3, ]
-high <- dataset.no.na[dataset$recog_rating == 6, ]
+recog <- dataset.no.na[dataset.no.na$recog_rating > 3, ]
+unrecog <- dataset.no.na[dataset.no.na$recog_rating <= 3, ]
+high <- dataset.no.na[dataset.no.na$recog_rating == 6, ]
 
 
 allHist<- ggplot(data = dataset.no.na, aes(x = dataset.no.na$response_error)) + geom_histogram(bins = 100) + scale_y_continuous(limits=c(0, 700)) + labs(title ="All Recognition Ratings", x = "Response Error (radians)", y = "Frequency") + theme_classic()
@@ -106,7 +58,7 @@ recogHist<- ggplot(data = recog, aes(x = recog$response_error)) + geom_histogram
 
 highHist<- ggplot(data = high, aes(x = high$response_error)) + geom_histogram(bins = 100)+ scale_y_continuous(limits=c(0, 700)) + labs(title ="Highlt Recognized Items", x = "Response Error (radians)", y = "Frequency") + theme_classic()
 
-jumboHist <- ggplot() + geom_histogram(data = dataset.no.na, aes(x = dataset.no.na$response_error, fill="All"), bins = 100) + geom_histogram(data = recog, aes(x = recog$response_error, fill="Recognized"), bins = 100) + geom_histogram(data = unrecog, aes(x = unrecog$response_error, fill="Unrecognized"), bins = 100) + theme_classic()+ labs(x = "Response Error (radians)", y = "Frequency",fill = "Recognition Rating")
+jumboHist <- ggplot() + geom_histogram(data = dataset.no.na, aes(x = dataset.no.na$response_error, fill="All"), bins = 50) + geom_histogram(data = recog, aes(x = recog$response_error, fill="Recognized"), bins = 50) + geom_histogram(data = unrecog, aes(x = unrecog$response_error, fill="Unrecognized"), bins = 50) + theme_classic()+ labs(x = "Response Error (radians)", y = "Frequency",fill = "Recognition Rating")
 # Write CSV in R
 #write.csv(dataset, file = "dataFiltered3.csv")
 

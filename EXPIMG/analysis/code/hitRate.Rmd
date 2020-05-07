@@ -11,6 +11,7 @@ knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/analysis/data/")
 ```
 
 ```{r}
+setwd("~/GitHub/sourcemem/EXPIMG/analysis/data")
 rawData <- read.csv('dataset.csv')
 LowData <- rawData[rawData$condition==' LOW',]
 HighData <- rawData[rawData$condition==' HIGH',]

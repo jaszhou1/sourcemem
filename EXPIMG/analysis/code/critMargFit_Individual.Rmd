@@ -55,7 +55,7 @@ dataset$subjString <- factor(dataset$subjString,
 dataset$participant <- factor(dataset$participant, levels = unique(dataset$participant))
 
 
-participant <- 8
+participant <- 20
 
 dataset <- dataset[dataset$participant == participant, ]
 recogdata <- dataset[dataset$recog_rating>3,]
@@ -459,19 +459,19 @@ ggplot(data=recogdata,aes(x=recogdata$response_RT, ..density..)) + geom_histogra
   # ----Plot RT data quantiles ------
 
 
-geom_vline(xintercept = RTquantiles$value, group = RTquantiles$quantile, linetype="dotted", size = 1.5)+
-  
-  geom_text(data = RTquantiles, aes(label = quantile, x = value, y = Inf), hjust = -.1) +
+# geom_vline(xintercept = RTquantiles$value, group = RTquantiles$quantile, linetype="dotted", size = 1.5)+
+#   
+#   geom_text(data = RTquantiles, aes(label = quantile, x = value, y = Inf), hjust = -.1) +
 
   # ------ Model --------
-geom_line(data = model_rt, aes(x = value, prob, colour = factor(modelName)), size = 0.75) +  
+# geom_line(data = model_rt, aes(x = value, prob, colour = factor(modelName)), size = 0.75) +  
   facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 3, scale = "free") + 
   
   #Misc
   scale_colour_manual(name="Models",values=cols) +
   xlab("Response Time (seconds)") +
   ylab("Probability \n Density") +
-  ggtitle("Response Time by Subject") +
+  ggtitle("Response Time") +
   theme(
     # x axis label
     # Theme asthetics to make the plot look nicer

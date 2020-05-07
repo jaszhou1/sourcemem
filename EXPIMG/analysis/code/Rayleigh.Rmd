@@ -7,13 +7,13 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/analysis/data")
+knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/EXPIMG/analysis/data")
 library(circular)
 ```
 
 ```{r}
 
-dataset <- read.csv("imageability.csv", na.strings = " NA")
+dataset <- read.csv("datafiltered3.csv", na.strings = " NA")
 #dataset$recog_rating <- as.factor(dataset$recog_rating) #Confidence Ratings are Discrete
 
 

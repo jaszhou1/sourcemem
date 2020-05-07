@@ -18,9 +18,9 @@ knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/EXPIMG/models/figures/cDiffu
 ```
 
 ```{r}
-data <- read.csv("QQ_data.csv")
+data <- read.csv("DataQuantiles.csv")
 cont <- read.csv("2020_02_10_19_28_pooled_cont4q.csv")
-thresh <- read.csv("2020_02_10_19_28_pooled_threshold4q.csv") 
+thresh <- read.csv("2020_02_10_19_28_pooled_thresh4q.csv") 
 hybrid <- read.csv("2020_02_10_19_28_pooled_hybrid4q.csv")
 
 dataset <- rbind(data,cont,thresh,hybrid)
@@ -155,22 +155,11 @@ QxQ <- ggplot(data = data,
                 colour = quantile_idx)) + geom_point() +
   
 # Plot continuous model           
-  geom_line(data = cont,
-            aes(x = cont$theta,
-                y = cont$rt,
-                group = cont$quantile_idx), size = 0.55, linetype = "dashed") +
-  
-  # Plot threshold model           
-  geom_line(data = thresh,
-            aes(x = thresh$theta,
-                y = thresh$rt,
-                group = thresh$quantile_idx), size = 0.55, linetype = "solid") +
-  
-  # Plot hybrid model           
-  geom_line(data = hybrid,
-            aes(x = hybrid$theta,
-                y = hybrid$rt,
-                group = hybrid$quantile_idx), size = 0.55, linetype = "dotdash") +
+ geom_line(data = model,
+            aes(x = model$theta,
+                y = model$rt,
+                group=interaction(model$quantile_idx, model$model_name), 
+                linetype = model$model_name)) +
   
    # ------------ Group plot by participant -----------------
 facet_wrap(~subjString, labeller = label_wrap_gen(width = 30), ncol = 4, scale = "free") + 

@@ -18,8 +18,8 @@ knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/EXPIMG/models/figures/cDiffu
 ```
 
 ```{r}
-#data <- read.csv("QQ_data.csv")
-data <- read.csv("DataOneBin.csv")
+data <- read.csv("DataQuantiles.csv")
+#data <- read.csv("DataOneBin.csv")
 cont <- read.csv("2020_02_10_19_28_pooled_cont4q.csv")
 thresh <- read.csv("2020_02_10_19_28_pooled_thresh4q.csv") 
 hybrid <- read.csv("2020_02_10_19_28_pooled_hybrid4q.csv")
@@ -61,7 +61,7 @@ dataset$subjString <- factor(dataset$subjString,
 data.subjString <- unique(dataset$subjString)
 
 
-participant <- 19
+participant <- 20
 
 dataset <- dataset[dataset$participant == participant, ]
 
