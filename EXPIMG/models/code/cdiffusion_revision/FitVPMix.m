@@ -19,7 +19,7 @@ st = abs(normrnd(0.05,0.01));
 sa = 0;
 
 
-P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter,st,sa];
+P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter, st,sa];
 
 Sel = [1,0,1,0,1,1,1,1,1,1,1,1,0];  % all parameters free
 n_recog = length(data{1,1});

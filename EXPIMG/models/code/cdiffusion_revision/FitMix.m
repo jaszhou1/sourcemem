@@ -4,18 +4,18 @@ function [ll, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitMix(data, bad
 %          1    2    3    4    5      6    7   8   9   10    11  12  13
 setopt;
 
-v1a = normrnd(6,0.1);
+v1a = normrnd(3,0.5);
 v2a = 0;
-v1b = normrnd(6,0.1);
+v1b = normrnd(3,0.5);
 v2b = 0;
 eta1 = 0;
 eta2 = 0;
-a1 = normrnd(4,0.5);
-a2 = normrnd(1.4,0.5);
-pi1 = normrnd(0.8,0.2);
-pi2 = normrnd(0.8,0.2);
-Ter = normrnd(-.05,0.02);
-st = abs(normrnd(0.03,0.05));
+a1 = normrnd(1,0.5);
+a2 = normrnd(1,0.5);
+pi1 = normrnd(0.5,0.1);
+pi2 = normrnd(0.5,0.1);
+Ter = normrnd(0,0.2);
+st = abs(normrnd(0.05,0.01));
 sa = 0;
 
 P = [v1a, v2a, v1b, v2b, eta1, eta2, a1, a2, pi1, pi2, Ter,st,sa];
