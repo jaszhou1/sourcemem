@@ -29,12 +29,12 @@ marginal.publication.figure <- function(data, empirical.data,
     "Cont"=1,
     "Thresh"=2,
     "Hybrid"=3
-
+    
   )
   
   MODEL.COL <- list(
     "Cont"="#CC79A7",
-    "Thresh"="#E69F00",
+    "Thresh"="#009E73",
     "Hybrid"="#009E73"
   )
   
@@ -46,7 +46,7 @@ marginal.publication.figure <- function(data, empirical.data,
   ## Get the summary variables from the data.
   PARTICIPANTS <- unique(data$participant)
   NUM.PARTICIPANTS <- length(PARTICIPANTS)
-  PARTICIPANTS.PER.ROW <- 2
+  PARTICIPANTS.PER.ROW <- 4
   MODEL.TYPES <- unique(as.character(data$model_name))
   
   ## Compute variables required for chart layout.
@@ -109,7 +109,7 @@ marginal.publication.figure <- function(data, empirical.data,
     ## Plot the predicted density of the models.
     for(model.type in MODEL.TYPES) {
       model.data <- p.resp.model[p.resp.model$model_name == model.type, ]
-      points(model.data$value, model.data$prob, type="l", lwd = 1.5, 
+      points(model.data$value, model.data$prob, type="l", lwd = 2, 
              #lty=MODEL.LTY[[model.type]], 
              # I don't think the line types help differentiate models visually
              # I have them all dashed so thresh and hybrid are both visible
@@ -163,7 +163,7 @@ marginal.publication.figure <- function(data, empirical.data,
     
     for(model.type in MODEL.TYPES) {
       model.data <- p.rt.model[p.rt.model$model_name == model.type, ]
-      points(model.data$value, model.data$prob, type="l" ,  lwd = 1.5,
+      points(model.data$value, model.data$prob, type="l" ,  lwd = 2,
              #lty=MODEL.LTY[[model.type]],
              lty=2,
              col=MODEL.COL[[model.type]])
@@ -196,8 +196,6 @@ marginal.publication.figure <- function(data, empirical.data,
   #allow clipping
   par(xpd = NA)
   ## Add in legend
-  legend("bottomright", inset = c(0.1,-0.4), legend=c("Variable-Precision", "Threshold", "Hybrid"),
-         col=c("#CC79A7","#E69F00","#009E73"), lty=c(2,2,2), bty = "n",cex=X.AXIS.CEX, title="Models")
   
   ## If we're writing to a file (i.e. a PDF), close the device.
   if(filename != "") {
@@ -210,7 +208,7 @@ Cont <- read.csv('2020-02-10-19-28_Cont_Marginal_pooled.csv')
 Thresh <- read.csv('2020-02-10-19-28_Thresh_Marginal_pooled.csv')
 Hybrid <- read.csv('2020-02-10-19-29_Hybrid_Marginal_pooled.csv')
 
-models <- rbind(Cont,Thresh,Hybrid)
+models <- rbind(Cont,Thresh)
 models$is_theta <- models$is_theta == ' true'
 models$is_model <- models$is_model == ' true'
 ## Read in empirical data

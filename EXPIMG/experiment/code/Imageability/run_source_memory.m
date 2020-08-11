@@ -14,7 +14,7 @@ os = getenv('OS');
 VERSION = '3.0';
 
 if ispc
-        ROOT_DIRECTORY = 'C:\Users\jasonz1\Documents\MATLAB\Experiment 1';
+        ROOT_DIRECTORY = 'C:\Users\jason\Documents\GitHub\sourcemem\EXPIMG\experiment\code\Imageability';
         DIR_SEP = '/';
 elseif isunix
       ROOT_DIRECTORY = '~/sourcemem/EXPIMG/experiment/code/Imageability';

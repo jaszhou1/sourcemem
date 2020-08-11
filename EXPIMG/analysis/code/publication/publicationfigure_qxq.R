@@ -33,7 +33,7 @@ joint.publication.figure <- function(data, empirical.data,
   # Models by Colour
   MODEL.COL <- list(
     "Cont"="#CC79A7",
-    "Thresh"="#E69F00",
+    "Thresh"= "#009E73",
     "Hybrid"="#009E73"
   )
   
@@ -48,9 +48,9 @@ joint.publication.figure <- function(data, empirical.data,
 
   
   ## Get the summary variables from the data.
-  PARTICIPANTS <- unique(data$participant)
-  NUM.PARTICIPANTS <- length(PARTICIPANTS)
-  PARTICIPANTS.PER.ROW <- 4
+  PARTICIPANTS <- 4
+  NUM.PARTICIPANTS <- 1
+  PARTICIPANTS.PER.ROW <- 2
   MODEL.TYPES <- unique(as.character(data$model_name))
   QUANTILES <- unique(as.character(data$quantile_idx))
   
@@ -137,8 +137,10 @@ joint.publication.figure <- function(data, empirical.data,
   plot.new()
   #allow clipping
   par(xpd = NA)
-  legend("bottomright", inset = c(0.4,0), legend=c("V-P", "Threshold", "Hybrid"),
-          lty=c(2,2,2),col= c("#CC79A7","#E69F00","#009E73"), bty = "n",cex = INNER.X.AXIS.CEX, title="Models")
+  ##legend("bottomright", inset = c(0.4,0), legend=c("V-P", "Threshold", "Hybrid"),
+          ##lty=c(2,2,2),col= c("#CC79A7","#E69F00","#009E73"), bty = "n",cex = INNER.X.AXIS.CEX, title="Models")
+  legend("bottomright", inset = c(0.4,0), legend=c("V-P", "Threshold"),
+         lty=c(2,2,2),col= c("#CC79A7","#009E73"), bty = "n",cex = INNER.X.AXIS.CEX, title="Models")
   legend("bottomright", inset = c(0,0), legend=c("0.1", "0.5", "0.9"),
          pch=c(15,19,17), bty = "n",cex=1,
          title = "Quantiles")
@@ -154,10 +156,10 @@ Cont <- read.csv('2020-02-10-19-29_Cont_Joint_pooled.csv')
 Thresh <- read.csv('2020-02-10-19-29_Thresh_Joint_pooled.csv')
 Hybrid <- read.csv('2020-02-10-19-29_Hybrid_Joint_pooled.csv')
 
-models <- rbind(Cont,Thresh,Hybrid)
+models <- rbind(Cont,Thresh)
 models$is_model <- models$is_model == ' true'
 ## Read in empirical data
 dataset <- read.csv('DataQuantiles.csv')
 dataset$quantile_idx <- as.factor(dataset$quantile_idx)
 
-joint.publication.figure(models, dataset, "joint_black.png")
+joint.publication.figure(models, dataset)

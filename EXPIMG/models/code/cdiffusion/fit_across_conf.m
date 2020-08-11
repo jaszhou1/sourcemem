@@ -1,6 +1,5 @@
-%% This is copy-pasted over from FitHybridCrit, with a fixed at zero and boundaries allowing zero.
-% TODO: Implement this as a switch in an overall fitting script rather than
-% have two separate folders.
+%% Fit the model
+
 %% Open Data
 
 % Opens and organises the data into recognised/unrecognised (based on conf)
@@ -27,7 +26,8 @@ participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
 
 
 nruns = 10; %Number of times I want to run fits on each participant to find the best fit
-for k = 3:15
+%for k = 3:15
+k = 5;
 % %% Fit Variable Precision (Continuous model)
 % [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];\
 % %% Fit Variable Precision (Continuous model)
@@ -86,7 +86,7 @@ for i = participants
     
     ll = 1e7;
     for j=1:nruns
-        [llnew, bic, Pred, pest, Gstuff,penalty, pest_penalty] = FitMix_pooled(Recognised{i},badix);
+        [llnew, bic, Pred, pest, Gstuff,penalty, pest_penalty] = FitMix(Recognised{i},badix);
         if (llnew < ll && llnew > 0)
             ll = llnew;
             MX_LL_Preds_Recognised{i,1} = ll;
@@ -100,25 +100,6 @@ for i = participants
         end
     end
 end
-
-% MX_LL_Preds_Unrecognised = cell(length(participants),8);
-% for i = participants
-%     MX_LL_Preds_Unrecognised{i,1} = -1;
-%     MX_LL_Preds_Unrecognised{i,2} = 0;
-%     badix = badixs(i);
-%     while (MX_LL_Preds_Unrecognised{i,2} == 0 || MX_LL_Preds_Unrecognised{i,1} < 0)
-%         [ll, bic, Pred, pest, Gstuff,penalty,pest_penalty] = FitMix_pooled(Unrecognised{i},badix);
-%         MX_LL_Preds_Unrecognised{i,1} = ll;
-%         MX_LL_Preds_Unrecognised{i,2} = bic;
-%         MX_LL_Preds_Unrecognised{i,3} = Pred;
-%         MX_LL_Preds_Unrecognised{i,4} = pest;
-%         MX_LL_Preds_Unrecognised{i,5} = Gstuff;
-%         MX_LL_Preds_Unrecognised{i,6} = Unrecognised {i};
-%         MX_LL_Preds_Unrecognised{i,7} = penalty;
-%         MX_LL_Preds_Unrecognised{i,8} = pest_penalty;
-%         
-%     end
-% end
 
 % Fit VP + Mix Model
 
@@ -220,27 +201,27 @@ end
 filename = [datestr(now,'yyyy_mm_dd_HH_MM'),'_pooled',sprintf('_badix_%d', k)];
 save(filename)
 %% Save csv files to use for plotting in R
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_Marginal_pooled',sprintf('_badix_%d', k),'.csv'];
+filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_Marginal',sprintf('_badix_%d', k),'.csv'];
 abs_marginal_mat_to_csv(filename, 'Cont', VP_LL_Preds_Recognised);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Thresh','_Marginal_pooled',sprintf('_badix_%d', k),'.csv'];
+filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Thresh','_Marginal',sprintf('_badix_%d', k),'.csv'];
 abs_marginal_mat_to_csv(filename, 'Thresh', MX_LL_Preds_Recognised);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Hybrid','_Marginal_pooled',sprintf('_badix_%d', k),'.csv'];
+filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Hybrid','_Marginal',sprintf('_badix_%d', k),'.csv'];
 abs_marginal_mat_to_csv(filename, 'Hybrid', HY_LL_Preds_Recognised);
 
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_Joint_pooled',sprintf('_badix_%d', k),'.csv'];
+filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_Joint',sprintf('_badix_%d', k),'.csv'];
 abs_mat_to_csv(filename, 'Cont', VP_LL_Preds_Recognised);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Thresh','_Joint_pooled',sprintf('_badix_%d', k),'.csv'];
+filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Thresh','_Joint',sprintf('_badix_%d', k),'.csv'];
 abs_mat_to_csv(filename, 'Thresh', MX_LL_Preds_Recognised);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Hybrid','_Joint_pooled',sprintf('_badix_%d', k),'.csv'];
+filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Hybrid','_Joint',sprintf('_badix_%d', k),'.csv'];
 abs_mat_to_csv(filename, 'Hybrid', HY_LL_Preds_Recognised);
 
 filename = [datestr(now,'yyyy-mm-dd-HH-MM'), '_param',sprintf('_badix_%d', k),'.csv'];
 param_to_csv(filename,participants,VP_LL_Preds_Recognised,...
     MX_LL_Preds_Recognised,HY_LL_Preds_Recognised);
 
-end
+%end

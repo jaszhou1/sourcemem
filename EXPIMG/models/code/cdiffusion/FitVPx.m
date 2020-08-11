@@ -1,8 +1,4 @@
-function [ll, bic, Pred, pest] = FitVP(data)
-%MEMORY_FIXATION Display a fixation cross for orienting the participant.
-%   Data Treatment script to make EXPSOURCE model fitting code cooperate with
-%   EXPIMG data
-%
+function [ll, bic, Pred, pest] = FitVPx(data)
 % Jason Zhou <jasonz1 AT student DOT unimelb DOT edu DOT au>
 
 %testing fitting continuous (VP) model to EXPIMG data
@@ -12,9 +8,9 @@ setopt;
 %    P = [v1a, v2a, v1b, v2b, eta1a, eta2a, eta1b, eta2b, a, Ter]
 %          1    2    3    4     5      6      7      8    9   10
 v1a = normrnd(1,1);
-v2a = normrnd(0.01,0.1);
+v2a = 0;
 v1b = normrnd(1.5,1);
-v2b = normrnd(0.01,0.1);
+v2b = 0;
 eta1 = normrnd(1.5,1);
 eta2 = normrnd(0.5,0.5);
 a = normrnd(1.25,1);
