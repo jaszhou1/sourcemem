@@ -91,7 +91,7 @@ pest_penalty = [];
 %   v1a, v2a, v1b, v2b, eta1, eta2,      a1, a2,       pi1, pi2,    Ter  st, sa]
 % ---------------------------------------------------- ----------------------
  
-Ub= [ 4.5*ones(1,4),  1*ones(1,2),  5*ones(1,2),    ones(1,2),   1.0, 0.8, 0]; 
+Ub= [ 5.5*ones(1,4),  1*ones(1,2),  5*ones(1,2),    ones(1,2),   1.0, 0.8, 0]; 
 Lb= [0*ones(1,4),  0*ones(1,2),  0.3*ones(1,2),    zeros(1,2),   -0.5, 0, 0];
 Pub=[ 4.0*ones(1,4),  0.7*ones(1,2),  4.5*ones(1,2), 1*ones(1,2),  0.8, 0.7, 0]; 
 Plb=[0*ones(1,4),  0*ones(1,2),  0.4*ones(1,2), 0.01*ones(1,2), -0.4, 0, 0];
@@ -101,6 +101,8 @@ if any(P - Ub > 0) | any(Lb - P > 0)
         1e3 * (sum(max(P - Ub, 0).^2) + sum(max(Lb - P, 0).^2));
    bic = 0;
    Gstuff = cell(3,2);
+   pest_penalty(1,:) = P;
+   pest_penalty(2,:) = max(P - Pub, 0).^2 + max(Plb - P, 0).^2;
    if trace
        max(P - Ub, 0)
        max(Lb - P, 0)
