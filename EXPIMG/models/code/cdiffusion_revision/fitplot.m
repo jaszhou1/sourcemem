@@ -29,7 +29,7 @@ set(gca, 'Ylim', [0, 1.5])
 xlabel('Response Error')
 ylabel('Probability density')
 % label(gca, .7, .9, 'Low');
-title('Low')
+title('Recognised')
 hold
 plot(thetaa, pthetaa, 'Linewidth', 2);
 
@@ -40,7 +40,7 @@ set(gca, 'Xlim', [-pi, pi])
 set(gca, 'Ylim', [0, 1.5])
 xlabel('Response Error')
 % label(gca, .7, .9, 'High');
-title('High')
+title('Unrecognised')
 hold
 plot(thetab, pthetab, 'Linewidth', 2);
 
@@ -50,7 +50,7 @@ histogram(Rt1, 50, 'Normalization', 'pdf', 'BinLimits', [0,3.0]);
 xlabel('Response Time (s)')
 set(gca, 'Ylim', [0, 3.5])
 % label(gca, .7, .9, 'Low');
-title('Low')
+title('Recognised')
 hold
 ylabel('Probability density')
 plot(ta, gtam, 'Linewidth', 2);
@@ -61,7 +61,7 @@ histogram(Rt2, 50, 'Normalization', 'pdf', 'BinLimits', [0,3.0]);
 xlabel('Response Time (s)')
 set(gca, 'Ylim', [0, 3.0])
 % label(gca, .7, .9, 'High');
-title('High')
+title('Unrecognised')
 hold
 plot(tb, gtbm, 'Linewidth', 2);
 
