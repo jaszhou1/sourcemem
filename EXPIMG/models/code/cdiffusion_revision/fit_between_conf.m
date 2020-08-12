@@ -7,7 +7,7 @@
 % in the Fit_Data structure, {:,1} is recognised, {:,2} is unrecognised
 Data = conf_data;
 
-nruns = 10; %Number of times I want to run fits on each participant to find the best fit
+nruns = 20; %Number of times I want to run fits on each participant to find the best fit
 
 
 % %% Fit Variable Precision (Continuous model)
@@ -52,7 +52,7 @@ for i = participants
     ll = 1e7;
     for j=1:nruns
         [llnew, bic, Pred, pest, Gstuff,penalty, pest_penalty] = FitMix(Data{i},badix);
-       % if llnew < ll
+        if llnew < ll
             ll = llnew;
             MX_LL_Preds{i,1} = ll;
             MX_LL_Preds{i,2} = bic;
@@ -62,7 +62,7 @@ for i = participants
             MX_LL_Preds{i,6} = Data {i};
             MX_LL_Preds{i,7} = penalty;
             MX_LL_Preds{i,8} = pest_penalty;
-        %end
+       end
     end
 end
 
@@ -76,7 +76,7 @@ for i = participants
     ll = 1e7;
     for j = 1:nruns
         [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPMix(Data{i},badix);
-       % if llnew < ll
+        if llnew < ll
             ll = llnew;
             HY_LL_Preds{i,1} = ll;
             HY_LL_Preds{i,2} = bic;
@@ -86,7 +86,7 @@ for i = participants
             HY_LL_Preds{i,6} = Data {i};
             HY_LL_Preds{i,7} = penalty;
             HY_LL_Preds{i,8} = pest_penalty;
-     %   end
+        end
      %   fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
     end
     
@@ -94,47 +94,49 @@ end
 
 %% Plot Fits superimposed on Data, and save.
 % % Plot
-for i = participants
-    filename = ['Cont_',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-    fitplot(Data {i}, VP_LL_Preds{i,3});
-    saveas(gcf,filename);
+%for i = participants
+%    filename = ['Cont_',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+%    fitplot(Data {i}, VP_LL_Preds{i,3});
+%    saveas(gcf,filename);
     
-    filename = ['Thresh_',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-    fitplot(Data {i}, MX_LL_Preds{i,3});
-    saveas(gcf,filename);
+%    filename = ['Thresh_',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+%    fitplot(Data {i}, MX_LL_Preds{i,3});
+%    saveas(gcf,filename);
     
-    filename = ['Hybrid_',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-    fitplot(Data {i}, HY_LL_Preds{i,3});
-    saveas(gcf,filename);
-    close all
- end
+%    filename = ['Hybrid_',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+%    fitplot(Data {i}, HY_LL_Preds{i,3});
+%    saveas(gcf,filename);
+%    close all
+% end
 
-close all
+%close all
 
 
 %% Save mat file 
+save(datestr(now,'yyyy_mm_dd_HH_MM'));
+
 
 save(datestr(now,'yyyy_mm_dd_HH_MM'))
 %% Save csv files to use for plotting in R
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_btwconf','_Marginal','.csv'];
-abs_marginal_mat_to_csv(filename, 'Cont', VP_LL_Preds);
+%filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_btwconf','_Marginal','.csv'];
+%abs_marginal_mat_to_csv(filename, 'Cont', VP_LL_Preds);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Thresh','_btwconf','_Marginal','.csv'];
-abs_marginal_mat_to_csv(filename, 'Thresh', MX_LL_Preds);
+%filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Thresh','_btwconf','_Marginal','.csv'];
+%abs_marginal_mat_to_csv(filename, 'Thresh', MX_LL_Preds);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Hybrid','_btwconf','_Marginal','.csv'];
-abs_marginal_mat_to_csv(filename, 'Hybrid', HY_LL_Preds);
+%filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Hybrid','_btwconf','_Marginal','.csv'];
+%abs_marginal_mat_to_csv(filename, 'Hybrid', HY_LL_Preds);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_btwconf','_Joint','.csv'];
-abs_mat_to_csv(filename, 'Cont', VP_LL_Preds);
+%filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_btwconf','_Joint','.csv'];
+%abs_mat_to_csv(filename, 'Cont', VP_LL_Preds);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Thresh','_btwconf','_Joint','.csv'];
-abs_mat_to_csv(filename, 'Thresh', MX_LL_Preds);
+%filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Thresh','_btwconf','_Joint','.csv'];
+%abs_mat_to_csv(filename, 'Thresh', MX_LL_Preds);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Hybrid','_btwconf','_Joint','.csv'];
-abs_mat_to_csv(filename, 'Hybrid', HY_LL_Preds);
+%filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Hybrid','_btwconf','_Joint','.csv'];
+%abs_mat_to_csv(filename, 'Hybrid', HY_LL_Preds);
 
-filename = [datestr(now,'yyyy-mm-dd-HH-MM'), '_param',sprintf('_badix_%d', k),'.csv'];
-param_to_csv(filename,participants,VP_LL_Preds,...
-    MX_LL_Preds,HY_LL_Preds);
+%filename = [datestr(now,'yyyy-mm-dd-HH-MM'), '_param',sprintf('_badix_%d', k),'.csv'];
+%param_to_csv(filename,participants,VP_LL_Preds,...
+%    MX_LL_Preds,HY_LL_Preds);
 
