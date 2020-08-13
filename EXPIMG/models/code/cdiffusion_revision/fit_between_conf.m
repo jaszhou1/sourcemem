@@ -3,6 +3,9 @@
 %   Can the threshold-style models continue to match the data 
 %   if they can only change the proportion of failed trials for 
 %   the two different confidence ranges?
+%
+%   All parameters constrained between low and high recognition datasets
+%   Except pi1 and pi2, the mixing proportions in the mixture models.
 % ========================================================================
 % in the Fit_Data structure, {:,1} is recognised, {:,2} is unrecognised
 Data = conf_data;
@@ -23,7 +26,7 @@ for i = participants
     badix = badixs(i);
     % Multiple Starts
     for j = 1:nruns
-        [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPx(Data{i},badix);
+        [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPx_conf(Data{i},badix);
         disp(i);
         
         if llnew < ll
@@ -51,7 +54,7 @@ for i = participants
     badix = badixs(i);
     ll = 1e7;
     for j=1:nruns
-        [llnew, bic, Pred, pest, Gstuff,penalty, pest_penalty] = FitMix(Data{i},badix);
+        [llnew, bic, Pred, pest, Gstuff,penalty, pest_penalty] = FitMix_conf(Data{i},badix);
         if llnew < ll
             ll = llnew;
             MX_LL_Preds{i,1} = ll;
@@ -75,7 +78,7 @@ for i = participants
     badix = badixs(i);
     ll = 1e7;
     for j = 1:nruns
-        [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPMix(Data{i},badix);
+        [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPMix_conf(Data{i},badix);
         if llnew < ll
             ll = llnew;
             HY_LL_Preds{i,1} = ll;
@@ -94,15 +97,15 @@ end
 
 %% Plot Fits superimposed on Data, and save.
 % % Plot
-%for i = participants
+% for i = participants
 %    filename = ['Cont_',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
 %    fitplot(Data {i}, VP_LL_Preds{i,3});
 %    saveas(gcf,filename);
-    
+%     
 %    filename = ['Thresh_',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
 %    fitplot(Data {i}, MX_LL_Preds{i,3});
 %    saveas(gcf,filename);
-    
+%     
 %    filename = ['Hybrid_',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
 %    fitplot(Data {i}, HY_LL_Preds{i,3});
 %    saveas(gcf,filename);
@@ -115,8 +118,12 @@ end
 %% Save mat file 
 save(datestr(now,'yyyy_mm_dd_HH_MM'));
 
+param_avg_to_csv(strcat(datestr(now,'yyyy_mm_dd_HH_MM'),'_average','.csv'),...
+    VP_LL_Preds, MX_LL_Preds, HY_LL_Preds)
 
-save(datestr(now,'yyyy_mm_dd_HH_MM'))
+param_to_csv(strcat(datestr(now,'yyyy_mm_dd_HH_MM'),'_individual','.csv'),...
+    VP_LL_Preds, MX_LL_Preds, HY_LL_Preds)
+
 %% Save csv files to use for plotting in R
 %filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_btwconf','_Marginal','.csv'];
 %abs_marginal_mat_to_csv(filename, 'Cont', VP_LL_Preds);
