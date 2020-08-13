@@ -26,7 +26,7 @@ for i = participants
     badix = badixs(i);
     % Multiple Starts
     for j = 1:nruns
-        [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPx_conf(Data{i},badix);
+        [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPx(Data{i},badix);
         disp(i);
         
         if llnew < ll
@@ -118,11 +118,11 @@ end
 %% Save mat file 
 save(datestr(now,'yyyy_mm_dd_HH_MM'));
 
-param_avg_to_csv(strcat(datestr(now,'yyyy_mm_dd_HH_MM'),'_average','.csv'),...
-    VP_LL_Preds, MX_LL_Preds, HY_LL_Preds)
+%param_avg_to_csv(strcat(datestr(now,'yyyy_mm_dd_HH_MM'),'_average','.csv'),...
+%    VP_LL_Preds, MX_LL_Preds, HY_LL_Preds)
 
-param_to_csv(strcat(datestr(now,'yyyy_mm_dd_HH_MM'),'_individual','.csv'),...
-    VP_LL_Preds, MX_LL_Preds, HY_LL_Preds)
+%param_to_csv(strcat(datestr(now,'yyyy_mm_dd_HH_MM'),'_individual','.csv'),...
+%    VP_LL_Preds, MX_LL_Preds, HY_LL_Preds)
 
 %% Save csv files to use for plotting in R
 %filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_btwconf','_Marginal','.csv'];
