@@ -91,6 +91,7 @@ sigma = 1.0;
 % Cleaned up penalty calculation, hard and soft bounds - 30/1/19
 penalty = 0;
 pest_penalty = [];
+Pred = [];
 
 % ---------------------------------------------------------------------------
 %   v1, v2,       eta,  a,       pi1, pi2,    Ter  st, sa]
@@ -129,17 +130,17 @@ pest_penalty(2,:) = max(P - Pub, 0).^2 + max(Plb - P, 0).^2;
 % Ensure etas, ter, and a are positive.
 % Removed Ter from being considered as we are allowing Ter to be negative.
 %lowerbounderror = sum(min(P(5:length(P)) - zeros(1,length(P)-4), 0).^2);
-lowerbounderror = sum(min(P(5:10) - zeros(1,length(P)-7), 0).^2);
-if lowerbounderror > 0
-   ll = 1e5 + 1e3 * lowerbounderror;
-   bic = 0;
-   Gstuff = cell(3,2);
+%lowerbounderror = sum(min(P(5:10) - zeros(1,length(P)-7), 0).^2);
+%if lowerbounderror > 0
+%   ll = 1e5 + 1e3 * lowerbounderror;
+%   bic = 0;
+%   Gstuff = cell(3,2);
 % elseif sa / 2 >= a1 Commented out as a1 == 0 for no criteria variability
 %     disp('Criterion range error')
 %     ll = 1e5;
 %     bic = 0;
 %     Gstuff = cell(3,2);
-else
+%else
    if sa < epsilon % No criterion variability
        % Memory-based process
        % Parameters for long
