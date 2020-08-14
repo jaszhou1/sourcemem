@@ -6,8 +6,9 @@ load('dataFiltered3.mat'); % Filtered version
 J1(:,1) = [];
 %Split high and low recog conf
 
-J_HC = J1(J1(:,2)>=3,:);
-J_LC = J1(J1(:,2)<3,:);
+J_HC = J1(J1(:,2)==6,:);
+J_LC = J1(J1(:,2)>3,:);
+J_LC = J_LC(J_LC(:,2)<6,:);
 
 %Conditions: 1 is LOW, 2 is HIGH
 
