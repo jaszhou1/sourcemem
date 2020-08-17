@@ -15,7 +15,7 @@ fprintf(fp, [header_line '\n']);
 for i = participants
     
     %% There appears to be a strange observer without any data in them, so
-    %  let's skip over anyone who doesn't seem to have data.
+% %      let's skip over anyone who doesn't seem to have data.
     if isempty(Cont{i,1})
         continue
     end
