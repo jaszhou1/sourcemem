@@ -1,4 +1,4 @@
-function [ll,bic,Pred, Gstuff, penalty, pest_penalty] = fitmixture4x_conf(Pvar, Pfix, Sel, Data, nlow, nhigh, badix, trace)
+function [ll,bic,Pred, Gstuff, penalty, pest_penalty] = fitmixture4x_conf_drift(Pvar, Pfix, Sel, Data, nlow, nhigh, badix, trace)
 % ========================================================================
 % Circular diffusion with drift variability for Jason's source memory task.
 % Across-trial variability in criterion.
