@@ -4,7 +4,7 @@ function [ll,bic,Pred, Gstuff, penalty, pest_penalty] = fitmixture4x_conf_drift(
 % Across-trial variability in criterion.
 %
 % Constrains parameters across the two "conditions" (in this case, response
-% confidence), to be the same expect for the mixing proportions
+% confidence), to be the same expect for the mixing proportions and drift
 %
 % Mixture of memory based and guessing based process with different 
 % criteria. Assumes the eta components in the x and y directions are the
@@ -16,13 +16,13 @@ function [ll,bic,Pred, Gstuff, penalty, pest_penalty] = fitmixture4x_conf_drift(
 %    mixing proportions for long and short.
 %    'Data' is cell array structure created by <makelike>
 % ========================================================================
-name = 'FITMIXTURE4X: ';
+name = 'FITMIXTURE4X_CONF_DRIFT: ';
 errmg1 = 'Incorrect number of parameters for model, exiting...';
 errmg2 = 'Incorrect length selector vector, exiting...';
 errmg3 = 'Data should be a 1 x 2 cell array from <makelike>...';
 
 tmax = 5.1; 
-np = 11;
+np = 12;
 nt = 300;
 h = tmax / nt; 
 %nshort and n long changed to nlow and nhigh, values now handed in rather than
@@ -71,14 +71,14 @@ v2a = P(2);
 v1b = P(3);
 v2b = P(4);
 eta1 = P(5);
-eta2 = eta1;
+eta2 = P(5);
 a1 = P(6);
-a2 = a1;
-pi1 = P(7);
-pi2 = P(8); 
-ter = P(9);
-st = P(10);
-sa = P(11);
+a2 = P(7);
+pi1 = P(8);
+pi2 = P(9); 
+ter = P(10);
+st = P(11);
+sa = P(12);
 
 
 % Components of drift variability.
@@ -94,13 +94,13 @@ pest_penalty = [];
 Pred = [];
 
 % ---------------------------------------------------------------------------
-%   v1, v2,       eta,  a,       pi1, pi2,    Ter  st, sa]
+%   v1a, v2a, v1b, v2b,   eta,  a1, a2, pi1, pi2,    Ter  st, sa]
 % ---------------------------------------------------- ----------------------
  
-Ub= [ 7*ones(1,4),  1,  5,    ones(1,2),   1.0, 0.8, 0]; 
-Lb= [0*ones(1,4),  0,  0.3,    zeros(1,2),   -0.5, 0, 0];
-Pub=[ 6.5*ones(1,4),0.7, 4.5,  ones(1,2),  0.8, 0.7, 0]; 
-Plb=[0*ones(1,4),  0,  0.4, 0.01*ones(1,2), -0.4, 0, 0];
+Ub= [ 7*ones(1,4),  1,  5, 5,  ones(1,2),   1.0, 0.8, 0]; 
+Lb= [0*ones(1,4),  0,  0.3, 0.3, zeros(1,2),   -0.5, 0, 0];
+Pub=[ 6.5*ones(1,4),0.7, 4.5, 4.5, ones(1,2),  0.8, 0.7, 0]; 
+Plb=[0*ones(1,4),  0,  0.4, 0.4, 0.01*ones(1,2), -0.4, 0, 0];
 
 if any(P - Ub > 0) | any(Lb - P > 0)
    ll = 1e7 + ...

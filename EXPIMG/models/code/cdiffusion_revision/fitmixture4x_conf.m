@@ -16,13 +16,13 @@ function [ll,bic,Pred, Gstuff, penalty, pest_penalty] = fitmixture4x_conf(Pvar, 
 %    mixing proportions for long and short.
 %    'Data' is cell array structure created by <makelike>
 % ========================================================================
-name = 'FITMIXTURE4X: ';
+name = 'FITMIXTURE4X_CONF: ';
 errmg1 = 'Incorrect number of parameters for model, exiting...';
 errmg2 = 'Incorrect length selector vector, exiting...';
 errmg3 = 'Data should be a 1 x 2 cell array from <makelike>...';
 
 tmax = 5.1; 
-np = 9;
+np = 10;
 nt = 300;
 h = tmax / nt; 
 %nshort and n long changed to nlow and nhigh, values now handed in rather than
@@ -68,17 +68,17 @@ save Ptemp Ptemp
 
 v1a = P(1);
 v2a = P(2);
-v1b = v1a;
-v2b = v2a;
+v1b = P(1);
+v2b = P(2);
 eta1 = P(3);
-eta2 = eta1;
+eta2 = P(3);
 a1 = P(4);
-a2 = a1;
-pi1 = P(5);
-pi2 = P(6); 
-ter = P(7);
-st = P(8);
-sa = P(9);
+a2 = P(5);
+pi1 = P(6);
+pi2 = P(7); 
+ter = P(8);
+st = P(9);
+sa = P(10);
 
 
 % Components of drift variability.
@@ -94,13 +94,13 @@ pest_penalty = [];
 Pred = [];
 
 % ---------------------------------------------------------------------------
-%   v1, v2,       eta,  a,       pi1, pi2,    Ter  st, sa]
+%   v1, v2,       eta,  a1, a2      pi1, pi2,    Ter  st, sa]
 % ---------------------------------------------------- ----------------------
  
-Ub= [ 7*ones(1,2),  1,  5,    ones(1,2),   1.0, 0.8, 0]; 
-Lb= [0*ones(1,2),  0,  0.3,    zeros(1,2),   -0.5, 0, 0];
-Pub=[ 6.5*ones(1,2),0.7, 4.5,  ones(1,2),  0.8, 0.7, 0]; 
-Plb=[0*ones(1,2),  0,  0.4, 0.01*ones(1,2), -0.4, 0, 0];
+Ub= [ 7*ones(1,2),  1,  5, 5,   ones(1,2),   1.0, 0.8, 0]; 
+Lb= [0*ones(1,2),  0,  0.3, 0.3, zeros(1,2),   -0.5, 0, 0];
+Pub=[ 6.5*ones(1,2),0.7, 4.5, 4.5,  ones(1,2),  0.8, 0.7, 0]; 
+Plb=[0*ones(1,2),  0,  0.4, 0.4, 0.01*ones(1,2), -0.4, 0, 0];
 
 if any(P - Ub > 0) | any(Lb - P > 0)
    ll = 1e7 + ...

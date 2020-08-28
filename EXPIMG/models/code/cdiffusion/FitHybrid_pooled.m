@@ -5,7 +5,7 @@
 
 % Opens and organises the data into recognised/unrecognised (based on conf)
 % and low/high imageability (condition, labelled cond)
-Fit_Data = Treatment_Simple(conf);
+Fit_Data = Treatment_Simple();
 %Loading in dataset with RTs longer than 5s and greater than 3 sds above median after that, filtered out
 
 Recognised = Fit_Data(:,1);

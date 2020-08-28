@@ -10,12 +10,22 @@
 % in the Fit_Data structure, {:,1} is recognised, {:,2} is unrecognised
 Data = conf_data;
 
+% Select participants who have more than 20 observations in the low
+% confidence recognised category (column 2)
+participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
+for i = participants
+    n_lowconf = size(Data{i,1}{1,2});
+    if n_lowconf < 20
+       Data{i,1} = [];
+    end
+end
+
 nruns = 20; %Number of times I want to run fits on each participant to find the best fit
 
 
 % %% Fit Variable Precision (Continuous model)
- participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
- badixs = [5,5,5,10,5,5,5,10,5,5,5,5,3,5,5,5,5,5,5,5];
+participants = find(~cellfun(@isempty,Data))';
+badixs = 5*ones(length(participants),1);
  
 % % %Empty array for Log Likelihoods and Predictions to live.
 VP_LL_Preds = cell(length(participants),8);
@@ -142,7 +152,7 @@ end
 save(datestr(now,'yyyy_mm_dd_HH_MM'));
 
 %% Save parameter and fit statistic csv files
-param_avg_to_csv(strcat(datestr(now,'yyyy_mm_dd_HH_MM'),'_average','_confdrift','.csv'),...
+param_avg_to_csv_confdrift(strcat(datestr(now,'yyyy_mm_dd_HH_MM'),'_average','_confdrift','.csv'),...
    VP_LL_Preds, MX_LL_Preds, HY_LL_Preds)
 
 param_to_csv(strcat(datestr(now,'yyyy_mm_dd_HH_MM'),'_individual','_confdrift','.csv'),...
