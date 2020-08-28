@@ -31,7 +31,7 @@ for i = participants
 end
 
 participants = find(~cellfun(@isempty,Data))';
-badixs = 5*ones(length(participants),1);
+badixs = 5*ones(20,1);
 
 nruns = 20; %Number of times I want to run fits on each participant to find the best fit
  
