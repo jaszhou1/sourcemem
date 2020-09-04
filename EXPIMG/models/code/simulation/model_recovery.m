@@ -19,6 +19,7 @@
 % manuscript to fit each model to the simulated datasets
 participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
 nruns = 10;
+badix = 5;
 
 % The format of each heading will be:
 % MODEL USED TO GENERATE THE SIMULATED DATA - MODEL BEING USED TO FIT
@@ -28,12 +29,11 @@ nruns = 10;
 VP_VP_Preds_Recognised = cell(length(participants),8);
 for i = participants
     ll = 1e7;
-    badix = k;
     
     % Multiple Starts
     for j = 1:nruns
         [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = ...
-            FitVPx_pooled(cont{i},badix);
+            FitVPx_pooled(cont(1,:),badix);
   
         if (llnew < ll && llnew > 0)
             ll = llnew;
@@ -54,12 +54,11 @@ VP_MX_Preds_Recognised = cell(length(participants),8);
 for i = participants
     VP_MX_Preds_Recognised{i,1} = -1;
     VP_MX_Preds_Recognised{i,2} = 0;
-    badix = k;
     
     ll = 1e7;
     for j=1:nruns
         [llnew, bic, Pred, pest, Gstuff,penalty, pest_penalty] =...
-            FitMix_pooled(cont{i},badix);
+            FitMix_pooled(cont(1,:),badix);
         
         if (llnew < ll && llnew > 0)
             ll = llnew;
@@ -76,4 +75,59 @@ for i = participants
 end
 
 
-%% Print BICs to csv file
+% Threshold-Continuous
+MX_VP_Preds_Recognised = cell(length(participants),8);
+for i = participants
+    ll = 1e7;
+    
+    % Multiple Starts
+    for j = 1:nruns
+        [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = ...
+            FitVPx_pooled(thresh(1,:),badix);
+  
+        if (llnew < ll && llnew > 0)
+            ll = llnew;
+            MX_VP_Preds_Recognised{i,1} = ll;
+            MX_VP_Preds_Recognised{i,2} = bic;
+            MX_VP_Preds_Recognised{i,3} = Pred;
+            MX_VP_Preds_Recognised{i,4} = pest;
+            MX_VP_Preds_Recognised{i,5} = Gstuff;
+            MX_VP_Preds_Recognised{i,6} = Recognised {i};
+            MX_VP_Preds_Recognised{i,7} = penalty;
+            MX_VP_Preds_Recognised{i,8} = pest_penalty;
+        end
+    end 
+end
+
+% Threshold-Threshold
+MX_MX_Preds_Recognised = cell(length(participants),8);
+for i = participants
+    MX_MX_Preds_Recognised{i,1} = -1;
+    MX_MX_Preds_Recognised{i,2} = 0;
+    
+    ll = 1e7;
+    for j=1:nruns
+        [llnew, bic, Pred, pest, Gstuff,penalty, pest_penalty] =...
+            FitMix_pooled(thresh(1,:),badix);
+        
+        if (llnew < ll && llnew > 0)
+            ll = llnew;
+            MX_MX_Preds_Recognised{i,1} = ll;
+            MX_MX_Preds_Recognised{i,2} = bic;
+            MX_MX_Preds_Recognised{i,3} = Pred;
+            MX_MX_Preds_Recognised{i,4} = pest;
+            MX_MX_Preds_Recognised{i,5} = Gstuff;
+            MX_MX_Preds_Recognised{i,6} = Recognised {i};
+            MX_MX_Preds_Recognised{i,7} = penalty;
+            MX_MX_Preds_Recognised{i,8} = pest_penalty;
+        end
+    end
+end
+
+%% Save 
+
+% Save MATLAB workspace
+filename = [datestr(now,'yyyy_mm_dd_HH_MM'),'_recovery'];
+save(filename)
+
+% Print BICs out to a .csv file
