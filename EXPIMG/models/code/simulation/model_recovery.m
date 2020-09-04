@@ -42,7 +42,7 @@ for i = participants
             VP_VP{i,3} = Pred;
             VP_VP{i,4} = pest;
             VP_VP{i,5} = Gstuff;
-            VP_VP{i,6} = cont(1,:);
+            VP_VP{i,6} = cont(i,:);
             VP_VP{i,7} = penalty;
             VP_VP{i,8} = pest_penalty;
         end
@@ -67,7 +67,7 @@ for i = participants
             VP_MX{i,3} = Pred;
             VP_MX{i,4} = pest;
             VP_MX{i,5} = Gstuff;
-            VP_MX{i,6} = cont(1,:);
+            VP_MX{i,6} = cont(i,:);
             VP_MX{i,7} = penalty;
             VP_MX{i,8} = pest_penalty;
         end
@@ -92,7 +92,7 @@ for i = participants
             MX_VP{i,3} = Pred;
             MX_VP{i,4} = pest;
             MX_VP{i,5} = Gstuff;
-            MX_VP{i,6} = thresh(1,:);
+            MX_VP{i,6} = thresh(i,:);
             MX_VP{i,7} = penalty;
             MX_VP{i,8} = pest_penalty;
         end
@@ -117,7 +117,7 @@ for i = participants
             MX_MX{i,3} = Pred;
             MX_MX{i,4} = pest;
             MX_MX{i,5} = Gstuff;
-            MX_MX{i,6} = thresh(1,:);
+            MX_MX{i,6} = thresh(i,:);
             MX_MX{i,7} = penalty;
             MX_MX{i,8} = pest_penalty;
         end
