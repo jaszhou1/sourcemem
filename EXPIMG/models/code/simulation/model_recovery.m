@@ -42,7 +42,7 @@ for i = participants
             VP_VP_Preds_Recognised{i,3} = Pred;
             VP_VP_Preds_Recognised{i,4} = pest;
             VP_VP_Preds_Recognised{i,5} = Gstuff;
-            VP_VP_Preds_Recognised{i,6} = Recognised {i};
+            VP_VP_Preds_Recognised{i,6} = cont(1,:);
             VP_VP_Preds_Recognised{i,7} = penalty;
             VP_VP_Preds_Recognised{i,8} = pest_penalty;
         end
@@ -67,7 +67,7 @@ for i = participants
             VP_MX_Preds_Recognised{i,3} = Pred;
             VP_MX_Preds_Recognised{i,4} = pest;
             VP_MX_Preds_Recognised{i,5} = Gstuff;
-            VP_MX_Preds_Recognised{i,6} = Recognised {i};
+            VP_MX_Preds_Recognised{i,6} = cont(1,:);
             VP_MX_Preds_Recognised{i,7} = penalty;
             VP_MX_Preds_Recognised{i,8} = pest_penalty;
         end
@@ -92,7 +92,7 @@ for i = participants
             MX_VP_Preds_Recognised{i,3} = Pred;
             MX_VP_Preds_Recognised{i,4} = pest;
             MX_VP_Preds_Recognised{i,5} = Gstuff;
-            MX_VP_Preds_Recognised{i,6} = Recognised {i};
+            MX_VP_Preds_Recognised{i,6} = thresh(1,:);
             MX_VP_Preds_Recognised{i,7} = penalty;
             MX_VP_Preds_Recognised{i,8} = pest_penalty;
         end
@@ -117,7 +117,7 @@ for i = participants
             MX_MX_Preds_Recognised{i,3} = Pred;
             MX_MX_Preds_Recognised{i,4} = pest;
             MX_MX_Preds_Recognised{i,5} = Gstuff;
-            MX_MX_Preds_Recognised{i,6} = Recognised {i};
+            MX_MX_Preds_Recognised{i,6} = thresh(1,:);
             MX_MX_Preds_Recognised{i,7} = penalty;
             MX_MX_Preds_Recognised{i,8} = pest_penalty;
         end
