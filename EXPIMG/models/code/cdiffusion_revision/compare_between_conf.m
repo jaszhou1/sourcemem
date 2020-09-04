@@ -152,16 +152,26 @@ end
 
 %% Plot Fits superimposed on Data, and save.
 % 
-% for i = participants
-%     
-%    filename = ['Mixing_Drift_',num2str(i),'.png'];
-%    fitplot(Data {i}, mixing_drift{i,3});
-%    saveas(gcf,filename);
-%     
-% end
-% 
-% 
-%close all
+for i = participants
+    
+   filename = ['Mixing_Drift_',num2str(i),'.png'];
+   fitplot(Data {i}, mixing_drift{i,3});
+   saveas(gcf,filename);
+   close all
+   
+   filename = ['Mixing_',num2str(i),'.png'];
+   fitplot(Data {i}, mixing{i,3});
+   saveas(gcf,filename);
+   close all
+   
+   filename = ['Original_',num2str(i),'.png'];
+   fitplot(Data {i}, original{i,3});
+   saveas(gcf,filename);
+   close all
+   
+end
+
+close all
 
 
 %% Save mat file 
@@ -171,6 +181,9 @@ save(datestr(now,'yyyy_mm_dd_HH_MM'));
 
 param_to_csv_compare(strcat(datestr(now,'yyyy_mm_dd_HH_MM'),'_individual','_confdrift','.csv'),...
    participants, original, mixing, mixing_drift)
+
+param_to_csv_avg_compare(strcat(datestr(now,'yyyy_mm_dd_HH_MM'),'_average','_confdrift','.csv'),...
+   original, mixing, mixing_drift)
 
 %% Save csv files to use for plotting in R
 %filename = [datestr(now,'yyyy-mm-dd-HH-MM'),'_Cont','_btwconf','_Marginal','.csv'];
