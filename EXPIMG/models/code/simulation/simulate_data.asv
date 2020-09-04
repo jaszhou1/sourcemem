@@ -103,7 +103,7 @@ for i = participants
         this_sim_high(j, 1) = theta;
         this_sim_high(j, 2) = Ta;
     end
-    simdata_cont{i,2} = this_sim_high;
+    simdata_cont{i,2} = this_sim_high;   
     
 end
 
@@ -167,52 +167,6 @@ for i = participants
     
     
     % Repeat, for high condition
-    ntrials = nobvs_high(i);
-    % This is the data structure that will contain the simulated
-    % observations for this participant
-    this_sim_high = double.empty(0, 2);
     
-    for j = 1:ntrials
-        
-        % Draw a random number and compare it to the mixing proportion (pi)
-        % to determine if we sample from a positive drift or a zero drift
-        % guessing process.
-        
-        if rand > pest(6) % Positive Drift
-            
-            % Arrange input vector that contains the  parameter values for simulation
-            mu1 = pest(1);
-            mu2 = pest(2);
-            sigma1 = 1;
-            sigma2 = 1;
-            a = pest(4);
-            
-            P = [mu1, mu2, sigma1, sigma2, a];
-            % Simulate a trial directly using dirisim
-            [T,Xt, Ta,theta,nonterm] = dirisim(P, h, tmax);
-            
-            % Store response error and response time of this trial
-            this_sim_high(j, 1) = theta;
-            this_sim_high(j, 2) = Ta;
-            
-        else % Zero Drift
-            
-            % Arrange input vector that contains the  parameter values for simulation
-            mu1 = 0;
-            mu2 = 0;
-            sigma1 = 1;
-            sigma2 = 1;
-            a = pest(5);
-            
-            P = [mu1, mu2, sigma1, sigma2, a];
-            % Simulate a trial directly using dirisim
-            [T,Xt, Ta,theta,nonterm] = dirisim(P, h, tmax);
-            
-            % Store response error and response time of this trial
-            this_sim_high(j, 1) = theta;
-            this_sim_high(j, 2) = Ta;
-        end
-    end
-    simdata_thresh{i,2} = this_sim_high;
 end
 end
