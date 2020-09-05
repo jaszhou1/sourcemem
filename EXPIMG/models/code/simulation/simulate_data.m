@@ -126,9 +126,10 @@ for i = participants
         
         % Draw a random number and compare it to the mixing proportion (pi)
         % to determine if we sample from a positive drift or a zero drift
-        % guessing process.
+        % guessing process. pi, which is pest(6) represents the proportion
+        % of trials that are driven by memory.
         
-        if rand > pest(6) % Positive Drift
+        if rand < pest(6) % Positive Drift
             
             % Arrange input vector that contains the  parameter values for simulation
             mu1 = pest(1);
