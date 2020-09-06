@@ -24,7 +24,7 @@ for i = participants
     nobvs_high(i) = this_participant_nobvs_high;
 end
 
-%% Load in the best fitting parameters of each model to that data
+%% Load in the best fitting parameters of each model to empirical data
 load('2020_02_10_19_28_pooled_badix_5.mat')
 
 % Arguments for the diffusion process simulation code
@@ -69,6 +69,9 @@ for i = participants
         % Simulate a trial directly using dirisim
         [T,Xt, Ta,theta,nonterm] = dirisim(P, h, tmax);
         
+        % Add non-decision time to response time
+        Ta = Ta + normrnd(pest(5), pest(6));
+        
         % Store response error and response time of this trial
         this_sim_low(j, 1) = theta;
         this_sim_low(j, 2) = Ta;
@@ -98,6 +101,9 @@ for i = participants
         P = [mu1, mu2, sigma1, sigma2, a];
         % Simulate a trial directly using dirisim
         [T,Xt, Ta,theta,nonterm] = dirisim(P, h, tmax);
+        
+        % Add non-decision time to response time
+        Ta = Ta + normrnd(pest(5), pest(6));
         
         % Store response error and response time of this trial
         this_sim_high(j, 1) = theta;
@@ -142,6 +148,9 @@ for i = participants
             % Simulate a trial directly using dirisim
             [T,Xt, Ta,theta,nonterm] = dirisim(P, h, tmax);
             
+            % Add non-decision time to response time
+            Ta = Ta + normrnd(pest(7), pest(8));
+            
             % Store response error and response time of this trial
             this_sim_low(j, 1) = theta;
             this_sim_low(j, 2) = Ta;
@@ -158,6 +167,9 @@ for i = participants
             P = [mu1, mu2, sigma1, sigma2, a];
             % Simulate a trial directly using dirisim
             [T,Xt, Ta,theta,nonterm] = dirisim(P, h, tmax);
+            
+            % Add non-decision time to response time
+            Ta = Ta + normrnd(pest(7), pest(8));
             
             % Store response error and response time of this trial
             this_sim_low(j, 1) = theta;
@@ -179,7 +191,7 @@ for i = participants
         % to determine if we sample from a positive drift or a zero drift
         % guessing process.
         
-        if rand > pest(6) % Positive Drift
+        if rand < pest(6) % Positive Drift
             
             % Arrange input vector that contains the  parameter values for simulation
             mu1 = pest(1);
@@ -191,6 +203,9 @@ for i = participants
             P = [mu1, mu2, sigma1, sigma2, a];
             % Simulate a trial directly using dirisim
             [T,Xt, Ta,theta,nonterm] = dirisim(P, h, tmax);
+            
+            % Add non-decision time to response time
+            Ta = Ta + normrnd(pest(7), pest(8));
             
             % Store response error and response time of this trial
             this_sim_high(j, 1) = theta;
@@ -208,6 +223,9 @@ for i = participants
             P = [mu1, mu2, sigma1, sigma2, a];
             % Simulate a trial directly using dirisim
             [T,Xt, Ta,theta,nonterm] = dirisim(P, h, tmax);
+            
+            % Add non-decision time to response time
+            Ta = Ta + normrnd(pest(7), pest(8));
             
             % Store response error and response time of this trial
             this_sim_high(j, 1) = theta;

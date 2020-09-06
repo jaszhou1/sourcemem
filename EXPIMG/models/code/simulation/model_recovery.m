@@ -127,19 +127,19 @@ end
 % % Plot
 %  for i = participants
 %     filename = ['Cont_Cont',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-%     fitplot(cont(i,:), VP_VP_Preds_Recognised{i,3});
+%     fitplot(cont(i,:), VP_VP{i,3});
 %     saveas(gcf,filename);
 %     
 %     filename = ['Cont_Thresh',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-%     fitplot(cont(i,:), VP_MX_Preds_Recognised{i,3});
+%     fitplot(cont(i,:), VP_MX{i,3});
 %     saveas(gcf,filename);
-
+% 
 %     filename = ['Thresh_Cont',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-%     fitplot(thresh(1,:), MX_VP_Preds_Recognised{i,3});
+%     fitplot(thresh(i,:), MX_VP{i,3});
 %     saveas(gcf,filename);
 %     
 %     filename = ['Thresh_Thresh',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-%     fitplot(thresh(i,:), MX_MX_Preds_Recognised{i,3});
+%     fitplot(thresh(i,:), MX_MX{i,3});
 %     saveas(gcf,filename);
 %     close all     
 %  end
