@@ -5,6 +5,13 @@ function [ll,bic,Pred, Gstuff, penalty, pest_penalty] = fitdcircle4x_conf(Pvar, 
 % Assumes the eta components in the x and y directions are the
 % same.
 
+
+%   Pooled indicates that parameters for low and high imageability (or long and short
+%   delay in the original set-up) are constrained to be the same. We are doing this because
+%   we saw no difference in the summary statistics of data between the two
+%   conditions
+
+
 %    [ll,bic,Pred] = fitdcircle3(Pvar, Pfix, Sel, Data)
 %    P = [v1a, v2a, v1b, v2b, eta1, eta2, a, Ter, st,sa]
 %          1    2    3    4    5      6   7   8   9   10
@@ -28,6 +35,7 @@ epsilon = 0.0001;
 nw = 50;
 h = tmax / nt; 
 w = 2 * pi / nw; 
+
 
 % Set manually if needed - 30/1/19
 %badix = 5; 
@@ -58,14 +66,14 @@ save Ptemp Ptemp
 
 v1a = P(1);
 v2a = P(2);
-v1b = v1a;
-v2b = v2a;
+v1b = P(1);
+v2b = P(2);
 eta1 = P(3);
-eta2 = eta1;
-a= P(4);
-ter = P(5);
-st = P(6);
-sa = P(7);
+eta2 = P(4);
+a= P(5);
+ter = P(6);
+st = P(7);
+sa = P(8);
 
 sigma = 1.0;
 
@@ -80,14 +88,13 @@ eta2b = eta2;
 % Cleaned up penalty calculation, hard and soft bounds - 30/1/19
 penalty = 0;
 
-
 % ---------------------------------------------------------------------------
-%   v1, v2, eta,   a,    Ter  st sa]
+%   v1a, v2a, v1b, v2b, eta1, eta2,   a,    Ter  st sa]
 % ---------------------------------------------------- ----------------------
-Ub= [ 4.0*ones(1,2),  3.0, 3.0, 5.0, 1.0, 0.7, 3.0]; 
-Lb= [0*ones(1,2),  0.0, 0.0, 0.5, -0.35, 0,  0];
-Pub=[ 2.5*ones(1,2),  2.5, 2.5, 4.5, 0.8, 0.65, 2.8]; 
-Plb=[0*ones(1,2),  0.0, 0.0, 0.7, -0.40, 0.01, 0];
+Ub= [ 4.0*ones(1,2),  3.0*ones(1,2),  5.0, 1.0, 0.7, 3.0]; 
+Lb= [0*ones(1,2),  0.0*ones(1,2),  0.5, -0.35, 0,  0];
+Pub=[ 2.5*ones(1,2),  2.5*ones(1,2),  4.5, 0.8, 0.65, 2.8]; 
+Plb=[0*ones(1,2),  0.0*ones(1,2),  0.7, -0.40, 0.01, 0];
 
 Pred = cell(1,4);
 if any(P - Ub > 0) | any(Lb - P > 0)
@@ -141,10 +148,10 @@ pest_penalty(2,:) = max(P - Pub, 0).^2 + max(Plb - P, 0).^2;
        for i = 1:n_sz_step
            Pai = [v1a, v2a, eta1a, eta2a, sigma, A(i)];
            Pbi = [v1b, v2b, eta1b, eta2b, sigma, A(i)];
-           [ta, gtai, thetaa, pthetaa, mta] = vdcircle300cls(Pa, tmax, badix);
-           [tb, gtbi, thetab, pthetab, mtb] = vdcircle300cls(Pb, tmax, badix);
-%            [ta, gta, thetaa, pthetaa, mta] = vdcircle3cls(Pa, nw, h, tmax, badix);
-%            [tb, gtb, thetab, pthetab, mtb] = vdcircle3cls(Pb, nw, h, tmax, badix);
+           %[ta, gta, thetaa, pthetaa, mta] = vdcircle300cls(Pa, tmax, badix);
+           %[tb, gtb, thetab, pthetab, mtb] = vdcircle300cls(Pb, tmax, badix);
+           [ta, gta, thetaa, pthetaa, mta] = vdcircle3cls(Pa, nw, h, tmax, badix);
+           [tb, gtb, thetab, pthetab, mtb] = vdcircle3cls(Pb, nw, h, tmax, badix);
            gta = gta + gtai;
            gtb = gtb + gtbi;
            pthetaa = pthetaa + pthetaai;
