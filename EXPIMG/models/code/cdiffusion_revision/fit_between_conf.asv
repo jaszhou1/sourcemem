@@ -149,7 +149,7 @@ end
 
 
 %% Save mat file 
-save('continuous_betweenconf_eta');
+save(datestr(now,'yyyy_mm_dd_HH_MM'));
 % save(datestr(now,'yyyy_mm_dd_HH_MM'));
 
 %% Save parameter and fit statistic csv files
