@@ -33,7 +33,7 @@ VP_LL_Preds = cell(length(participants),8);
 for i = participants
     
     ll = 1e7;
-    badix = badixs(i);
+    badix = 5;
     % Multiple Starts
     for j = 1:nruns
         [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPx_conf(Data{i},badix);
