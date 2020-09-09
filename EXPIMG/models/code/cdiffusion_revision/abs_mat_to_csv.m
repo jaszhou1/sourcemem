@@ -4,7 +4,9 @@ function [] = abs_mat_to_csv(filename, model_string, input_cells)
 %   the CSV as the returned output of this function) from the .MAT
 %   structure taken from the output of the diffusion runs.
 %
-
+%   This version is for the code that splits data into high and low
+%   confidence ranges. I just want the high data and fits to the high data
+%   here.
 
   %% Parameters for the plots.
   time_quantiles = [0.1, 0.5, 0.9];
@@ -26,8 +28,8 @@ for i = 1:length(input_cells)
     if isempty(data_cells{i, :})
         continue
     end
-    %Combine Conditions
-    data_cells{i,:} = vertcat(data_cells{i,1}{1,1},data_cells{i,1}{1,2});
+    % Select high confidence condition
+    data_cells{i,:} = data_cells{i,1}{1,2};
     
     %Make Absolute
     data_cells{i,1}(:,1) = abs(data_cells{i,1}(:,1));
@@ -60,9 +62,9 @@ end
     this_data_cell = data_cells{i, :};
    this_model_cell = model_cells{i, :};
 
-    time_vector = this_model_cell{1, 1};
-    theta_vector = this_model_cell{2, 1};
-    joint = this_model_cell{3, 1};
+    time_vector = this_model_cell{1, 2};
+    theta_vector = this_model_cell{2, 2};
+    joint = this_model_cell{3, 2};
 
     
     %% Output the Model predictions (the quantile lines).
