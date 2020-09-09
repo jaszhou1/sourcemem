@@ -1,4 +1,4 @@
-function [simdata_cont, simdata_thresh] = simulate_data()
+function [simdata_cont, simdata_thresh, p_cont, p_thresh] = simulate_data()
 %% simulate_data
 % Generate sets of simulated data for each model using parameters that provided the best
 % fit for each model for each participant. Each simulated dataset should be
@@ -35,6 +35,7 @@ nw = 50;
 d_angle = 2*pi/nw; %Angle space
 %% Simulate the continuous model
 simdata_cont = cell(20,2);
+p_cont = [];
 for i = participants
     % For this participant:
     

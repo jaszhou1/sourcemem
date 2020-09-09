@@ -125,24 +125,24 @@ for i = participants
 end
 %% Plot Fits superimposed on Data, and save.
 % % Plot
-%  for i = participants
-%     filename = ['Cont_Cont',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-%     fitplot(cont(i,:), VP_VP{i,3});
-%     saveas(gcf,filename);
-%     
-%     filename = ['Cont_Thresh',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-%     fitplot(cont(i,:), VP_MX{i,3});
-%     saveas(gcf,filename);
-% 
-%     filename = ['Thresh_Cont',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-%     fitplot(thresh(i,:), MX_VP{i,3});
-%     saveas(gcf,filename);
-%     
-%     filename = ['Thresh_Thresh',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
-%     fitplot(thresh(i,:), MX_MX{i,3});
-%     saveas(gcf,filename);
-%     close all     
-%  end
+ for i = participants
+    filename = ['Cont_Cont',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+    fitplot(cont(i,:), VP_VP{i,3});
+    saveas(gcf,filename);
+    
+    filename = ['Cont_Thresh',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+    fitplot(cont(i,:), VP_MX{i,3});
+    saveas(gcf,filename);
+
+    filename = ['Thresh_Cont',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+    fitplot(thresh(i,:), MX_VP{i,3});
+    saveas(gcf,filename);
+    
+    filename = ['Thresh_Thresh',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+    fitplot(thresh(i,:), MX_MX{i,3});
+    saveas(gcf,filename);
+    close all     
+ end
 
 %% Save 
 
@@ -150,4 +150,11 @@ end
 filename = [datestr(now,'yyyy_mm_dd_HH_MM'),'_recovery'];
 save(filename)
 
-% Print BICs out to a .csv file
+% Print BIC and parameter values out to a .csv file
+load('2020_02_10_19_28_pooled_badix_5.mat')
+
+filename = [datestr(now,'yyyy_mm_dd_HH_MM'),'_VP_gen.csv'];
+param_to_csv(filename, participants, VP_VP, VP_MX, VP_LL_Preds_Recognised, 1);
+
+filename = [datestr(now,'yyyy_mm_dd_HH_MM'),'_MX_gen.csv'];
+param_to_csv(filename, participants, MX_VP, MX_MX, MX_LL_Preds_Recognised, 0);
