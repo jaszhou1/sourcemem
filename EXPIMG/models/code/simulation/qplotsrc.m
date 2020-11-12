@@ -39,8 +39,8 @@ function qplotsrc(fitfunc, Pvar, Pfix, Sel, Data);
     gtmb = Gstuff{3,2};
 
     axhandle =setfig2;
-    qploti(co, axhandle(1), Data{1}, gtma, ta, thetaa, tmax, minrt, maxrt, 'Long', 0);
-    qploti(co, axhandle(2), Data{2}, gtma, ta, thetaa, tmax, minrt, maxrt, 'Short', 0);
+    qploti(co, axhandle(1), Data{1}, gtma, ta, thetaa, tmax, minrt, maxrt, 'Low', 0);
+    qploti(co, axhandle(2), Data{2}, gtma, ta, thetaa, tmax, minrt, maxrt, 'High', 0);
 end
 
 function qploti(co, axi, Datai, Gt, T, thetai, tmax, minrt, maxrt, labi, do_xlabel)
