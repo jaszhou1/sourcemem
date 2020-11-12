@@ -5,15 +5,27 @@
 
 % Opens and organises the data into recognised/unrecognised (based on conf)
 % and low/high imageability (condition, labelled cond)
-Fit_Data = Treatment_Simple();
+%Fit_Data = Treatment_Simple();
+load('REP.mat') % REP
+Fit_Data = cell(5,2);
+for i = 1:5
+    Fit_Data{i,1}(1,1) = data(i,1);
+    Fit_Data{i,1}(1,2) = data(i,2);
+    Fit_Data{i,2}(1,1) = data(i,1);
+    Fit_Data{i,2}(1,2) = data(i,2);
+end
 %Loading in dataset with RTs longer than 5s and greater than 3 sds above median after that, filtered out
 
-Recognised = Fit_Data(:,1);
-Unrecognised = Fit_Data(:,2);
+% Recognised = Fit_Data(:,1);
+% Unrecognised = Fit_Data(:,2);
+
+Recognised = Fit_Data(:,2); % REP
+Unrecognised = Fit_Data(:,1);
 
 %Fit the data, generate predictions.
 
-participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
+%participants = [1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17,18,19,20];
+participants = 1:5; % REP
 
 %%% BADIX CHANGE, 21/05 %%%
 % badix (appears in lower level fit functions, e.g. fitdcircle4x.m)
@@ -199,15 +211,15 @@ end
 %% Plot Fits superimposed on Data, and save.
 % % Plot
  for i = participants
-    filename = ['Cont_Recog_pooled',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+    filename = ['Cont',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
     fitplot(Recognised {i}, VP_LL_Preds_Recognised{i,3});
     saveas(gcf,filename);
     
-    filename = ['Thresh_Recog_pooled',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+    filename = ['Thresh',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
     fitplot(Recognised {i}, MX_LL_Preds_Recognised{i,3});
     saveas(gcf,filename);
     
-     filename = ['Hybrid_Recog_pooled',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
+     filename = ['Hybrid',num2str(i),'_',datestr(now,'dd_mm_yy_HH_MM'),'.png'];
      fitplot(Recognised {i}, HY_LL_Preds_Recognised{i,3});
      saveas(gcf,filename);
      close all     
