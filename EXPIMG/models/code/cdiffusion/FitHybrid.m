@@ -39,7 +39,7 @@ for i = participants
     badix = badixs(i);
     % Multiple Starts
     for j = 1:nruns
-        [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPx(Recognised{i},badix);
+        [llnew, bic, Pred, pest, Gstuff, penalty, pest_penalty] = FitVPx(Recognised{i});
         disp(i);
         
         if llnew < ll

@@ -19,7 +19,7 @@ rm(list = ls())
 knitr::opts_chunk$set(echo = TRUE)
 
 #knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/models/figures/critVarFits")
-knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/models/figures/cDiffusionFits")
+knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/EXPIMG/models/figures/cDiffusionFits")
 
 library(tidyverse)
 ```

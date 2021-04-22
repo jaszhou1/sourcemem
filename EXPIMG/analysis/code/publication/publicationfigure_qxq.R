@@ -152,14 +152,18 @@ joint.publication.figure <- function(data, empirical.data,
 }
 
 ## Read in model predictions
-Cont <- read.csv('2020-02-10-19-29_Cont_Joint_pooled.csv')
-Thresh <- read.csv('2020-02-10-19-29_Thresh_Joint_pooled.csv')
-Hybrid <- read.csv('2020-02-10-19-29_Hybrid_Joint_pooled.csv')
+# Cont <- read.csv('2020-02-10-19-29_Cont_Joint_pooled.csv')
+# Thresh <- read.csv('2020-02-10-19-29_Thresh_Joint_pooled.csv')
+# Hybrid <- read.csv('2020-11-12-21-23_Hybrid_Joint.csv')
+
+Cont <- read.csv('2020-11-12-21-23_Cont_Joint.csv')
+Thresh <- read.csv('2020-11-12-21-23_Thresh_Joint.csv')
 
 models <- rbind(Cont,Thresh)
-models$is_model <- models$is_model == ' true'
+models <- models[models$is_model == ' true',]
 ## Read in empirical data
-dataset <- read.csv('DataQuantiles.csv')
+dataset <- Cont[Cont$is_model == ' false',]
+# dataset <- read.csv('DataQuantiles.csv')
 dataset$quantile_idx <- as.factor(dataset$quantile_idx)
 
 joint.publication.figure(models, dataset)

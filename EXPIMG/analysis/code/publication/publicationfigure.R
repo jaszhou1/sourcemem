@@ -39,8 +39,8 @@ marginal.publication.figure <- function(data, empirical.data,
   )
   
   
-  X.AXIS.CEX <- 1.0
-  Y.AXIS.CEX <- 1.0
+  X.AXIS.CEX <- 1.5
+  Y.AXIS.CEX <- 1.5
   
   
   ## Get the summary variables from the data.
@@ -109,7 +109,7 @@ marginal.publication.figure <- function(data, empirical.data,
     ## Plot the predicted density of the models.
     for(model.type in MODEL.TYPES) {
       model.data <- p.resp.model[p.resp.model$model_name == model.type, ]
-      points(model.data$value, model.data$prob, type="l", lwd = 1.5, 
+      points(model.data$value, model.data$prob, type="l", lwd = 2, 
              #lty=MODEL.LTY[[model.type]], 
              # I don't think the line types help differentiate models visually
              # I have them all dashed so thresh and hybrid are both visible
@@ -163,7 +163,7 @@ marginal.publication.figure <- function(data, empirical.data,
     
     for(model.type in MODEL.TYPES) {
       model.data <- p.rt.model[p.rt.model$model_name == model.type, ]
-      points(model.data$value, model.data$prob, type="l" ,  lwd = 1.5,
+      points(model.data$value, model.data$prob, type="l" ,  lwd = 2,
              #lty=MODEL.LTY[[model.type]],
              lty=2,
              col=MODEL.COL[[model.type]])
@@ -196,8 +196,8 @@ marginal.publication.figure <- function(data, empirical.data,
   #allow clipping
   par(xpd = NA)
   ## Add in legend
-  legend("bottomright", inset = c(0.1,-0.4), legend=c("Variable-Precision", "Threshold", "Hybrid"),
-         col=c("#CC79A7","#E69F00","#009E73"), lty=c(2,2,2), bty = "n",cex=X.AXIS.CEX, title="Models")
+  legend("bottomright", legend=c("Variable-Precision", "Threshold", "Hybrid"),
+         col=c("#CC79A7","#E69F00","#009E73"), lty=c(2,2,2), lwd = 2, bty = "n",cex=X.AXIS.CEX, title="Models")
   
   ## If we're writing to a file (i.e. a PDF), close the device.
   if(filename != "") {
@@ -206,14 +206,15 @@ marginal.publication.figure <- function(data, empirical.data,
 }
 
 ## Read in model predictions
-Cont <- read.csv('2020-02-10-19-28_Cont_Marginal_pooled.csv')
-Thresh <- read.csv('2020-02-10-19-28_Thresh_Marginal_pooled.csv')
-Hybrid <- read.csv('2020-02-10-19-29_Hybrid_Marginal_pooled.csv')
+Cont <- read.csv('2020-11-12-20-42_Cont.csv')
+Thresh <- read.csv('2020-11-12-20-56_Thresh.csv')
+Hybrid <- read.csv('2020-11-12-20-56_Hybrid.csv')
 
 models <- rbind(Cont,Thresh,Hybrid)
 models$is_theta <- models$is_theta == ' true'
 models$is_model <- models$is_model == ' true'
 ## Read in empirical data
-dataset <- read.csv('dataFiltered3.csv')
+dataset <- read.csv('rep_data.csv')
+dataset$response_RT <- dataset$source_RT/1000
 
 marginal.publication.figure(models, dataset)

@@ -10,7 +10,7 @@ library(ggplot2)
 
 
 # Load in data
-setwd("~/GitHub/sourcemem/EXPIMG/analysis/data")
+setwd("~/GitHub/sourcemem_models/ZhangLuck/data")
 data <- read.csv('dataFiltered3.csv')
 data <- data[,-1]
 # valid_ps <- c(3,4,6,7,9,12,13,15,17)
