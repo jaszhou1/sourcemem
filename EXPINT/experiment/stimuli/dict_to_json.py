@@ -8,7 +8,7 @@ vectors = np.load('word2vec.npy', allow_pickle = True).item()
 # Load in the word list used in the experiment
 import csv
 import codecs
-with open('second_pass_word2vec.csv') as csv_file:
+with open('word2vec_length_6.csv') as csv_file:
     wordlist = csv.reader(codecs.EncodedFile(csv_file, 'utf8', 'utf_8_sig'), delimiter = '\n')
     # There's some stuff ('\xef\xbb\xbf') in my csv which tells computer that file is utf8 encoded.
     # Just reading it in will incorrectly include that as a string
@@ -26,5 +26,5 @@ with open('second_pass_word2vec.csv') as csv_file:
 # numpy array, because json.dump wont take a numpy object.
 filtered_vectors = {word:vectors[word].tolist() for word in words if word in vectors}
 
-with open('word2vec_second_pass.json', 'w+') as fp:
+with open('word2vec_length_6.json', 'w+') as fp:
     json.dump(filtered_vectors, fp, indent = 4)
