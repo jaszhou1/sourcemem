@@ -14,7 +14,7 @@ wordlist <- read.csv('subtlex_6_filtered.csv')
 profanity <- read.table('bad-words.txt')
 baby.names <- tolower(read.csv('baby-names.csv')$name)
 baby.names <- baby.names[!(baby.names == "river")] # I want to keep river
-banned.words <- c(baby.names, profanity)
+banned.words <- c(baby.names, profanity, 'cetera', 'wampum')
 wordlist <- wordlist[!(wordlist$word %in% banned.words),]
 wordlist$word <- tolower(wordlist$word)
 
@@ -36,6 +36,7 @@ for(i in 1:length(words)){
   }
 }
 
+# Function to find a matrix containing pairwise similarity higher than threshold
 get.matches <- function(word, threshold, all.words){
   # Subset the main dataframe with a starting word
   this.word <- as.list(all.words[word,])
@@ -58,4 +59,31 @@ get.matches <- function(word, threshold, all.words){
     }
   }
   return(this.subset)
+}
+
+get.all.matches <- function(threshold, all.words){
+  all.matches <- list()
+  for(i in words){
+    this.matches <- get.matches(i, threshold, all.words)
+    all.matches[[i]] <- this.matches
+  }
+  return(all.matches)
+}
+
+# Want lists of at least 15 items. Many of these are duplicates,
+# and manual filtering is how I've dealt with that.
+# filtered.lists <- all.matches[sapply(all.matches, nrow) > 15]
+
+# Format the list of lists as a 2D dataframe with columns numbering
+# each of the inner lists.
+format.list <- function(wordlists){
+  formatted.list <- data.frame(matrix(nrow = 0, ncol = 3))
+  colnames(formatted.list) <- c('word', 'list', 'list_type')
+  for(i in 1:length(wordlists)){
+    this.list <- wordlists[[i]]
+    formatted.list <- rbind(formatted.list, cbind(rownames(this.list), i, 'semantic'))
+  }
+  colnames(formatted.list) <- c('word', 'list', 'list_type')
+  write.csv(formatted.list, file = 'semantic_lists.csv')
+  return(formatted.list)
 }
