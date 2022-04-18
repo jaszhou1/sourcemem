@@ -3,20 +3,13 @@ setwd("~/git/sourcemem/EXPINT/experiment/static/stimuli")
 # Load in semantic lists, exclude those words, construct orthographic
 # from the leftovers
 
-semantic.lists <- read.csv('semantic_lists.csv')
+semantic.lists <- read.csv('semantic_lists_final.csv')
 
 # Load in a list of words and a JSON dictionary with word2vec vectors
-wordlist <- read.csv('subtlex_6_filtered.csv')
-wordlist <- wordlist[wordlist$FREQlow < 1000,]
+wordlist <- read.csv('subtlex_filtered_final.csv')
 
-# Words to exclude
-profanity <- read.table('bad-words.txt')
-baby.names <- tolower(read.csv('baby-names.csv')$name)
-baby.names <- baby.names[!(baby.names == "river")] # I want to keep river
-banned.words <- c(as.character(profanity$V1), baby.names, 'cetera', 'wampum')
-wordlist <- wordlist[!(wordlist$word %in% banned.words),]
+# exclude words that exist in semantic lists
 wordlist$word <- tolower(wordlist$word)
-
 wordlist <- wordlist[!(wordlist$word %in% semantic.lists$word),]
 
 # Find unique words
@@ -99,6 +92,13 @@ format.list <- function(wordlists){
     formatted.list <- rbind(formatted.list, cbind(rownames(this.list), i, 'orthographic'))
   }
   colnames(formatted.list) <- c('word', 'list', 'list_type')
-  write.csv(formatted.list, file = 'orthographic_lists_3.csv')
+  write.csv(formatted.list, file = 'orthographic_lists_final.csv')
   return(formatted.list)
+}
+
+# Top level function
+construct_orthographic_lists <- function(threshold){
+  paired.dist <- get.paired.dist(words)
+  all.matches <- get.all.matches(threshold, paired.dist)
+  format.list(all.matches)
 }

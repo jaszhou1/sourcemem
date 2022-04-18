@@ -15,7 +15,7 @@ wordlist.filtered$word <- tolower(wordlist.filtered$word)
 
 wordlist.filtered2 <- wordlist.filtered[(wordlist.filtered$length == 6) 
                               & (wordlist.filtered$FREQlow >= 10) 
-                              & (wordlist.filtered$FREQlow <= 1000),]
+                              & (wordlist.filtered$FREQlow <= 5000),]
 
 # Save filtered subtlex to draw from to make stimuli lists
 write.csv(wordlist.filtered2, file = "subtlex_filtered_final.csv")

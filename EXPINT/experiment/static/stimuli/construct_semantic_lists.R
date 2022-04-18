@@ -9,20 +9,16 @@ library(lsa)
 setwd("~/git/sourcemem/EXPINT/experiment/static/stimuli")
 
 # Load in a list of words and a JSON dictionary with word2vec vectors
-wordlist <- read.csv('subtlex_6_filtered.csv')
-word2vec <- fromJSON(file = 'word2vec_length_6.json')
+wordlist <- read.csv('subtlex_filtered_final.csv')
+word2vec <- fromJSON(txt = 'word2vec_final.json')
+
 
 # wordlist <- read.csv('subtlex_5_filtered.csv')
 # word2vec <- fromJSON(file = 'word2vec_length_5.json')
 
 # words to exclude
-profanity <- read.table('bad-words.txt')
-baby.names <- tolower(read.csv('baby-names.csv')$name)
-baby.names <- baby.names[!(baby.names == "river")] # I want to keep river
-banned.words <- c(as.character(profanity$V1), baby.names, 'cetera', 'wampum')
-wordlist <- wordlist[!(wordlist$word %in% banned.words),]
+wordlist <- wordlist[wordlist$word %in% names(word2vec), ]
 wordlist$word <- tolower(wordlist$word)
-
 
 # Find unique words
 words <- unique(wordlist$word)
@@ -103,6 +99,13 @@ format.list <- function(wordlists){
     formatted.list <- rbind(formatted.list, cbind(rownames(this.list), i, 'semantic'))
   }
   colnames(formatted.list) <- c('word', 'list', 'list_type')
-  write.csv(formatted.list, file = 'semantic_lists.csv')
+  write.csv(formatted.list, file = 'semantic_lists_final.csv')
   return(formatted.list)
+}
+
+# Top level function
+construct_semantic_lists <- function(threshold){
+  paired.cosine <- get.paired.cosine(words)
+  all.matches <- get.all.matches(threshold, paired.cosine)
+  format.list(all.matches)
 }
