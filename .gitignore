@@ -10,3 +10,11 @@ EXPINT/experiment/stimuli/SWOW/SWOW-EN.R100.csv
 EXPINT/experiment/stimuli/SWOW/SWOW-EN.R100.csv.zip
 EXPINT/experiment/stimuli/SWOW/SWOW-EN.complete.csv.zip
 EXPINT/experiment/stimuli/length6.Rdata
+EXPINT/experiment/static/stimuli/SWOW/manual_SWOW.csv
+EXPINT/experiment/static/stimuli/length6.Rdata
+EXPINT/experiment/static/stimuli/SWOW/filtered_SWOW.csv
+EXPINT/experiment/static/stimuli/SWOW/filtered_SWOW3.csv
+EXPINT/experiment/static/stimuli/SWOW/SWOW-EN.complete.csv.zip
+EXPINT/experiment/static/stimuli/SWOW/SWOW-EN.R100.csv
+EXPINT/experiment/static/stimuli/SWOW/SWOW-EN.R100.csv.zip
+EXPINT/experiment/static/stimuli/word2vec.npy
