@@ -19,3 +19,5 @@ EXPINT/experiment/static/stimuli/SWOW/SWOW-EN.R100.csv
 EXPINT/experiment/static/stimuli/SWOW/SWOW-EN.R100.csv.zip
 EXPINT/experiment/static/stimuli/word2vec.npy
 EXPINT/experiment/static/stimuli/unused_lists/length6.Rdata
+EXPINT/experiment/static/stimuli/paired_cosine_final.RData
+EXPINT/experiment/static/stimuli/paired_dist_final.RData
