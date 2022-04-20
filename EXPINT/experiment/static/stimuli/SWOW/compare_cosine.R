@@ -1,4 +1,4 @@
-setwd("~/git/sourcemem/EXPINT/experiment/stimuli/SWOW")
+setwd("~/git/sourcemem/EXPINT/experiment/static/stimuli/SWOW")
 library(rjson)
 library(lsa)
 
@@ -16,7 +16,7 @@ colnames(SWOW) <- c('cue', 'n_resp', 'word', 'count')
 colnames(DRM) <- c('cue', 'word')
 
 # Load in word2vec semantic vectors
-word2vec <- fromJSON(file = 'word2vec_filtered.json')
+word2vec <- fromJSON(txt = 'word2vec_filtered.json')
 
 for(i in 1:nrow(DRM)){
   cos <- cosine(word2vec[[DRM$cue[i]]], word2vec[[DRM$word[i]]])

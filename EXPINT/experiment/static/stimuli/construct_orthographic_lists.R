@@ -43,7 +43,10 @@ get.matches <- function(word, threshold, all.words){
   this.word <- this.word[this.word <= threshold]
   
   # Order these words by ascending distance to the starting word
-  this.word.ascending <- this.word[order(unlist(this.word), decreasing = FALSE)]
+  if(!(is.vector(unlist(this.word)))){
+    browser()
+  }
+  this.word.ascending <- this.word[order(unlist(this.word), decreasing = TRUE)]
   
   # Subset the main dataframe so only these words are included
   this.subset <- all.words[row.names(all.words) %in% names(this.word),
@@ -65,7 +68,7 @@ get.matches <- function(word, threshold, all.words){
 
 get.all.matches <- function(threshold, all.words){
   all.matches <- list()
-  for(i in words){
+  for(i in names(all.words)){
     # Find all words that exist in current lists
     # Unname the outer list (to avoid prefix on every name), and then get the names of inner lists
     existing.words <- names(unlist(unname(all.matches),recursive=FALSE))
@@ -75,10 +78,15 @@ get.all.matches <- function(threshold, all.words){
       all.matches[[i]] <- NULL
     } else {
       this.matches <- get.matches(i, threshold, all.words)
-      all.matches[[i]] <- this.matches
+      # If there are less than 16 words in this list, then we dont want this list
+      # and all the words in it should be eligible for subsequent lists
+      if (length(this.matches) < 16){
+        all.matches[[i]] <- NULL
+      } else{
+        all.matches[[i]] <- this.matches
+      }
     }
   }
-  all.matches <- all.matches[sapply(all.matches, nrow) > 15]
   return(all.matches)
 }
 

@@ -74,18 +74,22 @@ get.all.matches <- function(threshold, all.words){
     # Find all words that exist in current lists
     # Unname the outer list (to avoid prefix on every name), and then get the names of inner lists
     existing.words <- names(unlist(unname(all.matches),recursive=FALSE))
-    
+    all.words <- all.words[!(row.names(all.words) %in% existing.words),
+                               !(colnames(all.words) %in% existing.words)]
     # If this word is already in another list, skip it
     if(i %in% existing.words){
       all.matches[[i]] <- NULL
     } else {
       this.matches <- get.matches(i, threshold, all.words)
-      all.matches[[i]] <- this.matches
+      # If there are less than 16 words in this list, then we dont want this list
+      # and all the words in it should be eligible for subsequent lists
+      if (length(this.matches) < 16){
+        all.matches[[i]] <- NULL
+      } else{
+        all.matches[[i]] <- this.matches
+      }
     }
   }
-  # Want lists of at least 15 items. Many of these are duplicates,
-  # and manual filtering is how I've dealt with that.
-  all.matches <- all.matches[sapply(all.matches, nrow) > 15]
   return(all.matches)
 }
 
