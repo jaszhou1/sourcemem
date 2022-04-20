@@ -205,9 +205,9 @@ for (i = 0; i < num_con_blocks; i++) {
   var this_block_foil = [] ;
   for (j = 0; j <num_trials; j++) {
     this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
-                      angle: "N/A",
-                    cond: "orthographic similar",
-                  stim: "FALSE"};
+                          angle: "N/A",
+                          cond: "orthographic similar",
+                          stim: "FALSE"};
   }
   // The recognition list is constructed by shuffling foils with stim words
   recog_orthographic_similar[i] = shuffle(this_block_foil.concat(encode_orthographic_similar[i]));
@@ -366,7 +366,7 @@ for (i = 0; i < num_con_blocks; i++) {
   // Encode
    var prac_encode_list = [];
    for (j = 0; j <num_prac; j++) {
-     prac_encode_list[j] = {word: prac_stim_words[j],
+     prac_encode_list[j] = {word: prac_stim_words[j].word,
                       angle: getRandomAng(2*Math.PI),
                       cond: "practice",
                       stim: "TRUE"};
@@ -374,7 +374,7 @@ for (i = 0; i < num_con_blocks; i++) {
    // Recognition
    var prac_recog_list = [];
    for (j = 0; j <num_prac; j++) {
-     prac_recog_list[j] = {word: prac_foil_words[j],
+     prac_recog_list[j] = {word: prac_foil_words[j].word,
                       angle: "N/A",
                       cond: "practice",
                       stim: "FALSE"};

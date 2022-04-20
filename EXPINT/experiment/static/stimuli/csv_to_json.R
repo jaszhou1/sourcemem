@@ -2,8 +2,8 @@
 library(jsonlite)
 
 setwd("~/git/sourcemem/EXPINT/experiment/static/stimuli")
-semantic.lists <- read.csv('semantic_lists.csv')
-orthographic.lists <- read.csv('orthographic_lists.csv')
+semantic.lists <- read.csv('semantic_lists_final.csv')
+orthographic.lists <- read.csv('orthographic_lists_final.csv')
 
 semantic.json <- toJSON(semantic.lists, pretty = TRUE)
 orthographic.json <- toJSON(orthographic.lists, pretty = TRUE)
