@@ -21,3 +21,14 @@ EXPINT/experiment/static/stimuli/word2vec.npy
 EXPINT/experiment/static/stimuli/unused_lists/length6.Rdata
 EXPINT/experiment/static/stimuli/paired_cosine_final.RData
 EXPINT/experiment/static/stimuli/paired_dist_final.RData
+EXPINT/experiment_stimuli/SWOW/SWOW-EN.complete.csv.zip
+EXPINT/experiment_stimuli/paired_dist_final.RData
+EXPINT/experiment_stimuli/SWOW/SWOW-EN.R100.csv
+EXPINT/experiment_stimuli/paired_cosine_final.RData
+EXPINT/experiment_stimuli/paired_cosine.RData
+*.zip
+EXPINT/experiment_stimuli/unused_lists/manual_semantic_lists.RData
+EXPINT/experiment_stimuli/unused_lists/length6.Rdata
+EXPINT/experiment_stimuli/unused_lists/orthographic_list2.RData
+EXPINT/experiment_stimuli/unused_lists/orthographic_lists.RData
+EXPINT/experiment_stimuli/word2vec.npy
