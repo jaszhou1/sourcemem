@@ -11,7 +11,8 @@
 <script src="static/js/jspsych-call-function.js" type="text/javascript"></script>
 <script src="static/js/jspsych-contmemory-recall.js" type="text/javascript"></script>
 <script src="static/js/jspsych-html-keyboard-response.js" type="text/javascript"></script>
-<script src="static/stimuli/wordpool.js" type="text/javascript"></script>
+<script src="static/stimuli/orthographic-lists.js" type="text/javascript"></script>
+<script src="static/stimuli/semantic-lists.js" type="text/javascript"></script>
 {% endblock %}
 {% block main %}
 {% endblock %}
@@ -24,11 +25,13 @@
 // Jason Zhou <jasonz1 AT student DOT unimelb DOT edu DOT au>
 
   /* - - - - PARAMETERS - - - - */
-  var num_blocks = 12; // Subject to pilot testing for session timing
-  var num_trials = 10; // Subject to pilot testing for session timing
+  var num_con_blocks = 3 // Number of blocks per condition
+  var num_cons = 4 // Number of conditions
+  var num_blocks = num_con_blocks * num_cons; // Subject to pilot testing for session timing
+  var num_trials = 8 // Subject to pilot testing for session timing
+  var num_prac = Math.round(num_trials/2);
   var num_stim = num_blocks * num_trials; // Total number of words needed for the session
   var num_foil = num_stim; // Number of foil words for the recognition task
-  var num_prac = Math.round(num_trials/2); // Number of practice trials
 
   // Timing
   var isi = 250; // Inter-stimulus interval
@@ -92,67 +95,289 @@
 
   /* - - - - STIMULI - - - - */
 
-  // Shuffle wordpool
-  wordlist = jsPsych.randomization.shuffle(wordpool);
-  stim_words = wordlist.slice(0,num_stim) // Assign words as stimuli
-  foil_words = wordlist.slice(num_stim, num_stim + num_foil) // Assign words unused as stimuli as foils
-
-  // Practice words
-  prac_stim_words = wordlist.slice(num_stim + num_foil, num_stim + num_foil + num_prac);
-  prac_foil_words = wordlist.slice(num_stim + num_foil + num_prac, num_stim + num_foil + 2*num_prac);
-
-  // Function to generate a random angle between 0 and 2*pi
-  var stim_angles = [];
-  var prac_stim_angles = [];
+  // Function to generate a random angle between 0 and 2pi
   function getRandomAng(max) {
     return Math.random() * max;
   }
 
-  // Populate an array of same length as word stimuli with random angles
-  for (i = 0; i < stim_words.length; i++){
-    stim_angles[i] = getRandomAng(2*Math.PI)
+
+  // Function to subset out a list based on the "list" number property
+  function listNumber(x, y) {
+     return x.list == y;
+}
+
+//Function to shuffle stimuli (Fisher-Yates)
+function shuffle(originalArray){
+  // Added this line, otherwise it shuffles the encode list, rather than just returning a new array
+  var array = [].concat(originalArray);
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
   }
+  return array;
+}
 
-  for (i = 0; i < prac_stim_words.length; i++){
-    prac_stim_angles[i] = getRandomAng(2*Math.PI)
-  }
+// Modified version of the Fisher Yates function I copied off stack overflow
+// that shuffles multiple arrays in the exact same way (this is to shuffle
+// encode, recog and source blocks of different conditions) with checks for
+// equal array length
+var isArray = Array.isArray || function(value) {
+  return {}.toString.call(value) !== "[object Array]"
+};
 
+function shuffle_multiple() {
+  var arrLength = 0;
+  var argsLength = arguments.length;
+  var rnd, tmp;
 
-  /* - - - - GENERATE DESIGN - - - - */
-
-  //Function to shuffle stimuli (Fisher-Yates)
-  function shuffle(originalArray){
-    // Added this line, otherwise it shuffles the encode list, rather than just returning a new array
-    var array = [].concat(originalArray);
-    var currentIndex = array.length, temporaryValue, randomIndex;
-
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-
-      // And swap it with the current element.
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
+  for (var index = 0; index < argsLength; index += 1) {
+    if (!isArray(arguments[index])) {
+      throw new TypeError("Argument is not an array.");
     }
-    return array;
+
+    if (index === 0) {
+      arrLength = arguments[0].length;
+    }
+
+    if (arrLength !== arguments[index].length) {
+      throw new RangeError("Array lengths do not match.");
+    }
   }
+
+  while (arrLength) {
+    rnd = Math.floor(Math.random() * arrLength);
+    arrLength -= 1;
+    for (argsIndex = 0; argsIndex < argsLength; argsIndex += 1) {
+      tmp = arguments[argsIndex][arrLength];
+      arguments[argsIndex][arrLength] = arguments[argsIndex][rnd];
+      arguments[argsIndex][rnd] = tmp;
+    }
+  }
+}
+
+// Assemble lists for each condition
+/* - - - - ORTHOGRAPHIC - - - - */
+// Shuffle orthographic lists
+var num_orthographic_lists = Math.max.apply(Math, orthographic_lists.map(function(o) { return o.list; })) + 1
+// Get a shuffled array of indexes to use to select lists in a random order when contructing encode lists.
+var orthographic_index = shuffle(Array.from(Array(num_orthographic_lists).keys()))
+
+// Similar
+var encode_orthographic_similar = []; // Empty array for all stimuli to go into
+var recog_orthographic_similar = [];
+var source_orthographic_similar = [];
+
+for (i = 0; i < num_con_blocks; i++) {
+  // Get the index in position i in the shuffled array of indices
+  idx = orthographic_index[i]
+  this_list = shuffle(orthographic_lists.filter(x => x.list === idx)); // Returns words in list[idx[i]], and shuffles the inner list of stimuli
+
+  // ENCODE
+  // Populate an array with random angles for every item in this list
+  var this_stim_angles = [];
+  for (j = 0; j < this_list.length; j++){
+    this_stim_angles[j] = getRandomAng(2*Math.PI)
+  }
+
+  this_stim_words = this_list.slice(0,num_trials)
+  this_foil_words = this_list.slice(num_trials, num_trials *2)
+
+  var this_block = [] ;
+  for (j = 0; j <num_trials; j++) {
+    this_block[j] = {word: this_stim_words[j].word,
+                      angle: this_stim_angles[j],
+                      cond: "orthographic similar",
+                      stim: "TRUE"};
+  }
+  encode_orthographic_similar[i] = this_block;
+
+  // RECOGNITION
+  var this_block_foil = [] ;
+  for (j = 0; j <num_trials; j++) {
+    this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
+                      angle: "N/A",
+                    cond: "orthographic similar",
+                  stim: "FALSE"};
+  }
+  // The recognition list is constructed by shuffling foils with stim words
+  recog_orthographic_similar[i] = shuffle(this_block_foil.concat(encode_orthographic_similar[i]));
+
+  // The source task list is a shuffled copy of the encode list
+  source_orthographic_similar[i] = shuffle(encode_orthographic_similar[i])
+}
+
+// Dissimilar words are selected from the orthographic lists that are unused in the
+// similar lists. This is so we can be sure any difference between similar/Dissimilar
+// conditions are not due to the specific items
+var orthographic_dissimilar_words = shuffle(orthographic_lists.filter(x => !(x.list in orthographic_index.slice(0, num_con_blocks))))
+var orthographic_dissimilar_stim = orthographic_dissimilar_words.slice(0, num_con_blocks * num_trials)
+var orthographic_dissimilar_foil = orthographic_dissimilar_words.slice(num_con_blocks * num_trials, num_con_blocks * num_trials *2)
+
+var encode_orthographic_dissimilar = []; // Empty array for all stimuli to go into
+var recog_orthographic_dissimilar = [];
+var source_orthographic_dissimilar = [];
+
+for (i = 0; i < num_con_blocks; i++) {
+  word_offset = i * num_trials
+  this_stim_words = orthographic_dissimilar_stim.slice(word_offset, word_offset + num_trials)
+  this_foil_words = orthographic_dissimilar_foil.slice(word_offset, word_offset + num_trials)
+  // Populate an array with random angles for every item in this list
+  var this_block_angles = [];
+  for (j = 0; j < this_stim_words.length; j++){
+    this_block_angles[j] = getRandomAng(2*Math.PI)
+  }
+
+  var this_block = [] ;
+  for (j = 0; j <num_trials; j++) {
+    this_block[j] = {word: this_stim_words[j].word,
+                      angle: this_block_angles[j],
+                      cond: "orthographic dissimilar",
+                      stim: "TRUE"};
+  }
+  encode_orthographic_dissimilar[i] = this_block;
+
+  // RECOGNITION
+  var this_block_foil = [] ;
+  for (j = 0; j <num_trials; j++) {
+    this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
+                      angle: "N/A",
+                      cond: "orthographic dissimilar",
+                      stim: "FALSE"};
+  }
+  // The recognition list is constructed by shuffling foils with stim words
+  recog_orthographic_dissimilar[i] = shuffle(this_block_foil.concat(encode_orthographic_dissimilar[i]));
+
+  // The source task list is a shuffled copy of the encode list
+  source_orthographic_dissimilar[i] = shuffle(encode_orthographic_dissimilar[i])
+}
+
+/* - - - - SEMANTIC - - - - */
+// Shuffle semantic lists
+var num_semantic_lists = Math.max.apply(Math, semantic_lists.map(function(o) { return o.list; })) + 1
+// Get a shuffled array of indexes to use to select lists in a random order when contructing encode lists.
+var semantic_index = shuffle(Array.from(Array(num_semantic_lists).keys()))
+
+// Similar
+var encode_semantic_similar = []; // Empty array for all stimuli to go into
+var recog_semantic_similar = [];
+var source_semantic_similar = [];
+
+for (i = 0; i < num_con_blocks; i++) {
+  // Get the index in position i in the shuffled array of indices
+  idx = semantic_index[i]
+  this_list = shuffle(semantic_lists.filter(x => x.list === idx)); // Returns words in list[idx[i]], and shuffles the inner list of stimuli
+
+  // ENCODE
+  // Populate an array with random angles for every item in this list
+  var this_stim_angles = [];
+  for (j = 0; j < this_list.length; j++){
+    this_stim_angles[j] = getRandomAng(2*Math.PI)
+  }
+
+  this_stim_words = this_list.slice(0,num_trials)
+  this_foil_words = this_list.slice(num_trials, num_trials *2)
+
+  var this_block = [] ;
+  for (j = 0; j <num_trials; j++) {
+    this_block[j] = {word: this_stim_words[j].word,
+                      angle: this_stim_angles[j],
+                      cond: "semantic similar",
+                      stim: "TRUE"};
+  }
+  encode_semantic_similar[i] = this_block;
+
+  // RECOGNITION
+  var this_block_foil = [] ;
+  for (j = 0; j <num_trials; j++) {
+    this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
+                      angle: "N/A",
+                    cond: "semantic similar",
+                  stim: "FALSE"};
+  }
+  // The recognition list is constructed by shuffling foils with stim words
+  recog_semantic_similar[i] = shuffle(this_block_foil.concat(encode_semantic_similar[i]));
+
+  // The source task list is a shuffled copy of the encode list
+  source_semantic_similar[i] = shuffle(encode_semantic_similar[i])
+}
+
+// Dissimilar words are selected from the semantic lists that are unused in the
+// similar lists. This is so we can be sure any difference between similar/Dissimilar
+// conditions are not due to the specific items
+var semantic_dissimilar_words = shuffle(semantic_lists.filter(x => !(x.list in semantic_index.slice(0, num_con_blocks))))
+var semantic_dissimilar_stim = semantic_dissimilar_words.slice(0, num_con_blocks * num_trials)
+var semantic_dissimilar_foil = semantic_dissimilar_words.slice(num_con_blocks * num_trials, num_con_blocks * num_trials *2)
+
+var encode_semantic_dissimilar = []; // Empty array for all stimuli to go into
+var recog_semantic_dissimilar = [];
+var source_semantic_dissimilar = [];
+
+for (i = 0; i < num_con_blocks; i++) {
+  word_offset = i * num_trials
+  this_stim_words = semantic_dissimilar_stim.slice(word_offset, word_offset + num_trials)
+  this_foil_words = semantic_dissimilar_foil.slice(word_offset, word_offset + num_trials)
+  // Populate an array with random angles for every item in this list
+  var this_block_angles = [];
+  for (j = 0; j < this_stim_words.length; j++){
+    this_block_angles[j] = getRandomAng(2*Math.PI)
+  }
+
+  var this_block = [] ;
+  for (j = 0; j < num_trials; j++) {
+    this_block[j] = {word: this_stim_words[j].word,
+                      angle: this_block_angles[j],
+                      cond: "semantic dissimilar",
+                      stim: "TRUE"};
+  }
+  encode_semantic_dissimilar[i] = this_block;
+
+  // RECOGNITION
+  var this_block_foil = [] ;
+  for (j = 0; j <num_trials; j++) {
+    this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
+                      angle: "N/A",
+                      cond: "semantic dissimilar",
+                      stim: "FALSE"};
+  }
+  // The recognition list is constructed by shuffling foils with stim words
+  recog_semantic_dissimilar[i] = shuffle(this_block_foil.concat(encode_semantic_dissimilar[i]));
+
+  // The source task list is a shuffled copy of the encode list
+  source_semantic_dissimilar[i] = shuffle(encode_semantic_dissimilar[i])
+}
+
+  /* - - - - PRACTICE LIST - - - - */
+  // Draw prac words from unused orthographic list contents
+  var prac_words = shuffle(orthographic_lists).slice(recog_list.length*recog_list[1].length, recog_list.length*recog_list[1].length + num_prac*2)
+  var prac_stim_words = shuffle(prac_words.slice(0, num_prac))
+  var prac_foil_words = shuffle(prac_words.slice(num_prac, num_prac*2))
 
   // Generate a practice block
   // Encode
    var prac_encode_list = [];
    for (j = 0; j <num_prac; j++) {
      prac_encode_list[j] = {word: prac_stim_words[j],
-                       angle: prac_stim_angles[j]};
+                      angle: getRandomAng(2*Math.PI),
+                      cond: "practice",
+                      stim: "TRUE"};
    }
    // Recognition
    var prac_recog_list = [];
    for (j = 0; j <num_prac; j++) {
      prac_recog_list[j] = {word: prac_foil_words[j],
-                       angle: "N/A"};
+                      angle: "N/A",
+                      cond: "practice",
+                      stim: "FALSE"};
    }
    prac_recog_list = prac_recog_list.concat(prac_encode_list);
    prac_recog_list = shuffle(prac_recog_list);
@@ -161,49 +386,26 @@
    var prac_source_list = [];
    prac_source_list = shuffle(prac_encode_list);
 
+  /* - - - - GENERATE DESIGN - - - - */
 
-  // Generate experiment
-  //Generate encode list
-  var encode_list = []; // Empty array for all stimuli to go into
-  for (i = 0; i < num_blocks; i++) {
-    word_offset = i * num_trials
+  // TODO: Set up practice block from unused words.
 
-    this_block_words = stim_words.slice(word_offset, word_offset + num_trials)
-    this_block_angles = stim_angles.slice(word_offset, word_offset + num_trials)
-    var this_block = [] ;
-    for (j = 0; j <num_trials; j++) {
-      this_block[j] = {word: this_block_words[j],
-                        angle: this_block_angles[j]};
-    }
-    encode_list[i] = this_block;
-  }
+  // Concatenate encode lists of all conditions into one array.
+  var encode_list = encode_orthographic_similar.concat(encode_orthographic_dissimilar,
+                                                        encode_semantic_similar,
+                                                        encode_semantic_dissimilar)
 
+  // same for recognition blocks. Make sure these are concatenated in the same order
+  var recog_list = recog_orthographic_similar.concat(recog_orthographic_dissimilar,
+                                                      recog_semantic_similar,
+                                                      recog_semantic_dissimilar)
 
-  //Append foils to encode list..
-  var recog_list = [];
+  // and one more time for source test blocks
+  var source_list = source_orthographic_similar.concat(source_orthographic_dissimilar,
+                                                        source_semantic_similar,
+                                                        source_semantic_dissimilar)
 
-  for (i = 0; i < num_blocks; i++) {
-    word_offset = i * num_trials
-
-    this_block_foil_words = foil_words.slice(word_offset, word_offset + num_trials)
-    var this_block_foil = [] ;
-    for (j = 0; j <num_trials; j++) {
-      this_block_foil[j] = {word: this_block_foil_words[j], // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
-                        angle: "N/A"};
-    }
-    recog_list[i] = this_block_foil.concat(encode_list[i]);
-  }
-
-  // ...and shuffle to create recognition list
-  for (i = 0; i < num_blocks; i++) {
-  recog_list[i] = shuffle(recog_list[i])
-  }
-
-  //Shuffle encode blocks to create test blocks
-  var source_list = [];
-  for (i = 0; i < num_blocks; i++) {
-  source_list[i] = shuffle(encode_list[i])
-}
+ shuffle_multiple(encode_list, recog_list, source_list)
 
   /* - - - - DATA SAVING AND SUBMISSION - - - - */
   var DATA_SUBMITTED = false;
@@ -282,7 +484,9 @@
         data: {
           phase: 'study',
           block: -1,
-          trial: j
+          trial: j,
+          cond: prac_encode_list[j].cond,
+          stim: prac_encode_list[j].stim
         }
     });
   }
@@ -330,7 +534,9 @@
           data: {
             phase: 'recognition',
             block: -1,
-            trial: j
+            trial: j,
+            cond: prac_recog_list[j].cond,
+            stim: prac_recog_list[j].stim
           },
           on_finish: function(data){
             data.response = jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(data.key_press)
@@ -358,7 +564,9 @@
           data: {
             phase: 'recall',
             block: -1,
-            trial: j
+            trial: j,
+            cond: prac_source_list[j].cond,
+            stim: prac_source_list[j].stim
           },
           on_finish: function(data){
             data.correct = Math.abs(data.angular_error) <= Math.PI/8
@@ -390,7 +598,9 @@
           data: {
             phase: 'study',
             block: i,
-            trial: j
+            trial: j,
+            cond: encode_list[i][j].cond, // Add condition tag
+            stim: encode_list[i][j].stim // and a "is stim or foil" tag
           }
       });
     }
@@ -436,7 +646,9 @@
             data: {
               phase: 'recognition',
               block: i,
-              trial: j
+              trial: j,
+              cond: recog_list[i][j].cond,
+              stim: recog_list[i][j].stim
             },
             on_finish: function(data){
               data.response = jsPsych.pluginAPI.convertKeyCodeToKeyCharacter(data.key_press)
@@ -463,7 +675,9 @@
             data: {
               phase: 'recall',
               block: i,
-              trial: j
+              trial: j,
+              cond: source_list[i][j].cond,
+              stim: source_list[i][j].stim
             },
             on_finish: function(data){
               data.correct = Math.abs(data.angular_error) <= Math.PI/8
