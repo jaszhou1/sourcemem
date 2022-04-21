@@ -345,7 +345,7 @@ function shuffle_multiple() {
   var prac_encode_list = [];
   for (j = 0; j <num_prac; j++) {
     prac_encode_list[j] = {word: prac_stim_words[j].word,
-                     angle: Math.PI,
+                     angle: getRandomAng(2*Math.PI),
                      cond: "practice",
                      stim: "TRUE"};
   }
