@@ -62,13 +62,15 @@ datastore indicating the nature of the error.
     ## The required fields for each type of trial.
     REQUIRED_CONF_FIELDS = ["trial_type", "rt", "block",
                             "trial", "trial_index", "response", "stimulus",
-                            "key_press", "time_elapsed"]
+                            "key_press", "time_elapsed",
+                            "cond", "stim"]
     REQUIRED_PRESENT_FIELDS = ["trial_type", "num_fast_attempts",
                                "num_slow_attempts", "num_error_attempts",
                                "stimulus_word", "stimulus_angle",
                                "hitting_angle", "hitting_position", "angular_error",
                                "response_time", "display_angle_time", "display_word_time",
-                               "block", "trial","trial_index", "time_elapsed"]
+                               "block", "trial","trial_index", "time_elapsed",
+                               "cond", "stim"]
     REQUIRED_DISTRACTOR_FIELDS = ["trial_type", "subj_responses",
                                   "num1", "num2", "num3", "sums",
                                   "rts", "block", "trial",
@@ -77,7 +79,8 @@ datastore indicating the nature of the error.
                               "num_slow_attempts", "stimulus_word", "stimulus_angle",
                               "hitting_position", "hitting_angle",
                               "response_time", "display_time", "trial_index", "time_elapsed",
-                              "correct", "angular_error"]
+                              "correct", "angular_error",
+                              "cond", "stim"]
     trials = []
     present_trials = []
     recall_trials = []
@@ -101,7 +104,9 @@ datastore indicating the nature of the error.
                     "response": trial["response"],
                     "stimulus": trial["stimulus"],
                     "keycode": trial["key_press"],
-                    "time_elapsed": trial["time_elapsed"]
+                    "time_elapsed": trial["time_elapsed"],
+                    "cond": trial["cond"],
+                    "stim": trial["stim"]
                 }
                 trials.append(this_trial)
                 confidence_trials.append(this_trial)
@@ -130,7 +135,9 @@ datastore indicating the nature of the error.
                 "block": trial["block"],
                 "trial": trial["trial"],
                 "index": trial["trial_index"],
-                "time_elapsed": trial["time_elapsed"]
+                "time_elapsed": trial["time_elapsed"],
+                "cond": trial["cond"],
+                "stim": trial["stim"]
             }
             trials.append(this_trial)
             present_trials.append(this_trial)
@@ -169,7 +176,9 @@ datastore indicating the nature of the error.
                 "response_time": trial["response_time"],
                 "display_time": trial["display_time"],
                 "time_elapsed": trial["time_elapsed"],
-                "index": trial["trial_index"]
+                "index": trial["trial_index"],
+                "cond": trial["cond"],
+                "stim": trial["stim"]
             }
             trials.append(this_trial)
             recall_trials.append(this_trial)
