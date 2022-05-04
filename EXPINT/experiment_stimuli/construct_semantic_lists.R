@@ -17,6 +17,11 @@ setwd("~/git/sourcemem/EXPINT/experiment_stimuli")
 wordlist <- read.csv('subtlex_filtered_final.csv')
 word2vec <- fromJSON(txt = 'word2vec_final.json')
 
+profanity <- read.table('bad-words.txt')
+baby.names <- tolower(read.csv('baby-names.csv')$name)
+banned.words <- c(as.character(profanity$V1), baby.names, 'cetera', 'wampum',
+                  'autism', 'gayest', 'leadin', 'nomine', 'muumuu', 'mizzen',
+                  'senhor', 'blende', 'chicky', 'kibitz')
 
 # wordlist <- read.csv('subtlex_5_filtered.csv')
 # word2vec <- fromJSON(file = 'word2vec_length_5.json')
@@ -101,13 +106,13 @@ get.all.matches <- function(threshold, all.words){
 # Format the list of lists as a 2D dataframe with columns numbering
 # each of the inner lists.
 format.list <- function(wordlists){
-  formatted.list <- data.frame(matrix(nrow = 0, ncol = 3))
-  colnames(formatted.list) <- c('word', 'list', 'list_type')
+  formatted.list <- data.frame(matrix(nrow = 0, ncol = 4))
+  colnames(formatted.list) <- c('word', 'list', 'list_type', 'list_length')
   for(i in 1:length(wordlists)){
     this.list <- wordlists[[i]]
-    formatted.list <- rbind(formatted.list, cbind(rownames(this.list), i, 'semantic'))
+    formatted.list <- rbind(formatted.list, cbind(rownames(this.list), i, 'semantic', nrow(this.list)))
   }
-  colnames(formatted.list) <- c('word', 'list', 'list_type')
+  colnames(formatted.list) <- c('word', 'list', 'list_type', 'list_length')
   write.csv(formatted.list, file = 'semantic_lists_final_v2.csv')
   return(formatted.list)
 }
