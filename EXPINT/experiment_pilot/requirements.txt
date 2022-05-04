@@ -1,0 +1,7 @@
+Flask==1.1.1
+Jinja2==3.0.3
+werkzeug==2.0.3
+itsdangerous==2.0.1
+google-cloud-datastore
+google-cloud-logging
+google-cloud-storage
