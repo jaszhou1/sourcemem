@@ -7,8 +7,8 @@ library(stats)
 library(lsa)
 
 # Get the semantic threshold from looking at DRM norms
-source('~/git/sourcemem/EXPINT/experiment_stimuli/SWOW/compare_cosine.R')
-threshold <- mean(DRM$list_mean)
+#source('~/git/sourcemem/EXPINT/experiment_stimuli/SWOW/compare_cosine.R')
+#threshold <- mean(DRM$list_mean)
 
 
 setwd("~/git/sourcemem/EXPINT/experiment_stimuli")
