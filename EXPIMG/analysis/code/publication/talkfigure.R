@@ -204,6 +204,7 @@ marginal.publication.figure <- function(data, empirical.data,
 }
 
 ## Read in model predictions
+setwd("~/git/sourcemem/EXPIMG/analysis/code/publication")
 Cont <- read.csv('2020-02-10-19-28_Cont_Marginal_pooled.csv')
 Thresh <- read.csv('2020-02-10-19-28_Thresh_Marginal_pooled.csv')
 Hybrid <- read.csv('2020-02-10-19-29_Hybrid_Marginal_pooled.csv')

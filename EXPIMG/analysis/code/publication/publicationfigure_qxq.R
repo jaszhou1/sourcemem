@@ -17,7 +17,7 @@ joint.publication.figure <- function(data, empirical.data,
   if(filename == "") {
     X11() # Write to the screen
   } else {
-    png(file=filename, width=8.3, height=10.7, units = "in", pointsize = 12, res = 300)
+    png(file=filename, width=9, height=7.5, units = "in", pointsize = 14, res = 300)
     #pdf(file=filename, width=8.3, height=10.7)
   }
   
@@ -26,15 +26,13 @@ joint.publication.figure <- function(data, empirical.data,
   # Models by line type
   MODEL.LTY <- list(
     "Cont"=1,
-    "Thresh"=3,
-    "Hybrid"=2
+    "Thresh"=1
   )
   
   # Models by Colour
   MODEL.COL <- list(
-    "Cont"="#CC79A7",
-    "Thresh"= "#009E73",
-    "Hybrid"="#009E73"
+    "Cont"="blue1",
+    "Thresh"= "red1"
   )
   
   
@@ -106,7 +104,7 @@ joint.publication.figure <- function(data, empirical.data,
     # Plot each quantile for that model
         for(quantile.no in QUANTILES) {
           model.quantile <- model.data[model.data$quantile_idx == quantile.no,]
-          points(model.quantile$theta, model.quantile$rt, type="l",  lty=2,
+          points(model.quantile$theta, model.quantile$rt, type="l",  lty=2, lwd = 1.2,
                  col=MODEL.COL[[model.type]])
         }
       }
@@ -140,7 +138,7 @@ joint.publication.figure <- function(data, empirical.data,
   ##legend("bottomright", inset = c(0.4,0), legend=c("V-P", "Threshold", "Hybrid"),
           ##lty=c(2,2,2),col= c("#CC79A7","#E69F00","#009E73"), bty = "n",cex = INNER.X.AXIS.CEX, title="Models")
   legend("bottomright", inset = c(0.4,0), legend=c("V-P", "Threshold"),
-         lty=c(2,2,2),col= c("#CC79A7","#009E73"), bty = "n",cex = INNER.X.AXIS.CEX, title="Models")
+         lty=c(2,2,2),col= c("blue1","red1"), bty = "n",cex = INNER.X.AXIS.CEX, title="Models")
   legend("bottomright", inset = c(0,0), legend=c("0.1", "0.5", "0.9"),
          pch=c(15,19,17), bty = "n",cex=1,
          title = "Quantiles")
@@ -155,14 +153,16 @@ joint.publication.figure <- function(data, empirical.data,
 # Cont <- read.csv('2020-02-10-19-29_Cont_Joint_pooled.csv')
 # Thresh <- read.csv('2020-02-10-19-29_Thresh_Joint_pooled.csv')
 # Hybrid <- read.csv('2020-11-12-21-23_Hybrid_Joint.csv')
-
-Cont <- read.csv('2020-11-12-21-23_Cont_Joint.csv')
-Thresh <- read.csv('2020-11-12-21-23_Thresh_Joint.csv')
+setwd("~/git/sourcemem/EXPIMG/analysis/code/publication")
+# Cont <- read.csv('2020-11-12-21-23_Cont_Joint.csv')
+# Thresh <- read.csv('2020-11-12-21-23_Thresh_Joint.csv')
+Cont <- read.csv('2020-02-10-19-29_Cont_Joint_pooled.csv')
+Thresh <- read.csv('2020-02-10-19-29_Thresh_Joint_pooled.csv')
 
 models <- rbind(Cont,Thresh)
 models <- models[models$is_model == ' true',]
 ## Read in empirical data
-dataset <- Cont[Cont$is_model == ' false',]
+dataset <- read.csv('DataQuantiles.csv')
 # dataset <- read.csv('DataQuantiles.csv')
 dataset$quantile_idx <- as.factor(dataset$quantile_idx)
 

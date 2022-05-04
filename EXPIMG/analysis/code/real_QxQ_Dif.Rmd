@@ -14,7 +14,7 @@ library("ggplot2")
 library("plyr")
 library("tidyverse")
 library(readr)
-knitr::opts_knit$set(root.dir = "~/GitHub/sourcemem/EXPIMG/models/figures/cDiffusionFits")
+knitr::opts_knit$set(root.dir = "~/git/sourcemem/EXPIMG/models/figures/cDiffusionFits")
 ```
 
 ```{r}

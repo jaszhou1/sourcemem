@@ -11,7 +11,7 @@ library(ggplot2)
 ```
 
 ```{r}
-setwd("~/GitHub/sourcemem/analysis/data/modelPredictions")
+setwd("~/git/sourcemem/analysis/data/modelPredictions")
 Mix <- read.csv("cumDist.csv", header = FALSE)
 VP <- read.csv("VPcumDist.csv", header = FALSE)
 time <- read.csv("timeDensity.csv", header = FALSE)
