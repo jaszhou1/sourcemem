@@ -1,6 +1,6 @@
 setwd("~/git/sourcemem/EXPINT/experiment_stimuli")
-orthographic <- read.csv('orthographic_lists_final.csv')
-semantic <- read.csv('semantic_lists_final.csv')
+orthographic <- read.csv('orthographic_lists_final_v2.csv')
+semantic <- read.csv('semantic_lists_final_v2.csv')
 used.words <- rbind(orthographic, semantic)
 
 # Load in a list of words and a JSON dictionary with word2vec vectors

@@ -108,7 +108,7 @@ format.list <- function(wordlists){
     formatted.list <- rbind(formatted.list, cbind(rownames(this.list), i, 'semantic'))
   }
   colnames(formatted.list) <- c('word', 'list', 'list_type')
-  write.csv(formatted.list, file = 'semantic_lists_final.csv')
+  write.csv(formatted.list, file = 'semantic_lists_final_v2.csv')
   return(formatted.list)
 }
 
