@@ -1,5 +1,5 @@
 library(stringdist)
-setwd("~/git/sourcemem/EXPINT/experiment/static/stimuli")
+setwd("~/git/sourcemem/EXPINT/experiment_stimuli")
 # Load in semantic lists, exclude those words, construct orthographic
 # from the leftovers
 

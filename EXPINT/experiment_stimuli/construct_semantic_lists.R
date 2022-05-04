@@ -6,7 +6,12 @@ library(rjson)
 library(stats)
 library(lsa)
 
-setwd("~/git/sourcemem/EXPINT/experiment/static/stimuli")
+# Get the semantic threshold from looking at DRM norms
+source('~/git/sourcemem/EXPINT/experiment_stimuli/SWOW/compare_cosine.R')
+threshold <- mean(DRM$list_mean)
+
+
+setwd("~/git/sourcemem/EXPINT/experiment_stimuli")
 
 # Load in a list of words and a JSON dictionary with word2vec vectors
 wordlist <- read.csv('subtlex_filtered_final.csv')

@@ -1,7 +1,7 @@
 #Convert lists of stimul (semantic and orthographic lists) into JSON key:value pairs to read into javascript
 library(jsonlite)
 
-setwd("~/git/sourcemem/EXPINT/experiment/static/stimuli")
+setwd("~/git/sourcemem/EXPINT/experiment_stimuli")
 semantic.lists <- read.csv('semantic_lists_final.csv')
 orthographic.lists <- read.csv('orthographic_lists_final.csv')
 

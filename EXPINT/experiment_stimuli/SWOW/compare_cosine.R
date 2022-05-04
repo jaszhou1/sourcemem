@@ -1,5 +1,5 @@
-setwd("~/git/sourcemem/EXPINT/experiment/static/stimuli/SWOW")
-library(rjson)
+setwd("~/git/sourcemem/EXPINT/experiment_stimuli/SWOW")
+library(jsonlite)
 library(lsa)
 
 # small world of words
@@ -11,9 +11,10 @@ SWOW <- SWOW[!(SWOW$cue %in% unwanted.words),]
 
 # Tested DRM norms
 DRM <- read.csv('DRM_words.csv')
+DRM <- DRM[DRM$number<3,]
 
 colnames(SWOW) <- c('cue', 'n_resp', 'word', 'count')
-colnames(DRM) <- c('cue', 'word')
+colnames(DRM) <- c('cue', 'word', 'number')
 
 # Load in word2vec semantic vectors
 word2vec <- fromJSON(txt = 'word2vec_filtered.json')
@@ -32,7 +33,7 @@ for(i in 1:nrow(SWOW)){
 
 for(i in unique(DRM$cue)){
   this.list.mean <- mean(DRM[DRM$cue == i,]$cos)
-  DRM[DRM$cue == i,4] <- this.list.mean
+  DRM[DRM$cue == i,'list_mean'] <- this.list.mean
 }
 
 # From the SWOW list, remove any pairs where the semantic similarity is less than 2 sd below the mean 
@@ -72,4 +73,4 @@ SWOW <- SWOW[SWOW$n_resp >= 20,]
 # Remove responses which are also critical lures
 SWOW <- SWOW[!(SWOW$word %in% unique(SWOW$cue)),]
 
-write.csv(SWOW, file = 'automatic_SWOW.csv')
+#write.csv(SWOW, file = 'automatic_SWOW.csv')

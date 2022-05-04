@@ -1,6 +1,6 @@
 # filter SUBTLEX
 # Simple script to take the SUBTLEX corpus and filter for five letter words.
-setwd("~/git/sourcemem/EXPINT/experiment/static/stimuli")
+setwd("~/git/sourcemem/EXPINT/experiment_stimuli")
 
 wordlist <- read.csv('subtlexLength.csv')
 
@@ -15,7 +15,7 @@ wordlist.filtered$word <- tolower(wordlist.filtered$word)
 
 wordlist.filtered2 <- wordlist.filtered[(wordlist.filtered$length == 6) 
                               & (wordlist.filtered$FREQlow >= 10) 
-                              & (wordlist.filtered$FREQlow <= 5000),]
+                              & (wordlist.filtered$FREQlow <= 500),]
 
 # Save filtered subtlex to draw from to make stimuli lists
 write.csv(wordlist.filtered2, file = "subtlex_filtered_final.csv")
