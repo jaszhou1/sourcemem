@@ -7,8 +7,8 @@ library(stats)
 library(lsa)
 
 # Get the semantic threshold from looking at DRM norms
-#source('~/git/sourcemem/EXPINT/experiment_stimuli/SWOW/compare_cosine.R')
-#threshold <- mean(DRM$list_mean)
+# source('~/git/sourcemem/EXPINT/experiment_stimuli/SWOW/compare_cosine.R')
+# threshold <- mean(DRM$list_mean)
 
 
 setwd("~/git/sourcemem/EXPINT/experiment_stimuli")
@@ -27,6 +27,7 @@ banned.words <- c(as.character(profanity$V1), baby.names, 'cetera', 'wampum',
 # word2vec <- fromJSON(file = 'word2vec_length_5.json')
 
 # words to exclude
+wordlist <- wordlist[!(wordlist$word %in% banned.words),]
 wordlist <- wordlist[wordlist$word %in% names(word2vec), ]
 wordlist$word <- tolower(wordlist$word)
 
