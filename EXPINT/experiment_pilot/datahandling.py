@@ -75,12 +75,8 @@ datastore indicating the nature of the error.
                                   "num1", "num2", "num3", "sums",
                                   "rts", "block", "trial",
                                   "trial_index", "time_elapsed"]
-    REQUIRED_RECALL_FIELDS = ["trial_type", "num_fast_attempts",
-                              "num_slow_attempts", "stimulus_word", "stimulus_angle",
-                              "hitting_position", "hitting_angle",
-                              "response_time", "display_time", "trial_index", "time_elapsed",
-                              "correct", "angular_error",
-                              "cond", "stim"]
+    REQUIRED_RECALL_FIELDS = []
+
     trials = []
     present_trials = []
     recall_trials = []
@@ -191,7 +187,7 @@ datastore indicating the nature of the error.
         "session_id": session_id,
         "trials": trials,
         "present_trials": present_trials,
-        "recall_trials": recall_trials,
+        #"recall_trials": recall_trials,
         "math_distractors": math_distractors,
         "confidence_trials": confidence_trials
     }, data

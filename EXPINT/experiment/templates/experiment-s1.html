@@ -168,7 +168,7 @@ function shuffle_multiple() {
   // Assemble lists for each condition
   /* - - - - ORTHOGRAPHIC - - - - */
   // Shuffle orthographic lists
-  var num_orthographic_lists = Math.max.apply(Math, orthographic_lists.map(function(o) { return o.list; })) + 1
+  var num_orthographic_lists = Math.max.apply(Math, orthographic_lists.map(function(o) { return o.list; }))
   // Get a shuffled array of indexes to use to select lists in a random order when contructing encode lists.
   var orthographic_index = shuffle(Array.from(Array(num_orthographic_lists).keys())).map(n => n + 1)
 
@@ -218,7 +218,7 @@ function shuffle_multiple() {
 
   /* - - - - SEMANTIC - - - - */
   // Shuffle semantic lists
-  var num_semantic_lists = Math.max.apply(Math, semantic_lists.map(function(o) { return o.list; })) + 1
+  var num_semantic_lists = Math.max.apply(Math, semantic_lists.map(function(o) { return o.list; })) 
   // Get a shuffled array of indexes to use to select lists in a random order when contructing encode lists.
   var semantic_index = shuffle(Array.from(Array(num_semantic_lists).keys())).map(n => n + 1)
 
