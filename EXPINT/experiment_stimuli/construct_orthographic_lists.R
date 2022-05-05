@@ -100,7 +100,7 @@ format.list <- function(wordlists){
     formatted.list <- rbind(formatted.list, cbind(rownames(this.list), i, 'orthographic'))
   }
   colnames(formatted.list) <- c('word', 'list', 'list_type')
-  write.csv(formatted.list, file = 'orthographic_lists_final.csv')
+  write.csv(formatted.list, file = 'orthographic_lists_v5.csv')
   return(formatted.list)
 }
 
