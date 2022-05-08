@@ -25,7 +25,7 @@
 // Jason Zhou <jasonz1 AT student DOT unimelb DOT edu DOT au>
 
   /* - - - - PARAMETERS - - - - */
-  var num_con_blocks = 5 // Number of blocks per condition
+  var num_con_blocks = 1 // Number of blocks per condition
   var num_cons = 3 // Number of conditions
   var num_blocks = num_con_blocks * num_cons; // Subject to pilot testing for session timing
   var num_trials = 8 // Subject to pilot testing for session timing
@@ -168,7 +168,7 @@ function shuffle_multiple() {
   // Assemble lists for each condition
   /* - - - - ORTHOGRAPHIC - - - - */
   // Shuffle orthographic lists
-  var num_orthographic_lists = Math.max.apply(Math, orthographic_lists.map(function(o) { return o.list; })) 
+  var num_orthographic_lists = Math.max.apply(Math, orthographic_lists.map(function(o) { return o.list; }))
   // Get a shuffled array of indexes to use to select lists in a random order when contructing encode lists.
   var orthographic_index = shuffle(Array.from(Array(num_orthographic_lists).keys())).map(n => n + 1)
 
@@ -194,7 +194,7 @@ function shuffle_multiple() {
 
     var this_block = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block[j] = {word: this_stim_words[j].word,
+      this_block[j] = {word: this_stim_words[j].word.toUpperCase(),
                         angle: this_stim_angles[j],
                         cond: "orthographic",
                         stim: "TRUE"};
@@ -204,9 +204,9 @@ function shuffle_multiple() {
     // RECOGNITION
     var this_block_foil = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
+      this_block_foil[j] = {word: this_foil_words[j].word.toUpperCase(), // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
                             angle: "N/A",
-                            cond: "orthographicr",
+                            cond: "orthographic",
                             stim: "FALSE"};
     }
     // The recognition list is constructed by shuffling foils with stim words
@@ -244,7 +244,7 @@ function shuffle_multiple() {
 
     var this_block = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block[j] = {word: this_stim_words[j].word,
+      this_block[j] = {word: this_stim_words[j].word.toUpperCase(),
                         angle: this_stim_angles[j],
                         cond: "semantic",
                         stim: "TRUE"};
@@ -254,7 +254,7 @@ function shuffle_multiple() {
     // RECOGNITION
     var this_block_foil = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
+      this_block_foil[j] = {word: this_foil_words[j].word.toUpperCase(), // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
                         angle: "N/A",
                       cond: "semantic",
                     stim: "FALSE"};
@@ -294,7 +294,7 @@ function shuffle_multiple() {
 
     var this_block = [] ;
     for (j = 0; j < num_trials; j++) {
-      this_block[j] = {word: this_stim_words[j].word,
+      this_block[j] = {word: this_stim_words[j].word.toUpperCase(),
                         angle: this_block_angles[j],
                         cond: "unrelated",
                         stim: "TRUE"};
@@ -304,7 +304,7 @@ function shuffle_multiple() {
     // RECOGNITION
     var this_block_foil = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
+      this_block_foil[j] = {word: this_foil_words[j].word.toUpperCase(), // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
                         angle: "N/A",
                         cond: "unrelated",
                         stim: "FALSE"};
@@ -344,7 +344,7 @@ function shuffle_multiple() {
  // Encode
   var prac_encode_list = [];
   for (j = 0; j <num_prac; j++) {
-    prac_encode_list[j] = {word: prac_stim_words[j].word,
+    prac_encode_list[j] = {word: prac_stim_words[j].word.toUpperCase(),
                      angle: getRandomAng(2*Math.PI),
                      cond: "practice",
                      stim: "TRUE"};
@@ -352,7 +352,7 @@ function shuffle_multiple() {
   // Recognition
   var prac_recog_list = [];
   for (j = 0; j <num_prac; j++) {
-    prac_recog_list[j] = {word: prac_foil_words[j].word,
+    prac_recog_list[j] = {word: prac_foil_words[j].word.toUpperCase(),
                      angle: "N/A",
                      cond: "practice",
                      stim: "FALSE"};
