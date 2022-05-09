@@ -25,7 +25,7 @@
 // Jason Zhou <jasonz1 AT student DOT unimelb DOT edu DOT au>
 
   /* - - - - PARAMETERS - - - - */
-  var num_con_blocks = 5 // Number of blocks per condition
+  var num_con_blocks = 1 // Number of blocks per condition
   var num_cons = 3 // Number of conditions
   var num_blocks = num_con_blocks * num_cons; // Subject to pilot testing for session timing
   var num_trials = 8 // Subject to pilot testing for session timing
@@ -194,7 +194,7 @@ function shuffle_multiple() {
 
     var this_block = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block[j] = {word: this_stim_words[j].word,
+      this_block[j] = {word: this_stim_words[j].word.toUpperCase(),
                         angle: this_stim_angles[j],
                         cond: "orthographic",
                         stim: "TRUE"};
@@ -204,9 +204,9 @@ function shuffle_multiple() {
     // RECOGNITION
     var this_block_foil = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
+      this_block_foil[j] = {word: this_foil_words[j].word.toUpperCase(), // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
                             angle: "N/A",
-                            cond: "orthographicr",
+                            cond: "orthographic",
                             stim: "FALSE"};
     }
     // The recognition list is constructed by shuffling foils with stim words
@@ -218,7 +218,7 @@ function shuffle_multiple() {
 
   /* - - - - SEMANTIC - - - - */
   // Shuffle semantic lists
-  var num_semantic_lists = Math.max.apply(Math, semantic_lists.map(function(o) { return o.list; })) 
+  var num_semantic_lists = Math.max.apply(Math, semantic_lists.map(function(o) { return o.list; }))
   // Get a shuffled array of indexes to use to select lists in a random order when contructing encode lists.
   var semantic_index = shuffle(Array.from(Array(num_semantic_lists).keys())).map(n => n + 1)
 
@@ -244,7 +244,7 @@ function shuffle_multiple() {
 
     var this_block = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block[j] = {word: this_stim_words[j].word,
+      this_block[j] = {word: this_stim_words[j].word.toUpperCase(),
                         angle: this_stim_angles[j],
                         cond: "semantic",
                         stim: "TRUE"};
@@ -254,7 +254,7 @@ function shuffle_multiple() {
     // RECOGNITION
     var this_block_foil = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
+      this_block_foil[j] = {word: this_foil_words[j].word.toUpperCase(), // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
                         angle: "N/A",
                       cond: "semantic",
                     stim: "FALSE"};
@@ -294,7 +294,7 @@ function shuffle_multiple() {
 
     var this_block = [] ;
     for (j = 0; j < num_trials; j++) {
-      this_block[j] = {word: this_stim_words[j].word,
+      this_block[j] = {word: this_stim_words[j].word.toUpperCase(),
                         angle: this_block_angles[j],
                         cond: "unrelated",
                         stim: "TRUE"};
@@ -304,7 +304,7 @@ function shuffle_multiple() {
     // RECOGNITION
     var this_block_foil = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
+      this_block_foil[j] = {word: this_foil_words[j].word.toUpperCase(), // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
                         angle: "N/A",
                         cond: "unrelated",
                         stim: "FALSE"};
@@ -344,7 +344,7 @@ function shuffle_multiple() {
  // Encode
   var prac_encode_list = [];
   for (j = 0; j <num_prac; j++) {
-    prac_encode_list[j] = {word: prac_stim_words[j].word,
+    prac_encode_list[j] = {word: prac_stim_words[j].word.toUpperCase(),
                      angle: getRandomAng(2*Math.PI),
                      cond: "practice",
                      stim: "TRUE"};
@@ -352,7 +352,7 @@ function shuffle_multiple() {
   // Recognition
   var prac_recog_list = [];
   for (j = 0; j <num_prac; j++) {
-    prac_recog_list[j] = {word: prac_foil_words[j].word,
+    prac_recog_list[j] = {word: prac_foil_words[j].word.toUpperCase(),
                      angle: "N/A",
                      cond: "practice",
                      stim: "FALSE"};
@@ -504,33 +504,33 @@ function shuffle_multiple() {
 
   // SOURCE
   // Instructions
-  TIMELINE.push(instructions_source);
-  TIMELINE.push({
-      type: 'html-keyboard-response',
-      stimulus: '<p style="color:white">SOURCE</p>',
-      choices: jsPsych.NO_KEYS,
-      trial_duration: 2000,
-  });
-
-  //  var correct_trials = [];
-    // Trial
-    for(j = 0; j < num_prac; j++){
-      TIMELINE.push({
-          type: 'contmemory-recall',
-          stimulus: prac_source_list[j].word,
-          angle: prac_source_list[j].angle,
-          data: {
-            phase: 'recall',
-            block: -1,
-            trial: j,
-            cond: prac_source_list[j].cond,
-            stim: prac_source_list[j].stim
-          },
-          on_finish: function(data){
-            data.correct = Math.abs(data.angular_error) <= Math.PI/8
-          }
-      });
-    }
+  // TIMELINE.push(instructions_source);
+  // TIMELINE.push({
+  //     type: 'html-keyboard-response',
+  //     stimulus: '<p style="color:white">SOURCE</p>',
+  //     choices: jsPsych.NO_KEYS,
+  //     trial_duration: 2000,
+  // });
+  //
+  // //  var correct_trials = [];
+  //   // Trial
+  //   for(j = 0; j < num_prac; j++){
+  //     TIMELINE.push({
+  //         type: 'contmemory-recall',
+  //         stimulus: prac_source_list[j].word,
+  //         angle: prac_source_list[j].angle,
+  //         data: {
+  //           phase: 'recall',
+  //           block: -1,
+  //           trial: j,
+  //           cond: prac_source_list[j].cond,
+  //           stim: prac_source_list[j].stim
+  //         },
+  //         on_finish: function(data){
+  //           data.correct = Math.abs(data.angular_error) <= Math.PI/8
+  //         }
+  //     });
+  //   }
 
   TIMELINE.push(instructions_practice_end);
 
@@ -614,49 +614,49 @@ function shuffle_multiple() {
         });
       }
 
-    // SOURCE
-    // Instructions
-    TIMELINE.push({
-        type: 'html-keyboard-response',
-        stimulus: '<p style="color:white">SOURCE</p>',
-        choices: jsPsych.NO_KEYS,
-        trial_duration: 2000,
-    });
-
-    //  var correct_trials = [];
-      // Trial
-      for(j = 0; j < num_trials; j++){
-        TIMELINE.push({
-            type: 'contmemory-recall',
-            stimulus: source_list[i][j].word,
-            angle: source_list[i][j].angle,
-            data: {
-              phase: 'recall',
-              block: i,
-              trial: j,
-              cond: source_list[i][j].cond,
-              stim: source_list[i][j].stim
-            },
-            on_finish: function(data){
-              data.correct = Math.abs(data.angular_error) <= Math.PI/8
-            }
-        });
-      }
-
-    // BLOCK FEEDBACK
-    // Calculate feedback percentage and assemble string to be displayed
-    // Function to construct string for html keyboard response stimulus
-
-    TIMELINE.push({
-      type: "html-keyboard-response",
-      stimulus: function() {
-        var this_block_correct = jsPsych.data.get().last(num_trials).filter({trial_type: 'contmemory-recall',correct: true}).count()
-        var accuracy = Math.round(this_block_correct/num_trials * 100); // change to actual output from cont-recall
-        return "<p>End of Block</p>" +
-                "<p>You responded correctly on "+accuracy+"% of the trials in this block.</p>"+
-                "<p>Press any key to begin the next block.</p>";
-      }
-    });
+    // // SOURCE
+    // // Instructions
+    // TIMELINE.push({
+    //     type: 'html-keyboard-response',
+    //     stimulus: '<p style="color:white">SOURCE</p>',
+    //     choices: jsPsych.NO_KEYS,
+    //     trial_duration: 2000,
+    // });
+    //
+    // //  var correct_trials = [];
+    //   // Trial
+    //   for(j = 0; j < num_trials; j++){
+    //     TIMELINE.push({
+    //         type: 'contmemory-recall',
+    //         stimulus: source_list[i][j].word,
+    //         angle: source_list[i][j].angle,
+    //         data: {
+    //           phase: 'recall',
+    //           block: i,
+    //           trial: j,
+    //           cond: source_list[i][j].cond,
+    //           stim: source_list[i][j].stim
+    //         },
+    //         on_finish: function(data){
+    //           data.correct = Math.abs(data.angular_error) <= Math.PI/8
+    //         }
+    //     });
+    //   }
+    //
+    // // BLOCK FEEDBACK
+    // // Calculate feedback percentage and assemble string to be displayed
+    // // Function to construct string for html keyboard response stimulus
+    //
+    // TIMELINE.push({
+    //   type: "html-keyboard-response",
+    //   stimulus: function() {
+    //     var this_block_correct = jsPsych.data.get().last(num_trials).filter({trial_type: 'contmemory-recall',correct: true}).count()
+    //     var accuracy = Math.round(this_block_correct/num_trials * 100); // change to actual output from cont-recall
+    //     return "<p>End of Block</p>" +
+    //             "<p>You responded correctly on "+accuracy+"% of the trials in this block.</p>"+
+    //             "<p>Press any key to begin the next block.</p>";
+    //   }
+    // });
 
   }
 
