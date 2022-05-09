@@ -433,30 +433,30 @@ def experiment():
     user_is_sim = get_user_between_subjects_status(request)
     ## Check the whether we have session 1.
     completed_sessions = datahandling.get_completed_experimental_sessions(DATASTORE_CLIENT, sid)
-    if len(completed_sessions) > 0:
-        WAIT_PERIOD = datetime.timedelta(hours=MINIMUM_SESSION_REST_HRS)
-        ## Are we allowed to continue on? Has the last session been
-        ## completed too recently?
-        last_completed_session = max(completed_sessions.values(),
-                                     key=lambda x: x["completed"])
-        current_utc_time = datetime.datetime.now(datetime.timezone.utc)
-        time_rested = current_utc_time - last_completed_session["completed"]
-        if time_rested < WAIT_PERIOD:
-            ALMOST_READY = datetime.timedelta(hours=MINIMUM_SESSION_REST_HRS - 1)
-            rested_hours = time_rested.seconds / (60 * 60)
-            time_text = ""
-            if time_rested > ALMOST_READY:
-                time_text += "You are almost ready to begin the next" + \
-                    " session. Please wait at least one more hour."
-            elif time_rested < datetime.timedelta(hours=WAIT_UNTIL_TOMORROW_HRS):
-                time_text += "You will need to wait until tomorrow before the next session."
-            else:
-                time_text += "You must wait " + \
-                    str(round(MINIMUM_SESSION_REST_HRS - rested_hours)) + \
-                    " more hours."
-            return render_template("you-need-rest.html",
-                                   wait_time=MINIMUM_SESSION_REST_HRS+4,
-                                   time_text=time_text)
+    # if len(completed_sessions) > 0:
+    #     WAIT_PERIOD = datetime.timedelta(hours=MINIMUM_SESSION_REST_HRS)
+    #     ## Are we allowed to continue on? Has the last session been
+    #     ## completed too recently?
+    #     last_completed_session = max(completed_sessions.values(),
+    #                                  key=lambda x: x["completed"])
+    #     current_utc_time = datetime.datetime.now(datetime.timezone.utc)
+    #     time_rested = current_utc_time - last_completed_session["completed"]
+    #     if time_rested < WAIT_PERIOD:
+    #         ALMOST_READY = datetime.timedelta(hours=MINIMUM_SESSION_REST_HRS - 1)
+    #         rested_hours = time_rested.seconds / (60 * 60)
+    #         time_text = ""
+    #         if time_rested > ALMOST_READY:
+    #             time_text += "You are almost ready to begin the next" + \
+    #                 " session. Please wait at least one more hour."
+    #         elif time_rested < datetime.timedelta(hours=WAIT_UNTIL_TOMORROW_HRS):
+    #             time_text += "You will need to wait until tomorrow before the next session."
+    #         else:
+    #             time_text += "You must wait " + \
+    #                 str(round(MINIMUM_SESSION_REST_HRS - rested_hours)) + \
+    #                 " more hours."
+    #         return render_template("you-need-rest.html",
+    #                                wait_time=MINIMUM_SESSION_REST_HRS+4,
+    #                                time_text=time_text)
     has_completed_first_session = "1" in completed_sessions.keys()
     has_completed_second_session = "2" in completed_sessions.keys()
     has_completed_third_session = "3" in completed_sessions.keys()
@@ -470,24 +470,24 @@ def experiment():
     if has_completed_first_session and has_completed_second_session and has_completed_third_session and has_completed_fourth_session and has_completed_fifth_session and has_completed_sixth_session and has_completed_seventh_session and has_completed_eigth_session and has_completed_ninth_session and has_completed_tenth_session:
         logging.warning("User completed all sessions in experiment handler")
     if not has_completed_first_session:
-        return render_template("experiment.html")
+        return render_template("experiment-s1.html")
     if not has_completed_second_session:
-        return render_template("experiment.html")
+        return render_template("experiment-s2.html")
     if not has_completed_third_session:
-        return render_template("experiment.html")
+        return render_template("experiment-s3.html")
     if not has_completed_fourth_session:
-        return render_template("experiment.html")
+        return render_template("experiment-s4.html")
     if not has_completed_fifth_session:
-        return render_template("experiment.html")
+        return render_template("experiment-s5.html")
     if not has_completed_sixth_session:
-        return render_template("experiment.html")
+        return render_template("experiment-s6.html")
     if not has_completed_seventh_session:
-        return render_template("experiment.html")
+        return render_template("experiment-s7.html")
     if not has_completed_eigth_session:
-        return render_template("experiment.html")
+        return render_template("experiment-s8.html")
     if not has_completed_ninth_session:
-        return render_template("experiment.html")
-    return render_template("experiment.html")
+        return render_template("experiment-s9.html")
+    return render_template("experiment-s10.html")
 
 @app.route("/complete", methods=["GET"])
 def complete():

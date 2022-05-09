@@ -348,7 +348,7 @@ shuffle_multiple(encode_list, recog_list, source_list)
 
 /* - - - - PRACTICE LIST - - - - */
 // Draw prac words from the last element of each unrelated word list which should (hopefully!) be otherwise unused
-var prac_words = shuffle(unrelated_words.map(x => x[unrelated_words.length-1]))
+var prac_words = shuffle(unrelated_words.map(x => x[unrelated_words[1].length-1]))
 var prac_stim_words = shuffle(prac_words.slice(0, num_prac))
 var prac_foil_words = shuffle(prac_words.slice(num_prac, num_prac*2))
 
@@ -397,7 +397,7 @@ prac_source_list = shuffle(prac_encode_list);
 
   function saveData() {
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', '/submit-data/1');
+      xhr.open('POST', '/submit-data/2');
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onload = function() {
           DATA_SUBMITTED = true;
