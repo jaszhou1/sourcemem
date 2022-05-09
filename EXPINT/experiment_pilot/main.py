@@ -34,8 +34,8 @@ import datahandling
 EXPERIMENT_NAME = "Source Memory Experiment"
 
 ## Minimum rest period between sessions (in hours)
-MINIMUM_SESSION_REST_HRS = 22 
-WAIT_UNTIL_TOMORROW_HRS = 10 #10
+MINIMUM_SESSION_REST_HRS = 1
+WAIT_UNTIL_TOMORROW_HRS = 0
 
 ## Google Cloud Storage parameters.
 STORAGE_BUCKET_NAME = "jzhou-sourcemem-online"
@@ -470,24 +470,24 @@ def experiment():
     if has_completed_first_session and has_completed_second_session and has_completed_third_session and has_completed_fourth_session and has_completed_fifth_session and has_completed_sixth_session and has_completed_seventh_session and has_completed_eigth_session and has_completed_ninth_session and has_completed_tenth_session:
         logging.warning("User completed all sessions in experiment handler")
     if not has_completed_first_session:
-        return render_template("experiment-s1.html")
+        return render_template("experiment.html")
     if not has_completed_second_session:
-        return render_template("experiment-s2.html")
+        return render_template("experiment.html")
     if not has_completed_third_session:
-        return render_template("experiment-s3.html")
+        return render_template("experiment.html")
     if not has_completed_fourth_session:
-        return render_template("experiment-s4.html")
+        return render_template("experiment.html")
     if not has_completed_fifth_session:
-        return render_template("experiment-s5.html")
+        return render_template("experiment.html")
     if not has_completed_sixth_session:
-        return render_template("experiment-s6.html")
+        return render_template("experiment.html")
     if not has_completed_seventh_session:
-        return render_template("experiment-s7.html")
+        return render_template("experiment.html")
     if not has_completed_eigth_session:
-        return render_template("experiment-s8.html")
+        return render_template("experiment.html")
     if not has_completed_ninth_session:
-        return render_template("experiment-s9.html")
-    return render_template("experiment-s10.html")
+        return render_template("experiment.html")
+    return render_template("experiment.html")
 
 @app.route("/complete", methods=["GET"])
 def complete():

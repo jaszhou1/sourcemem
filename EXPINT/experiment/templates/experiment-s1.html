@@ -194,7 +194,7 @@ function shuffle_multiple() {
 
     var this_block = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block[j] = {word: this_stim_words[j].word,
+      this_block[j] = {word: this_stim_words[j].word.toUpperCase(),
                         angle: this_stim_angles[j],
                         cond: "orthographic",
                         stim: "TRUE"};
@@ -204,7 +204,7 @@ function shuffle_multiple() {
     // RECOGNITION
     var this_block_foil = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
+      this_block_foil[j] = {word: this_foil_words[j].word.toUpperCase(), // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
                             angle: "N/A",
                             cond: "orthographicr",
                             stim: "FALSE"};
@@ -218,7 +218,7 @@ function shuffle_multiple() {
 
   /* - - - - SEMANTIC - - - - */
   // Shuffle semantic lists
-  var num_semantic_lists = Math.max.apply(Math, semantic_lists.map(function(o) { return o.list; })) 
+  var num_semantic_lists = Math.max.apply(Math, semantic_lists.map(function(o) { return o.list; }))
   // Get a shuffled array of indexes to use to select lists in a random order when contructing encode lists.
   var semantic_index = shuffle(Array.from(Array(num_semantic_lists).keys())).map(n => n + 1)
 
@@ -244,7 +244,7 @@ function shuffle_multiple() {
 
     var this_block = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block[j] = {word: this_stim_words[j].word,
+      this_block[j] = {word: this_stim_words[j].word.toUpperCase(),
                         angle: this_stim_angles[j],
                         cond: "semantic",
                         stim: "TRUE"};
@@ -254,7 +254,7 @@ function shuffle_multiple() {
     // RECOGNITION
     var this_block_foil = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
+      this_block_foil[j] = {word: this_foil_words[j].word.toUpperCase(), // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
                         angle: "N/A",
                       cond: "semantic",
                     stim: "FALSE"};
@@ -271,31 +271,45 @@ function shuffle_multiple() {
   // similar lists. This is so we can be sure any difference between similar/Dissimilar
   // conditions are not due to the specific items
 
-  var orthographic_dissimilar_words = shuffle(orthographic_lists.filter(x => !(x.list in orthographic_index.slice(0, num_con_blocks))))
-  var semantic_dissimilar_words = shuffle(semantic_lists.filter(x => !(x.list in semantic_index.slice(0, num_con_blocks))))
-  var unrelated_words = shuffle(semantic_dissimilar_words.concat(orthographic_dissimilar_words))
+// To make the unrelated lists, start with an empty vector
+  var unrelated_words = new Array
 
-  var unrelated_stim = unrelated_words.slice(0, num_con_blocks * num_trials)
-  var unrelated_foil = unrelated_words.slice(num_con_blocks * num_trials, num_con_blocks * num_trials *2)
+// Then, iterate through a loop of each list not already used in the similar orthographic lists
+  for (i = num_con_blocks; i < orthographic_index.length-1; i++) {
+    // Get the index in position i in the shuffled array of indices
+    idx = orthographic_index[i]
+    this_list = shuffle(orthographic_lists.filter(x => x.list === idx)); // Returns words in list[idx[i]], and shuffles the inner list of stimuli
+    unrelated_words.push(this_list)
+  }// Add the shuffled array of items to unrelated_words, a nested array of lists of items
+// Same for semantic lists
+  for (i = num_con_blocks; i < semantic_index.length-1; i++) {
+    // Get the index in position i in the shuffled array of indices
+    idx = semantic_index[i]
+    this_list = shuffle(semantic_lists.filter(x => x.list === idx)); // Returns words in list[idx[i]], and shuffles the inner list of stimuli
+    unrelated_words.push(this_list) // Add the shuffled array of items to unrelated_words, a nested array of lists of items
+  }
 
-  var encode_unrelated = []; // Empty array for all stimuli to go into
-  var recog_unrelated = [];
-  var source_unrelated = [];
+// Now, assemble unrelated blocks by taking the ith element of each inner array, where i is the number of unrelated block
+var encode_unrelated = []; // Empty array for all stimuli to go into
+var recog_unrelated = [];
+var source_unrelated = [];
+  for(i = 0; i < num_con_blocks; i++){
+    this_list = shuffle(unrelated_words.map(x => x[i]))
 
-  for (i = 0; i < num_con_blocks; i++) {
-    word_offset = i * num_trials
-    this_stim_words = unrelated_stim .slice(word_offset, word_offset + num_trials)
-    this_foil_words = unrelated_foil.slice(word_offset, word_offset + num_trials)
+    // ENCODE
     // Populate an array with random angles for every item in this list
-    var this_block_angles = [];
-    for (j = 0; j < this_stim_words.length; j++){
-      this_block_angles[j] = getRandomAng(2*Math.PI)
+    var this_stim_angles = [];
+    for (j = 0; j < this_list.length; j++){
+      this_stim_angles[j] = getRandomAng(2*Math.PI)
     }
 
+    this_stim_words = this_list.slice(0,num_trials)
+    this_foil_words = this_list.slice(num_trials, num_trials *2)
+
     var this_block = [] ;
-    for (j = 0; j < num_trials; j++) {
-      this_block[j] = {word: this_stim_words[j].word,
-                        angle: this_block_angles[j],
+    for (j = 0; j <num_trials; j++) {
+      this_block[j] = {word: this_stim_words[j].word.toUpperCase(),
+                        angle: this_stim_angles[j],
                         cond: "unrelated",
                         stim: "TRUE"};
     }
@@ -304,10 +318,10 @@ function shuffle_multiple() {
     // RECOGNITION
     var this_block_foil = [] ;
     for (j = 0; j <num_trials; j++) {
-      this_block_foil[j] = {word: this_foil_words[j].word, // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
+      this_block_foil[j] = {word: this_foil_words[j].word.toUpperCase(), // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
                         angle: "N/A",
-                        cond: "unrelated",
-                        stim: "FALSE"};
+                      cond: "unrelated",
+                    stim: "FALSE"};
     }
     // The recognition list is constructed by shuffling foils with stim words
     recog_unrelated[i] = shuffle(this_block_foil.concat(encode_unrelated[i]));
@@ -317,8 +331,6 @@ function shuffle_multiple() {
   }
 
   /* - - - - GENERATE DESIGN - - - - */
-
-  // TODO: Set up practice block from unused words.
 
   // Concatenate encode lists of all conditions into one array.
   var encode_list = encode_orthographic.concat(encode_semantic,
@@ -335,8 +347,8 @@ function shuffle_multiple() {
  shuffle_multiple(encode_list, recog_list, source_list)
 
  /* - - - - PRACTICE LIST - - - - */
- // Draw prac words from unused orthographic list contents
- var prac_words = shuffle(unrelated_words).slice(recog_list.length*recog_list[1].length, recog_list.length*recog_list[1].length + num_prac*2)
+ // Draw prac words from the last element of each unrelated word list which should (hopefully!) be otherwise unused
+ var prac_words = shuffle(unrelated_words.map(x => x[unrelated_words.length-1]))
  var prac_stim_words = shuffle(prac_words.slice(0, num_prac))
  var prac_foil_words = shuffle(prac_words.slice(num_prac, num_prac*2))
 
