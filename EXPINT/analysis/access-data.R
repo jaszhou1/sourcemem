@@ -5,7 +5,7 @@
 ## more participants' datasets.
 
 library(httr)
-library(rjson)
+library(jsonlite)
 
 ## Parameters for accessing the online source memory experiment. These
 ## need to be in agreement with the parameters in the access
