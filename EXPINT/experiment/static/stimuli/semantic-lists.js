@@ -18,7 +18,7 @@ semantic_lists = [
     "member": 3
   },
   {
-    "word": "drapes",
+    "word": "sleeve",
     "list": 1,
     "list_type": "semantic",
     "member": 4
@@ -72,7 +72,7 @@ semantic_lists = [
     "member": 12
   },
   {
-    "word": "cleats",
+    "word": "blouse",
     "list": 1,
     "list_type": "semantic",
     "member": 13
