@@ -356,7 +356,7 @@ var prac_foil_words = shuffle(prac_words.slice(num_prac, num_prac*2))
 // Encode
 var prac_encode_list = [];
 for (j = 0; j <num_prac; j++) {
-  prac_encode_list[j] = {word: prac_stim_words[j].word,
+  prac_encode_list[j] = {word: prac_stim_words[j].word.toUpperCase(),
                    angle: getRandomAng(2*Math.PI),
                    cond: "practice",
                    stim: "TRUE"};
@@ -364,7 +364,7 @@ for (j = 0; j <num_prac; j++) {
 // Recognition
 var prac_recog_list = [];
 for (j = 0; j <num_prac; j++) {
-  prac_recog_list[j] = {word: prac_foil_words[j].word,
+  prac_recog_list[j] = {word: prac_foil_words[j].word.toUpperCase(),
                    angle: "N/A",
                    cond: "practice",
                    stim: "FALSE"};
@@ -658,16 +658,15 @@ prac_source_list = shuffle(prac_encode_list);
     // // Calculate feedback percentage and assemble string to be displayed
     // // Function to construct string for html keyboard response stimulus
     //
-    // TIMELINE.push({
-    //   type: "html-keyboard-response",
-    //   stimulus: function() {
-    //     var this_block_correct = jsPsych.data.get().last(num_trials).filter({trial_type: 'contmemory-recall',correct: true}).count()
-    //     var accuracy = Math.round(this_block_correct/num_trials * 100); // change to actual output from cont-recall
-    //     return "<p>End of Block</p>" +
-    //             "<p>You responded correctly on "+accuracy+"% of the trials in this block.</p>"+
-    //             "<p>Press any key to begin the next block.</p>";
-    //   }
-    // });
+    TIMELINE.push({
+      type: "html-keyboard-response",
+      stimulus: function() {
+        var pct = Math.round(jsPsych.progress().percent_complete)
+        return "<p>End of Block</p>" +
+                "<p>You have completed "+pct+"% of the experiment.</p>"+
+                "<p>Press any key to begin the next block.</p>";
+      }
+    });
 
   }
 

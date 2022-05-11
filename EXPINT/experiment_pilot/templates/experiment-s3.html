@@ -356,7 +356,7 @@ var prac_foil_words = shuffle(prac_words.slice(num_prac, num_prac*2))
 // Encode
 var prac_encode_list = [];
 for (j = 0; j <num_prac; j++) {
-  prac_encode_list[j] = {word: prac_stim_words[j].word,
+  prac_encode_list[j] = {word: prac_stim_words[j].word.toUpperCase(),
                    angle: getRandomAng(2*Math.PI),
                    cond: "practice",
                    stim: "TRUE"};
@@ -364,7 +364,7 @@ for (j = 0; j <num_prac; j++) {
 // Recognition
 var prac_recog_list = [];
 for (j = 0; j <num_prac; j++) {
-  prac_recog_list[j] = {word: prac_foil_words[j].word,
+  prac_recog_list[j] = {word: prac_foil_words[j].word.toUpperCase(),
                    angle: "N/A",
                    cond: "practice",
                    stim: "FALSE"};
