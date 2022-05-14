@@ -1050,7 +1050,7 @@ orthographic_lists = [
     "member": 15
   },
   {
-    "word": "lunger",
+    "word": "lunged",
     "list": 11,
     "list_type": "orthographic",
     "member": 16

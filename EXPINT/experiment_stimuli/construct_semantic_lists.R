@@ -2,7 +2,7 @@
 # We need to make x lists of words about 15-20 long where the pairwise 
 # word2vec similarity is maximised. Here using a matrix of pairwise sim
 # as opposed to trying to the k-means strat.
-library(rjson)
+library(jsonlite)
 library(stats)
 library(lsa)
 
@@ -15,7 +15,7 @@ setwd("~/git/sourcemem/EXPINT/experiment_stimuli")
 
 # Load in a list of words and a JSON dictionary with word2vec vectors
 wordlist <- read.csv('subtlex_filtered_final.csv')
-word2vec <- fromJSON(txt = 'word2vec_final.json')
+word2vec <- fromJSON(file = 'word2vec_final.json')
 
 profanity <- read.table('bad-words.txt')
 baby.names <- tolower(read.csv('baby-names.csv')$name)

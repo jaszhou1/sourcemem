@@ -1,14 +1,14 @@
 # Append orthographic and semantic similarity values to the dataset
 library(stringdist)
-library(jsonlite)
+library(rjson)
 library(lsa)
 
 # Load in semantic vectors
-setwd("~/git/sourcemem/EXPINT/experiment_stimuli")
+setwd("~/git/sourcemem_models/BaysCataloHussain/data/word2vec")
 
 # Load in word2vec semantic vectors
-word2vec <- fromJSON(file = 'word2vec_final.json')
-n_trials <- 8
+word2vec <- fromJSON(file = 'word2vec_filtered.json')
+n_trials <- 7
 
 cosine_distance <- function(theta, phi){
   distance <- 1 - cos(theta - phi)
@@ -19,7 +19,7 @@ append_distances <- function(data){
   distances <- c()
   for (i in 1:nrow(data)){
     this_target <- data$target_angle[i]
-    this_intrusions <- data[i, 14:22]
+    this_intrusions <- data[i, 16:22]
     this_trial_distances <- cosine_distance(this_target, this_intrusions)
     distances <- rbind(distances, this_trial_distances)
   }

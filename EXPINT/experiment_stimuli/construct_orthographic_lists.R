@@ -3,10 +3,11 @@ setwd("~/git/sourcemem/EXPINT/experiment_stimuli")
 # Load in semantic lists, exclude those words, construct orthographic
 # from the leftovers
 
-semantic.lists <- read.csv('semantic_list_filtered_v4.csv', fileEncoding="UTF-8-BOM")
+semantic.lists <- read.csv('semantic_lists_final.csv', fileEncoding="UTF-8-BOM")
 
 # Load in a list of words and a JSON dictionary with word2vec vectors
 wordlist <- read.csv('subtlex_filtered_final.csv')
+word2vec <- fromJSON(file = 'word2vec_final.json')
 
 # exclude words that exist in semantic lists
 wordlist$word <- tolower(wordlist$word)
