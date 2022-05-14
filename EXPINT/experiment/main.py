@@ -34,7 +34,7 @@ import datahandling
 EXPERIMENT_NAME = "Source Memory Experiment"
 
 ## Minimum rest period between sessions (in hours)
-MINIMUM_SESSION_REST_HRS = 22 
+MINIMUM_SESSION_REST_HRS = 23
 WAIT_UNTIL_TOMORROW_HRS = 10 #10
 
 ## Google Cloud Storage parameters.
@@ -532,25 +532,25 @@ def session_complete():
         has_completed_ninth_session = "9" in completed_sessions.keys()
         has_completed_tenth_session = "10" in completed_sessions.keys()
         if has_completed_first_session and has_completed_second_session and has_completed_third_session and has_completed_fourth_session and has_completed_fifth_session and has_completed_sixth_session and has_completed_seventh_session and has_completed_eigth_session and has_completed_ninth_session and has_completed_tenth_session:
-            return redirect("https://app.prolific.co/submissions/complete?cc=1F3FD55D")
+            return redirect("https://app.prolific.co/submissions/complete?cc=8EE537C9")
         elif has_completed_first_session and has_completed_second_session and has_completed_third_session and has_completed_fourth_session and has_completed_fifth_session and has_completed_sixth_session and has_completed_seventh_session and has_completed_eigth_session and has_completed_ninth_session:
-            return redirect("https://app.prolific.co/submissions/complete?cc=5C13E144")
+            return redirect("https://app.prolific.co/submissions/complete?cc=201394EC")
         elif has_completed_first_session and has_completed_second_session and has_completed_third_session and has_completed_fourth_session and has_completed_fifth_session and has_completed_sixth_session and has_completed_seventh_session and has_completed_eigth_session:
-            return redirect("https://app.prolific.co/submissions/complete?cc=75C12AC2")
+            return redirect("https://app.prolific.co/submissions/complete?cc=664346FA")
         elif has_completed_first_session and has_completed_second_session and has_completed_third_session and has_completed_fourth_session and has_completed_fifth_session and has_completed_sixth_session and has_completed_seventh_session:
-            return redirect("https://app.prolific.co/submissions/complete?cc=7D122125")
+            return redirect("https://app.prolific.co/submissions/complete?cc=6AEF0E49")
         elif has_completed_first_session and has_completed_second_session and has_completed_third_session and has_completed_fourth_session and has_completed_fifth_session and has_completed_sixth_session:
-            return redirect("https://app.prolific.co/submissions/complete?cc=2FB75361")
+            return redirect("https://app.prolific.co/submissions/complete?cc=3F6BDC84")
         elif has_completed_first_session and has_completed_second_session and has_completed_third_session and has_completed_fourth_session and has_completed_fifth_session:
-            return redirect("https://app.prolific.co/submissions/complete?cc=39530C08")
+            return redirect("https://app.prolific.co/submissions/complete?cc=37A46263")
         elif has_completed_first_session and has_completed_second_session and has_completed_third_session and has_completed_fourth_session:
-            return redirect("https://app.prolific.co/submissions/complete?cc=EDAA64B1")
+            return redirect("https://app.prolific.co/submissions/complete?cc=8FDC08F3")
         elif has_completed_first_session and has_completed_second_session and has_completed_third_session:
-            return redirect("https://app.prolific.co/submissions/complete?cc=60DD1460")
+            return redirect("https://app.prolific.co/submissions/complete?cc=1201F69C")
         elif has_completed_first_session and has_completed_second_session:
-            return redirect("https://app.prolific.co/submissions/complete?cc=24183B65")
+            return redirect("https://app.prolific.co/submissions/complete?cc=6B9950A6")
         elif has_completed_first_session:
-            return redirect("https://app.prolific.co/submissions/complete?cc=235C5D3D")
+            return redirect("https://app.prolific.co/submissions/complete?cc=29E5F01D")
         else:
             return redirect(url_for(".dispatch")) # Catch-all?
 
