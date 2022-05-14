@@ -206,7 +206,7 @@ function shuffle_multiple() {
     for (j = 0; j <num_trials; j++) {
       this_block_foil[j] = {word: this_foil_words[j].word.toUpperCase(), // Not strictly necessary, but treating foils the same as stimuli for consistent indexing
                             angle: "N/A",
-                            cond: "orthographicr",
+                            cond: "orthographic",
                             stim: "FALSE"};
     }
     // The recognition list is constructed by shuffling foils with stim words
