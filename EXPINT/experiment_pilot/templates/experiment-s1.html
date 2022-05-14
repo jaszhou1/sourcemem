@@ -661,7 +661,7 @@ prac_source_list = shuffle(prac_encode_list);
     TIMELINE.push({
       type: "html-keyboard-response",
       stimulus: function() {
-        var pct = Math.round(jsPsych.progress().percent_complete)
+        var pct = Math.round(jsPsych.progress().current_trial_global/num_blocks)
         return "<p>End of Block</p>" +
                 "<p>You have completed "+pct+"% of the experiment.</p>"+
                 "<p>Press any key to begin the next block.</p>";
