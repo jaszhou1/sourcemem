@@ -34,7 +34,7 @@ import datahandling
 EXPERIMENT_NAME = "Source Memory Experiment"
 
 ## Minimum rest period between sessions (in hours)
-MINIMUM_SESSION_REST_HRS = 23
+MINIMUM_SESSION_REST_HRS = 15
 WAIT_UNTIL_TOMORROW_HRS = 10 #10
 
 ## Google Cloud Storage parameters.
