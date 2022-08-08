@@ -14,7 +14,7 @@ library(rjson)
 library(lsa)
 
 # Load in semantic vectors
-setwd("~/git/sourcemem_models/BaysCataloHussain/data/word2vec")
+setwd("~/git/sourcemem/EXPINT/data")
 
 # Load in word2vec semantic vectors
 word2vec <- fromJSON(file = '~/git/sourcemem/EXPINT/experiment_stimuli/word2vec_final.json')
@@ -35,10 +35,12 @@ angle_diff <- function(a,b){
 started.users <- get.started.users(SERVER.BASE.URL, SERVER.PORT,
                                    SERVER.MASTER.API.KEY)
 
+completed.users <- get.completed.users(SERVER.BASE.URL, SERVER.PORT,
+                                   SERVER.MASTER.API.KEY)
 ## GET DATA
 get_session <- function(p,s){
   
-  this.session.data <- get.session.data.by.user.id(SERVER.BASE.URL, started.users[[p]], s,
+  this.session.data <- get.session.data.by.user.id(SERVER.BASE.URL, p, s,
                                                    SERVER.PORT, SERVER.MASTER.API.KEY)
   ## Extract the required information for each stimuli across the trial types.
   data <- data.frame(matrix(ncol=15,nrow= 0, dimnames=list(NULL, c("participant", "session", "block", 
@@ -308,7 +310,7 @@ recenter_data <- function(data){
     spatial <- data[i,37:43]
     orthographic <- data[i,44:50]
     semantic <- data[i,51:57]
-    for(j in 1:n_intrusions){
+    for(j in 1:n_intrusions){1
       recentered_errors[idx,1] <- this_intrusions[[j]]
       recentered_errors[idx,2] <- angle_diff(this_response_angle, this_intrusions[[j]])
       recentered_errors[idx,3] <- temporal[[j]]
@@ -333,7 +335,17 @@ plot_session <- function(p, sessions){
   data <- data[(data$is_stimulus == TRUE) & 
                       (data$block != -1), ]
   data <- append_intrusions(data)
-  #recentered.data <- recenter_data(data)
+  recentered.data <- recenter_data(data)
   source.error <- hist(data$source_error, breaks = 30)
+  return(source.error)
+}
+
+user_FA <- function(p, sessions){
+  data <- data.frame()
+  for(i in sessions){
+    this.data <- get_session(p, i)
+    data <- rbind(data, this.data)
+  }
+  recog <- get.user.recognition(data)
   return(recog)
 }
