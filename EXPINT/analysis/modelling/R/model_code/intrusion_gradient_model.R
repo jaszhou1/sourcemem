@@ -11,8 +11,8 @@ library(circular)
 
 intrusion_model <- function(params, data){
   
-  n_trials <- 10
-  n_intrusions <- 9
+  n_trials <- 8
+  n_intrusions <- n_trials -1
   # Get parameters out from vector
   # MEMORY
   kappa1 <- params[1] # Precision, memory

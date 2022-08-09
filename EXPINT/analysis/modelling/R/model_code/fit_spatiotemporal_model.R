@@ -28,13 +28,14 @@
 
 source('intrusion_gradient_model.R')
 
-fit_space_x_time <- function(data, participant){
+fit_spatiotemporal <- function(data, participant){
   # Set some starting parameters
   
   
   # Parameter Boundaries
-  lower <- c(0.1, 0.1, 0, 0, 0, 0, 0, 0, 0)
-  upper <- c(50, 50, 2, 1, 5, 5, 1, 1, 1)
+  #         1   2     3   4     5   6     7     8   9   10  11  12 13
+  lower <- c(1,  1,  0.2, 0.2, 0.2, 0.5, 0.5, 0.2, 0.2, 0,   0, 0, 0)
+  upper <- c(20, 15, 0.6, 0.4, 0.7, 3,   3,   0.6, 0.6, 0.6, 5, 5, 5)
   
   # Optimise
   this_fit <- DEoptim(intrusion_model, lower, upper, control = DEoptim.control(itermax = 200), this_data)

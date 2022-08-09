@@ -7,8 +7,8 @@ library(circular)
 
 intrusion_cond_model <- function(params, data){
   
-  n_trials <- 10
-  n_intrusions <- 9
+  n_trials <- 8
+  n_intrusions <- n_trials - 1
   # Get parameters out from vector
   # MEMORY
   kappa1 <- params[1] # Precision, memory
@@ -75,14 +75,14 @@ intrusion_cond_model <- function(params, data){
   ## Add different decays for the different conditions
   orthographic_similarity <- data.frame(matrix(nrow = nrow(data), ncol = n_intrusions))
   # When the condition is NOT orthographic, use iota 1
-  orthographic_similarity[data$condition!='orthographic',1:7] <- lapply(data[,44:50], shepard_similarity, k = iota1)
+  orthographic_similarity[data$condition!='orthographic',1:7] <- lapply(data[data$condition!='orthographic',44:50], shepard_similarity, k = iota1)
   # When the condition is orthographic, use iota 2
-  orthographic_similarity[data$condition=='orthographic',1:7] <- lapply(data[,44:50], shepard_similarity, k = iota2)
+  orthographic_similarity[data$condition=='orthographic',1:7] <- lapply(data[data$condition=='orthographic',44:50], shepard_similarity, k = iota2)
   
   # Scale semantic cosine similarity
   semantic_similarity <- data.frame(matrix(nrow = nrow(data), ncol = n_intrusions))
-  semantic_similarity[data$condition!='semantic',1:7] <- lapply(data[,51:57], shepard_similarity, k = upsilon1)
-  semantic_similarity[data$condition=='semantic',1:7] <- lapply(data[,51:57], shepard_similarity, k = upsilon2) 
+  semantic_similarity[data$condition!='semantic',1:7] <- lapply(data[data$condition!='semantic',51:57], shepard_similarity, k = upsilon1)
+  semantic_similarity[data$condition=='semantic',1:7] <- lapply(data[data$condition=='semantic',51:57], shepard_similarity, k = upsilon2) 
   
   
   # Multiply the temporal similarities with corresponding spatial similarity to get a spatiotemporal gradient on each trial
@@ -169,19 +169,30 @@ simulate_intrusion_cond_model <- function(participant, data, pest){
   n_intrusions <- 9 
   
   # Parameters
+  # MEMORY
   kappa1 <- params[[1]] # Precision, memory
   kappa2 <- params[[2]] # Precision, intrusion
+  # GUESS
   beta <- params[[3]] # Proportion of guesses (weight vs. intrusion+memory)
+  # INTRUSIONS
   gamma <- params[[4]] # Overall scaling of intrusions, this is not directly interpretable
+  # Spatiotemporal
   tau <- params[[5]] # Temporal asymmetry (tau >0.5 means forwards are more similar)
   lambda_b <- params[[6]] # Similarity decay of backwards temporal lag
   lambda_f <- params[[7]] # Similarity decay of forwards temporal lag
   zeta <- params[[8]] # Similarity decay of spatial similarity
   rho <- params[[9]] # Weight of spatial vs temporal in spatiotemporal component
-  chi <- params[[10]] # Weight of item vs spatiotemporal similarity component
-  iota <- params[[11]] # Similarity decay of orthographic component
-  upsilon <- params[[12]] # Similarity decay of semantic component
-  psi <- params[[13]] # Weight of semantic vs orthographic in item component
+  chi1 <- params[[10]] # Weight of item vs spatiotemporal similarity component LOW
+  chi2 <- params[[11]] # Weight of item HIGH
+  # Item
+  iota1 <- params[[12]] # Similarity decay of orthographic component LOW (unrelated/semantic)
+  iota2 <- params[[13]] # Decay for orthography HIGH 
+  upsilon1 <- params[[14]] # Similarity decay of semantic component LOW
+  upsilon2 <- params[[15]] # Decay for semantic HIGH
+  psi1 <- params[[16]] # Weight of semantic vs orthographic in item component BASE (unrelated)
+  psi2 <- params[[17]] # Weight of semantic vs orthographic in item component LOW (for orthographic)
+  psi3 <- params[[18]] # Weight of semantic HIGH (for semantic list)
+  
   
   
   shepard_similarity <- function(x, k){

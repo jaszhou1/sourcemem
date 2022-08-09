@@ -87,6 +87,7 @@ fit_ortho <- function(participant){
   upper <- c(40, 40, 1, 1, 5, 5, 0.8, 1, 1, 1)
   
   # Optimise
+  
   this_fit <- DEoptim(ortho_model, lower, upper, control = DEoptim.control(itermax = 200), this_data)
   
   # Calculate aic
@@ -267,7 +268,7 @@ fit_space_x_time_all <- function(is_parallel){
   res <- as.data.frame(res)
   write.csv(res, paste(toString(Sys.Date()), '_space_x_time_pest.csv', sep =""))
   sim_SxT <- simulate_dataset_space_x_time(data, res)
-  save(res, sim_SxT, file = paste(toString(Sys.Date()), '_sspace_x_time_pest.RData', sep =""))
+  save(res, sim_SxT, file = paste(toString(Sys.Date()), '_space_x_time_pest.RData', sep =""))
   return(res)
 }
 
