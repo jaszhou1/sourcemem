@@ -38,7 +38,7 @@ fit_spatiotemporal <- function(data, participant){
   upper <- c(20, 15, 0.6, 0.4, 0.7, 3,   3,   0.6, 0.6, 0.6, 5, 5, 5)
   
   # Optimise
-  this_fit <- DEoptim(intrusion_model, lower, upper, control = DEoptim.control(itermax = 200), this_data)
+  this_fit <- DEoptim(intrusion_model, lower, upper, control = DEoptim.control(itermax = 200), data)
   
   # Calculate aic
   aic <- get_aic(this_fit$optim$bestval, length(upper))
