@@ -27,6 +27,13 @@ data <- data[data$valid_RT, ]
 participants <- unique(data$participant)
 conds <- unique(data$condition)
 
+# Function to calculate aic 
+get_aic <- function(L, n_params){
+  aic <- 2*L + 2*n_params
+  return(aic)
+}
+
+
 # There are three conditions, orthographic lists, semantic lists, and unrelated lists
 # We can express this in a binary high/low way in terms of orthographic and semantic similarity
                 
