@@ -92,7 +92,7 @@ fit_saturated_all <- function(){
                    this_fit <- c(participants[i], optim$bestval, optim$aic, pest[1:18])
                    return(this_fit)
                  }
-  colnames(res) <- c('kappa1', 'kappa2', 'beta', 'gamma', 'tau', 'lambda_b', 'lambda_f', 
+  colnames(res) <- c('participant','nLL','aic', 'kappa1', 'kappa2', 'beta', 'gamma', 'tau', 'lambda_b', 'lambda_f', 
                      'zeta', 'rho', 'chi1', 'chi2', 'iota1', 'iota2', 'upsilon1', 'upsilon2', 
                      'psi1', 'psi2', 'psi3')
   
