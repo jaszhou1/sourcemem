@@ -89,12 +89,12 @@ fit_saturated_all <- function(){
                    this.data <- data[data$participant == i,]
                    optim <- fit_saturated(this.data, i)
                    pest <- optim$bestmem
-                   this_fit <- c(participants[i], optim$bestval, optim$aic, pest[1:18])
+                   this_fit <- c(participants[i], optim$bestval, optim$aic, pest[1:17])
                    return(this_fit)
                  }
   colnames(res) <- c('participant','nLL','aic', 'kappa1', 'kappa2', 'beta', 'gamma', 'tau', 'lambda_b', 'lambda_f', 
                      'zeta', 'rho', 'chi1', 'chi2', 'iota1', 'iota2', 'upsilon1', 'upsilon2', 
-                     'psi1', 'psi2', 'psi3')
+                     'psi1', 'psi2')
   
   res <- as.data.frame(res)
   write.csv(res, paste(toString(Sys.Date()), '_saturated_pest.csv', sep =""))

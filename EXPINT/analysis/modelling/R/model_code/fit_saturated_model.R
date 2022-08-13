@@ -19,21 +19,20 @@ iota1 <- 0.5    # 12. Similarity decay of orthographic component LOW (unrelated/
 iota2 <- 0.5    # 13. Decay for orthography HIGH 
 upsilon1 <- 0.5 # 14. Similarity decay of semantic component LOW
 upsilon2 <- 0.5 # 15. Decay for semantic HIGH
-psi1 <- 0.2     # 16. Weight of semantic vs orthographic in item component BASE (unrelated)
-psi2 <- 0.2     # 17. Weight of semantic vs orthographic in item component LOW (for orthographic)
-psi3 <- 0.5     # 18. Weight of semantic HIGH (for semantic list)
+psi1 <- 0.2     # 16. Weight of semantic vs orthographic in item component LOW (orth/unrelated)
+psi2 <- 0.5     # 18. Weight of semantic HIGH (for semantic list)
 
 P <- c(kappa1, kappa2, beta, gamma, tau, lambda_b, lambda_f, zeta, rho, chi1, chi2, iota1, iota2,
-       upsilon1, upsilon2, psi1, psi2, psi3)
+       upsilon1, upsilon2, psi1, psi2)
 
 fit_saturated <- function(data, participant){
   # Set some starting parameters
   
   
   # Parameter Boundaries
-  #         1    2    3    4    5   6     7     8   9   10   11   12  13  14  15  16  17  18
-  lower <- c(1,  1,  0.2, 0.2, 0.2, 0.5, 0.5, 0.2, 0.2, 0,   0,   0,  0,  0,  0,  0,  0,  0)
-  upper <- c(20, 15, 0.6, 0.4, 0.7, 3,   3,   0.6, 0.6, 0.6, 0.7, 5,  5,  5,  5,  1,  1,  1)
+  #         1    2    3    4    5   6     7     8   9   10   11   12  13  14  15  16  17  
+  lower <- c(1,  1,  0.2, 0.2, 0.2, 0.5, 0.5, 0.2, 0.2, 0,   0,   0,  0,  0,  0,  0,  0)
+  upper <- c(20, 15, 0.6, 0.4, 0.7, 3,   3,   0.6, 0.6, 0.6, 0.7, 5,  5,  5,  5,  1,  1)
   
   # Number of population members in DE, recommended 10*length of parameter vector
   NP <- length(upper[upper!=0]) * 10
@@ -42,7 +41,7 @@ fit_saturated <- function(data, participant){
   # could have different starting parameters for each population member? Am i making it worse than default NA
   
   # Optimise
-  this_fit <- DEoptim(intrusion_cond_model, lower, upper, control = DEoptim.control(initialpop = , itermax = 200), data)
+  this_fit <- DEoptim(intrusion_cond_model, lower, upper, control = DEoptim.control(itermax = 200), data)
   
   # Calculate aic
   aic <- get_aic(this_fit$optim$bestval, length(upper[upper!=0]))

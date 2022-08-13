@@ -30,9 +30,8 @@ intrusion_cond_model <- function(params, data){
   iota2 <- params[13] # Decay for orthography HIGH 
   upsilon1 <- params[14] # Similarity decay of semantic component LOW
   upsilon2 <- params[15] # Decay for semantic HIGH
-  psi1 <- params[16] # Weight of semantic vs orthographic in item component BASE (unrelated)
-  psi2 <- params[17] # Weight of semantic vs orthographic in item component LOW (for orthographic)
-  psi3 <- params[18] # Weight of semantic HIGH (for semantic list)
+  psi1 <- params[16] # Weight of semantic vs orthographic in item component LOW
+  psi2 <- params[17] # Weight of semantic vs orthographic in item component HIGH
   
   # Function to compute angular difference
   
@@ -89,8 +88,8 @@ intrusion_cond_model <- function(params, data){
   intrusion_weights <- data.frame(matrix(nrow = nrow(data),ncol = n_intrusions))
   
   intrusion_weights[data$condition == 'unrelated',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi1) * ((orthographic_similarity^(1-psi1)) * (semantic_similarity^psi1))^(chi1)
-  intrusion_weights[data$condition == 'orthographic',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi2) * ((orthographic_similarity^(1-psi2)) * (semantic_similarity^psi2))^(chi2)
-  intrusion_weights[data$condition == 'semantic',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi2) * ((orthographic_similarity^(1-psi3)) * (semantic_similarity^psi3))^(chi2)
+  intrusion_weights[data$condition == 'orthographic',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi2) * ((orthographic_similarity^(1-psi1)) * (semantic_similarity^psi1))^(chi2)
+  intrusion_weights[data$condition == 'semantic',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi2) * ((orthographic_similarity^(1-psi2)) * (semantic_similarity^psi2))^(chi2)
   # Multiply all intrusion weights with overall intrusion scaling parameter
   intrusion_weights <- gamma*intrusion_weights
   
@@ -189,11 +188,8 @@ simulate_intrusion_cond_model <- function(participant, data, pest){
   iota2 <- params[[13]] # Decay for orthography HIGH 
   upsilon1 <- params[[14]] # Similarity decay of semantic component LOW
   upsilon2 <- params[[15]] # Decay for semantic HIGH
-  psi1 <- params[[16]] # Weight of semantic vs orthographic in item component BASE (unrelated)
-  psi2 <- params[[17]] # Weight of semantic vs orthographic in item component LOW (for orthographic)
-  psi3 <- params[[18]] # Weight of semantic HIGH (for semantic list)
-  
-  
+  psi1 <- params[[16]] # Weight of semantic vs orthographic in item component LOW
+  psi2 <- params[[17]] # Weight of semantic vs orthographic in item component HIGH
   
   shepard_similarity <- function(x, k){
     x <- exp(-k * x)
@@ -226,18 +222,25 @@ simulate_intrusion_cond_model <- function(participant, data, pest){
   spatial_similarity <- data.frame(matrix(nrow = nrow(data), ncol = n_intrusions))
   spatial_similarity[,1:7] <- lapply(data[,37:43], shepard_similarity, k = zeta)
   
-  # Turn levenshtein distance into similarity
+  ## Add different decays for the different conditions
   orthographic_similarity <- data.frame(matrix(nrow = nrow(data), ncol = n_intrusions))
-  orthographic_similarity[,1:7] <- lapply(data[,44:50], shepard_similarity, k = iota)
+  # When the condition is NOT orthographic, use iota 1
+  orthographic_similarity[data$condition!='orthographic',1:7] <- lapply(data[data$condition!='orthographic',44:50], shepard_similarity, k = iota1)
+  # When the condition is orthographic, use iota 2
+  orthographic_similarity[data$condition=='orthographic',1:7] <- lapply(data[data$condition=='orthographic',44:50], shepard_similarity, k = iota2)
   
   # Scale semantic cosine similarity
   semantic_similarity <- data.frame(matrix(nrow = nrow(data), ncol = n_intrusions))
-  semantic_similarity[,1:7] <- lapply(data[,51:57], shepard_similarity, k = upsilon) 
+  semantic_similarity[data$condition!='semantic',1:7] <- lapply(data[data$condition!='semantic',51:57], shepard_similarity, k = upsilon1)
+  semantic_similarity[data$condition=='semantic',1:7] <- lapply(data[data$condition=='semantic',51:57], shepard_similarity, k = upsilon2) 
   
   
   # Multiply the temporal similarities with corresponding spatial similarity to get a spatiotemporal gradient on each trial
-  intrusion_weights <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi) * ((orthographic_similarity^(1-psi)) * (semantic_similarity^psi))^(chi)
+  intrusion_weights <- data.frame(matrix(nrow = nrow(data),ncol = n_intrusions))
   
+  intrusion_weights[data$condition == 'unrelated',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi1) * ((orthographic_similarity^(1-psi1)) * (semantic_similarity^psi1))^(chi1)
+  intrusion_weights[data$condition == 'orthographic',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi2) * ((orthographic_similarity^(1-psi1)) * (semantic_similarity^psi1))^(chi2)
+  intrusion_weights[data$condition == 'semantic',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi2) * ((orthographic_similarity^(1-psi2)) * (semantic_similarity^psi2))^(chi2)
   # Multiply all intrusion weights with overall intrusion scaling parameter
   intrusion_weights <- gamma*intrusion_weights
   
@@ -246,12 +249,6 @@ simulate_intrusion_cond_model <- function(participant, data, pest){
   target_weight <- 1 - rowSums(intrusion_weights)
   trial_weights <- cbind(target_weight, intrusion_weights)
   
-  # Make sure all weights are positive numbers
-  if(any(trial_weights < 0)){
-    print("Invalid: Negative weight")
-    nLL <- 1e7
-    return(nLL)
-  }
   # Multiply all weights by 1-beta, the non-guessed responses, based on the serial position of the target
   # Different betas for primacy and recency items
   
