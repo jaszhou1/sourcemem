@@ -37,7 +37,7 @@ for i = 1:length(participants)
     this_data = all_data((all_data(:,1) == i), :);
     this_cell = zeros(length(this_data), 40);
     this_cell(:,1) = this_data(:,13); % source error
-    this_cell(:,2) = this_data(:,14); % source RT
+    this_cell(:,2) = this_data(:,14)/1000; % source RT
     this_cell(:,3) = this_data(:,12); % response angle
     this_cell(:,4) = this_data(:,11); % target angle
     this_cell(:,5) = this_data(:,6); % trial number (in block)

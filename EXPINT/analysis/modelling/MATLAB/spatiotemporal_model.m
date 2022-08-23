@@ -82,7 +82,7 @@ beta = P(10);
 % beta_primacy = P(11);
 % beta_recency = P(12);
 % Temporal Gradient
-kappa = P(11); %Scaling parameter for forwards vs backwards intrusion decay slope
+tau = P(11); %Scaling parameter for forwards vs backwards intrusion decay slope
 lambda_b = P(12); % Decay of the backwards slope
 lambda_f = P(13); % Decay of the forwards slope
 zeta = P(14); %precision for Shepard similarity function (perceived spatial distance)
@@ -144,8 +144,8 @@ P_guess = [0, 0, 0, 0, sigma, a_guess];
 
 % Raw temporal similarity values from the lags -9 to 9, skipping 0 (in a
 % list of 10)
-backwards_similarity = (1-kappa)*exp(-lambda_b*(abs(-num_intrusions:-1)));
-forwards_similarity = kappa*exp(-lambda_f*(abs(1:num_intrusions)));
+backwards_similarity = (1-tau)*exp(-lambda_b*(abs(-num_intrusions:-1)));
+forwards_similarity = tau*exp(-lambda_f*(abs(1:num_intrusions)));
 
 % Concatenate, and normalise
 temporal_similarity_values = [backwards_similarity, forwards_similarity];
