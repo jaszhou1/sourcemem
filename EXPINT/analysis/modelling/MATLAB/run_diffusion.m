@@ -5,7 +5,7 @@
 load('EXPINT_data.mat')
 
 n_participants = length(data);
-n_runs = 3;
+n_runs = 10;
 num_workers = maxNumCompThreads/2 - 1; % Maximum number of workers
 
 %% Saturated Model
