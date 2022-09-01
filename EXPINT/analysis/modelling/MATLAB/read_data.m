@@ -47,6 +47,7 @@ for i = 1:length(participants)
         this_cell(:,20:26) = this_data(:,37:43); % intrusion spatial distances
         this_cell(:,27:33) = this_data(:,44:50); % Orthographic
         this_cell(:,34:40) = this_data(:,51:57); % Semantic
+        this_cell(:,41:47) = this_data(:, 16:22); % Intrusion Angles
         data{i,j} = this_cell;
     end
 end
