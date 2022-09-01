@@ -78,8 +78,10 @@ upsilon2 = P(23); % Semantic decay, High
 ter = P(24);
 st = P(25);
 
-% Check to see if component weights sum to 1.
-if gamma + beta > 1
+% Check that the weights make sense for conditions
+% i.e., I expect the weight for semantic similarity to be higher in the
+% semantic condition, so I will constrain the psi2 > psi1.
+if psi1 > psi2 || chi1 > chi2
     ll = 1e7;
     aic = 0;
     penalty = 1e7;
@@ -182,6 +184,7 @@ for cond = 1:3
 
     % Semantic similarity
     semantic_similarities = this_data(:, 34:40);
+    semantic_similarities = shepard(semantic_similarities, upsilon);
 
     % Normalise all components
     temporal_similarities = temporal_similarities./(max(temporal_similarities(:)));
