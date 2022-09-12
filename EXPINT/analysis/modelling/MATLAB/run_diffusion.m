@@ -82,3 +82,18 @@ parfor (i = 1:n_participants, num_workers)
 end
 filename = [datestr(now,'yyyy_mm_dd_HH')];
 save(filename)
+
+
+%% Simulate some datasets
+sim_gradient = [];
+for i = 1:10
+    this_sim = simulate_gradient_model(data(i,:), saturated{i,3}, i);
+    sim_gradient = vertcat(sim_gradient, this_sim);
+end
+
+sim_spatiotemporal = [];
+for i = 1:10
+    this_sim = simulate_gradient_model(data(i,:), spatiotemporal{i,3}, i);
+    sim_spatiotemporal = vertcat(sim_spatiotemporal, this_sim);
+end
+

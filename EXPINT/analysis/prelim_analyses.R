@@ -4,7 +4,8 @@ library(stringdist)
 library(rjson)
 library(lsa)
 library(psycho)
-
+library(ggplot2)
+library(grid)
 # Load in word2vec semantic vectors
 word2vec <- fromJSON(file = '~/git/sourcemem/EXPINT/experiment_stimuli/word2vec_final.json')
 
@@ -21,7 +22,7 @@ angle_diff <- function(a,b){
 }
 
 ## Looking at data prior to modelling
-data <- read.csv("~/git/sourcemem/EXPINT/data/EXPINT_data2.csv")
+data <- read.csv("~/git/sourcemem/EXPINT/data/EXPINT_data.csv")
 
 # Exclude data from practice blocks
 data <- data[data$block != -1,]

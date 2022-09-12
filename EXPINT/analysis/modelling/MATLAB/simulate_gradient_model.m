@@ -132,12 +132,14 @@ for cond = 1:3
     guess_weights = 1- sum(weights,2);
     weights = horzcat(weights, guess_weights);
 
+    % Now that weights are done, simulate each trial n times
+    n_trials = size(this_data, 1);
+
     % This is the data structure that will contain the simulated
     % observations for this participant
     this_cond_data = zeros(n_trials*n_sims, 49);
     idx = 1;
-    % Now that weights are done, simulate each trial n times
-    n_trials = size(this_data, 1);
+
     for i = 1:n_trials
         this_intrusions = this_data(i, 6:12);
         this_weights = weights(i, :);
