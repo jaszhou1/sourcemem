@@ -9,7 +9,7 @@ nt = 301;
 h = tmax / nt;
 
 % Default number of simulations
-n_sims = 50; % The number of times to simulate each trial
+n_sims = 10; % The number of times to simulate each trial
 
 % Number of intrusions
 num_intrusions = 7;
