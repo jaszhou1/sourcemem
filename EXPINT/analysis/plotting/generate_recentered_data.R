@@ -70,6 +70,6 @@ models <- rbind(saturated, spatiotemporal)
 source('recenter_data.R')
 recentered_data <- recenter.data(data)
 recentered_saturated <- recenter.model(saturated)
-recenterd_spatiotemporal <- recenter.model(spatiotemporal)
+recentered_spatiotemporal <- recenter.model(spatiotemporal)
 
 save.image('recentered_data.RData')
