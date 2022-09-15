@@ -83,5 +83,13 @@ rt <- ggplot(data) +
 
 # Recentered on Non-
 source('recenter_data.R')
-recentered_data <- recenter.data(data)
-recentered_saturated <- recenter.model(saturated)
+load("~/git/sourcemem/EXPINT/analysis/plotting/recentered_data.RData")
+
+this_data <- data[data$cond == cond, ]
+this_model <- model[model$cond == cond, ]
+orth <- ggplot() + 
+  geom_histogram(data = this_data, aes(x = offset, y = ..density..), bins = 30) +
+  geom_histogram(data = this_model, aes(x = offset, y = ..density..), alpha = 0.1, fill = 'red', bins = 30) + 
+  ylim(0, 0.5) + 
+  facet_grid(~orthographic) +
+  ggtitle(sprintf('%s Condition, Recentered on orthographic', cond))

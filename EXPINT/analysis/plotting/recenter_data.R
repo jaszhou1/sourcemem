@@ -71,7 +71,12 @@ recenter.model <- function(data){
   idx <- 1
   for (i in 1:nrow(data)){
     this_trial <- data[i, 5]
-    this_response_angle <- data[i, 3]
+    # Response angle for model should be the simulated response
+    # Because simulation is expressed as error, simply add error to the target angle
+    # to get what the simulated response angle was, for the purposes of recentering.
+    # IGNORE the "response angle" column, thats just the observed response for that trial
+    # and will just replicate the data, obviously.
+    this_response_angle <- data[i, 1] + data[i, 4]
     this_target_angle <- data[i, 4]
     this_intrusions <- data[i,41:47]
     temporal <- data[i,13:19]
