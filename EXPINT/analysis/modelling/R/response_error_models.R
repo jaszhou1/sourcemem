@@ -64,6 +64,8 @@ source('fit_spatiotemporal_model.R')
 #   this.p.fit <- fit_spatiotemporal(this.data, i)
 # }
 
+source('fit_orthosem.R')
+
 # Fit the saturated model
 source('fit_saturated_model.R')
 # for(i in participants){
