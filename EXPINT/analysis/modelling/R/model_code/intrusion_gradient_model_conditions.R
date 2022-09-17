@@ -45,6 +45,16 @@ intrusion_cond_model <- function(params, data){
     return(x)
   }
   
+  # If the condition-dependant weights don't make sense, 
+  # E.g., If the weighting for semantic in the semantic condition is lower than in the unrelated condition,
+  # Return early with a very large nLL
+  
+  if(psi1 > psi2 | chi1 > chi2){
+    print("Condition dependant weights invalid")
+    nLL <- 1e7
+    return(nLL)
+  }
+  
   # Rescale all target-nontarget distances so that the maximum distance is 1.
   data[,30:36] <- data[,30:36]/max(data[,30:36]) # Time
   data[,37:43] <- data[,37:43]/max(data[,37:43]) # Space
@@ -84,13 +94,25 @@ intrusion_cond_model <- function(params, data){
   semantic_similarity[data$condition=='semantic',1:7] <- lapply(data[data$condition=='semantic',51:57], shepard_similarity, k = upsilon2) 
   
   
-  # Multiply the temporal similarities with corresponding spatial similarity to get a spatiotemporal gradient on each trial
+  # Multiply the temporal similarities with corresponding spatial similarity to get a spatiotemporal gradient on each trial, for each condition
   intrusion_weights <- data.frame(matrix(nrow = nrow(data),ncol = n_intrusions))
   
-  intrusion_weights[data$condition == 'unrelated',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi1) * ((orthographic_similarity^(1-psi1)) * (semantic_similarity^psi1))^(chi1)
-  intrusion_weights[data$condition == 'orthographic',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi2) * ((orthographic_similarity^(1-psi1)) * (semantic_similarity^psi1))^(chi2)
-  intrusion_weights[data$condition == 'semantic',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi2) * ((orthographic_similarity^(1-psi2)) * (semantic_similarity^psi2))^(chi2)
-  # Multiply all intrusion weights with overall intrusion scaling parameter
+  intrusion_weights[data$condition == 'unrelated',] <- ((temporal_similarity[data$condition == 'unrelated',]^(1-rho)) * 
+                                                          (spatial_similarity[data$condition == 'unrelated',]^rho))^(1-chi1) * 
+    ((orthographic_similarity[data$condition == 'unrelated',]^(1-psi1)) * 
+       (semantic_similarity[data$condition == 'unrelated',]^psi1))^(chi1)
+  
+  intrusion_weights[data$condition == 'orthographic',] <- ((temporal_similarity[data$condition == 'orthographic',]^(1-rho)) * 
+                                                             (spatial_similarity[data$condition == 'orthographic',]^rho))^(1-chi1) * 
+    ((orthographic_similarity[data$condition == 'orthographic',]^(1-psi1)) * 
+       (semantic_similarity[data$condition == 'orthographic',]^psi1))^(chi1)
+  
+  intrusion_weights[data$condition == 'semantic',] <- ((temporal_similarity[data$condition == 'semantic',]^(1-rho)) * 
+                                                         (spatial_similarity[data$condition == 'semantic',]^rho))^(1-chi1) * 
+    ((orthographic_similarity[data$condition == 'semantic',]^(1-psi1)) * 
+       (semantic_similarity[data$condition == 'semantic',]^psi1))^(chi1)
+  
+    # Multiply all intrusion weights with overall intrusion scaling parameter
   intrusion_weights <- gamma*intrusion_weights
   
   colnames(intrusion_weights) <- c("weight_1", "weight_2", "weight_3", "weight_4", "weight_5", "weight_6", "weight_7")
@@ -157,15 +179,15 @@ intrusion_cond_model <- function(params, data){
 # pest = temp[participant,5:9]
 
 # Simulate data from fitted parameters of the temporal gradient model
-simulate_intrusion_cond_model <- function(participant, data, pest){
+simulate_intrusion_cond_model <- function(participant, data, params){
   
   # Check that trial numbers are 1-indexed
   if(min(data$present_trial) == 0){
     data$present_trial <- data$present_trial + 1
   }
   
-  n_trials <- 10
-  n_intrusions <- 9 
+  n_trials <- 8
+  n_intrusions <- 7 
   
   # Parameters
   # MEMORY
@@ -195,6 +217,9 @@ simulate_intrusion_cond_model <- function(participant, data, pest){
     x <- exp(-k * x)
     return(x)
   }
+  
+  # Get an untransformed copy of the similarities
+  similarities <- data[,30:57]
   
   # Rescale all target-nontarget distances so that the maximum distance is 1.
   data[,30:36] <- data[,30:36]/max(data[,30:36]) # Time
@@ -238,9 +263,20 @@ simulate_intrusion_cond_model <- function(participant, data, pest){
   # Multiply the temporal similarities with corresponding spatial similarity to get a spatiotemporal gradient on each trial
   intrusion_weights <- data.frame(matrix(nrow = nrow(data),ncol = n_intrusions))
   
-  intrusion_weights[data$condition == 'unrelated',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi1) * ((orthographic_similarity^(1-psi1)) * (semantic_similarity^psi1))^(chi1)
-  intrusion_weights[data$condition == 'orthographic',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi2) * ((orthographic_similarity^(1-psi1)) * (semantic_similarity^psi1))^(chi2)
-  intrusion_weights[data$condition == 'semantic',] <- ((temporal_similarity^(1-rho)) * (spatial_similarity^rho))^(1-chi2) * ((orthographic_similarity^(1-psi2)) * (semantic_similarity^psi2))^(chi2)
+  intrusion_weights[data$condition == 'unrelated',] <- ((temporal_similarity[data$condition == 'unrelated',]^(1-rho)) * 
+                                                          (spatial_similarity[data$condition == 'unrelated',]^rho))^(1-chi1) * 
+                                                          ((orthographic_similarity[data$condition == 'unrelated',]^(1-psi1)) * 
+                                                             (semantic_similarity[data$condition == 'unrelated',]^psi1))^(chi1)
+  
+  intrusion_weights[data$condition == 'orthographic',] <- ((temporal_similarity[data$condition == 'orthographic',]^(1-rho)) * 
+                                                             (spatial_similarity[data$condition == 'orthographic',]^rho))^(1-chi1) * 
+                                                            ((orthographic_similarity[data$condition == 'orthographic',]^(1-psi1)) * 
+                                                               (semantic_similarity[data$condition == 'orthographic',]^psi1))^(chi1)
+  
+  intrusion_weights[data$condition == 'semantic',] <- ((temporal_similarity[data$condition == 'semantic',]^(1-rho)) * 
+                                                         (spatial_similarity[data$condition == 'semantic',]^rho))^(1-chi1) * 
+                                                        ((orthographic_similarity[data$condition == 'semantic',]^(1-psi1)) * 
+                                                           (semantic_similarity[data$condition == 'semantic',]^psi1))^(chi1)
   # Multiply all intrusion weights with overall intrusion scaling parameter
   intrusion_weights <- gamma*intrusion_weights
   
@@ -260,8 +296,48 @@ simulate_intrusion_cond_model <- function(participant, data, pest){
     target_word = character(),
     target_angle = numeric(),
     target_position = integer(),
+    intruding_angle = numeric(),
+    trial_type = character(),
     simulated_response = numeric(),
     simulated_error = numeric(),
+    offset_1 = numeric(),
+    offset_2 = numeric(),
+    offset_3 = numeric(),
+    offset_4 = numeric(),
+    offset_5 = numeric(),
+    offset_6 = numeric(),
+    offset_7 = numeric(),
+    #angle_8 = numeric(),
+    participant = integer(),
+    lag_1 = numeric(),
+    lag_2 = numeric(),
+    lag_3 = numeric(),
+    lag_4 = numeric(),
+    lag_5 = numeric(),
+    lag_6 = numeric(),
+    lag_7 = numeric(),
+    spatial_1 = numeric(),
+    spatial_2 = numeric(),
+    spatial_3 = numeric(),
+    spatial_4 = numeric(),
+    spatial_5 = numeric(),
+    spatial_6 = numeric(),
+    spatial_7 = numeric(),
+    ortho_1 = numeric(),
+    ortho_2 = numeric(),
+    ortho_3 = numeric(),
+    ortho_4 = numeric(),
+    ortho_5 = numeric(),
+    ortho_6 = numeric(),
+    ortho_7 = numeric(),
+    semantic_1 = numeric(),
+    semantic_2 = numeric(),
+    semantic_3 = numeric(),
+    semantic_4 = numeric(),
+    semantic_5 = numeric(),
+    semantic_6 = numeric(),
+    semantic_7 = numeric(),
+    condition = character(),
     angle_1 = numeric(),
     angle_2 = numeric(),
     angle_3 = numeric(),
@@ -270,24 +346,28 @@ simulate_intrusion_cond_model <- function(participant, data, pest){
     angle_6 = numeric(),
     angle_7 = numeric(),
     angle_8 = numeric(),
-    participant = integer(),
     stringsAsFactors = FALSE
   )
   
-  nSims = 20
+  nSims = 5
   this_data <- data
   # Get the angles for each trial
   block_angles <- cbind(this_data[,11], this_data[,16:22])
+  intrusions <- this_data[,16:22]
   
   # Simulate each trial one by one
   for (i in 1:nrow(this_data)){
     
     # Stimulus identity
     word <- as.character(this_data$word[i])
+    this_condition <- as.character(this_data$condition[i])
     target_angle <- this_data$target_angle[i]
     target_position <- this_data$present_trial[i]
     this_block_angles <- block_angles[i,]
+    this_intrusions <- intrusions[i,]
     this_weights <- trial_weights[i,]
+    
+    this_similarities <- similarities[i,]
     
     positions <- 1:n_trials
     
@@ -296,27 +376,27 @@ simulate_intrusion_cond_model <- function(participant, data, pest){
       sim_intrusion_position <- rmnom(1, 1, this_weights)
       # This line is a bit hacky, I'm taking the intrusion angles only [2:10], and inserting the target angle in its serial position
       no_offset_angles <- insert(as.vector(t(this_block_angles[2:8])), ats = target_position, values = target_angle)
-      
       # See if this trial is a guess
       if(sim_intrusion_position[length(sim_intrusion_position)]){
         sim_angle <- NA
         sim_response <- runif(1, -pi, pi)
         sim_error <- angle_diff(target_angle, sim_response)
-        sim_data[nrow(sim_data)+1,] <- c(word, target_angle, target_position, sim_response, sim_error, no_offset_angles, participant)
+        sim_data[nrow(sim_data)+1,] <- c(word, target_angle, target_position, sim_angle, 'guess', sim_response, sim_error, this_intrusions, participant, this_similarities, this_condition, no_offset_angles)
       } else if (sim_intrusion_position[1]){
         # Decide which stimulus angle is the center of this retrieval
         sim_angle <- this_block_angles[sim_intrusion_position == 1]
         sim_response <- rvm(1, sim_angle, kappa1)
         sim_error <- angle_diff(target_angle, sim_response)
-        sim_data[nrow(sim_data)+1,] <- c(word, target_angle, target_position, sim_response, sim_error, no_offset_angles, participant)
+        sim_data[nrow(sim_data)+1,] <- c(word, target_angle, target_position, sim_angle, 'target', sim_response, sim_error, this_intrusions, participant, this_similarities, this_condition, no_offset_angles)
       } else {
         sim_angle <- this_block_angles[sim_intrusion_position == 1]
         sim_response <- rvm(1, sim_angle, kappa2)
         sim_error <- angle_diff(target_angle, sim_response)
-        sim_data[nrow(sim_data)+1,] <- c(word, target_angle, target_position, sim_response, sim_error, no_offset_angles, participant)
+        sim_data[nrow(sim_data)+1,] <- c(word, target_angle, target_position, sim_angle, 'intrusion', sim_response, sim_error, this_intrusions, participant, this_similarities, this_condition, no_offset_angles)
       }
+      # Add on columns for the raw spatial, temporal, orthographic, semantic similarities for this trial
+
     }
   }
-  sim_data[2:13]  <- lapply(sim_data[2:13], as.numeric)
   return(sim_data)
 }
