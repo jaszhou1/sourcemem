@@ -1,4 +1,4 @@
-function [ll, aic, P, penalty] = fit_gradient_model(data, badix)
+function [ll, aic, P, penalty] = fit_saturated_model(data, badix)
 setopt;
 
 % Default value for badix

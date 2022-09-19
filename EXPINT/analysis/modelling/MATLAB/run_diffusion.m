@@ -5,7 +5,7 @@
 load('EXPINT_data.mat')
 
 n_participants = length(data);
-n_runs = 5;
+n_runs = 2;
 num_workers = maxNumCompThreads/2 - 1; % Maximum number of workers
 
 %% Saturated Model
@@ -18,7 +18,7 @@ parfor (i = 1:n_participants, num_workers)
     this_fit = cell(1,4);
     for j = 1:n_runs
         this_participant_data = data(i,:);
-        [ll_new, aic, pest, pest_penalty] = fit_gradient_model(this_participant_data);
+        [ll_new, aic, pest, pest_penalty] = fit_saturated_model(this_participant_data);
         % If this ll is better than the last one, replace it in the saved
         % structure
         if (ll_new < ll)

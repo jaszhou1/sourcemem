@@ -1,6 +1,7 @@
-function [ll, aic, P, pest_penalty] = gradient_condition_model(Pvar, Pfix, Sel, Data, badix)
+function [ll, aic, P, pest_penalty] = gradient_model(Pvar, Pfix, Sel, Data, badix)
 
-% Four Factor model, where non-spatiotemporal things are multiplicative
+% Same as gradient condition model, but allowing 0 lowerbounds for
+% irrelevant parameters.
 %% Debugging
 name = 'INTRUSION_MODEL: ';
 errmg1 = 'Incorrect number of parameters for model, exiting...';
@@ -103,10 +104,10 @@ pest_penalty(1,:) = P;
 %      1   2     3      4      5      6        7   8        9     10      11    12     13     14     15     16         17        18      19       20       21      22           23          24     25    
 %   [v1t, v2t,  v1i,  v2i,   eta_t, eta_i,    at,  ag,    gamma, beta,   tau,  l_b,   l_f,   zeta,  rho,   chi1,     chi2,      psi1,   psi2,    iota1,  iota2,  upsilon1,   upsilon2,     Ter,    st]
 % ----------------------------------------------------------------------------
-Ub= [ 8,   0,    6,     0,     1,    1,       4.5, 4.5,    1.0,  0.8,    0.8,   3,    3,     1,     1,      0.8,      0.9,      0.8,     0.9,      5,     5,      5,          5,           0.5,    0.2];
-Lb= [ 1,   0,    0.5,   0,     0.1,  0.1,     0.1, 0.5,    0.1,  0.1,    0.1,   0.1,  0.1,   0,     0,      0,        0.1,      0,       0.1,      0.1,   0.1,    0.1,        0.1,         0.1,    0];
-Pub=[ 7,   0,    5.5,   0,     0.9,  0.9,     4.0, 4.0,    0.6,  0.7,    0.75,  2.5,  2.5,   0.6,   0.9,    0.75,     0.8,      0.75,    0.75,     4,     4,      4,          4,           0.45,   0.15];
-Plb=[ 1.1, 0,    1.1,   0,     0.2,  0.2,     0.7, 0.7,    0.2,  0.2,    0.15,  0.2,  0.2,   0.2,   0,      0.1,      0.2,      0.1,     0.2,      0.5,   0.5,    0.5,        0.5,         0.2,    0];
+Ub= [ 7,   0,    5,     0,     1,    1,       4.5, 4.5,    1.0,  0.8,    0.8,   3,    3,     1,     1,      0.8,      0.9,      0.8,     0.9,      5,     5,      5,          5,           0.5,    0.2];
+Lb= [ 1,   0,    0.5,   0,     0.1,  0.1,     0.1, 0.5,    0.1,  0.1,    0.1,   0.1,  0.1,   0,     0,      0,        0,        0,       0,        0,     0,      0,          0,           0.1,    0];
+Pub=[ 6,5, 0,    4.5,   0,     0.9,  0.9,     4.0, 4.0,    0.6,  0.7,    0.75,  2.5,  2.5,   0.6,   0.9,    0.75,     0.8,      0.75,    0.75,     4,     4,      4,          4,           0.45,   0.15];
+Plb=[ 1.1, 0,    1.1,   0,     0.2,  0.2,     0.7, 0.7,    0.2,  0.2,    0.15,  0.2,  0.2,   0.2,   0,      0,        0,        0,       0,        0,     0,      0,          0,           0.2,    0];
 
 if any(P - Ub > 0) || any(Lb - P > 0)
     ll = 1e7 + ...
