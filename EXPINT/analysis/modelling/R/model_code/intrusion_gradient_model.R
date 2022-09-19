@@ -157,8 +157,8 @@ simulate_intrusion_model <- function(participant, data, params){
     data$present_trial <- data$present_trial + 1
   }
   
-  n_trials <- 10
-  n_intrusions <- 9 
+  n_trials <- 8
+  n_intrusions <- 7 
   
   # Parameters
   kappa1 <- params[[1]] # Precision, memory
@@ -180,6 +180,9 @@ simulate_intrusion_model <- function(participant, data, params){
     x <- exp(-k * x)
     return(x)
   }
+  
+  # Get an untransformed copy of the similarities
+  similarities <- data[,30:57]
   
   # Rescale all target-nontarget distances so that the maximum distance is 1.
   data[,30:36] <- data[,30:36]/max(data[,30:36]) # Time
@@ -298,7 +301,7 @@ simulate_intrusion_model <- function(participant, data, params){
   )
   
   
-  nSims = 5
+  nSims = 1
   this_data <- data
   # Get the angles for each trial
   block_angles <- cbind(this_data[,11], this_data[,16:22])
