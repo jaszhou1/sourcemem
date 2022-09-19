@@ -107,11 +107,11 @@ for cond = 1:3
     spatial_similarities = shepard(spatial_distances, zeta);
 
     % Orthographic similarity
-    orthographic_distances = 1- this_data(:, 27:33);
+    orthographic_distances = this_data(:, 27:33);
     orthographic_similarities = shepard(orthographic_distances, iota);
 
     % Semantic similarity
-    semantic_similarities = this_data(:, 34:40);
+    semantic_similarities = 1- this_data(:, 34:40);
     semantic_similarities = shepard(semantic_similarities, upsilon);
 
     % Normalise all components
