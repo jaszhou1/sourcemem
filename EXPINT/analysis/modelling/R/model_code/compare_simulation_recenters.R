@@ -61,6 +61,21 @@ recenter_orthosem <- recenter.model(sim_orthosem)
 # recenter saturated model
 recenter_saturated <- recenter.model(sim_saturated)
 
+recentered_models <- rbind(recenter_spatiotemporal, recenter_orthosem, recenter_saturated)
+
+################# PLOTS
+
+# Plot response error
+
+plot_error <- function(data, model){
+  ggplot()+ 
+    geom_histogram(data = data, aes(x = source_error, y = ..density..), bins = 30) +
+    geom_histogram(data = model, aes(x = simulated_error, y = ..density..), fill = 'red', alpha = 0.2, bins = 30) +
+    ylim(0, 2) + 
+    facet_grid(~participant)
+}
+
+
 # Plot recentered spatiotemporal against data
 
 plot_temporal <- function(data, model, cond){
@@ -69,7 +84,7 @@ plot_temporal <- function(data, model, cond){
     geom_histogram(data = model[model$cond == cond, ], aes(x = offset, y = ..density..), fill = 'red', alpha = 0.2, bins = 30) +
     ylim(0, 0.5) + 
     facet_grid(~lag) +
-    ggtitle(sprintf('%s Condition, Recentered on orthographic', cond))
+    ggtitle(sprintf('%s Condition, Recentered on lag', cond))
   
 }
 
@@ -79,32 +94,34 @@ plot_spatial <- function(data, model, cond){
     geom_histogram(data = model[model$cond == cond, ], aes(x = offset, y = ..density..), fill = 'red', alpha = 0.2, bins = 30) +
     ylim(0, 0.5) + 
     facet_grid(~spatial_bin) +
-    ggtitle(sprintf('%s Condition, Recentered on orthographic', cond))
+    ggtitle(sprintf('%s Condition, Recentered on spatial bin', cond))
   
 }
 
 plot_orth <- function(data, model){
-  ggplot() + 
+  p1 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'orthographic', ], aes(x = offset, y = ..density..), bins = 30) +
     geom_histogram(data = model[model$cond == 'orthographic', ], aes(x = offset, y = ..density..), fill = 'red', alpha = 0.2, bins = 30) +
     ylim(0, 0.5) + 
     facet_grid(~orthographic) +
     ggtitle(sprintf('%s Condition, Recentered on orthographic', 'orth'))
-  
-  ggplot() + 
+
+  p2 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), bins = 30) +
     geom_histogram(data = model[model$cond == 'unrelated', ], aes(x = offset, y = ..density..), fill = 'red', alpha = 0.2, bins = 30) +
     ylim(0, 0.5) + 
     facet_grid(~orthographic) +
     ggtitle(sprintf('%s Condition, Recentered on orthographic', 'unrelated'))
-  
-  ggplot() + 
+
+  p3 <- ggplot() + 
     geom_histogram(data = data, aes(x = offset, y = ..density..), bins = 30) +
     geom_histogram(data = model, aes(x = offset, y = ..density..), fill = 'red', alpha = 0.2, bins = 30) +
     ylim(0, 0.5) + 
     facet_grid(~orthographic) +
     ggtitle(sprintf('%s Condition, Recentered on orthographic', 'overall'))
   
+  
+  ggsave('recenter_orth_overall.png', plot = last_plot(), width = 20, height = 15, units = "cm")
 }
 
 plot_sem <- function(data, model, cond){
@@ -113,8 +130,7 @@ plot_sem <- function(data, model, cond){
     geom_histogram(data = model[model$cond == cond, ], aes(x = offset, y = ..density..), fill = 'red', alpha = 0.2, bins = 30) +
     ylim(0, 0.5) + 
     facet_grid(~semantic_bin) +
-    ggtitle(sprintf('%s Condition, Recentered on orthographic', cond))
+    ggtitle(sprintf('%s Condition, Recentered on semantic', cond))
   
 }
 
-              

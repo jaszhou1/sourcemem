@@ -41,8 +41,8 @@ participants <- unique(data$participant)
 conds <- unique(data$condition)
 
 ## Read in simulated data
-saturated <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/sim_saturated.csv")
-spatiotemporal <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/sim_spatiotemporal.csv")
+saturated <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_saturated.csv")
+spatiotemporal <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_spatiotemporal.csv")
 saturated[,50] <- 'saturated'
 spatiotemporal[,50] <- 'spatiotemporal'
 
@@ -83,13 +83,26 @@ rt <- ggplot(data) +
 
 # Recentered on Non-
 source('recenter_data.R')
-load("~/git/sourcemem/EXPINT/analysis/plotting/recentered_data.RData")
+load("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/recenter_data.RData")
 
-this_data <- data[data$cond == cond, ]
-this_model <- model[model$cond == cond, ]
-orth <- ggplot() + 
-  geom_histogram(data = this_data, aes(x = offset, y = ..density..), bins = 30) +
-  geom_histogram(data = this_model, aes(x = offset, y = ..density..), alpha = 0.2, fill = 'red', bins = 30) + 
+models <- rbind(recenter_spatiotemporal, recenter_saturated)
+
+plot_orth <- function(data, models, cond){
+  this_cond_data <- data[data$cond == cond, ]
+  this_cond_models <- model[model$cond == cond, ]
+  orth <- ggplot() + 
+    geom_histogram(data = this_cond_data, aes(x = offset, y = ..density..), bins = 30) +
+    geom_density(data = this_cond_models, aes(x = offset), colour = model) + 
+    ylim(0, 0.5) + 
+    facet_grid(participant~orthographic) +
+    ggtitle(sprintf('%s Condition, Recentered on orthographic', cond))
+}
+
+
+
+ggplot() + 
+  geom_histogram(data = recenter_data[recenter_data$cond == 'orthographic',], aes(x = offset, y = ..density..), bins = 30) +
+  geom_density(data = recentered_shallow[recentered_shallow$cond == 2, ], aes(x = offset), colour = 'red') +
+  geom_density(data = recentered_steep[recentered_steep$cond == 2, ], aes(x = offset), colour = 'blue') +
   ylim(0, 0.5) + 
-  facet_grid(~orthographic) +
-  ggtitle(sprintf('%s Condition, Recentered on orthographic', cond))
+  facet_grid(~orthographic)

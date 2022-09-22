@@ -1,18 +1,29 @@
-recenter.condition <- function(data, cond){
-  this_data <- data[data$cond == cond, ]
-  orth <- ggplot(this_data) + geom_histogram(aes(x = offset, y = ..density..), bins = 30) + 
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/saturated.Rdata")
+library(ggplot2)
+library(ggpubr)
+
+plot_orth <- function(data, model){
+  p1 <- ggplot() + 
+    geom_histogram(data = data[data$cond == 'orthographic', ], aes(x = offset, y = ..density..), bins = 30) +
+    geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset, y = ..density..), fill = 'red', alpha = 0.2, bins = 30) +
     ylim(0, 0.5) + 
     facet_grid(~orthographic) +
-    ggtitle(sprintf('%s Condition, Recentered on orthographic', cond))
-  ggsave(sprintf('recenter_orthographic_cond_%s.png', cond), plot = orth, width = 20, height = 15, units = "cm")
+    ggtitle(sprintf('%s Condition, Recentered on orthographic', 'orth'))
   
-  sem <- ggplot(this_data) + geom_histogram(aes(x = offset, y = ..density..), bins = 30) + 
+  p2 <- ggplot() + 
+    geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), bins = 30) +
+    geom_histogram(data = model[model$cond == 'unrelated', ], aes(x = offset, y = ..density..), fill = 'red', alpha = 0.2, bins = 30) +
     ylim(0, 0.5) + 
-    facet_grid(~semantic_bin) +
-    ggtitle(sprintf('%s Condition, Recentered on semantic (quantile)', cond))
-  ggsave(sprintf('recenter_semantic_cond_%s.png', cond), plot = sem, width = 20, height = 15, units = "cm")
+    facet_grid(~orthographic) +
+    ggtitle(sprintf('%s Condition, Recentered on orthographic', 'unrelated'))
   
-  spatial <- ggplot(this_data) + geom_histogram(aes(x = offset, y = ..density..), bins = 30) + facet_grid(~spatial_bin) +
-    ggtitle(sprintf('%s Condition, Recentered on spatial (quantile)', cond))
-  ggsave(sprintf('recenter_spatial_cond_%s.png', cond), plot = spatial, width = 20, height = 15, units = "cm")
+  p3 <- ggplot() + 
+    geom_histogram(data = data, aes(x = offset, y = ..density..), bins = 30) +
+    geom_histogram(data = model, aes(x = offset, y = ..density..), fill = 'red', alpha = 0.2, bins = 30) +
+    ylim(0, 0.5) + 
+    facet_grid(~orthographic) +
+    ggtitle(sprintf('%s Condition, Recentered on orthographic', 'overall'))
+  
+  plot <- ggarrange(p1, p2, p3, ncol = 1, nrow = 3, heights = c(1, 1, 1))
+  ggsave('recenter_orth.png', plot = last_plot(), width = 20, height = 45, units = "cm")
 }

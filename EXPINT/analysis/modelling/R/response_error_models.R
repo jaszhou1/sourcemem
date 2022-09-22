@@ -132,9 +132,18 @@ fit_saturated_all <- function(){
   return(res)
 }
 
-spatiotemporal <- fit_spatiotemporal_all()
-orthosem <- fit_orthosem_all()
-saturated <- fit_saturated_all()
+
+
+simulate_spatiotemporal <- function(fits, data){
+  simulated_data <- data.frame()
+  for(i in 1:length(participants)){
+    this_data <- data[data$participant == i, ]
+    this_params <- fits[i, 4:length(fits)]
+    this_sim <- simulate_intrusion_model(i, this_data, this_params)
+    simulated_data <- rbind(simulated_data, this_sim)
+  }
+  return(simulated_data)
+}
 
 simulate_saturated <- function(fits, data){
   simulated_data <- data.frame()
@@ -146,3 +155,27 @@ simulate_saturated <- function(fits, data){
   }
   return(simulated_data)
 }
+
+# spatiotemporal <- fit_spatiotemporal_all()
+# orthosem <- fit_orthosem_all()
+# saturated <- fit_saturated_all()
+
+
+# sim_spatiotemporal <- simulate_spatiotemporal(spatiotemporal)
+# sim_orthosem <- simulate_spatiotemporal(orthosem)
+# sim_saturated <- simulate_spatiotemporal(saturated)
+
+## Recntering
+source("~/git/sourcemem/EXPINT/analysis/plotting/response_error/resp_recenter_data.R")
+# 
+# recenter_data <- recenter.data(data)
+# 
+# # Recenter the spatiotemporal model
+# recenter_spatiotemporal <- recenter.model(sim_spatiotemporal)
+# 
+# # Recenter the orthosem model
+# recenter_orthosem <- recenter.model(sim_orthosem)
+# 
+# # recenter saturated model
+# recenter_saturated <- recenter.model(sim_saturated)
+
