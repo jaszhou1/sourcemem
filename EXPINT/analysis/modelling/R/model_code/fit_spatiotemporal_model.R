@@ -4,27 +4,27 @@
 # the number of parameters to calculate the AIC/BIC.
 
 # # MEMORY
-# kappa1 <- params[1] # Precision, memory
-# kappa2 <- params[2] # Precision, intrusion
+# 1. kappa1 <- params[1] # Precision, memory
+# 2. kappa2 <- params[2] # Precision, intrusion
 
 # # GUESS
-# beta <- params[3] # Proportion of guesses (weight vs. intrusion+memory)
+# 3. beta <- params[3] # Proportion of guesses (weight vs. intrusion+memory)
 
 # # INTRUSIONS
-# gamma <- params[4] # Overall scaling of intrusions, this is not directly interpretable
+# 4. gamma <- params[4] # Overall scaling of intrusions, this is not directly interpretable
 
 # # Spatiotemporal
-# tau <- params[5] # Temporal asymmetry (tau >0.5 means forwards are more similar)
-# lambda_b <- params[6] # Similarity decay of backwards temporal lag
-# lambda_f <- params[7] # Similarity decay of forwards temporal lag
-# zeta <- params[8] # Similarity decay of spatial similarity
-# rho <- params[9] # Weight of spatial vs temporal in spatiotemporal component
-# chi <- params[10] # Weight of item vs spatiotemporal similarity component
+# 5. tau <- params[5] # Temporal asymmetry (tau >0.5 means forwards are more similar)
+# 6. lambda_b <- params[6] # Similarity decay of backwards temporal lag
+# 7. lambda_f <- params[7] # Similarity decay of forwards temporal lag
+# 8. zeta <- params[8] # Similarity decay of spatial similarity
+# 9. rho <- params[9] # Weight of spatial vs temporal in spatiotemporal component
+# 10. chi <- params[10] # Weight of item vs spatiotemporal similarity component
 
 # # Item
-# iota <- params[11] # Similarity decay of orthographic component
-# upsilon <- params[12] # Similarity decay of semantic component
-# psi <- params[13] # Weight of semantic vs orthographic in item component
+# 11. iota <- params[11] # Similarity decay of orthographic component
+# 12. upsilon <- params[12] # Similarity decay of semantic component
+# 13. psi <- params[13] # Weight of semantic vs orthographic in item component
 
 source('intrusion_gradient_model.R')
 
@@ -33,15 +33,15 @@ fit_spatiotemporal <- function(data, participant){
   
   
   # Parameter Boundaries
-  #         1   2     3   4     5   6     7     8   9   10  11  12 13
-  lower <- c(1,  1,  0.2, 0.2, 0.2, 0.5, 0.5, 0.2, 0.2, 0,   0, 0, 0)
-  upper <- c(20, 15, 0.6, 0.4, 0.7, 3,   3,   0.6, 0.6, 0.6, 5, 5, 5)
+  #         1    2    3   4     5   6     7     8      9   10  11  12 13
+  lower <- c(1,  1,  0.2, 0.3, 0.5, 0.5, 0.1,   0.1,  0.1,  0,   0, 0, 0)
+  upper <- c(20, 15, 0.6, 5,   0.99, 5,   5,    5,    0.9,  0,   0, 0, 0)
   
   # Optimise
   this_fit <- DEoptim(intrusion_model, lower, upper, control = DEoptim.control(itermax = 200), data)
   
   # Calculate aic
-  aic <- get_aic(this_fit$optim$bestval, length(upper))
+  aic <- get_aic(this_fit$optim$bestval, length(upper[upper!=0]))
   this_fit$optim$aic<-aic
   fit <- this_fit$optim
   # Pass out best fitting parameters

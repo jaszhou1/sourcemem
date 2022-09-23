@@ -11,7 +11,7 @@ library(R.utils)
 library(statip)
 
 ## Handle data prior to modelling
-data <- read.csv("~/git/sourcemem/EXPINT/data/EXPINT_data2.csv")
+data <- read.csv("~/git/sourcemem/EXPINT/data/EXPINT_data.csv")
 setwd("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code")
 # Exclude data from practice blocks
 data <- data[data$block != -1,]
@@ -33,10 +33,20 @@ get_aic <- function(L, n_params){
   return(aic)
 }
 
+cosine_distance <- function(theta, phi){
+  distance <- 1 - cos(theta - phi)
+  return(distance)
+}
+
+angle_diff <- function(a,b){
+  diff <- atan2(sin(a-b), cos(a-b))
+  return(diff)
+}
+
 
 # There are three conditions, orthographic lists, semantic lists, and unrelated lists
 # We can express this in a binary high/low way in terms of orthographic and semantic similarity
-                
+
 # Orthographic:   1, 0
 # Semantic:       0, 1
 # Unrelated:      0, 0
@@ -53,6 +63,8 @@ source('fit_spatiotemporal_model.R')
 #   this.data <- data[data$participant == i,]
 #   this.p.fit <- fit_spatiotemporal(this.data, i)
 # }
+
+source('fit_orthosem.R')
 
 # Fit the saturated model
 source('fit_saturated_model.R')
@@ -75,9 +87,28 @@ fit_spatiotemporal_all <- function(){
                  }
   colnames(res) <- c('participant','nLL','aic','kappa1','kappa2', 'beta', 'gamma', 'tau', 'lambda_b', 
                      'lambda_f', 'zeta', 'rho', 'chi', 'iota', 'upsilon', 'psi')
-
+  
   res <- as.data.frame(res)
   write.csv(res, paste(toString(Sys.Date()), '_spatiotemporal_pest.csv', sep =""))
+  return(res)
+}
+
+fit_orthosem_all <- function(){
+  cl <- makeForkCluster((detectCores() - 1))
+  registerDoParallel(cl)
+  res = foreach (i = 1:length(participants),
+                 .combine = rbind) %dopar% {
+                   this.data <- data[data$participant == i,]
+                   optim <- fit_orthosem(this.data, i)
+                   pest <- optim$bestmem
+                   this_fit <- c(participants[i], optim$bestval, optim$aic, pest[1:13])
+                   return(this_fit)
+                 }
+  colnames(res) <- c('participant','nLL','aic','kappa1','kappa2', 'beta', 'gamma', 'tau', 'lambda_b', 
+                     'lambda_f', 'zeta', 'rho', 'chi', 'iota', 'upsilon', 'psi')
+  
+  res <- as.data.frame(res)
+  write.csv(res, paste(toString(Sys.Date()), '_orthosem_pest.csv', sep =""))
   return(res)
 }
 
@@ -100,3 +131,51 @@ fit_saturated_all <- function(){
   write.csv(res, paste(toString(Sys.Date()), '_saturated_pest.csv', sep =""))
   return(res)
 }
+
+
+
+simulate_spatiotemporal <- function(fits, data){
+  simulated_data <- data.frame()
+  for(i in 1:length(participants)){
+    this_data <- data[data$participant == i, ]
+    this_params <- fits[i, 4:length(fits)]
+    this_sim <- simulate_intrusion_model(i, this_data, this_params)
+    simulated_data <- rbind(simulated_data, this_sim)
+  }
+  return(simulated_data)
+}
+
+simulate_saturated <- function(fits, data){
+  simulated_data <- data.frame()
+  for(i in 1:length(participants)){
+        this_data <- data[data$participant == i, ]
+        this_params <- fits[i, 4:length(fits)]
+        this_sim <- simulate_intrusion_cond_model(i, this_data, this_params)
+        simulated_data <- rbind(simulated_data, this_sim)
+  }
+  return(simulated_data)
+}
+
+# spatiotemporal <- fit_spatiotemporal_all()
+# orthosem <- fit_orthosem_all()
+# saturated <- fit_saturated_all()
+
+
+# sim_spatiotemporal <- simulate_spatiotemporal(spatiotemporal)
+# sim_orthosem <- simulate_spatiotemporal(orthosem)
+# sim_saturated <- simulate_spatiotemporal(saturated)
+
+## Recntering
+source("~/git/sourcemem/EXPINT/analysis/plotting/response_error/resp_recenter_data.R")
+# 
+# recenter_data <- recenter.data(data)
+# 
+# # Recenter the spatiotemporal model
+# recenter_spatiotemporal <- recenter.model(sim_spatiotemporal)
+# 
+# # Recenter the orthosem model
+# recenter_orthosem <- recenter.model(sim_orthosem)
+# 
+# # recenter saturated model
+# recenter_saturated <- recenter.model(sim_saturated)
+

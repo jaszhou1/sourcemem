@@ -14,7 +14,6 @@ eta_targ = normrnd(0.2, 0.1);
 eta_int = normrnd(0.01, 0.01);
 a_targ = normrnd(1.7, 0.1);
 a_guess = normrnd(0.5, 0.1);
-
 beta = normrnd(0.3, 0.1);
 gamma = normrnd(0.05, 0.1);
 % Temporal Gradient
@@ -50,8 +49,8 @@ Sel = [1,        0,     1,       0,       1,        1,        1,       1,...
     1,    1,     1,      1,        1,      1,    1,   0,     0,    0,   0,...
     0,     0,    0,      0,          1,  0];   
 
-pest = fminsearch(@gradient_condition_model, P(Sel==1), options, P(Sel==0), Sel, data, badix);
+pest = fminsearch(@gradient_model, P(Sel==1), options, P(Sel==0), Sel, data, badix);
 P(Sel==1) = pest;
-[ll, aic, P, penalty] = gradient_condition_model(P(Sel==1), P(Sel==0), Sel, data, badix);
+[ll, aic, P, penalty] = gradient_model(P(Sel==1), P(Sel==0), Sel, data, badix);
 
 end

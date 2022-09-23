@@ -24,13 +24,13 @@ lambda_f = normrnd(0.6, 0.1); % Decay of the forwards slope
 zeta = normrnd(0.5, 0.1); %precision for Shepard similarity function (perceived spatial distance)
 rho = normrnd(0.3, 0.1); % Spatial component weight in intrusion probability calculation
 chi1 = normrnd(0.3, 0.1); % Item v Context, Low
-chi2 = 0; % Item v Context, High
+chi2 = chi1; % Item v Context, High
 psi1 = normrnd(0.3, 0.1); % Semantic v Ortho, Low
-psi2 = 0; % Semantic v Ortho, High
-iota1 = 0; % Ortho decay, Low
-iota2 = 0; % Ortho decay, High
-upsilon1 = 0; % Semantic decay, Low
-upsilon2 = 0; % Semantic decay, High
+psi2 = psi1; % Semantic v Ortho, High
+iota1 = normrnd(0.5, 0.1); % Ortho decay, Low
+iota2 = iota1; % Ortho decay, High
+upsilon1 = normrnd(0.4, 0.1); % Semantic decay, Low
+upsilon2 = upsilon1; % Semantic decay, High
 % Nondecision Time
 ter = normrnd(0.2, 0.05);
 st = 0;
@@ -47,11 +47,19 @@ P = [v1_targ, v2_targ, v1_int, v2_int, eta_targ, eta_int,  a_targ, a_guess,...
     iota1, iota2, upsilon1, upsilon2, ter, st];
 
 Sel = [1,        0,     1,       0,       1,        1,        1,       1,...
-    1,    1,     1,      1,        1,      1,    1,   1,     0,    1,   0,...
-    0,     0,    0,      0,          1,  0];   
+      1,    1,     1,      1,     1,      1,    1,    1,     0,    1,   0,...
+      1,     0,    1,      0,          1,  0];   
 
 pest = fminsearch(@orthosem_model, P(Sel==1), options, P(Sel==0), Sel, data, badix);
 P(Sel==1) = pest;
+
+% Some cooked stuff to make sure the unestimated condition-dependant
+% parameters are the same as the estimated parameters for simulation
+P(17) = P(16);
+P(19) = P(18);
+P(21) = P(20);
+P(23) = P(22);
+
 [ll, aic, P, penalty] = orthosem_model(P(Sel==1), P(Sel==0), Sel, data, badix);
 
 end

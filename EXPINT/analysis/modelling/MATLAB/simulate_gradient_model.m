@@ -9,7 +9,7 @@ nt = 301;
 h = tmax / nt;
 
 % Default number of simulations
-n_sims = 50; % The number of times to simulate each trial
+n_sims = 1; % The number of times to simulate each trial
 
 % Number of intrusions
 num_intrusions = 7;
@@ -107,11 +107,11 @@ for cond = 1:3
     spatial_similarities = shepard(spatial_distances, zeta);
 
     % Orthographic similarity
-    orthographic_distances = 1- this_data(:, 27:33);
+    orthographic_distances = this_data(:, 27:33);
     orthographic_similarities = shepard(orthographic_distances, iota);
 
     % Semantic similarity
-    semantic_similarities = this_data(:, 34:40);
+    semantic_similarities = 1- this_data(:, 34:40);
     semantic_similarities = shepard(semantic_similarities, upsilon);
 
     % Normalise all components
@@ -132,12 +132,14 @@ for cond = 1:3
     guess_weights = 1- sum(weights,2);
     weights = horzcat(weights, guess_weights);
 
+    % Now that weights are done, simulate each trial n times
+    n_trials = size(this_data, 1);
+
     % This is the data structure that will contain the simulated
     % observations for this participant
     this_cond_data = zeros(n_trials*n_sims, 49);
     idx = 1;
-    % Now that weights are done, simulate each trial n times
-    n_trials = size(this_data, 1);
+
     for i = 1:n_trials
         this_intrusions = this_data(i, 6:12);
         this_weights = weights(i, :);
