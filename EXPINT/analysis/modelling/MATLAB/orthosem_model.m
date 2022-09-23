@@ -2,7 +2,7 @@ function [ll, aic, P, pest_penalty] = orthosem_model(Pvar, Pfix, Sel, Data, badi
 
 % Four Factor model, where non-spatiotemporal things are multiplicative
 %% Debugging
-name = 'INTRUSION_MODEL: ';
+name = 'ORTHOSEM_MODEL: ';
 errmg1 = 'Incorrect number of parameters for model, exiting...';
 errmg2 = 'Incorrect length selector vector, exiting...';
 errmg3 = 'Component weights do not sum to 1...';

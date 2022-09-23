@@ -2,10 +2,10 @@ function [ll, aic, P, pest_penalty] = gradient_condition_model(Pvar, Pfix, Sel, 
 
 % Four Factor model, where non-spatiotemporal things are multiplicative
 %% Debugging
-name = 'INTRUSION_MODEL: ';
+name = 'SATURATED_GRADIENT: ';
 errmg1 = 'Incorrect number of parameters for model, exiting...';
 errmg2 = 'Incorrect length selector vector, exiting...';
-errmg3 = 'Component weights do not sum to 1...';
+errmg3 = 'Mixture parameter higher in LOW than for HIGH condition...';
 errmg4 = 'Negative trial weight, exiting...';
 
 %% Global variables
@@ -104,9 +104,9 @@ pest_penalty(1,:) = P;
 %   [v1t, v2t,  v1i,  v2i,   eta_t, eta_i,    at,  ag,    gamma, beta,   tau,  l_b,   l_f,   zeta,  rho,   chi1,     chi2,      psi1,   psi2,    iota1,  iota2,  upsilon1,   upsilon2,     Ter,    st]
 % ----------------------------------------------------------------------------
 Ub= [ 8,   0,    8,     0,     1,    1,       4.5, 4.5,    0.7,  0.4,    0.8,   2.5,  2.5,   0.7,   0.7,    0.7,      0.8,      0.7,     0.9,      6,     6,      6,          6,           0.5,    0.2];
-Lb= [ 1,   0,    0.2,   0,     0.1,  0.1,     0.1, 0.5,    0.05, 0.1,    0.2,   0.3,  0.3,   0.1,   0.3,    0.1,      0.1,      0,       0.1,      0.1,   0.1,    0.1,        0.1,         0.1,    0];
+Lb= [ 1,   0,    0.2,   0,     0.01, 0.01,     0.1, 0.1,    0.05, 0.05,   0.2,   0.3,  0.3,   0.1,   0.1,    0.1,      0.1,      0,       0.1,      0.1,   0.1,    0.1,        0.1,         0.1,    0];
 Pub=[ 7,   0,    7,     0,     0.9,  0.9,     4.0, 4.0,    0.6,  0.3,    0.75,  2,    2,     0.6,   0.65,   0.6,      0.6,      0.6,     0.85,     5,     5,      5,          5,           0.45,   0.15];
-Plb=[ 1.1, 0,    0.5,   0,     0.2,  0.2,     0.7, 0.7,    0.1,  0.15,   0.25,  0.4,  0.4,   0.2,   0.4,    0.2,      0.2,      0.05,    0.1,      0.5,   0.5,    0.5,        0.5,         0.2,    0];
+Plb=[ 1.1, 0,    0.5,   0,     0.05,  0.05,     0.7, 0.7,    0.1,  0.1,    0.25,  0.4,  0.4,   0.2,   0.2,    0.2,      0.2,      0.05,    0.1,      0.5,   0.5,    0.5,        0.5,         0.2,    0];
 
 if any(P - Ub > 0) || any(Lb - P > 0)
     ll = 1e7 + ...
