@@ -7,7 +7,7 @@ load('group_data.mat');
 % Define parameters
 v1_targ = 5;
 v2_targ = 0;
-v1_int = 3;
+v1_int = 5;
 v2_int = 0;
 % Trial-trial drift variability
 eta_targ = 0.03;

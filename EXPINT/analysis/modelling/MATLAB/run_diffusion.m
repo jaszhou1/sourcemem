@@ -90,10 +90,11 @@ for i = 1:10
     this_sim = simulate_gradient_model(data(i,:), saturated{i,3}, i);
     sim_gradient = vertcat(sim_gradient, this_sim);
 end
+csvwrite('sim_saturated.csv', sim_gradient)
 
 sim_spatiotemporal = [];
 for i = 1:10
     this_sim = simulate_gradient_model(data(i,:), spatiotemporal{i,3}, i);
     sim_spatiotemporal = vertcat(sim_spatiotemporal, this_sim);
 end
-
+csvwrite('sim_spatiotemporal.csv', sim_spatiotemporal)
