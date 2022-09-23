@@ -15,7 +15,7 @@ eta_int = normrnd(0.01, 0.01);
 a_targ = normrnd(1.7, 0.1);
 a_guess = normrnd(0.5, 0.1);
 beta = normrnd(0.3, 0.1);
-gamma = normrnd(0.05, 0.1);
+gamma = normrnd(0.2, 0.1);
 % Temporal Gradient
 tau = normrnd(0.6, 0.1); %Weight forwards vs backwards intrusion decay slope
 lambda_b = normrnd(0.8, 0.1); % Decay of the backwards slope
