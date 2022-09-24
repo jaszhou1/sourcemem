@@ -36,3 +36,5 @@ docs/~$final_prog_review.pptx
 docs/~$chdh_sem.pptx
 *.asv
 EXPINT/analysis/modelling/MATLAB/testsim.csv
+EXPINT/analysis/plotting/diffusion/testsim_shallow.csv
+EXPINT/analysis/plotting/diffusion/testsim_steep.csv

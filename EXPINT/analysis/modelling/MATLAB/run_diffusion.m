@@ -5,8 +5,8 @@
 load('EXPINT_data.mat')
 
 n_participants = length(data);
-n_runs = 2;
-num_workers = maxNumCompThreads/2 - 1; % Maximum number of workers
+n_runs = 3;
+num_workers = maxNumCompThreads/2; % Maximum number of workers
 
 %% Saturated Model
 saturated = cell(n_participants,4);
@@ -30,8 +30,8 @@ parfor (i = 1:n_participants, num_workers)
         end
     end
 end
-filename = [datestr(now,'yyyy_mm_dd_HH'),'_temp_saturated'];
-save(filename)
+% filename = [datestr(now,'yyyy_mm_dd_HH'),'_temp_saturated'];
+% save(filename)
 
 %% Spatiotemporal Model
 spatiotemporal = cell(n_participants,4);
@@ -55,8 +55,8 @@ parfor (i = 1:n_participants, num_workers)
         end
     end
 end
-filename = [datestr(now,'yyyy_mm_dd_HH'),'_temp_saturated'];
-save(filename)
+% filename = [datestr(now,'yyyy_mm_dd_HH'),'_temp_saturated'];
+% save(filename)
 
 %% Orthosem model with no difference across conditions
 orthosem = cell(n_participants,4);
@@ -80,20 +80,21 @@ parfor (i = 1:n_participants, num_workers)
         end
     end
 end
-filename = [datestr(now,'yyyy_mm_dd_HH')];
-save(filename)
-
-
-%% Simulate some datasets
-sim_gradient = [];
-for i = 1:10
-    this_sim = simulate_gradient_model(data(i,:), saturated{i,3}, i);
-    sim_gradient = vertcat(sim_gradient, this_sim);
-end
-
-sim_spatiotemporal = [];
-for i = 1:10
-    this_sim = simulate_gradient_model(data(i,:), spatiotemporal{i,3}, i);
-    sim_spatiotemporal = vertcat(sim_spatiotemporal, this_sim);
-end
-
+% filename = [datestr(now,'yyyy_mm_dd_HH')];
+% save(filename)
+% 
+% 
+% %% Simulate some datasets
+% sim_gradient = [];
+% for i = 1:10
+%     this_sim = simulate_gradient_model(data(i,:), saturated{i,3}, i);
+%     sim_gradient = vertcat(sim_gradient, this_sim);
+% end
+% csvwrite('sim_saturated.csv', sim_gradient)
+% 
+% sim_spatiotemporal = [];
+% for i = 1:10
+%     this_sim = simulate_gradient_model(data(i,:), spatiotemporal{i,3}, i);
+%     sim_spatiotemporal = vertcat(sim_spatiotemporal, this_sim);
+% end
+% csvwrite('sim_spatiotemporal.csv', sim_spatiotemporal)
