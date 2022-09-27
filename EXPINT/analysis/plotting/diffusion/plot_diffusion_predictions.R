@@ -3,7 +3,7 @@
 # data into density co-ordinates to plot against the data, from a variety of 
 # facets.
 
-setwd("~/git/sourcemem/EXPINT/analysis/plotting/")
+setwd("~/git/sourcemem/EXPINT/analysis/plotting/diffusion")
 
 ## Load dependencies
 library(circular)
@@ -66,18 +66,30 @@ colnames(spatiotemporal) <- col.names
 
 models <- rbind(saturated, spatiotemporal)
 
+# Plotting
+setwd("~/git/sourcemem/EXPINT/analysis/plotting/output/diffusion")
 
 # Marginal Error/ RT
-error <- ggplot(data) + 
+indiv_error <- ggplot(data) + 
   geom_histogram(aes(x = source_error, y = ..density..), colour = 1, fill = 'white', bins = 50) +
   geom_density(data = models, aes(x = error, colour = model), size = 1.2) +
   facet_wrap(~participant, ncol = 5)
 
-rt <- ggplot(data) + 
+group_error <- ggplot(data) + 
+  geom_histogram(aes(x = source_error, y = ..density..), colour = 1, fill = 'white', bins = 50) +
+  geom_density(data = models, aes(x = error, colour = model), size = 1.2) 
+
+indiv_rt <- ggplot(data) + 
   geom_histogram(aes(x = source_RT, y = ..density..), colour = 1, fill = 'white', bins = 50) +
-  geom_density(data = models, aes(x = rt, colour = model), size = 1.2) +
+  geom_density(data = models, aes(x = rt, colour = model), adjust = 1.5, size = 1.2) +
   xlim(0, 5) +
   facet_wrap(~participant, ncol = 5)
+
+group_rt <- ggplot(data) + 
+  geom_histogram(aes(x = source_RT, y = ..density..), colour = 1, fill = 'white', bins = 50) +
+  geom_density(data = models, aes(x = rt, colour = model), adjust = 1.5, size = 1.2) +
+  xlim(0, 5) 
+
 
 # Joint Quantiles
 

@@ -59,7 +59,7 @@ recenter.data <- function(data){
 
 # Different function for simulated dataset, because the indexing is different
 
-recenter.model <- function(data){
+recenter.model <- function(data, model){
   n_intrusions <- 7
   recentered_errors <- data.frame(matrix(ncol=11,nrow=nrow(data)*n_intrusions, 
                                          dimnames=list(NULL, c('participant', 'cond',

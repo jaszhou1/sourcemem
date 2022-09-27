@@ -161,9 +161,9 @@ simulate_saturated <- function(fits, data){
 # saturated <- fit_saturated_all()
 
 
-# sim_spatiotemporal <- simulate_spatiotemporal(spatiotemporal)
-# sim_orthosem <- simulate_spatiotemporal(orthosem)
-# sim_saturated <- simulate_spatiotemporal(saturated)
+# sim_spatiotemporal <- simulate_spatiotemporal(spatiotemporal, data)
+# sim_orthosem <- simulate_spatiotemporal(orthosem, data)
+# sim_saturated <- simulate_spatiotemporal(saturated, data)
 
 ## Recntering
 source("~/git/sourcemem/EXPINT/analysis/plotting/response_error/resp_recenter_data.R")
@@ -171,11 +171,11 @@ source("~/git/sourcemem/EXPINT/analysis/plotting/response_error/resp_recenter_da
 # recenter_data <- recenter.data(data)
 # 
 # # Recenter the spatiotemporal model
-# recenter_spatiotemporal <- recenter.model(sim_spatiotemporal)
+# recenter_spatiotemporal <- recenter.model(sim_spatiotemporal, 'spatiotemporal')
 # 
 # # Recenter the orthosem model
-# recenter_orthosem <- recenter.model(sim_orthosem)
+# recenter_orthosem <- recenter.model(sim_orthosem, 'orthosem')
 # 
 # # recenter saturated model
-# recenter_saturated <- recenter.model(sim_saturated)
+# recenter_saturated <- recenter.model(sim_saturated, 'saturated')
 
