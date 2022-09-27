@@ -3,7 +3,7 @@
 # data into density co-ordinates to plot against the data, from a variety of 
 # facets.
 
-setwd("~/git/sourcemem/EXPINT/analysis/plotting/")
+setwd("~/git/sourcemem/EXPINT/analysis/plotting/diffusion")
 
 ## Load dependencies
 library(circular)
