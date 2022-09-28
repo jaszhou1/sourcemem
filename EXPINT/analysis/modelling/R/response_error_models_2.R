@@ -1,15 +1,6 @@
 # Top level script to fit response error models to my final PhD experiment
 
 # Compared to the "initial" version, these models are further elaborated
-
-# 1. gamma_cond allows different intrusion scaling across conditions
-source('fit_gamma.R')
-# 2. gamma_beta_cond allows for different intrusion, and guess weight across conditions
-source('fit_gamma_beta.R')
-# 3. gamma_beta_kappa_cond allows for all of above, as well as different precision of mem/intrusion across conditions
-# Actually not doing this yet, instead fit a dummy strawman type one, with no spatiotemporal
-source('fit_pure_orthosem.R')
-
 library(CircStats)
 library(circular)
 library(DEoptim)
@@ -24,6 +15,15 @@ library(statip)
 ## Handle data prior to modelling
 data <- read.csv("~/git/sourcemem/EXPINT/data/EXPINT_data.csv")
 setwd("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code")
+
+# 1. gamma_cond allows different intrusion scaling across conditions
+source('fit_gamma.R')
+# 2. gamma_beta_cond allows for different intrusion, and guess weight across conditions
+source('fit_gamma_beta.R')
+# 3. gamma_beta_kappa_cond allows for all of above, as well as different precision of mem/intrusion across conditions
+# Actually not doing this yet, instead fit a dummy strawman type one, with no spatiotemporal
+source('fit_pure_orthosem.R')
+
 # Exclude data from practice blocks
 data <- data[data$block != -1,]
 
