@@ -25,15 +25,17 @@ recentered_models <- rbind(recenter_spatiotemporal, recenter_orthosem, recenter_
 #     models = models[model$participant == participant,]
 #   }
 # }
+
+setwd("~/git/sourcemem/EXPINT/analysis/plotting/output/resp_error")
 individual_error <- ggplot() +
-  geom_histogram(data = data, aes(x = source_error, y = ..density..), bins = 30) +
+  geom_histogram(data = data, aes(x = source_error, y = ..density..), colour = 1, fill = 'white', bins = 30) +
   geom_density(data = models, aes(x = simulated_error, color = model), adjust = 1) +
-  facet_wrap(~participant)
+  facet_wrap(~condition)
 
 ggsave('indiv_error.png', plot = last_plot(), width = 40, height = 35, units = "cm")
 
 group_error <- ggplot() +
-  geom_histogram(data = data, aes(x = source_error, y = ..density..), bins = 30) +
+  geom_histogram(data = data, aes(x = source_error, y = ..density..), colour = 1, fill = 'white', bins = 30) +
   geom_density(data = models, aes(x = simulated_error, color = model, size = 1.2), adjust = 1)
 ggsave('group_error.png', plot = last_plot(), width = 40, height = 35, units = "cm")
 
@@ -59,21 +61,21 @@ plot.orthographic.recenter <- function(data, model, participant){
     model = model[model$participant == participant,]
   }
   p1 <- ggplot() + 
-    geom_histogram(data = data[data$cond == 'orthographic', ], aes(x = offset, y = ..density..), bins = 30) +
+    geom_histogram(data = data[data$cond == 'orthographic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
     geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset,  color = model), adjust = 1.2) +
     ylim(0, 0.5) + 
     facet_grid(~orthographic) +
     ggtitle(sprintf('%s Condition, Recentered on orthographic', 'orth'))
   
   p2 <- ggplot() + 
-    geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), bins = 30) +
+    geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
     geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset,  color = model), adjust = 1.2) +
     ylim(0, 0.5) + 
     facet_grid(~orthographic) +
     ggtitle(sprintf('%s Condition, Recentered on orthographic', 'unrelated'))
   
   p3 <- ggplot() + 
-    geom_histogram(data = data, aes(x = offset, y = ..density..), bins = 30) +
+    geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
     geom_density(data = model, aes(x = offset,  color = model), adjust = 1.2) +
     ylim(0, 0.5) + 
     facet_grid(~orthographic)  +
@@ -92,21 +94,21 @@ plot.semantic.recenter <- function(data, model, participant){
     model = model[model$participant == participant,]
   }
   p1 <- ggplot() + 
-    geom_histogram(data = data[data$cond == 'semantic', ], aes(x = offset, y = ..density..), bins = 30) +
+    geom_histogram(data = data[data$cond == 'semantic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
     geom_density(data = model[model$cond == 'semantic', ], aes(x = offset,  color = model), adjust = 1.2) +
     ylim(0, 0.5) + 
     facet_grid(~semantic_bin) +
     ggtitle(sprintf('%s Condition, Recentered on semantic', 'semantic'))
   
   p2 <- ggplot() + 
-    geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), bins = 30) +
+    geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
     geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset,  color = model), adjust = 1.2) +
     ylim(0, 0.5) + 
     facet_grid(~semantic_bin) +
     ggtitle(sprintf('%s Condition, Recentered on semantic', 'unrelated'))
   
   p3 <- ggplot() + 
-    geom_histogram(data = data, aes(x = offset, y = ..density..), bins = 30) +
+    geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
     geom_density(data = model, aes(x = offset,  color = model), adjust = 1) +
     ylim(0, 0.5) + 
     facet_grid(~semantic_bin)  +
@@ -125,7 +127,7 @@ plot.spatial.recenter <- function(data, model, participant){
     model = model[model$participant == participant,]
   }
   p1 <- ggplot() + 
-    geom_histogram(data = data, aes(x = offset, y = ..density..), bins = 30) +
+    geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
     geom_density(data = model, aes(x = offset,  color = model), adjust = 1) +
     ylim(0, 0.7) + 
     facet_grid(~spatial_bin)  +
@@ -146,7 +148,7 @@ plot.temporal.recenter <- function(data, model, participant){
     model = model[model$participant == participant,]
   }
   p1 <- ggplot() + 
-    geom_histogram(data = data, aes(x = offset, y = ..density..), bins = 30) +
+    geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
     geom_density(data = model, aes(x = offset,  color = model), adjust = 1) +
     ylim(0, 0.5) + 
     facet_grid(~lag)  +
@@ -165,7 +167,7 @@ plot.asymm.recenter <- function(data, model, participant){
     model = model[model$participant == participant,]
   }
   p1 <- ggplot() + 
-    geom_histogram(data = data, aes(x = offset, y = ..density..), bins = 30) +
+    geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
     geom_density(data = model, aes(x = offset,  color = model), adjust = 1) +
     ylim(0, 0.5) + 
     facet_wrap(~lag, ncol = 7)  +
@@ -173,13 +175,14 @@ plot.asymm.recenter <- function(data, model, participant){
   
   plot <- ggarrange(p1, ncol = 1, nrow = 1, heights = c(1, 1, 1))
   filename <- sprintf('%s_recenter_asymm_temporal.png', participant)
-  ggsave(filename, plot = last_plot(), width = 40, height = 35, units = "cm")
+  ggsave(filename, plot = last_plot(), width = 40, height = 20, units = "cm")
 }
 
 plot.all.individual <- function(){
-  setwd("~/git/sourcemem/EXPINT/analysis/plotting/output")
+  setwd("~/git/sourcemem/EXPINT/analysis/plotting/output/resp_error")
   for(i in participants){
     plot.temporal.recenter(recenter_data, recentered_models, i)
+    plot.asymm.recenter(recenter_data, recentered_models,i)
     plot.spatial.recenter(recenter_data, recentered_models, i)
     plot.orthographic.recenter(recenter_data, recentered_models, i)
     plot.semantic.recenter(recenter_data, recentered_models, i)

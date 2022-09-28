@@ -98,3 +98,13 @@ end
 %     sim_spatiotemporal = vertcat(sim_spatiotemporal, this_sim);
 % end
 % csvwrite('sim_spatiotemporal.csv', sim_spatiotemporal)
+
+header_line = 'participant, model_name, AIC, v1t, v2t,  v1i,  v2i,   eta_t, eta_i,    at,  ag,    beta,  gamma,  tau,  l_b,   l_f,   zeta,  rho,   chi1,     chi2,      psi1,   psi2,    iota1,  iota2,  upsilon1,   upsilon2,     Ter,    st';
+filename = [datestr(now,'yyyy_mm_dd_HH'),'_pest_spatiotemporal.csv'];
+param_to_csv(filename, 1:n_participants, spatiotemporal, 'Spatiotemporal', header_line);
+
+filename = [datestr(now,'yyyy_mm_dd_HH'),'_pest_orthosem.csv'];
+param_to_csv(filename, 1:n_participants, orthosem, 'Orthosem', header_line);
+
+filename = [datestr(now,'yyyy_mm_dd_HH'),'_pest_saturated.csv'];
+param_to_csv(filename, 1:n_participants, saturated, 'Saturated', header_line);

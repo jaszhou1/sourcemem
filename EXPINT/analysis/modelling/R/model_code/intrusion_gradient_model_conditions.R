@@ -103,14 +103,14 @@ intrusion_cond_model <- function(params, data){
        (semantic_similarity[data$condition == 'unrelated',]^psi1))^(chi1)
   
   intrusion_weights[data$condition == 'orthographic',] <- ((temporal_similarity[data$condition == 'orthographic',]^(1-rho)) * 
-                                                             (spatial_similarity[data$condition == 'orthographic',]^rho))^(1-chi1) * 
+                                                             (spatial_similarity[data$condition == 'orthographic',]^rho))^(1-chi2) * 
     ((orthographic_similarity[data$condition == 'orthographic',]^(1-psi1)) * 
-       (semantic_similarity[data$condition == 'orthographic',]^psi1))^(chi1)
+       (semantic_similarity[data$condition == 'orthographic',]^psi1))^(chi2)
   
   intrusion_weights[data$condition == 'semantic',] <- ((temporal_similarity[data$condition == 'semantic',]^(1-rho)) * 
-                                                         (spatial_similarity[data$condition == 'semantic',]^rho))^(1-chi1) * 
-    ((orthographic_similarity[data$condition == 'semantic',]^(1-psi1)) * 
-       (semantic_similarity[data$condition == 'semantic',]^psi1))^(chi1)
+                                                         (spatial_similarity[data$condition == 'semantic',]^rho))^(1-chi2) * 
+    ((orthographic_similarity[data$condition == 'semantic',]^(1-psi2)) * 
+       (semantic_similarity[data$condition == 'semantic',]^psi2))^(chi2)
   
     # Multiply all intrusion weights with overall intrusion scaling parameter
   intrusion_weights <- gamma*intrusion_weights
@@ -269,14 +269,14 @@ simulate_intrusion_cond_model <- function(participant, data, params){
                                                              (semantic_similarity[data$condition == 'unrelated',]^psi1))^(chi1)
   
   intrusion_weights[data$condition == 'orthographic',] <- ((temporal_similarity[data$condition == 'orthographic',]^(1-rho)) * 
-                                                             (spatial_similarity[data$condition == 'orthographic',]^rho))^(1-chi1) * 
+                                                             (spatial_similarity[data$condition == 'orthographic',]^rho))^(1-chi2) * 
                                                             ((orthographic_similarity[data$condition == 'orthographic',]^(1-psi1)) * 
-                                                               (semantic_similarity[data$condition == 'orthographic',]^psi1))^(chi1)
+                                                               (semantic_similarity[data$condition == 'orthographic',]^psi1))^(chi2)
   
   intrusion_weights[data$condition == 'semantic',] <- ((temporal_similarity[data$condition == 'semantic',]^(1-rho)) * 
-                                                         (spatial_similarity[data$condition == 'semantic',]^rho))^(1-chi1) * 
-                                                        ((orthographic_similarity[data$condition == 'semantic',]^(1-psi1)) * 
-                                                           (semantic_similarity[data$condition == 'semantic',]^psi1))^(chi1)
+                                                         (spatial_similarity[data$condition == 'semantic',]^rho))^(1-chi2) * 
+                                                        ((orthographic_similarity[data$condition == 'semantic',]^(1-psi2)) * 
+                                                           (semantic_similarity[data$condition == 'semantic',]^psi2))^(chi2)
   # Multiply all intrusion weights with overall intrusion scaling parameter
   intrusion_weights <- gamma*intrusion_weights
   
