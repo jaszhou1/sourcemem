@@ -21,6 +21,7 @@ if length(pest) ~= n_params
     [name, errmg1], length(pest), return;
 end
 
+P = pest;
 % Drift norms
 v1_targ_1 = P(1);
 v2_targ_1 = P(2);
