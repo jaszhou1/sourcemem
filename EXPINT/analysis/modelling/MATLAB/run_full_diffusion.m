@@ -33,11 +33,11 @@ end
 
  sim_saturated = [];
  for i = 1:10
-     this_sim = simulate_gradient_model(data(i,:), saturated{i,3}, i);
+     this_sim = simulate_full_model(data(i,:), saturated{i,3}, i);
      sim_saturated = vertcat(sim_saturated, this_sim);
  end
  csvwrite('sim_saturated.csv', sim_saturated)
 
-header_line = 'participant, model_name, AIC, v1t_1, v2t_1,  v1i_1,  v2i_1,  v1t_2, v2t_2,  v1i_2,  v2i_2, v1t_3, v2t_3,  v1i_3,  v2i_3,         eta_t, eta_i,       at,  ag,    beta1,  beta2,  beta3      gamma1, gamma2,  gamma3,     tau,  l_b,   l_f,   zeta,  rho,   chi1,     chi2,      psi1,   psi2,    iota1,  iota2,  upsilon1,   upsilon2,     Ter,    st';
+header_line = 'participant, model_name, AIC, v1t_1, v2t_1,  v1i_1,  v2i_1,  v1t_2, v2t_2,  v1i_2,  v2i_2, v1t_3, v2t_3,  v1i_3,  v2i_3,         eta_t, eta_i,       at,  ag,    beta1,  beta2,  beta3,      gamma1, gamma2,  gamma3,     tau,  l_b,   l_f,   zeta,  rho,   chi1,     chi2,      psi1,   psi2,    iota1,  iota2,  upsilon1,   upsilon2,     Ter,    st';
 filename = [datestr(now,'yyyy_mm_dd_HH'),'_pest_saturated.csv'];
 param_to_csv(filename, 1:n_participants, saturated, 'Saturated', header_line);
