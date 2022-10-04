@@ -79,7 +79,8 @@ plot_marginal <- function(){
   
   group_error <- ggplot(data) + 
     geom_histogram(aes(x = source_error, y = ..density..), colour = 1, fill = 'white', bins = 50) +
-    geom_density(data = models, aes(x = error, colour = model), size = 1.2) 
+    geom_density(data = models, aes(x = error, colour = model), size = 1.2) +
+    facet_wrap(~condition)
   ggsave('group_error.png', plot = last_plot(), width = 40, height = 35, units = "cm")
   
   indiv_rt <- ggplot(data) + 
@@ -92,7 +93,8 @@ plot_marginal <- function(){
   group_rt <- ggplot(data) + 
     geom_histogram(aes(x = source_RT, y = ..density..), colour = 1, fill = 'white', bins = 50) +
     geom_density(data = models, aes(x = rt, colour = model), adjust = 1.5, size = 1.2) +
-    xlim(0, 5)
+    xlim(0, 5) +
+    facet_wrap(~condition)
   ggsave('group_rt.png', plot = last_plot(), width = 40, height = 35, units = "cm")
 }
 

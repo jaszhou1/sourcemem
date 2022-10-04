@@ -76,14 +76,23 @@ for(i in participants){
 #Plot d prime across conditions
 recog$condition <- factor(recog$condition, levels = c("unrelated", "semantic", "orthographic"), ordered = T)
 recog$participant <- as.factor(recog$participant)
-recog_plot <- ggplot(recog, aes(x=condition,  y = dprime, group = participant, color = participant)) + 
+recog_dprime <- ggplot(recog, aes(x=condition,  y = dprime, group = participant, color = participant)) + 
   geom_line(lwd = 1.5, alpha = 0.4) + geom_point(size = 3) +
   geom_text(data = subset(recog, condition == "orthographic"), aes(label = participant, colour = participant, x = Inf, y = dprime), hjust = -.1)
 
-gt <- ggplotGrob(recog_plot)
+gt <- ggplotGrob(recog_dprime)
 gt$layout$clip[gt$layout$name == "panel"] <- "off"
 grid.draw(gt)
 
+recog_hit_FA <- ggplot(data = recog) + 
+  geom_line(aes(x = condition, y = false.alarms, group = participant, color = participant), lty = 'dashed', lwd = 1.5, alpha = 0.4) + 
+  geom_point(aes(x = condition, y = false.alarms, group = participant, color = participant), size = 3, shape = 1) +
+  geom_line(aes(x = condition, y = hits, group = participant, color = participant), lty = 'dotted', lwd = 1.5, alpha = 0.4) + 
+  geom_point(aes(x = condition, y = hits, group = participant, color = participant), size = 3, shape = 1) 
+
+# Plot error across serial position, for each condition
+error_across_position <- ggplot(data = data) +
+  geom_point(a)
 
 # Rayleigh test of uniformity
 rayleigh <- data.frame(participant = integer(),
