@@ -21,53 +21,96 @@ if length(pest) ~= n_params
     [name, errmg1], length(pest), return;
 end
 
-P = pest;
 % Drift norms
-v1_targ_1 = P(1);
-v2_targ_1 = P(2);
-v1_targ_2 = P(3);
-v2_targ_2 = P(4);
-v1_targ_3 = P(5);
-v2_targ_3 = P(6);
-v1_int_1 = P(7);
-v2_int_1 = P(8);
-v1_int_2 = P(9);
-v2_int_2 = P(10);
-v1_int_3 = P(11);
-v2_int_3 = P(12);
+v1_targ_1 = pest(1);
+v2_targ_1 = pest(2);
+v1_int_1 = pest(3);
+v2_int_1 = pest(4);
+
+v1_targ_2 = pest(5);
+v2_targ_2 = pest(6);
+v1_int_2 = pest(7);
+v2_int_2 = pest(8);
+
+v1_targ_3 = pest(9);
+v2_targ_3 = pest(10);
+v1_int_3 = pest(11);
+v2_int_3 = pest(12);
 % Trial-trial drift variability
-eta_targ = P(13);
-eta_int = P(14);
+eta_targ = pest(13);
+eta_int = pest(14);
 % Decision Criteria
-a_targ = P(15);
+a_targ = pest(15);
 a_int = a_targ;
-a_guess = P(16);
+a_guess = pest(16);
 % Component Proportions
-beta1 = P(17);
-beta2 = P(18);
-beta3 = P(19);
-gamma1 = P(20);
-gamma2 = P(21);
-gamma3 = P(22);
+beta1 = pest(17);
+beta2 = pest(18);
+beta3 = pest(19);
+gamma1 = pest(20);
+gamma2 = pest(21);
+gamma3 = pest(22);
 % beta_primacy = P(11);
 % beta_recency = P(12);
 % Temporal Gradient
-tau = P(23); %Weight forwards vs backwards intrusion decay slope
-lambda_b = P(24); % Decay of the backwards slope
-lambda_f = P(25); % Decay of the forwards slope
-zeta = P(26); %precision for Shepard similarity function (perceived spatial distance)
-rho = P(27); % Spatial component weight in intrusion probability calculation
-chi1 = P(28); % Item v Context, Low
-chi2 = P(29); % Item v Context, High
-psi1 = P(30); % Semantic v Ortho, Low
-psi2 = P(31); % Semantic v Ortho, High
-iota1 = P(32); % Ortho decay, Low
-iota2 = P(33); % Ortho decay, High
-upsilon1 = P(34); % Semantic decay, Low
-upsilon2 = P(35); % Semantic decay, High
+tau = pest(23); %Weight forwards vs backwards intrusion decay slope
+lambda_b = pest(24); % Decay of the backwards slope
+lambda_f = pest(25); % Decay of the forwards slope
+zeta = pest(26); %precision for Shepard similarity function (perceived spatial distance)
+rho = pest(27); % Spatial component weight in intrusion probability calculation
+chi1 = pest(28); % Item v Context, Low
+chi2 = pest(29); % Item v Context, High
+psi1 = pest(30); % Semantic v Ortho, Low
+psi2 = pest(31); % Semantic v Ortho, High
+iota1 = pest(32); % Ortho decay, Low
+iota2 = pest(33); % Ortho decay, High
+upsilon1 = pest(34); % Semantic decay, Low
+upsilon2 = pest(35); % Semantic decay, High
 % Nondecision Time
-ter = P(36);
-st = P(37);
+ter = pest(36);
+st = pest(37);
+
+% If certain parameters are fed in as 0, assume I intend for them to be
+% equal across conditions, instead of actually being 0.
+if v1_targ_2 == 0
+    v1_targ_2 = v1_targ_1;
+    v1_targ_3 = v1_targ_1;
+end
+
+if v2_targ_2 == 0
+    v2_targ_2 = v2_targ_1;
+    v2_targ_3 = v2_targ_1;
+end
+
+if v1_int_2 == 0
+    v1_int_2 = v1_int_1;
+    v1_int_3 = v1_int_1;
+end
+
+if v2_int_2 == 0
+    v2_int_2 = v2_int_1;
+    v2_int_3 = v2_int_1;
+end
+
+if beta2 == 0
+    beta2 = beta1;
+    beta3 = beta1;
+end
+
+if gamma2 == 0
+    gamma2 = gamma1;
+    gamma3 = gamma1;
+end
+
+if chi2 == 0
+    chi2 = chi1;
+    iota2 = iota1;
+end
+
+if psi2 == 0
+    psi2 = psi1;
+    upsilon2 = upsilon1;
+end
 
 
 % Assume eta components in the x and y directions are the same

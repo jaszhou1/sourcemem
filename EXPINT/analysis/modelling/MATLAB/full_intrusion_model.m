@@ -47,16 +47,19 @@ P(Sel==0) = Pfix;
 % Drift norms
 v1_targ_1 = P(1);
 v2_targ_1 = P(2);
-v1_targ_2 = P(3);
-v2_targ_2 = P(4);
-v1_targ_3 = P(5);
-v2_targ_3 = P(6);
-v1_int_1 = P(7);
-v2_int_1 = P(8);
-v1_int_2 = P(9);
-v2_int_2 = P(10);
+v1_int_1 = P(3);
+v2_int_1 = P(4);
+
+v1_targ_2 = P(5);
+v2_targ_2 = P(6);
+v1_int_2 = P(7);
+v2_int_2 = P(8);
+
+v1_targ_3 = P(9);
+v2_targ_3 = P(10);
 v1_int_3 = P(11);
 v2_int_3 = P(12);
+
 % Trial-trial drift variability
 eta_targ = P(13);
 eta_int = P(14);
@@ -90,6 +93,59 @@ upsilon2 = P(35); % Semantic decay, High
 % Nondecision Time
 ter = P(36);
 st = P(37);
+
+% If certain parameters are fed in as 0, assume I intend for them to be
+% equal across conditions, instead of actually being 0.
+
+% Making some assumptions about some pairs of parameters (e.g. chi & iota)
+% and what the full model reduces down to when these parameters are equal
+% to each other. This may not be the best way to implement this, but I
+% can't be bothered writing 5+ versions of this code for the variants of
+% the model I wish to test.
+
+% The reason Pbound is passed in as an argument rather than being defined
+% in the model code like Philip usually does is so I can set the lowerbound
+% to 0 when I want parameters to be equal across conditions, but be higher
+% in the freer version of the model.
+ if v1_targ_2 == 0
+    v1_targ_2 = v1_targ_1;
+    v1_targ_3 = v1_targ_1;
+end
+
+if v2_targ_2 == 0
+    v2_targ_2 = v2_targ_1;
+    v2_targ_3 = v2_targ_1;
+end
+
+if v1_int_2 == 0
+    v1_int_2 = v1_int_1;
+    v1_int_3 = v1_int_1;
+end
+
+if v2_int_2 == 0
+    v2_int_2 = v2_int_1;
+    v2_int_3 = v2_int_1;
+end
+
+if beta2 == 0
+    beta2 = beta1;
+    beta3 = beta1;
+end
+
+if gamma2 == 0
+    gamma2 = gamma1;
+    gamma3 = gamma1;
+end
+
+if chi2 == 0
+    chi2 = chi1;
+    iota2 = iota1;
+end
+
+if psi2 == 0
+    psi2 = psi1;
+    upsilon2 = upsilon1;
+end
 
 % Check that the weights make sense for conditions
 % i.e., I expect the weight for semantic similarity to be higher in the
