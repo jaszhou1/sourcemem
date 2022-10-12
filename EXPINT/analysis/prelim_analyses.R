@@ -90,9 +90,9 @@ recog_hit_FA <- ggplot(data = recog) +
   geom_line(aes(x = condition, y = hits, group = participant, color = participant), lty = 'dotted', lwd = 1.5, alpha = 0.4) + 
   geom_point(aes(x = condition, y = hits, group = participant, color = participant), size = 3, shape = 1) 
 
-# Plot error across serial position, for each condition
-error_across_position <- ggplot(data = data) +
-  geom_point(a)
+# # Plot error across serial position, for each condition (Separate file does this 'error_across_position.R')
+# error_across_position <- ggplot(data = data) +
+#   geom_point(aes(x = present_trial, y = mean(abs(source_error))))
 
 # Rayleigh test of uniformity
 rayleigh <- data.frame(participant = integer(),
