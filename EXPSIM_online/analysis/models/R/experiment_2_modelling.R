@@ -18,7 +18,7 @@ data <- read.csv('experiment_2.csv')
 data <- data[data$block != 0,]
 
 # Exclude first session as a practice sessions
-data <- data[data$session != 1,]
+#data <- data[data$session != 1,]
 
 # Exclude invalid RTs
 data <- data[data$valid_RT==TRUE,]
