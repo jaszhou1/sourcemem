@@ -37,6 +37,14 @@ n_trials <- 10
 n_intrusions <- n_trials - 1
 intrusions <- data[,14:22]
 
+trial.count <- data.frame(matrix(NA, nrow = 36, ncol = 3))
+colnames(hit_rates)<- c("n_trials_seq","n_trials_seq", "n_trials")
+for(i in unique(data$participant)){
+  this.data <- data[data$participant == i, ]
+  trial.count[i, 1] <- this_hit_rate
+  trial.count[i, 2] <- this_condition
+}
+
 # ===================== Difference between conditions ===========================
 # Is there a difference between sequential and simultaneous conditions?
 # - Recognition 
@@ -66,10 +74,20 @@ sim_hit_rates <- hit_rates[hit_rates$cond == FALSE,]
 seq_data <- data[data$is_sequential == TRUE,]
 sim_data <- data[data$is_sequential == FALSE,]
 
-t.test(seq_data$response_error, sim_data$response_error)
-
 data[data$is_sequential == TRUE,]$is_sequential <- 'Sequential Presentation'
 data[data$is_sequential == FALSE,]$is_sequential <- 'Simultaneous Presentation'
+
+participant.means = data.frame(matrix(nrow = 36, ncol = 3))
+for(i in unique(data$participant)){
+  this.data = data[data$participant == i, ]
+  this.mean = mean(abs(this.data$response_error))
+  participant.means[i, 1] <- i
+  participant.means[i, 2] <- this.mean
+  participant.means[i, 3] <- this.data$is_sequential[1]
+}
+colnames(participant.means) <- c('participant', 'average absolute mean error', 'condition')
+seq.means <- participant.means[participant.means$condition == 'Sequential Presentation',]
+sim.means <- participant.means[participant.means$condition == 'Simultaneous Presentation',]
 
 condition_plot <- ggplot(data, aes(response_error)) + geom_histogram(aes(y=..density..)) + facet_wrap(~is_sequential) +
     theme_pubr() + theme(strip.text = element_text(size=12,lineheight=5.0)) +
@@ -78,3 +96,4 @@ condition_plot <- ggplot(data, aes(response_error)) + geom_histogram(aes(y=..den
     xlab('Response Error') + ylab('Density')
 
 # ===================== Modelling ===========================
+
