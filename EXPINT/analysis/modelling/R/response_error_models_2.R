@@ -33,6 +33,8 @@ data <- data[data$is_stimulus, ]
 # Exclude data with inalid RT
 data <- data[data$valid_RT, ]
 
+# Exclude data where target words were not recognised
+data <- data[data$recognised == 1,]
 
 # Define some things to iterate through
 participants <- unique(data$participant)
@@ -165,24 +167,24 @@ simulate.pure.orthosem <- function(fits, data){
 
 
 # Function calls
-gamma <- fit.gamma.all()
-sim_gamma <- simulate.gamma(gamma)
-
-gammabeta <- fit.gammabeta.all()
-sim_gammabeta <- simulate.gammabeta(gammabeta)
-
-orthosem <- fit.pure.orthosem.all()
-sim_orthosem <- simulate.pure.orthosem(orthosem)
+# gamma <- fit.gamma.all()
+# sim_gamma <- simulate.gamma(gamma)
+# 
+# gammabeta <- fit.gammabeta.all()
+# sim_gammabeta <- simulate.gammabeta(gammabeta)
+# 
+# orthosem <- fit.pure.orthosem.all()
+# sim_orthosem <- simulate.pure.orthosem(orthosem)
 
 ## Recentering
 source("~/git/sourcemem/EXPINT/analysis/plotting/response_error/resp_recenter_data.R")
-# Data
-recenter_data <- recenter.data(data)
-
-# Recenter the gamma model
-recenter_gamma <- recenter.model(sim_gamma, 'gamma')
-recenter_gammabeta <- recenter.model(sim_gammabeta, 'gamma + beta')
-recenter_orthosem <- recenter.model(sim_orthosem, 'pure orthosem')
-
-save.image(file = paste(toString(Sys.Date()), '_response_error.RData', sep =""))
+# # Data
+# recenter_data <- recenter.data(data)
+# 
+# # Recenter the gamma model
+# recenter_gamma <- recenter.model(sim_gamma, 'gamma')
+# recenter_gammabeta <- recenter.model(sim_gammabeta, 'gamma + beta')
+# recenter_orthosem <- recenter.model(sim_orthosem, 'pure orthosem')
+# 
+# save.image(file = paste(toString(Sys.Date()), '_response_error.RData', sep =""))
 
