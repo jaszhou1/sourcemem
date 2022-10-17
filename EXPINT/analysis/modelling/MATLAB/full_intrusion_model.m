@@ -326,8 +326,8 @@ for cond = 1:3
     %to the target location
 
     % Empty structure to put likelihood of each data point
-    like = zeros(length(this_data),1);
-    for i = 1:length(this_data)
+    like = zeros(size(this_data,1),1); % Maybe use size(this_data,1) instead if not enough observations
+    for i = 1:size(this_data,1)
         % Find the intrusions for this trial
         this_trial_intrusions = this_data(i, 6:12);
 

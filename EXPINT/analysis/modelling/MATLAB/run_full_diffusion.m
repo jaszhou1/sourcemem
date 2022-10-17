@@ -1,6 +1,6 @@
 %% Fit the fully parameterised intrusion model with different parameters across cond
 % Read in data
-load('EXPINT_data.mat')
+load('EXPINT_data_recognised.mat')
 
 n_participants = length(data);
 n_runs = 5;

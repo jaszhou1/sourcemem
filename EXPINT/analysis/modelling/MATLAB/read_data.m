@@ -20,6 +20,9 @@ all_data = all_data(all_data(:,7) == 1,:);
 % Then, exclude trials with invalid RTs
 all_data = all_data(all_data(:, 15) ~= 0,:);
 
+% Finally, exclude trials where the target word was not recognised
+all_data = all_data(all_data(:, 9) == 1,:);
+
 % Get a list of participants
 participants = unique(all_data(:,1));
 
