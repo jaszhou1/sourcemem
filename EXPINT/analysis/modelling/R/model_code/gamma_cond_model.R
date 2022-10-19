@@ -195,9 +195,9 @@ simulate_gamma_cond_model <- function(participant, data, params){
   # GUESS
   beta <- params[[3]] # Proportion of guesses (weight vs. intrusion+memory)
   # INTRUSIONS
-  gamma <- params[[4]] # Overall scaling of intrusions, this is not directly interpretable
-  gamma <- params[[5]]
-  gamma <- params[[6]]
+  gamma1 <- params[[4]] # Overall scaling of intrusions, this is not directly interpretable
+  gamma2 <- params[[5]]
+  gamma3 <- params[[6]]
   # Spatiotemporal
   tau <- params[[7]] # Temporal asymmetry (tau >0.5 means forwards are more similar)
   lambda_b <- params[[8]] # Similarity decay of backwards temporal lag

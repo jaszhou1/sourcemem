@@ -24,6 +24,18 @@ source('fit_gamma_beta.R')
 # Actually not doing this yet, instead fit a dummy strawman type one, with no spatiotemporal
 source('fit_pure_orthosem.R')
 
+# Fit the spatiotemporal model as a baseline
+source('fit_spatiotemporal_model.R')
+# for(i in participants){
+#   this.data <- data[data$participant == i,]
+#   this.p.fit <- fit_spatiotemporal(this.data, i)
+# }
+
+source('fit_orthosem.R')
+
+# This "saturated" model is not actually saturated, has different slopes and mixture for conditions, but not gamma or beta
+source('fit_mix_cond_model.R')
+
 # Exclude data from practice blocks
 data <- data[data$block != -1,]
 
@@ -71,6 +83,90 @@ angle_diff <- function(a,b){
 # so I think we let only the weight change across conditions.
 
 ## PARTICIPANT PARALLEL LOOPS
+
+## Older models
+fit_spatiotemporal_all <- function(){
+  cl <- makeForkCluster((detectCores() - 1))
+  registerDoParallel(cl)
+  res = foreach (i = 1:length(participants),
+                 .combine = rbind) %dopar% {
+                   this.data <- data[data$participant == i,]
+                   optim <- fit_spatiotemporal(this.data, i)
+                   pest <- optim$bestmem
+                   this_fit <- c(participants[i], optim$bestval, optim$aic, pest[1:13])
+                   return(this_fit)
+                 }
+  colnames(res) <- c('participant','nLL','aic','kappa1','kappa2', 'beta', 'gamma', 'tau', 'lambda_b', 
+                     'lambda_f', 'zeta', 'rho', 'chi', 'iota', 'upsilon', 'psi')
+  
+  res <- as.data.frame(res)
+  write.csv(res, paste(toString(Sys.Date()), '_spatiotemporal_pest.csv', sep =""))
+  return(res)
+}
+
+fit_orthosem_all <- function(){
+  cl <- makeForkCluster((detectCores() - 1))
+  registerDoParallel(cl)
+  res = foreach (i = 1:length(participants),
+                 .combine = rbind) %dopar% {
+                   this.data <- data[data$participant == i,]
+                   optim <- fit_orthosem(this.data, i)
+                   pest <- optim$bestmem
+                   this_fit <- c(participants[i], optim$bestval, optim$aic, pest[1:13])
+                   return(this_fit)
+                 }
+  colnames(res) <- c('participant','nLL','aic','kappa1','kappa2', 'beta', 'gamma', 'tau', 'lambda_b', 
+                     'lambda_f', 'zeta', 'rho', 'chi', 'iota', 'upsilon', 'psi')
+  
+  res <- as.data.frame(res)
+  write.csv(res, paste(toString(Sys.Date()), '_orthosem_pest.csv', sep =""))
+  return(res)
+}
+
+fit_mix_cond_all <- function(){
+  cl <- makeForkCluster((detectCores() - 1))
+  registerDoParallel(cl)
+  res = foreach (i = 1:length(participants),
+                 .combine = rbind) %dopar% {
+                   this.data <- data[data$participant == i,]
+                   optim <- fit_saturated(this.data, i)
+                   pest <- optim$bestmem
+                   this_fit <- c(participants[i], optim$bestval, optim$aic, pest[1:17])
+                   return(this_fit)
+                 }
+  colnames(res) <- c('participant','nLL','aic', 'kappa1', 'kappa2', 'beta', 'gamma', 'tau', 'lambda_b', 'lambda_f', 
+                     'zeta', 'rho', 'chi1', 'chi2', 'iota1', 'iota2', 'upsilon1', 'upsilon2', 
+                     'psi1', 'psi2')
+  
+  res <- as.data.frame(res)
+  write.csv(res, paste(toString(Sys.Date()), '_mix_cond_pest.csv', sep =""))
+  return(res)
+}
+
+simulate_spatiotemporal <- function(fits, data){
+  simulated_data <- data.frame()
+  for(i in 1:length(participants)){
+    this_data <- data[data$participant == i, ]
+    this_params <- fits[i, 4:length(fits)]
+    this_sim <- simulate_intrusion_model(i, this_data, this_params)
+    simulated_data <- rbind(simulated_data, this_sim)
+  }
+  return(simulated_data)
+}
+
+simulate_mix_cond <- function(fits, data){
+  simulated_data <- data.frame()
+  for(i in 1:length(participants)){
+    this_data <- data[data$participant == i, ]
+    this_params <- fits[i, 4:length(fits)]
+    this_sim <- simulate_intrusion_cond_model(i, this_data, this_params)
+    simulated_data <- rbind(simulated_data, this_sim)
+  }
+  return(simulated_data)
+}
+
+## NEWER MODELS
+
 fit.gamma.all <- function(){
   cl <- makeForkCluster((detectCores() - 1))
   registerDoParallel(cl)
@@ -150,7 +246,7 @@ fit.pure.orthosem.all <- function(){
                       'iota', 'upsilon', 'psi')
   
   res <- as.data.frame(res)
-  write.csv(res, paste(toString(Sys.Date()), '_gammabeta_pest.csv', sep =""))
+  write.csv(res, paste(toString(Sys.Date()), '_pure_orthosem_pest.csv', sep =""))
   return(res)
 }
 
@@ -173,18 +269,45 @@ simulate.pure.orthosem <- function(fits, data){
 # gammabeta <- fit.gammabeta.all()
 # sim_gammabeta <- simulate.gammabeta(gammabeta)
 # 
-# orthosem <- fit.pure.orthosem.all()
-# sim_orthosem <- simulate.pure.orthosem(orthosem)
+# pure_orthosem <- fit.pure.orthosem.all()
+# sim_pure_orthosem <- simulate.pure.orthosem(pure_orthosem)
 
-## Recentering
+# spatiotemporal <- fit_spatiotemporal_all()
+# orthosem <- fit_orthosem_all()
+# mix_cond <- fit_mix_cond_all()
+
+
+# sim_spatiotemporal <- simulate_spatiotemporal(spatiotemporal, data)
+# sim_orthosem <- simulate_spatiotemporal(orthosem, data)
+# sim_mix_cond <- simulate_mix_cond(mix_cond, data)
+
+## Recntering
 source("~/git/sourcemem/EXPINT/analysis/plotting/response_error/resp_recenter_data.R")
+# 
+# recenter_data <- recenter.data(data)
+# 
+# # Recenter the spatiotemporal model
+# recenter_spatiotemporal <- recenter.model(sim_spatiotemporal, 'spatiotemporal')
+# 
+# # Recenter the orthosem model
+# recenter_orthosem <- recenter.model(sim_orthosem, 'orthosem')
+# 
+# # recenter saturated model
+# recenter_saturated <- recenter.model(sim_saturated, 'saturated')
+
+
+
+
 # # Data
 # recenter_data <- recenter.data(data)
 # 
 # # Recenter the gamma model
 # recenter_gamma <- recenter.model(sim_gamma, 'gamma')
 # recenter_gammabeta <- recenter.model(sim_gammabeta, 'gamma + beta')
-# recenter_orthosem <- recenter.model(sim_orthosem, 'pure orthosem')
+# recenter_pure_orthosem <- recenter.model(sim_pure_orthosem, 'pure orthosem')
+# recenter_spatiotemporal <- recenter.model(sim_spatiotemporal, 'spatiotemporal')
+# recenter_orthosem <- recenter.model(sim_orthosem, 'orthosem')
+# recenter_mix_cond <- recenter.model(sim_mix_cond, 'saturated')
 # 
 # save.image(file = paste(toString(Sys.Date()), '_response_error.RData', sep =""))
 
