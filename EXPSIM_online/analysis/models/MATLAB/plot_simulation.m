@@ -10,15 +10,14 @@ Rt1 = Data(:,2);
 
 % Accuracy
 axes(axhandle(1))
-histogram(Pred(:,1), 50, 'Normalization', 'pdf', 'BinLimits', [-pi,pi]);
-% histogram(Theta1, 50, 'Normalization', 'pdf', 'BinLimits', [-pi,pi]);
+histogram(Theta1, 50, 'Normalization', 'pdf', 'BinLimits', [-pi,pi]);
 set(gca, 'Xlim', [-pi, pi])
 set(gca, 'Ylim', [0, 2.5])
 xlabel('Response Error (rad)')
 ylabel('Probability density')
 subtitle('Accuracy');
-% hold
-% ksdensity(Pred(:,1))
+hold
+ksdensity(Pred(:,1))
 
 
 % RT

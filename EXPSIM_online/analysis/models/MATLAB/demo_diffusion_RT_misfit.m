@@ -13,44 +13,42 @@
 % that does not exist in the data. Basically, p. 573 of Smith et al. (2020)
 
 load('exp2_data_cutoff.mat')
-
+close all
 % Participant 2 is probably the best example of a case where the simple
 % response error model does a good job of capturing the response error
 % distribution, but the diffusion model just doesn't do a good job.
 
-this_data = data{2};
+this_data = data{3};
 
-v1_targ = 1;
-v2_targ = 1;
-v1_int = 0;
+v1_targ = 4.7;
+v2_targ = 0;
+v1_int = 1.3;
 v2_int = 0;
-eta_targ = 1;
-eta_int = 0;
-a_targ = 3.5;
-a_guess = 1;
+eta1_targ = 3;
+eta2_targ = 3;
+eta1_int = 0.01;
+eta2_int = 0.01;
+a_targ = 2.62;
+a_guess = 1.365;
 gamma = 0;
-beta = 0;
-kappa = 0;
-lambda_b = 0;
-lambda_f = 0;
-zeta = 0;
-rho = 0;
-Ter = .10;
+beta = 0.4;
+kappa = 0.6;
+lambda_b = 1;
+lambda_f = 1;
+zeta = 1.5;
+rho = 0.2;
+Ter = 0.09;
 st = 0;
 
-params = [v1_targ, v2_targ, v1_int, v2_int, eta_targ, eta_int, ...
+params = [v1_targ, v2_targ, v1_int, v2_int, eta1_targ, eta2_targ, eta1_int, eta2_int,...
     a_targ,	 a_guess, gamma, beta, kappa, lambda_b, lambda_f, ...
     zeta, rho, Ter, st];
 
-sim_data = simulate_spatiotemporal(this_data, params);
+sim_data = simulate_spatiotemporal_eta(this_data, params);
 
-plot_simulation(P2, sim_data)
+plot_simulation(this_data, sim_data)
 
-function[simulated_data] = simulate_spatiotemporal(data, pest)
-
-%% Debugging
-name = 'SIMULATE_SPATIOTEMPORAL: ';
-errmg1 = 'Incorrect number of parameters, exiting...';
+function[simulated_data] = simulate_spatiotemporal_eta(data, pest)
 %%
 % Number of trials to simulate (should be the same as the actual dataset)
 n_trials = length(data);
@@ -62,7 +60,7 @@ n_sims = 50; % The number of times to simulate each trial
 num_intrusions = 9;
 
 % Expected number of parameters
-n_params = 17;
+n_params = 19;
 % Check the length of the parameter vector
 if length(pest) ~= n_params
     [name, errmg1], length(pest), return;
@@ -75,32 +73,34 @@ v2_targ = P(2);
 v1_int = P(3);
 v2_int = P(4);
 % Trial-trial drift variability
-eta_targ = P(5);
-eta_int = P(6);
+eta1_targ = P(5);
+eta2_targ = P(6);
+eta1_int = P(7);
+eta2_int = P(8);
 % Decision Criteria
-a_targ = P(7);
+a_targ = P(9);
 a_int = a_targ;
-a_guess = P(8);
+a_guess = P(10);
 % Component Proportions
-gamma = P(9);
-beta = P(10);
+gamma = P(11);
+beta = P(12);
 % beta_primacy = P(11);
 % beta_recency = P(12);
 % Temporal Gradient
-kappa = P(11); %Scaling parameter for forwards vs backwards intrusion decay slope
-lambda_b = P(12); % Decay of the backwards slope
-lambda_f = P(13); % Decay of the forwards slope
-zeta = P(14); %precision for Shepard similarity function (perceived spatial distance)
-rho = P(15); % Spatial component weight in intrusion probability calculation
+kappa = P(13); %Scaling parameter for forwards vs backwards intrusion decay slope
+lambda_b = P(14); % Decay of the backwards slope
+lambda_f = P(15); % Decay of the forwards slope
+zeta = P(16); %precision for Shepard similarity function (perceived spatial distance)
+rho = P(17); % Spatial component weight in intrusion probability calculation
 % Nondecision Time
-ter = P(16);
-st = P(17);
+ter = P(18);
+st = P(19);
 
 % Assume eta components in the x and y directions are the same
-eta1_targ = eta_targ;
-eta2_targ = eta_targ;
-eta1_int = eta_int;
-eta2_int = eta_int;
+% eta1_targ = eta_targ;
+% eta2_targ = eta_targ;
+% eta1_int = eta_int;
+% eta2_int = eta_int;
 
 % Arguments for the simulation function
 tmax = 5.1;
@@ -161,8 +161,8 @@ for i = 1:n_trials
         trial_type = mnrnd(1,this_weights);
         
         if trial_type(1) % This is the target
-            mu1 = max(0,normrnd(v1_targ, eta1_targ));
-            mu2 = max(0,normrnd(v2_targ, eta2_targ));
+            mu1 = normrnd(v1_targ, eta1_targ);
+            mu2 = normrnd(v2_targ, eta2_targ);
             sigma1 = 1; % This is the diffusion coefficient, and is always set to 1.
             sigma2 = 1;
             a = a_targ;
@@ -202,8 +202,8 @@ for i = 1:n_trials
             % Add one to index
             idx = idx + 1;
         else % This is an intrusion
-            mu1 = max(0,normrnd(v1_int, eta1_int));
-            mu2 = max(0,normrnd(v2_int, eta2_int));
+            mu1 = normrnd(v1_int, eta1_int);
+            mu2 = normrnd(v2_int, eta2_int);
             sigma1 = 1; % This is the diffusion coefficient, and is always set to 1.
             sigma2 = 1;
             a = a_int;

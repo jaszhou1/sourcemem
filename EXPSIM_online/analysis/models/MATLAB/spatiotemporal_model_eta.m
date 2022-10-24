@@ -1,5 +1,6 @@
-function [ll, aic, P, pest_penalty] = spatiotemporal_model(Pvar, Pfix, Sel, Data, badix)
-% S
+function [ll, aic, P, pest_penalty] = spatiotemporal_model_eta(Pvar, Pfix, Sel, Data, badix)
+% Spatiotemporal model, but with different values of eta1 and eta2, to try
+% and respond to Klaus's comments.
 
 % This is the temporal gradient intrusion model, where trial-to-trial
 % variability in component weights affects ONLY memory, so guesses are flat
@@ -24,14 +25,14 @@ function [ll, aic, P, pest_penalty] = spatiotemporal_model(Pvar, Pfix, Sel, Data
 % 13. non-target angle 9
 
 %% Debugging
-name = 'SPATIOTEMPORAL_GRADIENT_MODEL: ';
+name = 'SPATIOTEMPORAL_GRADIENT_MODEL_ETA: ';
 errmg1 = 'Incorrect number of parameters for model, exiting...';
 errmg2 = 'Incorrect length selector vector, exiting...';
 errmg3 = 'Component weights do not sum to 1...';
 errmg4 = 'Negative trial weight';
 %% Global variables
 
-np = 17; % Number of parameters
+np = 19; % Number of parameters
 epsx = 1e-9; % Small values to substitute for zeroes
 cden = 0.05;  % Contaminant density.
 tmax = 5.1; % Maximum response time
@@ -70,26 +71,28 @@ v2_targ = P(2);
 v1_int = P(3);
 v2_int = P(4);
 % Trial-trial drift variability
-eta_targ = P(5);
-eta_int = P(6);
+eta1_targ = P(5);
+eta2_targ = P(6);
+eta1_int = P(7);
+eta2_int = P(8);
 % Decision Criteria
-a_targ = P(7);
+a_targ = P(9);
 a_int = a_targ;
-a_guess = P(8);
+a_guess = P(10);
 % Component Proportions
-gamma = P(9);
-beta = P(10);
+gamma = P(11);
+beta = P(12);
 % beta_primacy = P(11);
 % beta_recency = P(12);
 % Temporal Gradient
-kappa = P(11); %Scaling parameter for forwards vs backwards intrusion decay slope
-lambda_b = P(12); % Decay of the backwards slope
-lambda_f = P(13); % Decay of the forwards slope
-zeta = P(14); %precision for Shepard similarity function (perceived spatial distance)
-rho = P(15); % Spatial component weight in intrusion probability calculation
+kappa = P(13); %Scaling parameter for forwards vs backwards intrusion decay slope
+lambda_b = P(14); % Decay of the backwards slope
+lambda_f = P(15); % Decay of the forwards slope
+zeta = P(16); %precision for Shepard similarity function (perceived spatial distance)
+rho = P(17); % Spatial component weight in intrusion probability calculation
 % Nondecision Time
-ter = P(16);
-st = P(17);
+ter = P(18);
+st = P(19);
 
 % Check to see if component weights sum to 1.
 if gamma + beta > 1
@@ -102,21 +105,16 @@ end
 
 sigma = 1.0;
 
-% Assume eta components in the x and y directions are the same
-eta1_targ = eta_targ;
-eta2_targ = eta_targ;
-eta1_int = eta_int;
-eta2_int = eta_int;
 %% Parameter bounds
 penalty = 0; % Set the penalty to an initial value of zero
 pest_penalty(1,:) = P;
 % ----------------------------------------------------------------------------
-%   [v1t, v2t,  v1i, v2i, eta_t, eta_i,   at,  ag,  gamma, beta, kappa, l_b,   l_f,   zeta,  rho, Ter, st]
+%   [v1t, v2t,  v1i, v2i, eta1_t, eta2_t, eta1_i, eta2_i,   at,  ag,  gamma, beta, kappa, l_b,   l_f,   zeta,  rho, Ter, st]
 % ----------------------------------------------------------------------------
-Ub= [ 8,   0,    8,   0,   1,    1,       4.5, 4.5,  1.0,  1.0,  1.0,    5,    5,     2.0,    1,   0.3,  0.2];
-Lb= [ 2,   0,    0,   0,   0,    0,       0.1, 0.5,  0,    0,    0.4,      0,    0,     0,      0,   0,    0];
-Pub=[ 7.5, 0,    7.5, 0,   0.9,  0.9,     4.0, 4.0,  0.9, 0.9,  0.9,    4.5,  4.5,   0.99,   0.9, 0.25, 0.15];
-Plb=[ 3,   0,    0,   0,   0,    0,       0.7, 0.7,  0.01, 0.01, 0.5,   0.01, 0.01,  0.01,   0.01,0.01, 0.01];
+Ub= [ 8,   0,    8,   0,   1,    1,          1,    1,      4.5, 4.5,  1.0,  1.0,  1.0,    5,    5,     2.0,    1,   0.3,  0.2];
+Lb= [ 2,   0,    0,   0,   0,    0,          0,    0,      0.1, 0.5,  0,    0,    0.4,      0,    0,     0,      0,   0,    0];
+Pub=[ 7.5, 0,    7.5, 0,   0.9,  0.9,        0.9,  0.9,    4.0, 4.0,  0.9, 0.9,  0.9,    4.5,  4.5,   0.99,   0.9, 0.25, 0.15];
+Plb=[ 3,   0,    0,   0,   0,    0,          0,    0,      0.7, 0.7,  0.01, 0.01, 0.5,   0.01, 0.01,  0.01,   0.01,0.01, 0.01];
 
 if any(P - Ub > 0) || any(Lb - P > 0)
     ll = 1e7 + ...

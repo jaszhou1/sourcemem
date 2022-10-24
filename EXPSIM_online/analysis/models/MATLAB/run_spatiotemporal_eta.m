@@ -1,8 +1,61 @@
-function[simulated_data] = simulate_spatiotemporal(data, pest)
+%% RUN_FITS_EXP2.M
+% This is the top-level script to fit diffusion models to Experiment 1 data
+% and save simulated data from estimated parameters for plotting in R.
 
-%% Debugging
-name = 'SIMULATE_SPATIOTEMPORAL: ';
-errmg1 = 'Incorrect number of parameters, exiting...';
+% Read in the data
+% data = read_sourcemem_data();
+load('exp2_data_cutoff.mat')
+n_participants = length(data);
+n_runs = 3;
+num_workers = maxNumCompThreads/2 - 1; % Maximum number of workers
+
+
+%% Spatiotemporal Model
+spatiotemporal = cell(n_participants,4);
+
+parfor (i = 1:n_participants, num_workers)
+    % Initial log likelihood value
+    ll = 1e7;
+    % Run each participant nrun times
+    this_fit = cell(1,4);
+    for j = 1:n_runs
+        this_participant_data = data{i};
+        [ll_new, aic, pest, pest_penalty] = fit_spatiotemporal_model_eta(this_participant_data);
+        % If this ll is better than the last one, replace it in the saved
+        % structure
+        if (ll_new < ll)
+            ll = ll_new;
+            this_fit{1} = ll_new;
+            this_fit{2} = aic;
+            this_fit{3} = pest;
+            this_fit{4} = pest_penalty;
+            spatiotemporal(i,:) = this_fit;
+        end
+    end
+end
+
+filename = [datestr(now,'yyyy_mm_dd_HH'),'_temp'];
+save(filename)
+
+% Simulate data, concatenate participants, and save simulated dataset
+simulated_spatiotemporal = [];
+for i = 1:n_participants
+    this_simulated_data = simulate_spatiotemporal_eta(data{i}, spatiotemporal{i,3});
+    % Label this dataset with participant number
+    this_simulated_data(:,3) = i; 
+    simulated_spatiotemporal = vertcat(simulated_spatiotemporal, this_simulated_data);
+end
+
+filename = [datestr(now,'yyyy_mm_dd_HH'),'_pest_spatiotemporal.csv'];
+header_line = 'participant, model_name, AIC, v1_targ, v2_targ, v1_int, v2_int, eta1_targ, eta2_targ, eta1_int, eta2_int, a_targ, a_guess, gamma, beta, kappa, lambda_b, lambda_f, zeta, rho, Ter, st';
+param_to_csv(filename, 1:n_participants, spatiotemporal, 'Spatiotemporal Gradient ETA', header_line)
+
+
+csvwrite('sim_spatiotemporal_eta.csv', simulated_spatiotemporal)
+
+
+
+function[simulated_data] = simulate_spatiotemporal_eta(data, pest)
 %%
 % Number of trials to simulate (should be the same as the actual dataset)
 n_trials = length(data);
@@ -14,7 +67,7 @@ n_sims = 50; % The number of times to simulate each trial
 num_intrusions = 9;
 
 % Expected number of parameters
-n_params = 17;
+n_params = 19;
 % Check the length of the parameter vector
 if length(pest) ~= n_params
     [name, errmg1], length(pest), return;
@@ -27,32 +80,34 @@ v2_targ = P(2);
 v1_int = P(3);
 v2_int = P(4);
 % Trial-trial drift variability
-eta_targ = P(5);
-eta_int = P(6);
+eta1_targ = P(5);
+eta2_targ = P(6);
+eta1_int = P(7);
+eta2_int = P(8);
 % Decision Criteria
-a_targ = P(7);
+a_targ = P(9);
 a_int = a_targ;
-a_guess = P(8);
+a_guess = P(10);
 % Component Proportions
-gamma = P(9);
-beta = P(10);
+gamma = P(11);
+beta = P(12);
 % beta_primacy = P(11);
 % beta_recency = P(12);
 % Temporal Gradient
-kappa = P(11); %Scaling parameter for forwards vs backwards intrusion decay slope
-lambda_b = P(12); % Decay of the backwards slope
-lambda_f = P(13); % Decay of the forwards slope
-zeta = P(14); %precision for Shepard similarity function (perceived spatial distance)
-rho = P(15); % Spatial component weight in intrusion probability calculation
+kappa = P(13); %Scaling parameter for forwards vs backwards intrusion decay slope
+lambda_b = P(14); % Decay of the backwards slope
+lambda_f = P(15); % Decay of the forwards slope
+zeta = P(16); %precision for Shepard similarity function (perceived spatial distance)
+rho = P(17); % Spatial component weight in intrusion probability calculation
 % Nondecision Time
-ter = P(16);
-st = P(17);
+ter = P(18);
+st = P(19);
 
 % Assume eta components in the x and y directions are the same
-eta1_targ = eta_targ;
-eta2_targ = eta_targ;
-eta1_int = eta_int;
-eta2_int = eta_int;
+% eta1_targ = eta_targ;
+% eta2_targ = eta_targ;
+% eta1_int = eta_int;
+% eta2_int = eta_int;
 
 % Arguments for the simulation function
 tmax = 5.1;
