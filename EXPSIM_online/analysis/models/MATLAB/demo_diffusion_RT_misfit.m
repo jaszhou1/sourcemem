@@ -18,11 +18,11 @@ close all
 % response error model does a good job of capturing the response error
 % distribution, but the diffusion model just doesn't do a good job.
 
-this_data = data{3};
+this_data = data{2};
 
-v1_targ = 4.7;
+v1_targ = 4.3;
 v2_targ = 0;
-v1_int = 1.3;
+v1_int = 1.6;
 v2_int = 0;
 eta1_targ = 3;
 eta2_targ = 3;
