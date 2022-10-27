@@ -37,38 +37,40 @@ v2_targ_3 = pest(10);
 v1_int_3 = pest(11);
 v2_int_3 = pest(12);
 % Trial-trial drift variability
-eta_targ = pest(13);
-eta_int = pest(14);
+eta1_targ = pest(13);
+eta2_targ = pest(14);
+eta1_int = pest(15);
+eta2_int = pest(16);
 % Decision Criteria
-a_targ = pest(15);
+a_targ = pest(17);
 a_int = a_targ;
-a_guess = pest(16);
+a_guess = pest(18);
 % Component Proportions
-beta1 = pest(17);
-beta2 = pest(18);
-beta3 = pest(19);
-gamma1 = pest(20);
-gamma2 = pest(21);
-gamma3 = pest(22);
+beta1 = pest(19);
+beta2 = pest(20);
+beta3 = pest(21);
+gamma1 = pest(22);
+gamma2 = pest(23);
+gamma3 = pest(24);
 % beta_primacy = P(11);
 % beta_recency = P(12);
 % Temporal Gradient
-tau = pest(23); %Weight forwards vs backwards intrusion decay slope
-lambda_b = pest(24); % Decay of the backwards slope
-lambda_f = pest(25); % Decay of the forwards slope
-zeta = pest(26); %precision for Shepard similarity function (perceived spatial distance)
-rho = pest(27); % Spatial component weight in intrusion probability calculation
-chi1 = pest(28); % Item v Context, Low
-chi2 = pest(29); % Item v Context, High
-psi1 = pest(30); % Semantic v Ortho, Low
-psi2 = pest(31); % Semantic v Ortho, High
-iota1 = pest(32); % Ortho decay, Low
-iota2 = pest(33); % Ortho decay, High
-upsilon1 = pest(34); % Semantic decay, Low
-upsilon2 = pest(35); % Semantic decay, High
+tau = pest(25); %Weight forwards vs backwards intrusion decay slope
+lambda_b = pest(26); % Decay of the backwards slope
+lambda_f = pest(27); % Decay of the forwards slope
+zeta = pest(28); %precision for Shepard similarity function (perceived spatial distance)
+rho = pest(29); % Spatial component weight in intrusion probability calculation
+chi1 = pest(30); % Item v Context, Low
+chi2 = pest(31); % Item v Context, High
+psi1 = pest(32); % Semantic v Ortho, Low
+psi2 = pest(33); % Semantic v Ortho, High
+iota1 = pest(34); % Ortho decay, Low
+iota2 = pest(35); % Ortho decay, High
+upsilon1 = pest(36); % Semantic decay, Low
+upsilon2 = pest(37); % Semantic decay, High
 % Nondecision Time
-ter = pest(36);
-st = pest(37);
+ter = pest(38);
+st = pest(9);
 
 % If certain parameters are fed in as 0, assume I intend for them to be
 % equal across conditions, instead of actually being 0.
@@ -111,13 +113,6 @@ if psi2 == 0
     psi2 = psi1;
     upsilon2 = upsilon1;
 end
-
-
-% Assume eta components in the x and y directions are the same
-eta1_targ = eta_targ;
-eta2_targ = eta_targ;
-eta1_int = eta_int;
-eta2_int = eta_int;
 
 % Initialise empty dataset to store simulated data
 simulated_data = [];

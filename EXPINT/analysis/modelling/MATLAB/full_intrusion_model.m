@@ -11,7 +11,7 @@ errmg4 = 'Negative trial weight, exiting...';
 
 %% Global variables
 
-np = 37; % Number of parameters
+np = 39; % Number of parameters
 epsx = 1e-9; % Small values to substitute for zeroes
 cden = 0.05;  % Contaminant density.
 tmax = 5.1; % Maximum response time
@@ -61,38 +61,40 @@ v1_int_3 = P(11);
 v2_int_3 = P(12);
 
 % Trial-trial drift variability
-eta_targ = P(13);
-eta_int = P(14);
+eta1_targ = P(13);
+eta2_targ = P(14);
+eta1_int = P(15);
+eta2_int = P(16);
 % Decision Criteria
-a_targ = P(15);
+a_targ = P(17);
 a_int = a_targ;
-a_guess = P(16);
+a_guess = P(18);
 % Component Proportions
-beta1 = P(17);
-beta2 = P(18);
-beta3 = P(19);
-gamma1 = P(20);
-gamma2 = P(21);
-gamma3 = P(22);
+beta1 = P(19);
+beta2 = P(20);
+beta3 = P(21);
+gamma1 = P(22);
+gamma2 = P(23);
+gamma3 = P(24);
 % beta_primacy = P(11);
 % beta_recency = P(12);
 % Temporal Gradient
-tau = P(23); %Weight forwards vs backwards intrusion decay slope
-lambda_b = P(24); % Decay of the backwards slope
-lambda_f = P(25); % Decay of the forwards slope
-zeta = P(26); %precision for Shepard similarity function (perceived spatial distance)
-rho = P(27); % Spatial component weight in intrusion probability calculation
-chi1 = P(28); % Item v Context, Low
-chi2 = P(29); % Item v Context, High
-psi1 = P(30); % Semantic v Ortho, Low
-psi2 = P(31); % Semantic v Ortho, High
-iota1 = P(32); % Ortho decay, Low
-iota2 = P(33); % Ortho decay, High
-upsilon1 = P(34); % Semantic decay, Low
-upsilon2 = P(35); % Semantic decay, High
+tau = P(25); %Weight forwards vs backwards intrusion decay slope
+lambda_b = P(26); % Decay of the backwards slope
+lambda_f = P(27); % Decay of the forwards slope
+zeta = P(28); %precision for Shepard similarity function (perceived spatial distance)
+rho = P(29); % Spatial component weight in intrusion probability calculation
+chi1 = P(30); % Item v Context, Low
+chi2 = P(31); % Item v Context, High
+psi1 = P(32); % Semantic v Ortho, Low
+psi2 = P(33); % Semantic v Ortho, High
+iota1 = P(34); % Ortho decay, Low
+iota2 = P(35); % Ortho decay, High
+upsilon1 = P(36); % Semantic decay, Low
+upsilon2 = P(37); % Semantic decay, High
 % Nondecision Time
-ter = P(36);
-st = P(37);
+ter = P(38);
+st = P(39);
 
 % If certain parameters are fed in as 0, assume I intend for them to be
 % equal across conditions, instead of actually being 0.
@@ -159,12 +161,6 @@ if psi1 > psi2 || chi1 > chi2
 end
 
 sigma = 1.0;
-
-% Assume eta components in the x and y directions are the same
-eta1_targ = eta_targ;
-eta2_targ = eta_targ;
-eta1_int = eta_int;
-eta2_int = eta_int;
 
 % If a condition-dependant parameter is missing, set it to the default
 % (primary) value, which is the base value. The model assumes that there is
