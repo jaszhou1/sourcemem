@@ -301,10 +301,10 @@ simulate_gamma_beta_cond_model <- function(participant, data, params){
   trial_weights[data$condition == 'unrelated', length(trial_weights)+1] <- beta1
   
   trial_weights[data$condition == 'orthographic',] <- trial_weights[data$condition == 'orthographic',] * (1-beta2)
-  trial_weights[data$condition == 'orthographic', length(trial_weights)+1] <- beta2
+  trial_weights[data$condition == 'orthographic', length(trial_weights)] <- beta2
   
   trial_weights[data$condition == 'semantic',] <- trial_weights[data$condition == 'semantic',] * (1-beta3)
-  trial_weights[data$condition == 'semantic', length(trial_weights)+1] <- beta3
+  trial_weights[data$condition == 'semantic', length(trial_weights)] <- beta3
   
   # Empty dataframe to store simulated data
   sim_data <- data.frame(
