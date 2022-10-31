@@ -113,8 +113,8 @@ for i = 1:n_trials
         trial_type = mnrnd(1,this_weights);
         
         if trial_type(1) % This is the target
-            mu1 = max(0,normrnd(v1_targ, eta1_targ));
-            mu2 = max(0,normrnd(v2_targ, eta2_targ));
+            mu1 = normrnd(v1_targ, eta1_targ);
+            mu2 = normrnd(v2_targ, eta2_targ);
             sigma1 = 1; % This is the diffusion coefficient, and is always set to 1.
             sigma2 = 1;
             a = a_targ;
@@ -154,8 +154,8 @@ for i = 1:n_trials
             % Add one to index
             idx = idx + 1;
         else % This is an intrusion
-            mu1 = max(0,normrnd(v1_int, eta1_int));
-            mu2 = max(0,normrnd(v2_int, eta2_int));
+            mu1 = normrnd(v1_int, eta1_int);
+            mu2 = normrnd(v2_int, eta2_int);
             sigma1 = 1; % This is the diffusion coefficient, and is always set to 1.
             sigma2 = 1;
             a = a_int;

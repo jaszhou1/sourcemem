@@ -1,5 +1,5 @@
 function [ll, aic, P, pest_penalty] = spatiotemporal_model(Pvar, Pfix, Sel, Data, badix)
-% TEMPORAL_GRADIENT_FLAT_GUESS
+% S
 
 % This is the temporal gradient intrusion model, where trial-to-trial
 % variability in component weights affects ONLY memory, so guesses are flat

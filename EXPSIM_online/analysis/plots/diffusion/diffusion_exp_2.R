@@ -11,7 +11,7 @@ data <- data[data$block!= 0,]
 # Exclude invalid RTs
 data <- data[data$valid_RT==TRUE,]
 
-setwd("~/git/sourcemem_online/analysis/models/MATLAB/experiment_2")
+setwd("~/git/sourcemem/EXPSIM_online/analysis/models/MATLAB/experiment_2")
 
 pure_guess <- read.csv('sim_pure_guess.csv', header = FALSE)
 pure_guess$model <- 'Pure Guess'
@@ -34,18 +34,18 @@ orthographic$model <- 'Orthographic'
 semantic <- read.csv('sim_semantic.csv', header = FALSE)
 semantic$model <- 'Semantic'
 
-add <- read.csv('sim_add.csv', header = FALSE)
-add$model <- 'Four Factor (Additive)'
+# add <- read.csv('sim_add.csv', header = FALSE)
+# add$model <- 'Four Factor (Additive)'
 
 multi <- read.csv('sim_multi.csv', header = FALSE)
 multi$model <- "Four Factor (Multiplicative)"
 
-spatiotemporal_no_eta <- read.csv('sim_spatiotemporal_no_eta.csv', header = FALSE)
-spatiotemporal_no_eta$model <- "Spatiotemporal (no eta)"
+spatiotemporal_eta <- read.csv('sim_spatiotemporal_eta.csv', header = FALSE)
+spatiotemporal_eta$model <- "Spatiotemporal (eta)"
 
 
 model_predictions <- rbind(pure_guess, pure_intrusion, intrusion, temporal, spatiotemporal,
-                           orthographic, semantic, add, multi, spatiotemporal_no_eta)
+                           orthographic, semantic, multi, spatiotemporal_eta)
 colnames(model_predictions) <- c('error', 'time', 'participant', 'model')
 
 MODEL.TYPES <- unique(model_predictions$model)
@@ -71,9 +71,9 @@ MODEL.COL <- list(
   "Spatiotemporal" = color_wheel[5],
   "Orthographic" = color_wheel[6],
   "Semantic" = color_wheel[7],
-  "Four Factor (Additive)" = color_wheel[8],
-  "Four Factor (Multiplicative)" = color_wheel[9],
-  "Spatiotemporal (no eta)" = color_wheel[10]
+ # "Four Factor (Additive)" = color_wheel[8],
+  "Four Factor (Multiplicative)" = color_wheel[8],
+  "Spatiotemporal (eta)" = color_wheel[9]
 )
 
 # Functions to get wrapped densities from simulated data
