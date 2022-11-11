@@ -15,7 +15,7 @@ set(gca, 'Xlim', [-pi, pi])
 set(gca, 'Ylim', [0, 2.5])
 xlabel('Response Error (rad)')
 ylabel('Probability density')
-subtitle('Accuracy');
+%subtitle('Accuracy');
 hold
 ksdensity(Pred(:,1))
 
@@ -25,8 +25,9 @@ axes(axhandle(2));
 histogram(Rt1, 50, 'Normalization', 'pdf', 'BinLimits', [0,4.5]);
 set(gca, 'Xlim', [0, 4.0])
 xlabel('Response Time (s)')
+ylabel('Probability density')
 set(gca, 'Ylim', [0, 3.75])
-subtitle('Time');
+%subtitle('Time');
 hold
 ksdensity(Pred(:,2))
 
@@ -51,5 +52,7 @@ for i = 1:5
     plot(this_model_qq(:,1), this_model_qq(:,2), model_symbol(i,:))
     hold on
 end
-
+set(gca, 'Ylim', [0, 3])
+xlabel('Absolute Response Error (rad)')
+ylabel('Response Time (s)')
 end

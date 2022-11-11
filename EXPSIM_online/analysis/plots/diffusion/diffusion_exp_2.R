@@ -52,16 +52,25 @@ MODEL.TYPES <- unique(model_predictions$model)
 
 # Assign models to colours
 
+# color_wheel <- c('#00468BFF',
+#                  '#ED0000FF', 
+#                  '#42B540FF',
+#                  '#0099B4FF',
+#                  '#925E9FFF',
+#                  '#FDAF91FF',
+#                  '#AD002AFF',
+#                  '#8F7700FF',
+#                  '#FF0000')
+
 color_wheel <- c('#00468BFF',
                  '#ED0000FF', 
                  '#42B540FF',
                  '#0099B4FF',
-                 '#925E9FFF',
+                 '#00468BFF',
                  '#FDAF91FF',
                  '#AD002AFF',
                  '#8F7700FF',
-                 '#80796BFF',
-                 '#FF0000')
+                 '#ED0000FF')
 
 MODEL.COL <- list(
   "Pure Guess"= color_wheel[1],
@@ -165,7 +174,7 @@ exp2_plot <- function(model_list, data, model_predictions, filename){
     # Plot model predictions
     for(model.type in MODEL.TYPES[model_list]) {
       model.data <- get_response_error_density(p.model[p.model$model == model.type, ])
-      points(model.data$value, model.data$prob, type="l", lty=2, lwd = 1.5, col=MODEL.COL[[model.type]])
+      points(model.data$value, model.data$prob, type="l", lty=2, lwd = 2, col=MODEL.COL[[model.type]])
     }
     
     ## Plot the participant number and data type
@@ -197,7 +206,7 @@ exp2_plot <- function(model_list, data, model_predictions, filename){
     
     for(model.type in MODEL.TYPES[model_list]) {
       model.data <- get_response_time_density(p.model[p.model$model == model.type, ])
-      points(model.data$value, model.data$prob, type="l", lty = 2, lwd = 1.5, col=MODEL.COL[[model.type]])
+      points(model.data$value, model.data$prob, type="l", lty = 2, lwd = 2, col=MODEL.COL[[model.type]])
     }
     
     axis(side=1, at=c(0, 7), lwd.ticks=0, labels=FALSE, cex.axis=AXIS.CEX)

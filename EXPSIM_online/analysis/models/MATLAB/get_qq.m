@@ -34,7 +34,7 @@
             this_bin_qq(:,1) = error_bins(i+1); % Upper boundary of bin, error quantile, x co-ord on plot
             this_bin_qq(:,2) = this_bin_rt; % RT quantiles, y co-ord
             this_bin_qq(:,3) = i; % Not sure if necessary, just quantile index for error and time. 
-            this_bin_qq(:,4) = 1:5;
+            this_bin_qq(:,4) = 1:length(time_quantiles);
 
             qq((1:length(time_quantiles))+(i-1)*length(time_quantiles),:) = this_bin_qq; % cooked indexing?? 
         end
