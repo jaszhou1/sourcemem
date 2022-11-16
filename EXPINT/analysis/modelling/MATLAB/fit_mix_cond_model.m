@@ -5,7 +5,7 @@ function [ll, aic, P, penalty] = fit_mix_cond_model(data, P, badix)
 
 setopt;
 % Default value for badix (Cuts off the leading edge of RT)
-if nargin < 3
+if nargin < 2
     badix = 5;
 
     %% Default Parameter Starting Points
@@ -65,7 +65,7 @@ if nargin < 3
     st = 0;
 
     P = [v1t_1, v2t_1,  v1i_1,  v2i_1,  v1t_2, v2t_2,  v1i_2,  v2i_2, v1t_3, v2t_3,  v1i_3,  v2i_3,   eta1_t, eta2_t, eta1_i, eta2_i,       a_t,  a_g,    beta1,  beta2,  beta3      gamma1, gamma2,  gamma3,     tau,  l_b,   l_f,   zeta,  rho,   chi1,     chi2,      psi1,   psi2,    iota1,  iota2,  upsilon1,   upsilon2,     ter,    st];
-elseif nargin < 2
+elseif nargin < 3
     badix = 5;
 end
 
