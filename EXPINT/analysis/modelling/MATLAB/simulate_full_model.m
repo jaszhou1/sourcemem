@@ -15,7 +15,7 @@ n_sims = 1; % The number of times to simulate each trial
 num_intrusions = 7;
 
 % Expected number of parameters
-n_params = 37;
+n_params = 39;
 % Check the length of the parameter vector
 if length(pest) ~= n_params
     [name, errmg1], length(pest), return;
@@ -70,7 +70,7 @@ upsilon1 = pest(36); % Semantic decay, Low
 upsilon2 = pest(37); % Semantic decay, High
 % Nondecision Time
 ter = pest(38);
-st = pest(9);
+st = pest(39);
 
 % If certain parameters are fed in as 0, assume I intend for them to be
 % equal across conditions, instead of actually being 0.
