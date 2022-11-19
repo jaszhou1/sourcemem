@@ -302,12 +302,12 @@ source("~/git/sourcemem/EXPINT/analysis/plotting/response_error/resp_recenter_da
 # recenter_data <- recenter.data(data)
 # 
 # # Recenter the gamma model
-# recenter_gamma <- recenter.model(sim_gamma, 'gamma')
-# recenter_gammabeta <- recenter.model(sim_gammabeta, 'gamma + beta')
-# recenter_pure_orthosem <- recenter.model(sim_pure_orthosem, 'pure orthosem')
-# recenter_spatiotemporal <- recenter.model(sim_spatiotemporal, 'spatiotemporal')
-# recenter_orthosem <- recenter.model(sim_orthosem, 'orthosem')
-# recenter_mix_cond <- recenter.model(sim_mix_cond, 'saturated')
+recenter_gamma <- recenter.model(sim_gamma, 'gamma')
+recenter_gammabeta <- recenter.model(sim_gammabeta, 'gamma + beta')
+recenter_pure_orthosem <- recenter.model(sim_pure_orthosem, 'pure orthosem')
+recenter_spatiotemporal <- recenter.model(sim_spatiotemporal, 'spatiotemporal')
+recenter_orthosem <- recenter.model(sim_orthosem, 'orthosem')
+recenter_mix_cond <- recenter.model(sim_mix_cond, 'saturated')
 # 
 # save.image(file = paste(toString(Sys.Date()), '_response_error.RData', sep =""))
 

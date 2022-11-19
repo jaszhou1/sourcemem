@@ -1,6 +1,3 @@
-# GENERATE_PUBLICATION_PLOTS
-# This is the top-level script that will generate all the plots for my third (and final!) PhD project.
-
 ## Load dependencies
 library(circular)
 library(stringdist)
@@ -41,21 +38,21 @@ conds <- unique(data$condition)
 # Flip the semantic similarity so it is expressed as a distance like others
 data[,51:57] <- 1-data[,51:57]
 
-setwd("~/git/sourcemem/EXPINT/analysis/plotting/output/publication")
+# Plot the source error distributions for the three word list conditions
+# Functions necessary for the recongition analyses for EXPINT.
 
-################## RECOGNITION #################
-# Hit rates and false alarms across conditions
-source("~/git/sourcemem/EXPINT/analysis/recognition_analyses.R")
+plot.source.cond <- function(data){
+  plot <- ggplot(data = data, aes(x = source_error, y = ..density..)) +
+    geom_histogram(bins = 50) +
+    facet_wrap(~condition) +
+    scale_y_continuous(name="Density") +
+    scale_x_continuous(name = "Source Error", breaks = c(-pi, 0, pi), labels=c(expression(-pi), "0", expression(pi))) +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          text = element_text(size = 16),
+          strip.background=element_rect(fill="white"))
+  return(plot)
+}
 
-HR_FA_cond <- plot_group_recog(TRUE)
-ggsave('HR_FA.png', plot = HR_FA_cond, height = 15, width = 25, units = "cm", dpi = 300)
-
-# Source error across recognition ratings
-source_recog <- plot.source.x.ratings(data)
-ggsave('error_across_recog_freq.png', plot = last_plot(), height = 15, width = 25, units = "cm", dpi = 300)
-
-################## SOURCE #####################
-source('~/git/sourcemem/EXPINT/analysis/source_analysis.R')
-
-source_cond <- plot.source.cond(data[(data$is_stimulus) & (data$recognised),])
-ggsave('error_cond.png', plot = source_cond, height = 10, width = 25, units = "cm", dpi = 300)
+# Fit the Zhang and Luck (2008) two-component mixture model to estimate the difference in peak and tail
+# Separately for each condition
