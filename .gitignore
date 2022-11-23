@@ -39,3 +39,6 @@ EXPINT/analysis/modelling/MATLAB/testsim.csv
 EXPINT/analysis/plotting/diffusion/testsim_shallow.csv
 EXPINT/analysis/plotting/diffusion/testsim_steep.csv
 EXPINT/experiment_stimuli/~$wordlist_pretty_2.xlsx
+*.docx
+EXPINT/docs/draft_1.docx
+EXPINT/docs/draft_1.docx
