@@ -12,7 +12,7 @@
 % error and show that it causes misses by exaggerating a slow error pattern
 % that does not exist in the data. Basically, p. 573 of Smith et al. (2020)
 
-load('exp2_data.mat')
+load('exp2_data_cutoff.mat')
 close all
 % Participant 2 is probably the best example of a case where the simple
 % response error model does a good job of capturing the response error
@@ -42,24 +42,24 @@ this_data = vertcat(data{:});
 % st = 0;
 
 % Free eta1 and eta2
-v1_targ = 5;
+v1_targ = 4.71;
 v2_targ = 0;
-v1_int = 2;
+v1_int = 0.94;
 v2_int = 0;
-eta1_targ = 0.1;
-eta2_targ = 0;
-eta1_int = 0.08;
-eta2_int = 0.08;
-a_targ = 3;
-a_guess = 1.34;
-gamma = 0.1;
-beta = 0.000001;
-kappa = 0.72;
-lambda_b = 0.17;
-lambda_f = 0.62;
-zeta = 0.78;
-rho = 0.86;
-Ter = 0.04;
+eta1_targ = 0.91;
+eta2_targ = 0.04;
+eta1_int = 0.50;
+eta2_int = 0.05;
+a_targ = 2.58;
+a_guess = 1.06;
+gamma = 0.06;
+beta = 0.25;
+kappa = 0.59;
+lambda_b = 1.11;
+lambda_f = 1.05;
+zeta = 0.39;
+rho = 0.28;
+Ter = 0.15;
 st = 0;
 
 
@@ -69,24 +69,32 @@ st = 0;
 % criterion or maybe a big nondecision time. Possibly need to try a lower
 % diffusion coefficient (basically, slower clock), but this would have a
 % similar effect, just different psychological interpretation, I think...
-targ2 = 0.15;
+targ2 = 0.10;
+targ3 = 0.40;
 v1_targ_2 = v1_targ;
 v2_targ_2 = v2_targ;
 Ter_2 = Ter;
-a2_targ = a_targ + 6;
+a2_targ = a_targ + 3;
 
 
 params = [v1_targ, v2_targ, v1_int, v2_int, eta1_targ, eta2_targ, eta1_int, eta2_int,...
     a_targ,	 a_guess, gamma, beta, kappa, lambda_b, lambda_f, ...
     zeta, rho, Ter, st, targ2, v1_targ_2, v2_targ_2, a2_targ, Ter_2];
 
-sim_data = simulate_spatiotemporal_eta(this_data, params, 0);
 
-plot_simulation(this_data, sim_data)
+params_3 = [v1_targ, v2_targ, v1_int, v2_int, eta1_targ, eta2_targ, eta1_int, eta2_int,...
+    a_targ,	 a_guess, gamma, beta, kappa, lambda_b, lambda_f, ...
+    zeta, rho, Ter, st, targ3, v1_targ_2, v2_targ_2, a2_targ, Ter_2];
+
+% sim_data = simulate_spatiotemporal_eta(this_data, params, 0);
 % 
+% plot_simulation(this_data, sim_data)
+% % 
 % sim_data2 = simulate_spatiotemporal_eta(this_data, params, 1);
 % plot_simulation(this_data, sim_data2)
 
+sim_data3 = simulate_spatiotemporal_eta(this_data, params_3, 1);
+plot_simulation(this_data, sim_data3)
 function[simulated_data] = simulate_spatiotemporal_eta(data, pest, second_target_process)
 %%
 % Number of trials to simulate (should be the same as the actual dataset)

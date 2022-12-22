@@ -2,7 +2,7 @@ function plot_simulation(Data, Pred)
 % ========================================================================
 % Plot fitted values of circular diffusion model with drift variability.
 % ========================================================================
-
+grayColor = [.7 .7 .7];
 axhandle = setfig3;
 
 Theta1 = Data(:,1);
@@ -10,7 +10,7 @@ Rt1 = Data(:,2);
 
 % Accuracy
 axes(axhandle(1))
-histogram(Theta1, 50, 'Normalization', 'pdf', 'BinLimits', [-pi,pi]);
+histogram(Theta1, 50, 'Normalization', 'pdf', 'BinLimits', [-pi,pi], 'FaceColor',grayColor);
 set(gca, 'Xlim', [-pi, pi])
 set(gca, 'Ylim', [0, 2.5])
 xlabel('Response Error (rad)')
@@ -22,7 +22,7 @@ ksdensity(Pred(:,1))
 
 % RT
 axes(axhandle(2));
-histogram(Rt1, 50, 'Normalization', 'pdf', 'BinLimits', [0,4.5]);
+histogram(Rt1, 50, 'Normalization', 'pdf', 'BinLimits', [0,4.5], 'FaceColor',grayColor);
 set(gca, 'Xlim', [0, 4.0])
 xlabel('Response Time (s)')
 ylabel('Probability density')
