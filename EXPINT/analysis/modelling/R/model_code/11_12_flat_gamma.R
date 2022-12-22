@@ -1,0 +1,148 @@
+# all non-targets are equally likely to intrude (flat gradient), but the proportion of intrusions
+# differs across conditions.
+
+source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/intrusion_cond_model.R")
+
+flat_gamma1 <- function(data){
+  # Variant 1: All three conditions are associated with different gammas
+  
+  # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.
+  #       prec.  guess      intrus.     w.space   w.orth    w.sem    time asym   d.time              d.space    d.orth    d.sem
+  Sel = c(1, 1,  1, 0, 0,   1, 1, 1,     0, 0, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,    0, 0, 0, 0, 0, 0,   0, 0, 0,  0, 0, 0,  0, 0, 0)
+  
+  # For the fixed parameters (P[Sel == 0], what value should parameter be fixed at? NA will be treated as "same as unrelated condition")
+  beta2 <- NA
+  beta3 <- NA
+
+  # intrusion weights
+  rho1 <- 0 # Spatial weight
+  rho2 <- NA
+  rho3 <- NA
+  
+  chi1 <- 0 # Orthographic weight
+  chi2 <- NA
+  chi3 <- NA
+  
+  psi1 <- 0 # Semantic weight
+  psi2 <- NA
+  psi3 <- NA
+  
+  # intrusion similarity decays
+  tau1 <- 0.5 # Temporal asymmetry (tau >0.5 means forwards are more similar)
+  tau2 <- NA
+  tau3 <- NA
+  
+  lambda_b1 <- 0 # Similarity decay of backwards temporal lag
+  lambda_f1 <- 0 # Similarity decay of forwards temporal lag
+  
+  lambda_b2 <- NA # Similarity decay of backwards temporal lag
+  lambda_f2 <- NA # Similarity decay of forwards temporal lag
+  
+  lambda_b3 <- NA # Similarity decay of backwards temporal lag
+  lambda_f3 <- NA # Similarity decay of forwards temporal lag
+  
+  zeta1 <- 0 # Similarity decay of spatial similarity
+  zeta2 <- NA
+  zeta3 <- NA
+  
+  iota1 <- 0 # Similarity decay of orthographic component unrelated
+  iota2 <- NA # Decay for orthography orthographic
+  iota3 <- NA
+  
+  upsilon1 <- 0 # Similarity decay of semantic component unrelated
+  upsilon2 <- NA # Decay for semantic orth
+  upsilon3 <- NA
+  
+  Pfix = c(beta2, beta3, rho1, rho2, rho3,
+           chi1, chi2, chi3, psi1, psi2, psi3, tau1, tau2, tau3, lambda_b1,
+           lambda_f1, lambda_b2, lambda_f2, lambda_b3, lambda_f3, zeta1,
+           zeta2, zeta3, iota1, iota2, iota3, upsilon1, upsilon2, upsilon3)
+  
+  # Boundaries for estimated parameters. DEoptim will sample uniformly between these bounds
+  #          prec1, prec2, beta1, gamma1, gamma2, gamma3
+  lower <- c(1,      1,    0.2,   0.01,  0.03,   0.01)
+  upper <- c(20,     15,   0.6,   0.4,   0.4,    0.2)
+  
+  # Optimise
+  this_fit <- DEoptim(intrusion_cond_model, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
+  
+  # Calculate aic
+  aic <- get_aic(this_fit$optim$bestval, length(upper))
+  this_fit$optim$aic<-aic
+  fit <- this_fit$optim
+  # Pass out best fitting parameters
+  return(fit)
+}
+
+flat_gamma2 <- function(data){
+  # Variant 2: Semantic is the same as unrelated, but orthographic is different from both
+  
+  # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.
+  #       prec.  guess      intrus.     w.space   w.orth    w.sem    time asym   d.time              d.space    d.orth    d.sem
+  Sel = c(1, 1,  1, 0, 0,   1, 1, 0,     0, 0, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,    0, 0, 0, 0, 0, 0,   0, 0, 0,  0, 0, 0,  0, 0, 0)
+  
+  # For the fixed parameters (P[Sel == 0], what value should parameter be fixed at? NA will be treated as "same as unrelated condition")
+  beta2 <- NA
+  beta3 <- NA
+  
+  gamma3 <- NA
+  
+  # intrusion weights
+  rho1 <- 0 # Spatial weight
+  rho2 <- NA
+  rho3 <- NA
+  
+  chi1 <- 0 # Orthographic weight
+  chi2 <- NA
+  chi3 <- NA
+  
+  psi1 <- 0 # Semantic weight
+  psi2 <- NA
+  psi3 <- NA
+  
+  # intrusion similarity decays
+  tau1 <- 0.5 # Temporal asymmetry (tau >0.5 means forwards are more similar)
+  tau2 <- NA
+  tau3 <- NA
+  
+  lambda_b1 <- 0 # Similarity decay of backwards temporal lag
+  lambda_f1 <- 0 # Similarity decay of forwards temporal lag
+  
+  lambda_b2 <- NA # Similarity decay of backwards temporal lag
+  lambda_f2 <- NA # Similarity decay of forwards temporal lag
+  
+  lambda_b3 <- NA # Similarity decay of backwards temporal lag
+  lambda_f3 <- NA # Similarity decay of forwards temporal lag
+  
+  zeta1 <- 0 # Similarity decay of spatial similarity
+  zeta2 <- NA
+  zeta3 <- NA
+  
+  iota1 <- 0 # Similarity decay of orthographic component unrelated
+  iota2 <- NA # Decay for orthography orthographic
+  iota3 <- NA
+  
+  upsilon1 <- 0 # Similarity decay of semantic component unrelated
+  upsilon2 <- NA # Decay for semantic orth
+  upsilon3 <- NA
+  
+  Pfix = c(beta2, beta3, gamma3, rho1, rho2, rho3,
+           chi1, chi2, chi3, psi1, psi2, psi3, tau1, tau2, tau3, lambda_b1,
+           lambda_f1, lambda_b2, lambda_f2, lambda_b3, lambda_f3, zeta1,
+           zeta2, zeta3, iota1, iota2, iota3, upsilon1, upsilon2, upsilon3)
+  
+  # Boundaries for estimated parameters. DEoptim will sample uniformly between these bounds
+  #          prec1, prec2, beta1, gamma1, gamma2
+  lower <- c(1,      1,    0.2,   0.01,  0.03)
+  upper <- c(20,     15,   0.6,   0.4,   0.4)
+  
+  # Optimise
+  this_fit <- DEoptim(intrusion_cond_model, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
+  
+  # Calculate aic
+  aic <- get_aic(this_fit$optim$bestval, length(upper))
+  this_fit$optim$aic<-aic
+  fit <- this_fit$optim
+  # Pass out best fitting parameters
+  return(fit)
+}

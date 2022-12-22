@@ -1,18 +1,13 @@
-## INTRUSION_COND_MODEL.R
-# Model code that fits three conditions simultaneously, with the option of the 
-# following parameters differing between conditions:
-# 1. Overall proportion of intrusions
-# 2. Overall proportion of guesses
-# 3. Weighting of temmporal similarity in determining intrusion probability
-# 4. same, spatial
-# 5. semantic
-# 6. orthographic
+## INTRUSION_COND_MODEL_PHI.R
+# This model is exactly the same as intrusion_cond, but because time weight is usually
+# defined as 1- the others, its hard to take it out of the model entirely. Here, we
+# just change that line of code so time doesnt play a role.
 
 library(extraDistr)
 library(CircStats)
 library(circular)
 
-intrusion_cond_model <- function(Pvar, data, Pfix, Sel){
+intrusion_cond_model_phi <- function(Pvar, data, Pfix, Sel){
   
   n_trials <- 8
   n_intrusions <- n_trials - 1
@@ -129,14 +124,6 @@ intrusion_cond_model <- function(Pvar, data, Pfix, Sel){
     rho3 <- rho1
   }
   
-  if(is.na(chi2)){
-    chi2 <- chi1
-  }
-  
-  if(is.na(chi3)){
-    chi3 <- chi1
-  }
-  
   if(is.na(psi2)){
     psi2 <- psi1
   }
@@ -164,11 +151,11 @@ intrusion_cond_model <- function(Pvar, data, Pfix, Sel){
   if(is.na(lambda_b3)){
     lambda_b3 <- lambda_b1
   }
-
+  
   if(is.na(lambda_f3)){
     lambda_f3 <- lambda_f1
   }
-
+  
   if(is.na(zeta2)){
     zeta2 <- zeta1
   }
@@ -194,15 +181,13 @@ intrusion_cond_model <- function(Pvar, data, Pfix, Sel){
   }
   
   # Define the weight for time in the intrusion weight calculation
-  phi1 <- 1 - (rho1 + chi1 + psi1)
-  phi2 <- 1 - (rho2 + chi2 + psi2)
-  phi3 <- 1 - (rho3 + chi3 + psi3)
+  phi1 <- 0
+  phi2 <- 0
+  phi3 <- 0
   
-  if(any(c(phi1, phi2, phi3) < 0)){
-    print("Similarity weights do not sum to 1")
-    nLL <- 1e7
-    return(nLL)
-  }
+  chi1 <- 1-rho1
+  chi2 <- 1-rho2
+  chi3 <- 1-rho3
   
   data[,30:36] <- data[,30:36]/max(data[,30:36]) # Time, max is number of nontargets, 7
   data[,37:43] <- data[,37:43]/max(data[,37:43]) # Space, max is 2, cos metric
