@@ -1,5 +1,6 @@
 # MODEL 5: weights and decays the same, except for orthographic similarity in the orthographic condition
 # bit of a strange one
+source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/intrusion_cond_model.R")
 orth_weight <- function(data){
   # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.
   #       prec.  guess      intrus.     w.space   w.orth    w.sem    time asym   d.time              d.space    d.orth    d.sem

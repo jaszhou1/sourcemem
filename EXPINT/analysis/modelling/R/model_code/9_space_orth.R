@@ -1,5 +1,5 @@
 # MODEL 9: Only space and orthography matter for intrusions.
-
+source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/intrusion_cond_model_phi.R")
 space_orth <- function(data){
   # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.
   

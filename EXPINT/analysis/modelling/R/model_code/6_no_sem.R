@@ -1,4 +1,5 @@
 # MODEL 6: collapsed semantic and unrelated, different intrusion weights, but the same decay
+source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/intrusion_cond_model.R")
 
 no_sem <- function(data){
   # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.

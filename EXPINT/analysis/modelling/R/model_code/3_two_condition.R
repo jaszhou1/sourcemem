@@ -1,5 +1,7 @@
 # MODEL 3: Assume no  difference between unrelated and semantic conditions, collapse all parameters related to semantic cond
 
+source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/intrusion_cond_model.R")
+
 two_cond <- function(data){
   # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.
   #       prec.  guess      intrus.     w.space   w.orth    w.sem    time asym   d.time              d.space    d.orth    d.sem

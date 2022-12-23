@@ -1,4 +1,5 @@
 # MODEL 7: similarity weights and decays the same, different intrusion coefficient for orthographic and unrelated.
+source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/intrusion_cond_model.R")
 same_weight <- function(data){
   # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.
   #       prec.  guess      intrus.     w.space   w.orth    w.sem    time asym   d.time              d.space    d.orth    d.sem

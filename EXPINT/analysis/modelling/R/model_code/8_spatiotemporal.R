@@ -1,5 +1,6 @@
 # MODEL 8: different intrusion coefficient for orthographic condition, but no orthographic similarity gradient. Seems like nonsense?
 # no semantic either, so basically the old spatiotemporal model, but with two gammas.
+source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/intrusion_cond_model.R")
 spatiotemporal <- function(data){
   # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.
   #       prec.  guess      intrus.     w.space   w.orth    w.sem    time asym   d.time              d.space    d.orth    d.sem
