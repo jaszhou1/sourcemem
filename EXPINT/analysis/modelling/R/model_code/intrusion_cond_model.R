@@ -199,7 +199,7 @@ intrusion_cond_model <- function(Pvar, data, Pfix, Sel){
   phi3 <- 1 - (rho3 + chi3 + psi3)
   
   if(any(c(phi1, phi2, phi3) < 0)){
-    print("Similarity weights do not sum to 1")
+    # print("Similarity weights do not sum to 1")
     nLL <- 1e7
     return(nLL)
   }
@@ -319,7 +319,7 @@ intrusion_cond_model <- function(Pvar, data, Pfix, Sel){
   
   # Make sure all weights are positive numbers
   if(any(trial_weights < 0)){
-    print("Invalid: Negative weight")
+    # print("Invalid: Negative weight")
     nLL <- 1e7
     return(nLL)
   }

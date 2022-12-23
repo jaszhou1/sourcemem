@@ -63,7 +63,7 @@ flat_intrusion <- function(data){
   # Boundaries for estimated parameters. DEoptim will sample uniformly between these bounds
   #          prec1, prec2, beta1, gamma1
   lower <- c(1,  1,  0.2, 0.001)
-  upper <- c(20, 15, 0.6, 0.5)
+  upper <- c(20, 15, 0.8, 0.5)
   
   # Optimise
   this_fit <- DEoptim(intrusion_cond_model, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
@@ -71,6 +71,14 @@ flat_intrusion <- function(data){
   # Calculate aic
   aic <- get_aic(this_fit$optim$bestval, length(upper))
   this_fit$optim$aic<-aic
+  
+  # Assemble estimated parameter vector
+  Pest <- vector(mode = "numeric", length = 35)
+  
+  Pest[Sel == 1] <- this_fit$optim$bestmem # Estimated parameters
+  Pest[Sel == 0] <- Pfix # Fixed parameters
+  this_fit$optim$Pest <- Pest
+  
   fit <- this_fit$optim
   # Pass out best fitting parameters
   return(fit)

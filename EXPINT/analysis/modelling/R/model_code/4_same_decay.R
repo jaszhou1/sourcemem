@@ -42,6 +42,14 @@ same_decay <- function(data){
   # Calculate aic
   aic <- get_aic(this_fit$optim$bestval, length(upper))
   this_fit$optim$aic<-aic
+  
+  # Assemble estimated parameter vector
+  Pest <- vector(mode = "numeric", length = 35)
+  
+  Pest[Sel == 1] <- this_fit$optim$bestmem # Estimated parameters
+  Pest[Sel == 0] <- Pfix # Fixed parameters
+  this_fit$optim$Pest <- Pest
+  
   fit <- this_fit$optim
   # Pass out best fitting parameters
   return(fit)

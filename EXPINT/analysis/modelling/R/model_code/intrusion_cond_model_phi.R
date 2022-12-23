@@ -346,7 +346,7 @@ intrusion_cond_model_phi <- function(Pvar, data, Pfix, Sel){
 # P = temp[participant,5:9]
 
 # Simulate data from fitted parameters of the temporal gradient model
-simulate_intrusion_cond_model <- function(participant, data, P){
+simulate_intrusion_cond_model_phi <- function(participant, data, P){
   
   # Check that trial numbers are 1-indexed
   if(min(data$present_trial) == 0){
@@ -499,9 +499,14 @@ simulate_intrusion_cond_model <- function(participant, data, P){
     upsilon3 <- upsilon1
   }
   
-  phi1 <- 1 - (rho1 + chi1 + psi1)
-  phi2 <- 1 - (rho2 + chi2 + psi2)
-  phi3 <- 1 - (rho3 + chi3 + psi3)
+  # Define the weight for time in the intrusion weight calculation
+  phi1 <- 0
+  phi2 <- 0
+  phi3 <- 0
+  
+  chi1 <- 1-rho1
+  chi2 <- 1-rho2
+  chi3 <- 1-rho3
   
   # Get an untransformed copy of the similarities
   similarities <- data[,30:57]
