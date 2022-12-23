@@ -40,7 +40,7 @@ same_decay <- function(data){
   this_fit <- DEoptim(intrusion_cond_model, Pbounds[1,], Pbounds[2,], control = DEoptim.control(itermax = 500), data, Pfix, Sel)
   
   # Calculate aic
-  aic <- get_aic(this_fit$optim$bestval, length(upper))
+  aic <- get_aic(this_fit$optim$bestval, length(Pbounds[1,]))
   this_fit$optim$aic<-aic
   
   # Assemble estimated parameter vector
