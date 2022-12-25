@@ -148,7 +148,7 @@ flat_gamma2 <- function(data){
   this_fit <- DEoptim(intrusion_cond_model, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
   
   # Calculate aic
-  aic <- get_aic(this_fit$optim$bestval, length(Pbounds[1,]))
+  aic <- get_aic(this_fit$optim$bestval, length(upper))
   this_fit$optim$aic<-aic
   
   # Assemble estimated parameter vector
