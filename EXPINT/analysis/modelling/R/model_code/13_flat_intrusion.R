@@ -62,7 +62,7 @@ flat_intrusion <- function(data){
   
   # Boundaries for estimated parameters. DEoptim will sample uniformly between these bounds
   #          prec1, prec2, beta1, gamma1
-  lower <- c(1,  1,  0.2, 0.001)
+  lower <- c(1,  1,  0.1, 0.001)
   upper <- c(20, 15, 0.8, 0.5)
   
   # Optimise

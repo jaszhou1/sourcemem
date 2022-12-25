@@ -346,7 +346,7 @@ intrusion_cond_model_phi <- function(Pvar, data, Pfix, Sel){
 # P = temp[participant,5:9]
 
 # Simulate data from fitted parameters of the temporal gradient model
-simulate_intrusion_cond_model_phi <- function(participant, data, P){
+simulate_intrusion_cond_model_phi <- function(participant, data, P, model_name){
   
   # Check that trial numbers are 1-indexed
   if(min(data$present_trial) == 0){
@@ -645,6 +645,7 @@ simulate_intrusion_cond_model_phi <- function(participant, data, P){
     angle_6 = numeric(),
     angle_7 = numeric(),
     angle_8 = numeric(),
+    model = character(),
     stringsAsFactors = FALSE
   )
   
@@ -680,18 +681,18 @@ simulate_intrusion_cond_model_phi <- function(participant, data, P){
         sim_angle <- NA
         sim_response <- runif(1, -pi, pi)
         sim_error <- angle_diff(target_angle, sim_response)
-        sim_data[nrow(sim_data)+1,] <- c(word, target_angle, target_position, sim_angle, 'guess', sim_response, sim_error, this_intrusions, participant, this_similarities, this_condition, no_offset_angles)
+        sim_data[nrow(sim_data)+1,] <- c(word, target_angle, target_position, sim_angle, 'guess', sim_response, sim_error, this_intrusions, participant, this_similarities, this_condition, no_offset_angles, model_name)
       } else if (sim_intrusion_position[1]){
         # Decide which stimulus angle is the center of this retrieval
         sim_angle <- this_block_angles[sim_intrusion_position == 1]
         sim_response <- rvm(1, sim_angle, kappa1)
         sim_error <- angle_diff(target_angle, sim_response)
-        sim_data[nrow(sim_data)+1,] <- c(word, target_angle, target_position, sim_angle, 'target', sim_response, sim_error, this_intrusions, participant, this_similarities, this_condition, no_offset_angles)
+        sim_data[nrow(sim_data)+1,] <- c(word, target_angle, target_position, sim_angle, 'target', sim_response, sim_error, this_intrusions, participant, this_similarities, this_condition, no_offset_angles, model_name)
       } else {
         sim_angle <- this_block_angles[sim_intrusion_position == 1]
         sim_response <- rvm(1, sim_angle, kappa2)
         sim_error <- angle_diff(target_angle, sim_response)
-        sim_data[nrow(sim_data)+1,] <- c(word, target_angle, target_position, sim_angle, 'intrusion', sim_response, sim_error, this_intrusions, participant, this_similarities, this_condition, no_offset_angles)
+        sim_data[nrow(sim_data)+1,] <- c(word, target_angle, target_position, sim_angle, 'intrusion', sim_response, sim_error, this_intrusions, participant, this_similarities, this_condition, no_offset_angles, model_name)
       }
       # Add on columns for the raw spatial, temporal, orthographic, semantic similarities for this trial
       

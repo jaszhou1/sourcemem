@@ -60,8 +60,8 @@ flat_gamma1 <- function(data){
   
   # Boundaries for estimated parameters. DEoptim will sample uniformly between these bounds
   #          prec1, prec2, beta1, gamma1, gamma2, gamma3
-  lower <- c(1,      1,    0.2,   0.01,  0.03,   0.01)
-  upper <- c(20,     15,   0.6,   0.4,   0.4,    0.2)
+  lower <- c(1,      1,    0.1,   0.01,  0.03,   0.01)
+  upper <- c(20,     15,   0.7,   0.4,   0.4,    0.2)
   
   # Optimise
   this_fit <- DEoptim(intrusion_cond_model, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
@@ -141,8 +141,8 @@ flat_gamma2 <- function(data){
   
   # Boundaries for estimated parameters. DEoptim will sample uniformly between these bounds
   #          prec1, prec2, beta1, gamma1, gamma2
-  lower <- c(1,      1,    0.2,   0.01,  0.03)
-  upper <- c(20,     15,   0.6,   0.4,   0.4)
+  lower <- c(1,      1,    0.1,   0.01,  0.03)
+  upper <- c(20,     15,   0.7,   0.4,   0.4)
   
   # Optimise
   this_fit <- DEoptim(intrusion_cond_model, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)

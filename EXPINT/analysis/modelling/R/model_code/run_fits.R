@@ -56,10 +56,11 @@ source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/9_space_orth.R")
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/10_temp_orth.R")
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/11_12_flat_gamma.R")
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/13_flat_intrusion.R")
+source('~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/14_equal_nosem.R')
 
-models <- c(saturated, fixed_guess, two_cond, same_decay, orth_weight, no_sem, same_weight, spatiotemporal, space_orth, temp_orth, flat_gamma1, flat_gamma2, flat_intrusion)
+models <- c(saturated, fixed_guess, two_cond, same_decay, orth_weight, no_sem, same_weight, spatiotemporal, space_orth, temp_orth, flat_gamma1, flat_gamma2, flat_intrusion, equal_nosem)
 
-model_names <- c('saturated', 'fixed_guess', 'two_cond', 'same_decay', 'orth_weight', 'no_sem', 'same_weight', 'spatiotemporal', 'space_orth', 'temp_orth', 'flat_gamma1', 'flat_gamma2', 'flat_intrusion')
+model_names <- c('saturated', 'fixed_guess', 'two_cond', 'same_decay', 'orth_weight', 'no_sem', 'same_weight', 'spatiotemporal', 'space_orth', 'temp_orth', 'flat_gamma1', 'flat_gamma2', 'flat_intrusion', 'equal_nosem')
 
 fit_model <- function(data, model, model_name){
   cl <- makeForkCluster((detectCores() - 1))
@@ -97,12 +98,40 @@ for(i in 1:length(models)){
   this_model_fit <- fit_model(data, models[[i]], model_names[[i]])
   model_fits <- append(model_fits, list(this_model_fit))
 }
-
+names(model_fits) <- model_names
 save(model_fits, file = paste(toString(Sys.Date()), '_fits.RData', sep =""))
 
+# Put all the aics together
+AICs <- setNames(data.frame(matrix(nrow = 10, ncol = length(model_fits))), model_names)
+for(i in 1:length(model_fits)){
+  AICs[,i] <- model_fits[[i]]$aic 
+}
+AICs[11,] <- colSums(AICs)
+source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/AIC_weight.R") 
+wAIC <- AIC_weight(AICs, 'wAIC.csv')
+
 # Simulate model predictions from the estimated parameters
+source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/resp_recenter_data.R")
+sim_data <- data.frame()
+recentered_sim_data <- data.frame()
+for(i in 1:length(models)){
+  this_model <- model_fits[[i]]
+  for(j in participants){
+    this_participant_data <- data[data$participant == j,]
+    this_Pest <- this_model[j, 4:38]
+    # the no temporal model needs a different simulation function
+    if(model_names[[i]] == "space_orth"){
+      this_sim_data <- simulate_intrusion_cond_model_phi(j, this_participant_data, this_Pest, model_names[i])
+    } else{
+      this_sim_data <- simulate_intrusion_cond_model(j, this_participant_data, this_Pest, model_names[i])
+    }
+    this_recentered_data <- recenter.model(this_sim_data, model_names[i])
+    sim_data <- rbind(sim_data, this_sim_data)
+    recentered_sim_data <- rbind(recentered_sim_data, this_recentered_data)
+  }
+}
 
-
+save(sim_data, recentered_sim_data, file = paste(toString(Sys.Date()), '_simulated.RData', sep =""))
 
 
 
