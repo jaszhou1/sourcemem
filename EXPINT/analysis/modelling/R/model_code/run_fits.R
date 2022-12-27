@@ -58,6 +58,7 @@ source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/11_12_flat_gamma.
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/13_flat_intrusion.R")
 source('~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/14_equal_nosem.R')
 
+setwd("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models")
 models <- c(saturated, fixed_guess, two_cond, same_decay, orth_weight, no_sem, same_weight, spatiotemporal, space_orth, temp_orth, flat_gamma1, flat_gamma2, flat_intrusion, equal_nosem)
 
 model_names <- c('saturated', 'fixed_guess', 'two_cond', 'same_decay', 'orth_weight', 'no_sem', 'same_weight', 'spatiotemporal', 'space_orth', 'temp_orth', 'flat_gamma1', 'flat_gamma2', 'flat_intrusion', 'equal_nosem')
