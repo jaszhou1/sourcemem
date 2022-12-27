@@ -40,8 +40,8 @@ spatiotemporal <- function(data){
   Pbounds <- matrix(data = NA, nrow = 2, ncol = 10)
   #          prec1, prec2, beta1, beta2, beta3, gamma1, gamma2, gamma3, rho1, rho2, rho3, chi1, psi1, tau1, lambda_b1, lambda_f1, zeta1, iota1, upsilon1
   colnames(Pbounds) <- c('kappa1', 'kappa2', 'beta1', 'gamma1', 'gamma2', 'rho1', 'tau1', 'lambda_b1', 'lambda_f1', 'zeta1')
-  Pbounds[1,] <- c(1,  1,  0.1, 0.01,0.03,  0,    0.5, 0, 0, 0)
-  Pbounds[2,] <- c(20, 15, 0.8, 0.4, 0.4,   0.6,  0.7, 2, 2, 10)
+  Pbounds[1,] <- c(3,  3,  0.1, 0.01,0.03,  0,    0.5, 0, 0, 0)
+  Pbounds[2,] <- c(50, 50, 0.8, 0.4, 0.4,   0.6,  0.7, 2, 2, 10)
   
   
   # Optimise
