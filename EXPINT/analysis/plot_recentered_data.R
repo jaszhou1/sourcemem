@@ -105,25 +105,25 @@ asymm_temporal_recenter <- function(data){
   p1 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'orthographic', ], aes(x = offset, y = ..density..), bins = 50) +
     ylim(0, 0.3) + 
-    facet_grid(~abs_lag) +
+    facet_grid(~lag) +
     ggtitle('orthographic')
   
   p2 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'semantic', ], aes(x = offset, y = ..density..), bins = 50) +
     ylim(0, 0.3) + 
-    facet_grid(~abs_lag) +
+    facet_grid(~lag) +
     ggtitle('semantic')
   
   p3 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), bins = 50) +
     ylim(0, 0.3) + 
-    facet_grid(~abs_lag) +
+    facet_grid(~lag) +
     ggtitle('unrelated')
   
   p4 <- ggplot() + 
     geom_histogram(data = data, aes(x = offset, y = ..density..), bins = 50) +
     ylim(0, 0.3) + 
-    facet_grid(~abs_lag) +
+    facet_grid(~lag) +
     ggtitle('overall')
   
   plot <- ggarrange(p1,p2,p3,p4, ncol = 1)
