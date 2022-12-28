@@ -153,6 +153,11 @@ intrusion_cond_model <- function(Pvar, data, Pfix, Sel){
     tau3 <- tau1
   }
   
+  #extra one, let the decay be the same in both directions of time
+  if(is.na(lambda_f1)){
+    lambda_f1 <- lambda_b1
+  }
+  
   if(is.na(lambda_b2)){
     lambda_b2 <- lambda_b1
   }
@@ -191,6 +196,12 @@ intrusion_cond_model <- function(Pvar, data, Pfix, Sel){
   
   if(is.na(upsilon3)){
     upsilon3 <- upsilon1
+  }
+  
+  # Force precision for intrusions to be equal or less than precision for memory
+  if(kappa2 > kappa1){
+    nLL <- 1e7
+    return(nLL)
   }
   
   # Define the weight for time in the intrusion weight calculation

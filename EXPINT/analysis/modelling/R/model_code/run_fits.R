@@ -56,12 +56,17 @@ source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/9_space_orth.R")
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/10_temp_orth.R")
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/11_12_flat_gamma.R")
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/13_flat_intrusion.R")
-source('~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/14_equal_nosem.R')
+
+# Second family of models, which take out the temporal asymmetry
+source('~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/14_sym_equal.R')
+source('~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/15_sym_weight.R')
+source('~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/16_sym_decay.R')
+source('~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/17_sym_weight_chi.R')
 
 setwd("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models")
-models <- c(saturated, fixed_guess, two_cond, same_decay, orth_weight, no_sem, same_weight, spatiotemporal, space_orth, temp_orth, flat_gamma1, flat_gamma2, flat_intrusion, equal_nosem)
+models <- c(saturated, fixed_guess, two_cond, same_decay, orth_weight, no_sem, same_weight, spatiotemporal, space_orth, temp_orth, flat_gamma1, flat_gamma2, flat_intrusion, sym_equal, sym_weight, sym_decay, sym_weight_chi)
 
-model_names <- c('saturated', 'fixed_guess', 'two_cond', 'same_decay', 'orth_weight', 'no_sem', 'same_weight', 'spatiotemporal', 'space_orth', 'temp_orth', 'flat_gamma1', 'flat_gamma2', 'flat_intrusion', 'equal_nosem')
+model_names <- c('saturated', 'fixed_guess', 'two_cond', 'same_decay', 'orth_weight', 'no_sem', 'same_weight', 'spatiotemporal', 'space_orth', 'temp_orth', 'flat_gamma1', 'flat_gamma2', 'flat_intrusion', 'sym_equal', 'sym_weight', 'sym_decay', 'sym_weight_chi')
 
 fit_model <- function(data, model, model_name){
   cl <- makeForkCluster((detectCores() - 1))
@@ -132,7 +137,9 @@ for(i in 1:length(models)){
   }
 }
 
-save(sim_data, recentered_sim_data, file = paste(toString(Sys.Date()), '_simulated.RData', sep =""))
+recentered_data <- recenter.data(data)
+
+save(sim_data, recentered_sim_data, recentered_data, file = paste(toString(Sys.Date()), '_simulated.RData', sep =""))
 
 
 

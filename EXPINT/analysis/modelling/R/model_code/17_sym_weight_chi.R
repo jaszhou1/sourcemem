@@ -1,24 +1,27 @@
-# MODEL 7: similarity weights and decays the same, different intrusion coefficient for orthographic and unrelated.
+# MODEL 15: 
+# No semantics at all, and no temporal asymmetry
+# Intrusion similarity weights are the same across conditions
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/intrusion_cond_model.R")
-equal_nosem <- function(data){
+
+sym_weight_chi <- function(data){
   # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.
   #       prec.  guess      intrus.     w.space   w.orth    w.sem    time asym   d.time              d.space    d.orth    d.sem
-  Sel = c(1, 1,  1, 0, 0,   1, 1, 0,    1, 0, 0,  1, 0, 0,  0, 0, 0,  1, 0, 0,    1, 1, 0, 0, 0, 0,   1, 0, 0,  1, 0, 0,  1, 0, 0)
+  Sel = c(1, 1,  1, 0, 0,   1, 1, 0,    1, 1, 0,  1, 1, 0,  0, 0, 0,  0, 0, 0,    1, 0, 0, 0, 0, 0,   1, 0, 0,  1, 0, 0,  0, 0, 0)
   
   # For the fixed parameters (P[Sel == 0], what value should parameter be fixed at? NA will be treated as "same as unrelated condition")
   beta2 <- NA
   beta3 <- NA
   gamma3 <- NA
   # intrusion weights
-  rho2 <- NA
   rho3 <- NA # Space, sem condition
-  chi2 <- NA
   chi3 <- NA
   psi1 <- 0
   psi2 <- NA
   psi3 <- NA
+  tau1 <- 0.5
   tau2 <- NA
   tau3 <- NA
+  lambda_f1 <- NA
   lambda_b2 <- NA
   lambda_f2 <- NA
   lambda_b3 <- NA # Similarity decay of backwards temporal lag
@@ -27,17 +30,18 @@ equal_nosem <- function(data){
   zeta3 <- NA
   iota2 <- NA
   iota3 <- NA
+  upsilon1 <- 0
   upsilon2 <- NA
   upsilon3 <- NA
   
-  Pfix = c(beta2, beta3, gamma3, rho2, rho3, chi2, chi3, psi1, psi2, psi3, tau2, tau3, lambda_b2, lambda_f2, lambda_b3, lambda_f3, zeta2, zeta3, iota2, iota3, upsilon2, upsilon3)
+  Pfix = c(beta2, beta3, gamma3, rho3, chi3, psi1, psi2, psi3, tau1, tau2, tau3, lambda_f1, lambda_b2, lambda_f2, lambda_b3, lambda_f3, zeta2, zeta3, iota2, iota3, upsilon1, upsilon2, upsilon3)
   
   # Boundaries for estimated parameters. DEoptim will sample uniformly between these bounds
-  Pbounds <- matrix(data = NA, nrow = 2, ncol = 13)
+  Pbounds <- matrix(data = NA, nrow = 2, ncol = 12)
   #          prec1, prec2, beta1, beta2, beta3, gamma1, gamma2, gamma3, rho1, rho2, rho3, chi1, psi1, tau1, lambda_b1, lambda_f1, zeta1, iota1, upsilon1
-  colnames(Pbounds) <- c('kappa1', 'kappa2', 'beta1', 'gamma1', 'gamma2', 'rho1', 'chi1', 'tau1', 'lambda_b1', 'lambda_f1', 'zeta1','iota1', 'upsilon1')
-  Pbounds[1,] <- c(1,  1,  0.2, 0.01,0.03,  0,  0,   0.5, 0, 0, 0, 0, 0)
-  Pbounds[2,] <- c(50, 50, 0.8, 1, 1,  0.8, 0.8, 0.7, 5, 5, 10, 10, 10)
+  colnames(Pbounds) <- c('kappa1', 'kappa2', 'beta1', 'gamma1', 'gamma2', 'rho1', 'rho2', 'chi1', 'chi2', 'lambda_b1', 'zeta1','iota1')
+  Pbounds[1,] <- c(3,  2,  0, 0.01,0.01,  0, 0, 0, 0, 0, 0, 0)
+  Pbounds[2,] <- c(50, 50, 0.8, 1, 1,     1, 1, 1, 1, 5, 10, 20)
   
   
   # Optimise
