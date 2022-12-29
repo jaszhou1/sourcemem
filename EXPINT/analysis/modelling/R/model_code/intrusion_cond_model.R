@@ -485,6 +485,11 @@ simulate_intrusion_cond_model <- function(participant, data, P, model_name){
     tau3 <- tau1
   }
   
+  #extra one, let the decay be the same in both directions of time
+  if(is.na(lambda_f1)){
+    lambda_f1 <- lambda_b1
+  }
+  
   if(is.na(lambda_b2)){
     lambda_b2 <- lambda_b1
   }
