@@ -12,16 +12,25 @@ library(extraDistr)
 library(plyr)
 library(R.utils)
 library(statip)
-
+library(ggpubr)
 # Source the model code
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/intrusion_cond_model.R")
-
-# Load in and filter the data
+source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/recenter_data.R")
+source("~/git/sourcemem/EXPINT/analysis/plot_recentered_data.R")
 data <- read.csv("~/git/sourcemem/EXPINT/data/EXPINT_data.csv")
 data <- data[data$block != -1,]
 data <- data[data$is_stimulus, ]
 data <- data[data$valid_RT, ]
 data <- data[data$recognised == 1,]
+
+simulate_data <- function(P){# Load in and filter the data
+  sim_data <- simulate_intrusion_cond_model(99, data, P, 'test')
+  recentered_sim_data <- recenter_model(sim_data)
+  res <- c()
+  res$sim_data <- sim_data
+  res$recentered_sim_data <- recentered_sim_data
+  return(res)
+}
 
 # Specify some parameter values
 prec1 <- 20
@@ -29,7 +38,7 @@ prec2 <- 10
 beta1 <- 0.3
 beta2 <- NA
 beta3 <- NA
-gamma1 <- 0.1
+gamma1 <- 0.2
 gamma2 <- NA
 gamma3 <- NA
 # intrusion weights
@@ -37,7 +46,7 @@ rho1 <- 0.3 # Spatial weight
 rho2 <- NA
 rho3 <- NA
 
-chi1 <- 0.2 # Orthographic weight
+chi1 <- 0.5 # Orthographic weight
 chi2 <- NA
 chi3 <- NA
 
@@ -63,23 +72,177 @@ zeta1 <- 0.3 # Similarity decay of spatial similarity
 zeta2 <- NA
 zeta3 <- NA
 
-iota1 <- 0.2 # Similarity decay of orthographic component unrelated
+iota1 <- 3 # Similarity decay of orthographic component unrelated
 iota2 <- NA # Decay for orthography orthographic
 iota3 <- NA
 
-upsilon1 <- 0.4 # Similarity decay of semantic component unrelated
+upsilon1 <- 1 # Similarity decay of semantic component unrelated
 upsilon2 <- NA # Decay for semantic orth
 upsilon3 <- NA
 
-P = c(prec1, prec2, beta1, beta2, beta3, gamma1, gamma2, gamma3, rho1, rho2, rho3,
-         chi1, chi2, chi3, psi1, psi2, psi3, tau1, tau2, tau3, lambda_b1,
-         lambda_f1, lambda_b2, lambda_f2, lambda_b3, lambda_f3, zeta1,
-         zeta2, zeta3, iota1, iota2, iota3, upsilon1, upsilon2, upsilon3)
+P1 = c(prec1, prec2, beta1, beta2, beta3, gamma1, gamma2, gamma3, rho1, rho2, rho3,
+       chi1, chi2, chi3, psi1, psi2, psi3, tau1, tau2, tau3, lambda_b1,
+       lambda_f1, lambda_b2, lambda_f2, lambda_b3, lambda_f3, zeta1,
+       zeta2, zeta3, iota1, iota2, iota3, upsilon1, upsilon2, upsilon3)
 
-sim_data <- simulate_intrusion_cond_model(99, data, P)
 
-# Recenter the simulated data
-source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/recenter_data.R")
-source("~/git/sourcemem/EXPINT/analysis/plot_recentered_data.R")
-recentered_sim_data <- recenter_model(sim_data)
+P2 = c(prec1, prec2, beta1, beta2, beta3, gamma1, gamma2, gamma3, 0, rho2, rho3,
+       0, chi2, chi3, psi1, psi2, psi3, tau1, tau2, tau3, lambda_b1,
+       lambda_f1, lambda_b2, lambda_f2, lambda_b3, lambda_f3, zeta1,
+       zeta2, zeta3, iota1, iota2, iota3, upsilon1, upsilon2, upsilon3)
+
+P3 = c(prec1, prec2, beta1, beta2, beta3, gamma1, gamma2, gamma3, 0, rho2, rho3,
+       0, chi2, chi3, psi1, psi2, psi3, 0.8, tau2, tau3, lambda_b1,
+       lambda_f1, lambda_b2, lambda_f2, lambda_b3, lambda_f3, zeta1,
+       zeta2, zeta3, iota1, iota2, iota3, upsilon1, upsilon2, upsilon3)
+
+sim1 <- simulate_data(P1)
+sim2 <- simulate_data(P2)
+sim3 <- simulate_data(P3)
+setwd("~/git/sourcemem/EXPINT/analysis/modelling/R")
+save(sim1, sim2, sim3, file = 'simulated_recentered.RData')
+
+## Plotting functions
+
+plot.orthographic.recenter <- function(model){
+  model <- model[model$orthographic < 5,]
+  p1 <- ggplot() + 
+    geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.5) + 
+    facet_grid(~orthographic) +
+    ggtitle(sprintf('%s Condition, Recentered on orthographic', 'orth'))
+  
+  p2 <- ggplot() + 
+    geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.5) + 
+    facet_grid(~orthographic) +
+    ggtitle(sprintf('%s Condition, Recentered on orthographic', 'unrelated'))
+  
+  p3 <- ggplot() + 
+    geom_density(data = model, aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.5) + 
+    facet_grid(~orthographic)  +
+    ggtitle(sprintf('%s Condition, Recentered on orthographic', 'overall'))
+  
+  plot <- ggarrange(p1, p2, p3, ncol = 1, nrow = 3, heights = c(1, 1, 1))
+  return(plot)
+}
+
+plot.semantic.recenter <- function(model){
+  p1 <- ggplot() + 
+    geom_density(data = model[model$cond == 'semantic', ], aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.5) + 
+    facet_grid(~semantic_bin) +
+    ggtitle(sprintf('%s Condition, Recentered on semantic', 'semantic'))
+  
+  p2 <- ggplot() + 
+    geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.5) + 
+    facet_grid(~semantic_bin) +
+    ggtitle(sprintf('%s Condition, Recentered on semantic', 'unrelated'))
+  
+  p3 <- ggplot() + 
+    geom_density(data = model, aes(x = offset), adjust = 1) +
+    ylim(0, 0.5) + 
+    facet_grid(~semantic_bin)  +
+    ggtitle(sprintf('%s Condition, Recentered on semantic', 'overall'))
+  
+  plot <- ggarrange(p1, p2, p3, ncol = 1, nrow = 3, heights = c(1, 1, 1))
+  return(plot)
+}
+
+plot.spatial.recenter <- function(model){
+  p1 <- ggplot() + 
+    geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.5) + 
+    facet_grid(~spatial_bin) +
+    ggtitle('orthographic')
+  
+  p2 <- ggplot() + 
+    geom_density(data = model[model$cond == 'semantic', ], aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.5) + 
+    facet_grid(~spatial_bin) +
+    ggtitle('semantic')
+  
+  p3 <- ggplot() + 
+    geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.5) + 
+    facet_grid(~spatial_bin) +
+    ggtitle('unrelated')
+  
+  p4 <- ggplot() + 
+    geom_density(data = model, aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.5) + 
+    facet_grid(~spatial_bin) +
+    ggtitle('overall')
+  
+  plot <- ggarrange(p1,p2,p3,p4, ncol = 1, common.legend = TRUE, legend="bottom")
+  plot <- annotate_figure(plot, top = text_grob("Spatial Recenter", 
+                                                color = "black", face = "bold", size = 16))
+  return(plot)
+}
+
+plot.temporal.recenter <- function(model){
+  model$abs_lag <- abs(model$lag)
+  model <- model[model$abs_lag < 5,]
+  p1 <- ggplot() + 
+    geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.3) + 
+    facet_grid(~abs_lag) +
+    ggtitle('orthographic')
+  
+  p2 <- ggplot() + 
+    geom_density(data = model[model$cond == 'semantic', ], aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.3) + 
+    facet_grid(~abs_lag) +
+    ggtitle('semantic')
+  
+  p3 <- ggplot() + 
+    geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.3) + 
+    facet_grid(~abs_lag) +
+    ggtitle('unrelated')
+  
+  p4 <- ggplot() + 
+    geom_density(data = model, aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.3) + 
+    facet_grid(~abs_lag) +
+    ggtitle('overall')
+  
+  plot <- ggarrange(p1,p2,p3,p4, ncol = 1,  common.legend = TRUE, legend="bottom")
+  plot <- annotate_figure(plot, top = text_grob("Temporal Recenter", 
+                                                color = "black", face = "bold", size = 16))
+  return(plot)
+}
+
+plot.asymm.recenter <- function(model){
+  p1 <- ggplot() + 
+    geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.3) + 
+    facet_grid(~lag) +
+    ggtitle('orthographic')
+  
+  p2 <- ggplot() + 
+    geom_density(data = model[model$cond == 'semantic', ], aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.3) + 
+    facet_grid(~lag) +
+    ggtitle('semantic')
+  
+  p3 <- ggplot() + 
+    geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.3) + 
+    facet_grid(~lag) +
+    ggtitle('unrelated')
+  
+  p4 <- ggplot() + 
+    geom_density(data = model, aes(x = offset), adjust = 1.2) +
+    ylim(0, 0.3) + 
+    facet_grid(~lag) +
+    ggtitle('overall')
+  plot <- ggarrange(p1,p2,p3,p4, ncol = 1,  common.legend = TRUE, legend="bottom")
+  plot <- annotate_figure(plot, top = text_grob("Asymmetric Temporal Recenter", 
+                                                color = "black", face = "bold", size = 16))
+  return(plot)
+}
+
 
