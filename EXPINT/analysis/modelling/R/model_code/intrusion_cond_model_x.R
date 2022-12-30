@@ -294,6 +294,21 @@ intrusion_cond_model_x <- function(Pvar, data, Pfix, Sel){
   chi3 <- chi3/sum(phi3, rho3, chi3, psi3)
   psi3 <- psi3/sum(phi3, rho3, chi3, psi3)
   
+  # If the weight is zero, trying to normalise it will give NaN (dividing x by zero)
+  # Only a problem with the no gradient model. Here's a janky way of dealing with that
+  phi1 <- max(0, phi1, na.rm = T)
+  rho1 <- max(0, rho1, na.rm = T)
+  chi1 <- max(0, chi1, na.rm = T)
+  psi1 <- max(0, psi1, na.rm = T)
+  phi2 <- max(0, phi2, na.rm = T)
+  rho2 <- max(0, rho2, na.rm = T)
+  chi2 <- max(0, chi2, na.rm = T)
+  psi2 <- max(0, psi2, na.rm = T)
+  phi3 <- max(0, phi3, na.rm = T)
+  rho3 <- max(0, rho3, na.rm = T)
+  chi3 <- max(0, chi3, na.rm = T)
+  psi3 <- max(0, psi3, na.rm = T)
+  
   # Multiply the temporal similarities with corresponding spatial similarity to get a spatiotemporal gradient on each trial, for each condition
   intrusion_weights <- data.frame(matrix(nrow = nrow(data),ncol = n_intrusions))
   
