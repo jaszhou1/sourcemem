@@ -14,9 +14,7 @@ intrusion_cond_model_x <- function(Pvar, data, Pfix, Sel){
   
   # Check number of parameters
   if(length(Pvar) + length(Pfix) != 38){
-    print("Incorrect number of parameters")
-    nLL <- 1e7
-    return(nLL)
+    stop("Incorrect number of parameters")
   }
   
   # Assemble parameter vector from the free (to be estimated) and fixed parameters
@@ -213,39 +211,73 @@ intrusion_cond_model_x <- function(Pvar, data, Pfix, Sel){
   data[,51:57] <- 1-data[,51:57] # Turn semantic cosine similarity into distance (big number means less similar), max is naturally 1.
   
   temporal_similarity <- data.frame(matrix(nrow = nrow(data), ncol = n_intrusions))
-  temporal_similarity[data$condition=='unrelated',1:7] <- lapply(data[data$condition=='unrelated',30:36], 
+  temporal_similarity[data$condition=='unrelated',1:7] <- apply(data[data$condition=='unrelated',30:36],
+                                                                c(1,2),
                                                                  temporal_shepard,
                                                                  k1 = lambda_b1, k2 = lambda_f1, tau = tau1)
   
-  temporal_similarity[data$condition=='orthographic',1:7] <- lapply(data[data$condition=='orthographic',30:36], 
+  temporal_similarity[data$condition=='orthographic',1:7] <- apply(data[data$condition=='orthographic',30:36],
+                                                                    c(1,2),
                                                                     temporal_shepard,
                                                                     k1 = lambda_b2, k2 = lambda_f2, tau = tau2)
   
-  temporal_similarity[data$condition=='semantic',1:7] <- lapply(data[data$condition=='semantic',30:36], 
+  temporal_similarity[data$condition=='semantic',1:7] <- apply(data[data$condition=='semantic',30:36],
+                                                                c(1,2),
                                                                 temporal_shepard,
                                                                 k1 = lambda_b3, k2 = lambda_f3, tau = tau3)
   
   
   # Turn cosine distances between target and intrusions into Shepard similarity
   spatial_similarity <- data.frame(matrix(nrow = nrow(data), ncol = n_intrusions))
-  spatial_similarity[data$condition=='unrelated',1:7] <- lapply(data[data$condition=='unrelated',37:43], shepard_similarity, k = zeta1)
-  spatial_similarity[data$condition=='orthographic',1:7] <- lapply(data[data$condition=='orthographic',37:43], shepard_similarity, k = zeta2)
-  spatial_similarity[data$condition=='semantic',1:7] <- lapply(data[data$condition=='semantic',37:43], shepard_similarity, k = zeta3)
+  spatial_similarity[data$condition=='unrelated',1:7] <- apply(data[data$condition=='unrelated',37:43],
+                                                               c(1,2),
+                                                               shepard_similarity, 
+                                                               k = zeta1)
+  
+  spatial_similarity[data$condition=='orthographic',1:7] <- apply(data[data$condition=='orthographic',37:43],
+                                                                  c(1,2),
+                                                                  shepard_similarity, 
+                                                                  k = zeta2)
+  
+  spatial_similarity[data$condition=='semantic',1:7] <- apply(data[data$condition=='semantic',37:43],
+                                                              c(1,2),
+                                                              shepard_similarity, 
+                                                              k = zeta3)
   
   ## Add different decays for the different conditions
   orthographic_similarity <- data.frame(matrix(nrow = nrow(data), ncol = n_intrusions))
   # When the condition is unrelated, use iota 1
-  orthographic_similarity[data$condition=='unrelated',1:7] <- lapply(data[data$condition=='unrelated',44:50], shepard_similarity, k = iota1)
+  orthographic_similarity[data$condition=='unrelated',1:7] <- apply(data[data$condition=='unrelated',44:50],
+                                                                    c(1,2),
+                                                                    shepard_similarity, 
+                                                                    k = iota1)
   # When the condition is orthographic, use iota 2
-  orthographic_similarity[data$condition=='orthographic',1:7] <- lapply(data[data$condition=='orthographic',44:50], shepard_similarity, k = iota2)
+  orthographic_similarity[data$condition=='orthographic',1:7] <- apply(data[data$condition=='orthographic',44:50], 
+                                                                       c(1,2),
+                                                                       shepard_similarity, 
+                                                                       k = iota2)
   # When the condition is semantic, use iota 3
-  orthographic_similarity[data$condition=='semantic',1:7] <- lapply(data[data$condition=='semantic',44:50], shepard_similarity, k = iota3)
+  orthographic_similarity[data$condition=='semantic',1:7] <- apply(data[data$condition=='semantic',44:50], 
+                                                                   c(1,2),
+                                                                   shepard_similarity, 
+                                                                   k = iota3)
   
   # Scale semantic cosine similarity
   semantic_similarity <- data.frame(matrix(nrow = nrow(data), ncol = n_intrusions))
-  semantic_similarity[data$condition=='unrelated',1:7] <- lapply(data[data$condition=='unrelated',51:57], shepard_similarity, k = upsilon1)
-  semantic_similarity[data$condition=='orthographic',1:7] <- lapply(data[data$condition=='orthographic',51:57], shepard_similarity, k = upsilon2) 
-  semantic_similarity[data$condition=='semantic',1:7] <- lapply(data[data$condition=='semantic',51:57], shepard_similarity, k = upsilon3) 
+  semantic_similarity[data$condition=='unrelated',1:7] <- apply(data[data$condition=='unrelated',51:57], 
+                                                                c(1,2),
+                                                                shepard_similarity, 
+                                                                k = upsilon1)
+  
+  semantic_similarity[data$condition=='orthographic',1:7] <- apply(data[data$condition=='orthographic',51:57], 
+                                                                   c(1,2),
+                                                                   shepard_similarity, 
+                                                                   k = upsilon2)
+  
+  semantic_similarity[data$condition=='semantic',1:7] <- apply(data[data$condition=='semantic',51:57], 
+                                                               c(1,2),
+                                                               shepard_similarity, 
+                                                               k = upsilon3) 
   # Normalise the intrusion similarity weights
   phi1 <- phi1/sum(phi1, rho1, chi1, psi1)
   rho1 <- rho1/sum(phi1, rho1, chi1, psi1)
@@ -528,40 +560,88 @@ simulate_intrusion_cond_model_x <- function(participant, data, P, model_name){
   
   
   temporal_similarity <- data.frame(matrix(nrow = nrow(data), ncol = n_intrusions))
-  temporal_similarity[data$condition=='unrelated',1:7] <- lapply(data[data$condition=='unrelated',30:36], 
-                                                                 temporal_shepard,
-                                                                 k1 = lambda_b1, k2 = lambda_f1, tau = tau1)
-  
-  temporal_similarity[data$condition=='orthographic',1:7] <- lapply(data[data$condition=='orthographic',30:36], 
-                                                                    temporal_shepard,
-                                                                    k1 = lambda_b2, k2 = lambda_f2, tau = tau2)
-  
-  temporal_similarity[data$condition=='semantic',1:7] <- lapply(data[data$condition=='semantic',30:36], 
+  temporal_similarity[data$condition=='unrelated',1:7] <- apply(data[data$condition=='unrelated',30:36],
+                                                                c(1,2),
                                                                 temporal_shepard,
-                                                                k1 = lambda_b3, k2 = lambda_f3, tau = tau3)
+                                                                k1 = lambda_b1, k2 = lambda_f1, tau = tau1)
+  
+  temporal_similarity[data$condition=='orthographic',1:7] <- apply(data[data$condition=='orthographic',30:36],
+                                                                   c(1,2),
+                                                                   temporal_shepard,
+                                                                   k1 = lambda_b2, k2 = lambda_f2, tau = tau2)
+  
+  temporal_similarity[data$condition=='semantic',1:7] <- apply(data[data$condition=='semantic',30:36],
+                                                               c(1,2),
+                                                               temporal_shepard,
+                                                               k1 = lambda_b3, k2 = lambda_f3, tau = tau3)
   
   
   # Turn cosine distances between target and intrusions into Shepard similarity
   spatial_similarity <- data.frame(matrix(nrow = nrow(data), ncol = n_intrusions))
-  spatial_similarity[data$condition=='unrelated',1:7] <- lapply(data[data$condition=='unrelated',37:43], shepard_similarity, k = zeta1)
-  spatial_similarity[data$condition=='orthographic',1:7] <- lapply(data[data$condition=='orthographic',37:43], shepard_similarity, k = zeta2)
-  spatial_similarity[data$condition=='semantic',1:7] <- lapply(data[data$condition=='semantic',37:43], shepard_similarity, k = zeta3)
+  spatial_similarity[data$condition=='unrelated',1:7] <- apply(data[data$condition=='unrelated',37:43],
+                                                               c(1,2),
+                                                               shepard_similarity, 
+                                                               k = zeta1)
+  
+  spatial_similarity[data$condition=='orthographic',1:7] <- apply(data[data$condition=='orthographic',37:43],
+                                                                  c(1,2),
+                                                                  shepard_similarity, 
+                                                                  k = zeta2)
+  
+  spatial_similarity[data$condition=='semantic',1:7] <- apply(data[data$condition=='semantic',37:43],
+                                                              c(1,2),
+                                                              shepard_similarity, 
+                                                              k = zeta3)
   
   ## Add different decays for the different conditions
   orthographic_similarity <- data.frame(matrix(nrow = nrow(data), ncol = n_intrusions))
   # When the condition is unrelated, use iota 1
-  orthographic_similarity[data$condition=='unrelated',1:7] <- lapply(data[data$condition=='unrelated',44:50], shepard_similarity, k = iota1)
+  orthographic_similarity[data$condition=='unrelated',1:7] <- apply(data[data$condition=='unrelated',44:50],
+                                                                    c(1,2),
+                                                                    shepard_similarity, 
+                                                                    k = iota1)
   # When the condition is orthographic, use iota 2
-  orthographic_similarity[data$condition=='orthographic',1:7] <- lapply(data[data$condition=='orthographic',44:50], shepard_similarity, k = iota2)
+  orthographic_similarity[data$condition=='orthographic',1:7] <- apply(data[data$condition=='orthographic',44:50], 
+                                                                       c(1,2),
+                                                                       shepard_similarity, 
+                                                                       k = iota2)
   # When the condition is semantic, use iota 3
-  orthographic_similarity[data$condition=='semantic',1:7] <- lapply(data[data$condition=='semantic',44:50], shepard_similarity, k = iota3)
+  orthographic_similarity[data$condition=='semantic',1:7] <- apply(data[data$condition=='semantic',44:50], 
+                                                                   c(1,2),
+                                                                   shepard_similarity, 
+                                                                   k = iota3)
   
   # Scale semantic cosine similarity
   semantic_similarity <- data.frame(matrix(nrow = nrow(data), ncol = n_intrusions))
-  semantic_similarity[data$condition=='unrelated',1:7] <- lapply(data[data$condition=='unrelated',51:57], shepard_similarity, k = upsilon1)
-  semantic_similarity[data$condition=='orthographic',1:7] <- lapply(data[data$condition=='orthographic',51:57], shepard_similarity, k = upsilon2) 
-  semantic_similarity[data$condition=='semantic',1:7] <- lapply(data[data$condition=='semantic',51:57], shepard_similarity, k = upsilon3) 
+  semantic_similarity[data$condition=='unrelated',1:7] <- apply(data[data$condition=='unrelated',51:57], 
+                                                                c(1,2),
+                                                                shepard_similarity, 
+                                                                k = upsilon1)
   
+  semantic_similarity[data$condition=='orthographic',1:7] <- apply(data[data$condition=='orthographic',51:57], 
+                                                                   c(1,2),
+                                                                   shepard_similarity, 
+                                                                   k = upsilon2)
+  
+  semantic_similarity[data$condition=='semantic',1:7] <- apply(data[data$condition=='semantic',51:57], 
+                                                               c(1,2),
+                                                               shepard_similarity, 
+                                                               k = upsilon3) 
+  # Normalise the intrusion similarity weights
+  phi1 <- phi1/sum(phi1, rho1, chi1, psi1)
+  rho1 <- rho1/sum(phi1, rho1, chi1, psi1)
+  chi1 <- chi1/sum(phi1, rho1, chi1, psi1)
+  psi1 <- psi1/sum(phi1, rho1, chi1, psi1)
+  
+  phi2 <- phi2/sum(phi2, rho2, chi2, psi2)
+  rho2 <- rho2/sum(phi2, rho2, chi2, psi2)
+  chi2 <- chi2/sum(phi2, rho2, chi2, psi2)
+  psi2 <- psi1/sum(phi2, rho2, chi2, psi2)
+  
+  phi3 <- phi3/sum(phi3, rho3, chi3, psi3)
+  rho3 <- rho3/sum(phi3, rho3, chi3, psi3)
+  chi3 <- chi3/sum(phi3, rho3, chi3, psi3)
+  psi3 <- psi3/sum(phi3, rho3, chi3, psi3)
   
   # Multiply the temporal similarities with corresponding spatial similarity to get a spatiotemporal gradient on each trial, for each condition
   intrusion_weights <- data.frame(matrix(nrow = nrow(data),ncol = n_intrusions))
