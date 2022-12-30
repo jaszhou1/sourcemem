@@ -96,11 +96,11 @@ P3 = c(prec1, prec2, beta1, beta2, beta3, gamma1, gamma2, gamma3, 0, rho2, rho3,
        lambda_f1, lambda_b2, lambda_f2, lambda_b3, lambda_f3, zeta1,
        zeta2, zeta3, iota1, iota2, iota3, upsilon1, upsilon2, upsilon3)
 
-sim1 <- simulate_data(P1)
-sim2 <- simulate_data(P2)
-sim3 <- simulate_data(P3)
-setwd("~/git/sourcemem/EXPINT/analysis/modelling/R")
-save(sim1, sim2, sim3, file = 'simulated_recentered.RData')
+# sim1 <- simulate_data(P1)
+# sim2 <- simulate_data(P2)
+# sim3 <- simulate_data(P3)
+# 
+# save(sim1, sim2, sim3, file = '~/git/sourcemem/EXPINT/analysis/modelling/R/simulated_recentered.RData')
 
 ## Plotting functions
 
@@ -217,25 +217,25 @@ plot.temporal.recenter <- function(model){
 
 plot.asymm.recenter <- function(model){
   p1 <- ggplot() + 
-    geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset), adjust = 1.2) +
+    geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset), adjust = 1) +
     ylim(0, 0.3) + 
     facet_grid(~lag) +
     ggtitle('orthographic')
   
   p2 <- ggplot() + 
-    geom_density(data = model[model$cond == 'semantic', ], aes(x = offset), adjust = 1.2) +
+    geom_density(data = model[model$cond == 'semantic', ], aes(x = offset), adjust = 1) +
     ylim(0, 0.3) + 
     facet_grid(~lag) +
     ggtitle('semantic')
   
   p3 <- ggplot() + 
-    geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset), adjust = 1.2) +
+    geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset), adjust = 1) +
     ylim(0, 0.3) + 
     facet_grid(~lag) +
     ggtitle('unrelated')
   
   p4 <- ggplot() + 
-    geom_density(data = model, aes(x = offset), adjust = 1.2) +
+    geom_density(data = model, aes(x = offset), adjust = 1) +
     ylim(0, 0.3) + 
     facet_grid(~lag) +
     ggtitle('overall')
