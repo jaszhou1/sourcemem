@@ -64,15 +64,28 @@ source('x10_spatiotemporal.R')
 source('x11_spatiotemporal_ortho.R')
 source('x12_four_factor.R')
 
+# Introduce a new set of models, based on what fit well from the above list,
+# which allow for difference in weight and slope of similarity factors
+source('x13_temporal_weight.R')
+source('x14_spatial_weight.R')
+source('x15_spatiotemporal_weight.R')
+source('x16_temporal_decay.R')
+source('x17_spatial_decay.R')
+source('x18_spatiotemporal_decay.R')
+
 models <- c(flat_intrusion, flat_gamma1, flat_gamma2, temporal, 
             asym_temporal, spatial, ortho, temporal_ortho,
             spatial_ortho, spatiotemporal, spatiotemporal_ortho,
-            four_factor)
+            four_factor, temporal_ortho_weight, spatial_ortho_weight,
+            spatiotemporal_ortho_weight, temporal_ortho_decay, spatial_ortho_decay,
+            spatiotemporal_ortho_decay)
 
 model_names <- c('flat_intrusion', 'flat_gamma1', 'flat_gamma2', 'temporal',
                  'asym_temporal', 'spatial', 'ortho', 'temporal_ortho',
                  'spatial_ortho', 'spatiotemporal', 'spatiotemporal_ortho',
-                 'four_factor')
+                 'four_factor', 'temporal_weight', 'spatial_weight',
+                 'spatiotemporal_weight', 'temporal_decay', 'spatial_decay', 
+                 'spatiotemporal_decay')
 
 fit_model <- function(data, model, model_name){
   cl <- makeForkCluster((detectCores() - 1))
