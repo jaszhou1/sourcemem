@@ -50,7 +50,6 @@ angle_diff <- function(a,b){
 }
 
 ## Load in the model variants
-setwd("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code")
 source('x1_flat_intrusion.R')
 source('x2_flat_gamma_1.R')
 source('x3_flat_gamma_2.R')
@@ -138,12 +137,22 @@ for(i in 1:length(models)){
   }
 }
 
+sim_data1 <- sim_data[sim_data$model %in% c('flat_intrusion', 'flat_gamma1', 'flat_gamma2', 'temporal',
+                                            'asym_temporal', 'spatial', 'ortho', 'temporal_ortho',
+                                            'spatial_ortho', 'spatiotemporal'), ]
+sim_data2 <- sim_data[!(sim_data$model %in% c('flat_intrusion', 'flat_gamma1', 'flat_gamma2', 'temporal',
+                                            'asym_temporal', 'spatial', 'ortho', 'temporal_ortho',
+                                            'spatial_ortho', 'spatiotemporal')), ]
+
 recentered_data <- recenter.data(data)
 
 # Bundle everything up and save output
-setwd("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models")
 wAIC <- AIC_weight(AICs, 'wAIC.csv')
-save(sim_data, recentered_sim_data, recentered_data, file = paste(toString(Sys.Date()), '_simulated.RData', sep =""))
+# save(recentered_data, file = paste(toString(Sys.Date()), '_simulated.RData', sep =""))
+save(sim_data1, file = paste(toString(Sys.Date()), '_simulated1.RData', sep =""))
+save(sim_data2, file = paste(toString(Sys.Date()), '_simulated2.RData', sep =""))
+save(recentered_sim_data, file = paste(toString(Sys.Date()), '_simulated_recenter.RData', sep =""))
+
 
 
 
