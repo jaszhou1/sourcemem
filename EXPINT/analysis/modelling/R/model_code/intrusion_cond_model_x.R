@@ -279,35 +279,35 @@ intrusion_cond_model_x <- function(Pvar, data, Pfix, Sel){
                                                                shepard_similarity, 
                                                                k = upsilon3) 
   # # Normalise the intrusion similarity weights <- Do I need to do this? The value is ultimately arbitrary, gamma is what what scales the intrusion
-  # phi1 <- phi1/sum(phi1, rho1, chi1, psi1)
-  # rho1 <- rho1/sum(phi1, rho1, chi1, psi1)
-  # chi1 <- chi1/sum(phi1, rho1, chi1, psi1)
-  # psi1 <- psi1/sum(phi1, rho1, chi1, psi1)
-  # 
-  # phi2 <- phi2/sum(phi2, rho2, chi2, psi2)
-  # rho2 <- rho2/sum(phi2, rho2, chi2, psi2)
-  # chi2 <- chi2/sum(phi2, rho2, chi2, psi2)
-  # psi2 <- psi1/sum(phi2, rho2, chi2, psi2)
-  # 
-  # phi3 <- phi3/sum(phi3, rho3, chi3, psi3)
-  # rho3 <- rho3/sum(phi3, rho3, chi3, psi3)
-  # chi3 <- chi3/sum(phi3, rho3, chi3, psi3)
-  # psi3 <- psi3/sum(phi3, rho3, chi3, psi3)
+  phi1 <- phi1/sum(phi1, rho1, chi1, psi1)
+  rho1 <- rho1/sum(phi1, rho1, chi1, psi1)
+  chi1 <- chi1/sum(phi1, rho1, chi1, psi1)
+  psi1 <- psi1/sum(phi1, rho1, chi1, psi1)
+
+  phi2 <- phi2/sum(phi2, rho2, chi2, psi2)
+  rho2 <- rho2/sum(phi2, rho2, chi2, psi2)
+  chi2 <- chi2/sum(phi2, rho2, chi2, psi2)
+  psi2 <- psi2/sum(phi2, rho2, chi2, psi2)
+
+  phi3 <- phi3/sum(phi3, rho3, chi3, psi3)
+  rho3 <- rho3/sum(phi3, rho3, chi3, psi3)
+  chi3 <- chi3/sum(phi3, rho3, chi3, psi3)
+  psi3 <- psi3/sum(phi3, rho3, chi3, psi3)
   
   # If the weight is zero, trying to normalise it will give NaN (dividing x by zero)
   # Only a problem with the no gradient model. Here's a janky way of dealing with that
-  # phi1 <- max(0, phi1, na.rm = T)
-  # rho1 <- max(0, rho1, na.rm = T)
-  # chi1 <- max(0, chi1, na.rm = T)
-  # psi1 <- max(0, psi1, na.rm = T)
-  # phi2 <- max(0, phi2, na.rm = T)
-  # rho2 <- max(0, rho2, na.rm = T)
-  # chi2 <- max(0, chi2, na.rm = T)
-  # psi2 <- max(0, psi2, na.rm = T)
-  # phi3 <- max(0, phi3, na.rm = T)
-  # rho3 <- max(0, rho3, na.rm = T)
-  # chi3 <- max(0, chi3, na.rm = T)
-  # psi3 <- max(0, psi3, na.rm = T)
+  phi1 <- max(0, phi1, na.rm = T)
+  rho1 <- max(0, rho1, na.rm = T)
+  chi1 <- max(0, chi1, na.rm = T)
+  psi1 <- max(0, psi1, na.rm = T)
+  phi2 <- max(0, phi2, na.rm = T)
+  rho2 <- max(0, rho2, na.rm = T)
+  chi2 <- max(0, chi2, na.rm = T)
+  psi2 <- max(0, psi2, na.rm = T)
+  phi3 <- max(0, phi3, na.rm = T)
+  rho3 <- max(0, rho3, na.rm = T)
+  chi3 <- max(0, chi3, na.rm = T)
+  psi3 <- max(0, psi3, na.rm = T)
   
   # Multiply the temporal similarities with corresponding spatial similarity to get a spatiotemporal gradient on each trial, for each condition
   intrusion_weights <- data.frame(matrix(nrow = nrow(data),ncol = n_intrusions))
@@ -330,26 +330,24 @@ intrusion_cond_model_x <- function(Pvar, data, Pfix, Sel){
   colnames(intrusion_weights) <- c("weight_1", "weight_2", "weight_3", "weight_4", "weight_5", "weight_6", "weight_7")
   
   target_weight <- 1 - rowSums(intrusion_weights)
+  # Filter out zeroes, set target weight to very small
+  if(any(target_weight < 0)){
+    target_weight[target_weight < 0] <- 1e-7
+  }
   trial_weights <- cbind(target_weight, intrusion_weights)
-  
+  trial_weights <- as.data.frame(t(apply(trial_weights,1, function(x) x/sum(x))))
   # Multiply all weights by 1-beta, the non-guessed responses, based on the serial position of the target
   # Allow different betas for different conditions
   
   # Unrelated condition
   trial_weights[data$condition == 'unrelated',] <- trial_weights[data$condition == 'unrelated',] * (1-beta1)
-  trial_weights[data$condition == 'unrelated', length(trial_weights)+1] <- beta1
+  trial_weights[data$condition == 'unrelated', ncol(trial_weights)+1] <- beta1
   
   trial_weights[data$condition == 'orthographic',] <- trial_weights[data$condition == 'orthographic',] * (1-beta2)
-  trial_weights[data$condition == 'orthographic', length(trial_weights)] <- beta2
+  trial_weights[data$condition == 'orthographic', ncol(trial_weights)] <- beta2
   
   trial_weights[data$condition == 'semantic',] <- trial_weights[data$condition == 'semantic',] * (1-beta3)
-  trial_weights[data$condition == 'semantic', length(trial_weights)] <- beta3
-  
-  # Filter out zeroes 
-  if(any(trial_weights < 0)){
-    # print("Invalid: Negative weight")
-    trial_weights[trial_weights < 0] <- 0
-  }
+  trial_weights[data$condition == 'semantic', ncol(trial_weights)] <- beta3
   
   data <- cbind(data, intrusion_weights)
   # Get likelihoods of the response angle coming from a von Mises distribution centered on each of the angles in its block
@@ -558,11 +556,7 @@ simulate_intrusion_cond_model_x <- function(participant, data, P, model_name){
   if(is.na(upsilon3)){
     upsilon3 <- upsilon1
   }
-  
-  phi1 <- 1 - (rho1 + chi1 + psi1)
-  phi2 <- 1 - (rho2 + chi2 + psi2)
-  phi3 <- 1 - (rho3 + chi3 + psi3)
-  
+
   # Get an untransformed copy of the similarities
   similarities <- data[,30:57]
   
@@ -642,20 +636,20 @@ simulate_intrusion_cond_model_x <- function(participant, data, P, model_name){
                                                                shepard_similarity, 
                                                                k = upsilon3) 
   # # Normalise the intrusion similarity weights
-  # phi1 <- phi1/sum(phi1, rho1, chi1, psi1)
-  # rho1 <- rho1/sum(phi1, rho1, chi1, psi1)
-  # chi1 <- chi1/sum(phi1, rho1, chi1, psi1)
-  # psi1 <- psi1/sum(phi1, rho1, chi1, psi1)
-  # 
-  # phi2 <- phi2/sum(phi2, rho2, chi2, psi2)
-  # rho2 <- rho2/sum(phi2, rho2, chi2, psi2)
-  # chi2 <- chi2/sum(phi2, rho2, chi2, psi2)
-  # psi2 <- psi1/sum(phi2, rho2, chi2, psi2)
-  # 
-  # phi3 <- phi3/sum(phi3, rho3, chi3, psi3)
-  # rho3 <- rho3/sum(phi3, rho3, chi3, psi3)
-  # chi3 <- chi3/sum(phi3, rho3, chi3, psi3)
-  # psi3 <- psi3/sum(phi3, rho3, chi3, psi3)
+  phi1 <- phi1/sum(phi1, rho1, chi1, psi1)
+  rho1 <- rho1/sum(phi1, rho1, chi1, psi1)
+  chi1 <- chi1/sum(phi1, rho1, chi1, psi1)
+  psi1 <- psi1/sum(phi1, rho1, chi1, psi1)
+
+  phi2 <- phi2/sum(phi2, rho2, chi2, psi2)
+  rho2 <- rho2/sum(phi2, rho2, chi2, psi2)
+  chi2 <- chi2/sum(phi2, rho2, chi2, psi2)
+  psi2 <- psi2/sum(phi2, rho2, chi2, psi2)
+
+  phi3 <- phi3/sum(phi3, rho3, chi3, psi3)
+  rho3 <- rho3/sum(phi3, rho3, chi3, psi3)
+  chi3 <- chi3/sum(phi3, rho3, chi3, psi3)
+  psi3 <- psi3/sum(phi3, rho3, chi3, psi3)
   
   # Multiply the temporal similarities with corresponding spatial similarity to get a spatiotemporal gradient on each trial, for each condition
   intrusion_weights <- data.frame(matrix(nrow = nrow(data),ncol = n_intrusions))
@@ -678,13 +672,12 @@ simulate_intrusion_cond_model_x <- function(participant, data, P, model_name){
   colnames(intrusion_weights) <- c("weight_1", "weight_2", "weight_3", "weight_4", "weight_5", "weight_6", "weight_7")
   
   target_weight <- 1 - rowSums(intrusion_weights)
-  trial_weights <- cbind(target_weight, intrusion_weights)
-  
-  # Filter out zeroes 
-  if(any(trial_weights < 0)){
-    # print("Invalid: Negative weight")
-    trial_weights[trial_weights < 0] <- 0
+  # Filter out zeroes, set target weight to very small
+  if(any(target_weight < 0)){
+    target_weight[target_weight < 0] <- 1e-7
   }
+  trial_weights <- cbind(target_weight, intrusion_weights)
+  trial_weights <- as.data.frame(t(apply(trial_weights,1, function(x) x/sum(x))))
   
   # Multiply all weights by 1-beta, the non-guessed responses, based on the serial position of the target
   # Allow different betas for different conditions
