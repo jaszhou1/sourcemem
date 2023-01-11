@@ -12,7 +12,7 @@ Rt1 = Data(:,2);
 axes(axhandle(1))
 histogram(Theta1, 50, 'Normalization', 'pdf', 'BinLimits', [-pi,pi], 'FaceColor',grayColor);
 set(gca, 'Xlim', [-pi, pi])
-set(gca, 'Ylim', [0, 2.5])
+set(gca, 'Ylim', [0, 1.5])
 xlabel('Response Error (rad)')
 ylabel('Probability density')
 %subtitle('Accuracy');
@@ -23,10 +23,10 @@ ksdensity(Pred(:,1))
 % RT
 axes(axhandle(2));
 histogram(Rt1, 50, 'Normalization', 'pdf', 'BinLimits', [0,4.5], 'FaceColor',grayColor);
-set(gca, 'Xlim', [0, 4.0])
+set(gca, 'Xlim', [0, 6.0])
 xlabel('Response Time (s)')
 ylabel('Probability density')
-set(gca, 'Ylim', [0, 3.75])
+set(gca, 'Ylim', [0, 2])
 %subtitle('Time');
 hold
 ksdensity(Pred(:,2))
@@ -52,7 +52,8 @@ for i = 1:5
     plot(this_model_qq(:,1), this_model_qq(:,2), model_symbol(i,:))
     hold on
 end
-set(gca, 'Ylim', [0, 3])
+set(gca, 'Ylim', [0, 5.5])
+set(gca, 'Xlim', [0, 2.5])
 xlabel('Absolute Response Error (rad)')
 ylabel('Response Time (s)')
 end
