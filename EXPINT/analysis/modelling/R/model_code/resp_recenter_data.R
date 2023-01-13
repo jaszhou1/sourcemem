@@ -58,6 +58,57 @@ recenter.data <- function(data){
 }
 
 # Different function for simulated dataset, because the indexing is different
+recenter.trial <- function(x){
+  recentered_errors <- data.frame(matrix(ncol=11,nrow=7, 
+                                         dimnames=list(NULL, c('participant', 'cond',
+                                                               'intruding_angle', 'offset', 
+                                                               'lag', 'spatial', 
+                                                               'orthographic', 'semantic',
+                                                               'spatial_bin', 'semantic_bin',
+                                                               'model'))))
+  # This function takes in data for one trial, and calculates the difference between 
+  # the response angle and each non-target angle, along with similarity measures
+  this_response_angle <- as.numeric(x[6])
+  this_target_angle <- as.numeric(x[2])
+  this_intrusions <- as.numeric(x[8:14])
+  temporal <- as.numeric(x[16:22])
+  spatial <- as.numeric(x[23:29])
+  orthographic <- as.numeric(x[30:36])
+  semantic <- 1- as.numeric(x[37:43])
+  for(i in 1:7){
+    recentered_errors[i,1] <- as.integer(x[15])
+    recentered_errors[i,2] <- x[44]
+    recentered_errors[i,3] <- this_intrusions[[i]]
+    recentered_errors[i,4] <- angle_diff(this_response_angle, this_intrusions[[i]])
+    recentered_errors[i,5] <- temporal[[i]]
+    recentered_errors[i,6] <- spatial[[i]] ##Note the "1-", for all others small number
+    # means more similar, while its reverse for
+    # semantic, which is a cosine similarity
+    recentered_errors[i,7] <- orthographic[[i]]
+    recentered_errors[i,8] <- semantic[[i]]
+    # Leave out the bins, for semantics and space, calculate those after the rest have been assembled
+    recentered_errors[i, 11] <- x[53]
+  }
+  return(recentered_errors)
+}
+
+recenter.model2 <- function(sim_data){
+  recentered_errors <- do.call("rbind", apply(sim_data, MARGIN = 1, recenter.trial))
+  # Discretise the spatial and semantic columns for some rough plots
+  n_bins <- 5
+  sem_bins <- quantile(recentered_errors$semantic, seq(0, 1, length =n_bins), na.rm = TRUE)
+  spatial_bins <- quantile(recentered_errors$spatial, seq(0, 1, length = n_bins), na.rm = TRUE)
+  for(i in 1:(n_bins-1)){
+    recentered_errors[(recentered_errors$spatial >= spatial_bins[[i]]&
+                         recentered_errors$spatial <= spatial_bins[[i+1]]),
+                      'spatial_bin'] <- i
+    recentered_errors[(recentered_errors$semantic >= sem_bins[[i]]&
+                         recentered_errors$semantic <= sem_bins[[i+1]]),
+                      'semantic_bin'] <- i
+  }
+  return(recentered_errors)
+}
+
 
 recenter.model <- function(data, model){
   n_intrusions <- 7
