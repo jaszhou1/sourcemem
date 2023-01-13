@@ -131,7 +131,7 @@ for(i in 1:length(models)){
     this_participant_data <- data[data$participant == j,]
     this_Pest <- this_model[j, 4:41]
     this_sim_data <- simulate_intrusion_cond_model_x(j, this_participant_data, this_Pest, model_names[i])
-    this_recentered_data <- recenter.model2(this_sim_data, model_names[i])
+    this_recentered_data <- recenter.model2(this_sim_data)
     sim_data <- rbind(sim_data, this_sim_data)
     recentered_sim_data <- rbind(recentered_sim_data, this_recentered_data)
   }
