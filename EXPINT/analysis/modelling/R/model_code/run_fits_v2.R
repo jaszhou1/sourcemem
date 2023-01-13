@@ -124,7 +124,8 @@ fit_model <- function(data, model, model_name){
 # Simulate model predictions from the estimated parameters (big job because recentering)
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/resp_recenter_data.R")
 
-# model_simulations <- list()
+ model_simulations <- list()
+
 # for(i in 1:length(models)){
 #   this_model <- model_fits[[i]]
 #   this_model_name <- model_names[i]
@@ -136,15 +137,14 @@ source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/resp_recenter_dat
 #   }
 # }
 
+
+cl <- makeForkCluster(10)
+registerDoParallel(cl)
  
 for(i in 1:length(models)){
   this_model <- model_fits[[i]]
   this_model_name <- model_names[i]
-
-  cl <- makeForkCluster((detectCores() - 1))
-  registerDoParallel(cl)
-
-  res = foreach (j = 1:length(participants)) %dopar% {
+  res = foreach (j = 1:length(participants), .combine = rbind) %dopar% {
                    this_participant_data <- data[data$participant == j,]
                    this_Pest <- this_model[j, 4:41]
                    this_sim_data <- simulate_intrusion_cond_model_x(j, this_participant_data, this_Pest, this_model_name)
