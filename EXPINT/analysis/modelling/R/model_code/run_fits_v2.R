@@ -103,7 +103,7 @@ fit_model <- function(data, model, model_name){
   write.csv(res, paste(toString(Sys.Date()), '_', model_name,'.csv', sep =""))
   return(res)
 }
-
+# 
 # model_fits <- list() # Can this be vectorised? Should be first port of call, before parallel looping
 # for(i in 1:length(models)){
 #   this_model_fit <- fit_model(data, models[[i]], model_names[[i]])
@@ -119,27 +119,60 @@ fit_model <- function(data, model, model_name){
 # }
 # AICs[11,] <- colSums(AICs)
 # source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/AIC_weight.R")
-# wAIC <- AIC_weight(AICs, 'wAIC.csv')
+# wAIC <- AIC_weight(AICs, paste(toString(Sys.Date()), 'wAIC.csv', sep =""))
 
 # Simulate model predictions from the estimated parameters (big job because recentering)
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/resp_recenter_data.R")
-model_simulations <- list()
+
+# model_simulations <- list()
+# for(i in 1:length(models)){
+#   this_model <- model_fits[[i]]
+#   this_model_name <- model_names[i]
+#   for(j in 1:length(participants)){
+#     this_participant_data <- data[data$participant == j,]
+#     this_Pest <- this_model[j, 4:41]
+#     this_sim_data <- simulate_intrusion_cond_model_x(j, this_participant_data, this_Pest, this_model_name)
+#     model_simulations <- append(model_simulations, this_sim_data)
+#   }
+# }
+
+ 
 for(i in 1:length(models)){
   this_model <- model_fits[[i]]
   this_model_name <- model_names[i]
-  
+
   cl <- makeForkCluster((detectCores() - 1))
   registerDoParallel(cl)
-  
+
   res = foreach (j = 1:length(participants)) %dopar% {
                    this_participant_data <- data[data$participant == j,]
                    this_Pest <- this_model[j, 4:41]
                    this_sim_data <- simulate_intrusion_cond_model_x(j, this_participant_data, this_Pest, this_model_name)
-                   this_recentered_data <- recenter.model(this_sim_data, this_model_name)
-                   return(list(this_sim_data, this_recentered_data))
-                 }
+                   return(this_sim_data)
+  }
+  res <- as.data.frame(res)
   model_simulations <- append(model_simulations, res)
 }
-save(model_simulations, file = paste(toString(Sys.Date()), '_Preds.RData', sep =""))
+save(model_simulations, file = paste(toString(Sys.Date()), '_preds.RData', sep =""))
 
+
+
+# for(i in 1:length(models)){
+#   this_model <- model_fits[[i]]
+#   this_model_name <- model_names[i]
+#   
+#   cl <- makeForkCluster((detectCores() - 1))
+#   registerDoParallel(cl)
+#   
+#   res = foreach (j = 1:length(participants)) %dopar% {
+#                    this_participant_data <- data[data$participant == j,]
+#                    this_Pest <- this_model[j, 4:41]
+#                    this_sim_data <- simulate_intrusion_cond_model_x(j, this_participant_data, this_Pest, this_model_name)
+#                    this_recentered_data <- recenter.model(this_sim_data, this_model_name)
+#                    return(list(this_sim_data, this_recentered_data))
+#                  }
+#   model_simulations <- append(model_simulations, res)
+# }
+# save(model_simulations, file = paste(toString(Sys.Date()), '_Preds.RData', sep =""))
+# 
 
