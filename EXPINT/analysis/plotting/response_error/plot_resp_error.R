@@ -1,10 +1,11 @@
 library(ggplot2)
 library(ggpubr)
 
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-13_preds.RData")
 # Load simulated datasets
-load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-05_simulated1.RData")
-load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-05_simulated2.RData")
-load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-05_simulated_recenter.RData")
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-13_sim_data.RData")
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/recentered_sim_data.RData")
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/recentered_data.RData")
 data <- read.csv("~/git/sourcemem/EXPINT/data/EXPINT_data.csv")
 data <- data[data$block != -1,]
 # Exclude foils
@@ -12,8 +13,6 @@ data <- data[data$is_stimulus, ]
 # Exclude data with inalid RT
 data <- data[data$valid_RT, ]
 participants <- unique(data$participant)
-
-sim_data <- rbind(sim_data1, sim_data2)
 
 model_names <- unique(sim_data$model)
 
