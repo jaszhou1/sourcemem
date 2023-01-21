@@ -5,8 +5,8 @@
 
 spatial <- function(data){
   # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.
-  #       prec.  guess      intrus.   w.time     w.space   w.orth    w.sem    time asym   d.time              d.space    d.orth    d.sem
-  Sel = c(1, 1,  1, 0, 0,   1, 1, 0,  0, 0, 0,   0, 0, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,   0, 0, 0, 0, 0, 0,   1, 0, 0,  0, 0, 0,  0, 0, 0)
+  #       prec.  guess      intrus.   w.space   w.orth    w.sem    time asym   d.time              d.space    d.orth    d.sem
+  Sel = c(1, 1,  1, 0, 0,   1, 1, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,   0, 0, 0, 0, 0, 0,   1, 0, 0,  0, 0, 0,  0, 0, 0)
   
   # For the fixed parameters (P[Sel == 0], what value should parameter be fixed at? NA will be treated as "same as unrelated condition")
   beta2 <- NA
@@ -15,19 +15,15 @@ spatial <- function(data){
   gamma3 <- NA
   
   # intrusion weights
-  phi1 <- 0
-  phi2 <- NA
-  phi3 <- NA
-  
-  rho1 <- 1 # Spatial weight
-  rho2 <- NA
-  rho3 <- NA
-  
-  chi1 <- 0 # Orthographic weight
+  chi1 <- 0   # Item vs. Context weight
   chi2 <- NA
   chi3 <- NA
   
-  psi1 <- 0 # Semantic weight
+  phi1 <- 1 # Space vs. Time weight
+  phi2 <- NA
+  phi3 <- NA
+  
+  psi1 <- 0 # Semantic vs. Orthographic weight
   psi2 <- NA
   psi3 <- NA
   
@@ -56,8 +52,8 @@ spatial <- function(data){
   upsilon2 <- NA # Decay for semantic orth
   upsilon3 <- NA
   
-  Pfix = c(beta2, beta3, gamma3, phi1, phi2, phi3, rho1, rho2, rho3,
-           chi1, chi2, chi3, psi1, psi2, psi3, tau1, tau2, tau3,
+  Pfix = c(beta2, beta3, gamma3, chi1, chi2, chi3, phi1, phi2, phi3,
+           psi1, psi2, psi3, tau1, tau2, tau3,
            lambda_b1, lambda_f1, lambda_b2, lambda_f2, lambda_b3, lambda_f3,
            zeta2, zeta3, iota1, iota2, iota3, upsilon1, upsilon2, upsilon3)
   
