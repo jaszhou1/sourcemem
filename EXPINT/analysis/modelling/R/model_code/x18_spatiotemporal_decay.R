@@ -63,7 +63,7 @@ spatiotemporal_ortho_decay <- function(data){
   this_fit$optim$aic<-aic
   
   # Assemble estimated parameter vector
-  Pest <- vector(mode = "numeric", length = 38)
+  Pest <- vector(mode = "numeric", length = 35)
   
   Pest[Sel == 1] <- this_fit$optim$bestmem # Estimated parameters
   Pest[Sel == 0] <- Pfix # Fixed parameters

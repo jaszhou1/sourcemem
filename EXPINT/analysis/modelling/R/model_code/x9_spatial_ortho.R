@@ -5,7 +5,7 @@
 spatial_ortho <- function(data){
   # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.
   #       prec.  guess      intrus.   context w   w.spac    w.sem    time asym   d.time              d.space    d.orth    d.sem
-  Sel = c(1, 1,  1, 0, 0,   1, 1, 0,  1, 0, 0,  1, 0, 0,  0, 0, 0,  0, 0, 0,   0, 0, 0, 0, 0, 0,   1, 0, 0,  1, 0, 0,  0, 0, 0)
+  Sel = c(1, 1,  1, 0, 0,   1, 1, 0,  1, 0, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,   0, 0, 0, 0, 0, 0,   1, 0, 0,  1, 0, 0,  0, 0, 0)
   
   # For the fixed parameters (P[Sel == 0], what value should parameter be fixed at? NA will be treated as "same as unrelated condition")
   beta2 <- NA
@@ -67,7 +67,7 @@ spatial_ortho <- function(data){
   this_fit$optim$aic<-aic
   
   # Assemble estimated parameter vector
-  Pest <- vector(mode = "numeric", length = 38)
+  Pest <- vector(mode = "numeric", length = 35)
   
   Pest[Sel == 1] <- this_fit$optim$bestmem # Estimated parameters
   Pest[Sel == 0] <- Pfix # Fixed parameters

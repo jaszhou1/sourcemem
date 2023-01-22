@@ -92,9 +92,9 @@ fit_model <- function(data, model, model_name){
   res = foreach (i = 1:length(participants),
                  .combine = rbind) %dopar% {
                    this.data <- data[data$participant == i,]
-                   optim <- model(this.data)
-                   pest <- optim$bestmem
-                   this_fit <- c(participants[i], optim$bestval, optim$aic, optim$Pest)
+                   fit <- model(this.data)
+                   pest <- fit$bestmem
+                   this_fit <- c(participants[i], fit$bestval, fit$aic, fit$Pest)
                    return(this_fit)
                  }
   res <- as.data.frame(res)

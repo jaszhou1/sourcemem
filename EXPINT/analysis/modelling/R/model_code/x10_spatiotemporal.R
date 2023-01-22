@@ -60,7 +60,7 @@ spatiotemporal <- function(data){
   # Boundaries for estimated parameters. DEoptim will sample uniformly between these bounds
   #          prec1, prec2, beta1, gamma1, gamma2, phi1, lambda_b1, zeta1
   lower <- c(1,     1,     0.1,   0,      0,      0,     0,         0)
-  upper <- c(20,    15,    0.8,   0.5,    0.5,    1,     5,        10)
+  upper <- c(20,    15,    0.8,   0.5,    0.7,    1,     5,        10)
   
   # Optimise
   this_fit <- DEoptim(intrusion_cond_model_x, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
@@ -70,7 +70,7 @@ spatiotemporal <- function(data){
   this_fit$optim$aic<-aic
   
   # Assemble estimated parameter vector
-  Pest <- vector(mode = "numeric", length = 38)
+  Pest <- vector(mode = "numeric", length = 35)
   
   Pest[Sel == 1] <- this_fit$optim$bestmem # Estimated parameters
   Pest[Sel == 0] <- Pfix # Fixed parameters
