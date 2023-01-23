@@ -7,7 +7,7 @@
 % with the RT distribution." <- demonstrate this
 
 
-load('exp2_data_cutoff.mat')
+load('exp1_data.mat')
 close all
 % Participant 2 is probably the best example of a case where the simple
 % response error model does a good job of capturing the response error
@@ -15,17 +15,17 @@ close all
 
 this_data = vertcat(data{:});
 
-v1_targ = 6;
+v1_targ = 2;
 v2_targ = 0;
-v1_int = 2;
+v1_int = 1;
 v2_int = 0;
-eta1_targ = 5;
+eta1_targ = 1;
 eta2_targ = 0.01;
-eta1_int = 1;
-eta2_int = 0.5;
-a_targ = 3;
+eta1_int = 0.5;
+eta2_int = 0.01;
+a_targ = 0.9;
 a_guess = 1.06;
-gamma = 0.25;
+gamma = 0.05;
 beta = 0;
 kappa = 0.59;
 lambda_b = 1.11;

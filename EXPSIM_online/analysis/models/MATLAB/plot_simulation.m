@@ -23,7 +23,7 @@ ksdensity(Pred(:,1))
 % RT
 axes(axhandle(2));
 histogram(Rt1, 50, 'Normalization', 'pdf', 'BinLimits', [0,4.5], 'FaceColor',grayColor);
-set(gca, 'Xlim', [0, 6.0])
+set(gca, 'Xlim', [0, 5.0])
 xlabel('Response Time (s)')
 ylabel('Probability density')
 set(gca, 'Ylim', [0, 2])
