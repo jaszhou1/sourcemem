@@ -45,56 +45,64 @@ P(Sel==0) = Pfix;
 % save Ptemp
 
 % Drift norms
-v1_targ_1 = P(1);
-v2_targ_1 = P(2);
-v1_int_1 = P(3);
-v2_int_1 = P(4);
-
-v1_targ_2 = P(5);
-v2_targ_2 = P(6);
-v1_int_2 = P(7);
-v2_int_2 = P(8);
-
-v1_targ_3 = P(9);
-v2_targ_3 = P(10);
-v1_int_3 = P(11);
-v2_int_3 = P(12);
+v1_targ = P(1);
+v2_targ = P(2);
+v1_int = P(3);
+v2_int = P(4);
 
 % Trial-trial drift variability
-eta1_targ = P(13);
-eta2_targ = P(14);
-eta1_int = P(15);
-eta2_int = P(16);
+eta1_targ = P(9);
+eta2_targ = P(10);
+eta1_int = P(11);
+eta2_int = P(12);
+
 % Decision Criteria
-a_targ = P(17);
+a_targ = P(13);
 a_int = a_targ;
-a_guess = P(18);
+a_guess = P(14);
+
 % Component Proportions
-beta1 = P(19);
-beta2 = P(20);
-beta3 = P(21);
-gamma1 = P(22);
-gamma2 = P(23);
-gamma3 = P(24);
-% beta_primacy = P(11);
-% beta_recency = P(12);
+beta1 = P(15);
+beta2 = P(16);
+
+gamma1 = P(17);
+gamma2 = P(18);
+
+% Intrusion similarity rating weights
+chi1 = P(19);
+chi2 = P(20);
+
+phi1 = P(21);
+phi2 = P(22);
+
+psi1 = P(23);
+psi2 = P(24);
+
 % Temporal Gradient
-tau = P(25); %Weight forwards vs backwards intrusion decay slope
-lambda_b = P(26); % Decay of the backwards slope
-lambda_f = P(27); % Decay of the forwards slope
-zeta = P(28); %precision for Shepard similarity function (perceived spatial distance)
-rho = P(29); % Spatial component weight in intrusion probability calculation
-chi1 = P(30); % Item v Context, Low
-chi2 = P(31); % Item v Context, High
-psi1 = P(32); % Semantic v Ortho, Low
-psi2 = P(33); % Semantic v Ortho, High
-iota1 = P(34); % Ortho decay, Low
-iota2 = P(35); % Ortho decay, High
-upsilon1 = P(36); % Semantic decay, Low
-upsilon2 = P(37); % Semantic decay, High
+tau1 = P(25); %Weight forwards vs backwards intrusion decay slope
+tau2 = P(26);
+
+lambda_b1 = P(27);
+lambda_f1 = P(28);
+
+lambda_b2 = P(29);
+lambda_f2 = P(30);
+
+% Spatial gradient
+zeta1 = P(31); %precision for Shepard similarity function (perceived spatial distance)
+zeta2 = P(32);
+
+% Orthographic gradient 
+iota1 = P(33); % Ortho decay, Low
+iota2 = P(34); % Ortho decay, High
+
+% Semantic gradient
+upsilon1 = P(35); % Semantic decay, Low
+upsilon2 = P(36); % Semantic decay, High
+
 % Nondecision Time
-ter = P(38);
-st = P(39);
+ter = P(37);
+st = P(38);
 
 % If certain parameters are fed in as 0, assume I intend for them to be
 % equal across conditions, instead of actually being 0.
@@ -109,50 +117,60 @@ st = P(39);
 % in the model code like Philip usually does is so I can set the lowerbound
 % to 0 when I want parameters to be equal across conditions, but be higher
 % in the freer version of the model.
- if v1_targ_2 == 0
-    v1_targ_2 = v1_targ_1;
-    v1_targ_3 = v1_targ_1;
-end
-
-if v2_targ_2 == 0
-    v2_targ_2 = v2_targ_1;
-    v2_targ_3 = v2_targ_1;
-end
-
-if v1_int_2 == 0
-    v1_int_2 = v1_int_1;
-    v1_int_3 = v1_int_1;
-end
-
-if v2_int_2 == 0
-    v2_int_2 = v2_int_1;
-    v2_int_3 = v2_int_1;
-end
-
-if beta2 == 0
+if isnan(beta2)
     beta2 = beta1;
-    beta3 = beta1;
+    %beta3 = beta1;
 end
 
-if gamma2 == 0
+if isnan(gamma2)
     gamma2 = gamma1;
-    gamma3 = gamma1;
+    %gamma3 = gamma1;
 end
 
-if chi2 == 0
+if isnan(chi2)
     chi2 = chi1;
+end
+
+if isnan(phi2)
+    phi2 = phi1;
+end
+
+if isnan(psi2)
+    psi2 = psi1;
+end
+
+if isnan(tau2)
+    tau2 = tau1;
+end
+
+if isnan(lambda_f1)
+    lambda_f1 = lambda_b1;
+end
+
+if isnan(lambda_b2)
+    lambda_b2 = lambda_b1;
+end
+
+if isnan(lambda_f2)
+    lambda_f1 = lambda_f2;
+end
+
+if isnan(zeta2)
+    zeta2 = zeta1;
+end
+
+if isnan(iota2)
     iota2 = iota1;
 end
 
-if psi2 == 0
-    psi2 = psi1;
+if isnan(upsilon2)
     upsilon2 = upsilon1;
 end
 
 % Check that the weights make sense for conditions
 % i.e., I expect the weight for semantic similarity to be higher in the
 % semantic condition, so I will constrain the psi2 > psi1.
-if psi1 > psi2 || chi1 > chi2
+if v1_int > v1_targ
     ll = 1e7;
     aic = 0;
     penalty = 1e7;
@@ -208,38 +226,41 @@ for cond = 1:3
     % components.
 
     if cond == 1 % All parameters base value
-        v1_targ = v1_targ_1;
-        v2_targ = v2_targ_1;
-        v1_int = v1_int_1;
-        v2_int = v2_int_1;
         beta = beta1;
         gamma = gamma1;
         chi = chi1;
+        phi = phi2;
         psi = psi1;
+        tau = tau1;
+        lambda_b = lambda_b1;
+        lambda_f = lambda_f1;
+        zeta = zeta1;
         iota = iota1;
         upsilon = upsilon1;
     elseif cond == 2 % ORTHOGRAPHIC CONDITION
-        v1_targ = v1_targ_2;
-        v2_targ = v2_targ_2;
-        v1_int = v1_int_2;
-        v2_int = v2_int_2;
-        beta = beta2;
-        gamma = gamma2;
-        chi = chi2; % Higher item than base
-        psi = psi1; % Low semantic
-        iota = iota2; % Different orth decay to base
-        upsilon = upsilon1; % but same semantic decay
-    elseif cond == 3 % SEMANTIC CONDITION
-        v1_targ = v1_targ_3;
-        v2_targ = v2_targ_3;
-        v1_int = v1_int_3;
-        v2_int = v2_int_3;
-        beta = beta3;
-        gamma = gamma3;
-        chi = chi2; % Higher item than base
-        psi = psi2; % High semantic
-        iota = iota1; % Same orth decay as base
-        upsilon = upsilon2; % different semantic decay
+        beta = beta1;
+        gamma = gamma1;
+        chi = chi1;
+        phi = phi2;
+        psi = psi1;
+        tau = tau1;
+        lambda_b = lambda_b1;
+        lambda_f = lambda_f1;
+        zeta = zeta1;
+        iota = iota1;
+        upsilon = upsilon1;
+    elseif cond == 3 % SEMANTIC CONDITION <-  Assume this is the same as unrelated, based on response error models.
+        beta = beta1;
+        gamma = gamma1;
+        chi = chi1;
+        phi = phi2;
+        psi = psi1;
+        tau = tau1;
+        lambda_b = lambda_b1;
+        lambda_f = lambda_f1;
+        zeta = zeta1;
+        iota = iota1;
+        upsilon = upsilon1;
     end
 
     %% On-target retrieval density sturcture
@@ -269,11 +290,11 @@ for cond = 1:3
     temporal_similarities = reshape(temporal_similarities, size(lags));
 
     % Spatial similarity
-    spatial_distances = this_data(:,20:26);
+    spatial_distances = this_data(:,20:26)./max(this_data(:,20:26));
     spatial_similarities = shepard(spatial_distances, zeta);
 
     % Orthographic similarity
-    orthographic_distances = this_data(:, 27:33);
+    orthographic_distances = this_data(:, 27:33)./max(this_data(:,27:33));
     orthographic_similarities = shepard(orthographic_distances, iota);
 
     % Semantic similarity
@@ -286,7 +307,7 @@ for cond = 1:3
     orthographic_similarities = orthographic_similarities./(max(orthographic_similarities(:)));
     semantic_similarities = semantic_similarities./(max(semantic_similarities(:)));
 
-    intrusion_similarities = ((temporal_similarities.^(1-rho)) .* (spatial_similarities.^rho)).^(1-chi)...
+    intrusion_similarities = ((temporal_similarities.^(1-phi)) .* (spatial_similarities.^phi)).^(1-chi)...
         .* ((orthographic_similarities.^(1-psi)) .* (semantic_similarities.^psi)).^chi;
 
     % Scale spatiotemporal similarity values by gamma, the overall intrusion
