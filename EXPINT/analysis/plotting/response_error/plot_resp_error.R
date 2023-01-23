@@ -1,7 +1,7 @@
 library(ggplot2)
 library(ggpubr)
 
-load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-13_preds.RData")
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-23_fits.RData")
 # Load simulated datasets
 load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-13_sim_data.RData")
 load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/recentered_sim_data.RData")

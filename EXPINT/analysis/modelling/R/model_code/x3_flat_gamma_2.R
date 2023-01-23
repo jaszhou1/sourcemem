@@ -5,8 +5,8 @@
 
 flat_gamma2 <- function(data){
   # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.
-  #       prec.  guess      intrus.   w.time     w.space   w.orth    w.sem    time asym   d.time              d.space    d.orth    d.sem
-  Sel = c(1, 1,  1, 0, 0,   1, 1, 0,  0, 0, 0,   0, 0, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,    0, 0, 0, 0, 0, 0,   0, 0, 0,  0, 0, 0,  0, 0, 0)
+  #       prec.  guess      intrus.  w.space   w.orth    w.sem    time asym   d.time              d.space    d.orth    d.sem
+  Sel = c(1, 1,  1, 0, 0,   1, 1, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,  0, 0, 0,    0, 0, 0, 0, 0, 0,   0, 0, 0,  0, 0, 0,  0, 0, 0)
   
   # For the fixed parameters (P[Sel == 0], what value should parameter be fixed at? NA will be treated as "same as unrelated condition")
   # For the fixed parameters (P[Sel == 0], what value should parameter be fixed at? NA will be treated as "same as unrelated condition")

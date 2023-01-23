@@ -658,7 +658,7 @@ simulate_intrusion_cond_model_x <- function(participant, data, P, model_name){
   this_data <- cbind(this_data, block_angles, trial_weights, similarities, model_name)
   this_data <- this_data[rep(seq_len(nrow(this_data)), each = nSims), ]
   # Simulate each trial one by one
-  sim_data <- do.call("rbind", apply(this_data, MARGIN = 1, simulate_trial, prec1, prec2, model_name))
+  sim_data <- do.call("rbind", apply(this_data, MARGIN = 1, simulate_trial, kappa1, kappa2, model_name))
   sim_data <- as.data.frame(sim_data)
   
   return(sim_data)

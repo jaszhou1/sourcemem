@@ -35,18 +35,18 @@ simulate_data <- function(P){# Load in and filter the data
 }
 
 # Specify some parameter values
-prec1 <- 20
-prec2 <- 10
-beta1 <- 0.3
+kappa1 <- 12.6
+kappa2 <- 10.76
+beta1 <- 0.4
 beta2 <- NA
 beta3 <- NA
-gamma1 <- 0.5
-gamma2 <- NA
+gamma1 <- 0.2
+gamma2 <- 0.12
 gamma3 <- NA
 # intrusion weights
 
-chi1 <- 0.2 # Item weight
-chi2 <- NA
+chi1 <- 0.45 # Item weight
+chi2 <- 0.45
 chi3 <- NA
 
 phi1 <- 0 # Space weight
@@ -62,8 +62,8 @@ tau1 <- 0.5 # Temporal asymmetry (tau >0.5 means forwards are more similar)
 tau2 <- NA
 tau3 <- NA
 
-lambda_b1 <- 5 # Similarity decay of backwards temporal lag
-lambda_f1 <- 5 # Similarity decay of forwards temporal lag
+lambda_b1 <- 1.74 # Similarity decay of backwards temporal lag
+lambda_f1 <- NA # Similarity decay of forwards temporal lag
 
 lambda_b2 <- NA # Similarity decay of backwards temporal lag
 lambda_f2 <- NA # Similarity decay of forwards temporal lag
@@ -71,20 +71,20 @@ lambda_f2 <- NA # Similarity decay of forwards temporal lag
 lambda_b3 <- NA # Similarity decay of backwards temporal lag
 lambda_f3 <- NA # Similarity decay of forwards temporal lag
 
-zeta1 <- 0.3 # Similarity decay of spatial similarity
+zeta1 <- 0 # Similarity decay of spatial similarity
 zeta2 <- NA
 zeta3 <- NA
 
-iota1 <- 20 # Similarity decay of orthographic component unrelated
+iota1 <- 5.75 # Similarity decay of orthographic component unrelated
 iota2 <- NA # Decay for orthography orthographic
 iota3 <- NA
 
-upsilon1 <- 1 # Similarity decay of semantic component unrelated
+upsilon1 <- 0 # Similarity decay of semantic component unrelated
 upsilon2 <- NA # Decay for semantic orth
 upsilon3 <- NA
 
 
-P = c(prec1, prec2, beta1, beta2, beta3, gamma1, gamma2, gamma3, chi1, chi2, chi3,
+P = c(kappa1, kappa2, beta1, beta2, beta3, gamma1, gamma2, gamma3, chi1, chi2, chi3,
        phi1, phi2, phi3, psi1, psi2, psi3, tau1, tau2, tau3, 
        lambda_b1, lambda_f1, lambda_b2, lambda_f2, lambda_b3, lambda_f3, zeta1,
        zeta2, zeta3, iota1, iota2, iota3, upsilon1, upsilon2, upsilon3) 
@@ -92,6 +92,13 @@ P = c(prec1, prec2, beta1, beta2, beta3, gamma1, gamma2, gamma3, chi1, chi2, chi
 sim1 <- simulate_data(P)
 
 ## Plotting functions
+
+plot.response.error <- function(data, model){
+  plot <- ggplot() +
+    geom_histogram(data = data, aes(x = source_error, y = ..density..), colour = 1, fill = 'white', bins = 50) +
+    geom_histogram(data = model, aes(x = simulated_error, y = ..density..), fill = 'red', bins = 50, alpha = 0.2)
+  return(plot)
+}
 
 plot.orthographic.recenter <- function(data, model){
   model <- model[model$orthographic < 5,]
