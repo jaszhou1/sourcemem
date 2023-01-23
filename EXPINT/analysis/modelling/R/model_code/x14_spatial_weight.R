@@ -56,7 +56,7 @@ spatial_ortho_weight <- function(data){
   # Boundaries for estimated parameters. DEoptim will sample uniformly between these bounds
   #          prec1, prec2, beta1, gamma1, gamma2, chi1, chi2, zeta, iota1
   lower <- c(1,     1,     0.1,   0,      0,        0,   0,    0,         0)
-  upper <- c(20,    15,    0.8,   0.5,    0.5,      1,   1,    10,        20)
+  upper <- c(50,    35,    0.8,   0.8,    0.8,      1,   1,    10,        20)
   
   # Optimise
   this_fit <- DEoptim(intrusion_cond_model_x, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
