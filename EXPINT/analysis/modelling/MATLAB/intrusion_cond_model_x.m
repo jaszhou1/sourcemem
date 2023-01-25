@@ -75,34 +75,34 @@ chi2 = P(16);
 phi1 = P(17);
 phi2 = P(18);
 
-psi1 = P(18);
-psi2 = P(19);
+psi1 = P(19);
+psi2 = P(20);
 
 % Temporal Gradient
-tau1 = P(20); %Weight forwards vs backwards intrusion decay slope
-tau2 = P(21);
+tau1 = P(21); %Weight forwards vs backwards intrusion decay slope
+tau2 = P(22);
 
-lambda_b1 = P(22);
-lambda_f1 = P(23);
+lambda_b1 = P(23);
+lambda_f1 = P(24);
 
-lambda_b2 = P(24);
-lambda_f2 = P(25);
+lambda_b2 = P(25);
+lambda_f2 = P(26);
 
 % Spatial gradient
-zeta1 = P(26); %precision for Shepard similarity function (perceived spatial distance)
-zeta2 = P(27);
+zeta1 = P(27); %precision for Shepard similarity function (perceived spatial distance)
+zeta2 = P(28);
 
 % Orthographic gradient 
-iota1 = P(33); % Ortho decay, Low
-iota2 = P(34); % Ortho decay, High
+iota1 = P(29); % Ortho decay, Low
+iota2 = P(30); % Ortho decay, High
 
 % Semantic gradient
-upsilon1 = P(35); % Semantic decay, Low
-upsilon2 = P(36); % Semantic decay, High
+upsilon1 = P(31); % Semantic decay, Low
+upsilon2 = P(32); % Semantic decay, High
 
 % Nondecision Time
-ter = P(37);
-st = P(38);
+ter = P(33);
+st = P(34);
 
 % If certain parameters are fed in as 0, assume I intend for them to be
 % equal across conditions, instead of actually being 0.
@@ -238,17 +238,17 @@ for cond = 1:3
         iota = iota1;
         upsilon = upsilon1;
     elseif cond == 2 % ORTHOGRAPHIC CONDITION
-        beta = beta1;
-        gamma = gamma1;
-        chi = chi1;
+        beta = beta2;
+        gamma = gamma2;
+        chi = chi2;
         phi = phi2;
-        psi = psi1;
-        tau = tau1;
-        lambda_b = lambda_b1;
-        lambda_f = lambda_f1;
-        zeta = zeta1;
-        iota = iota1;
-        upsilon = upsilon1;
+        psi = psi2;
+        tau = tau2;
+        lambda_b = lambda_b2;
+        lambda_f = lambda_f2;
+        zeta = zeta2;
+        iota = iota2;
+        upsilon = upsilon2;
     elseif cond == 3 % SEMANTIC CONDITION <-  Assume this is the same as unrelated, based on response error models.
         beta = beta1;
         gamma = gamma1;

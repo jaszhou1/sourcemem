@@ -72,18 +72,32 @@ source('x16_temporal_decay.R')
 source('x17_spatial_decay.R')
 source('x18_spatiotemporal_decay.R')
 
-models <- c(flat_intrusion, flat_gamma1, flat_gamma2, temporal, 
+# models <- c(flat_intrusion, flat_gamma1, flat_gamma2, temporal, 
+#             asym_temporal, spatial, ortho, temporal_ortho,
+#             spatial_ortho, spatiotemporal, spatiotemporal_ortho,
+#             four_factor, temporal_ortho_weight, spatial_ortho_weight,
+#             spatiotemporal_ortho_weight, temporal_ortho_decay, spatial_ortho_decay,
+#             spatiotemporal_ortho_decay)
+# 
+# model_names <- c('flat_intrusion', 'flat_gamma1', 'flat_gamma2', 'temporal',
+#                  'asym_temporal', 'spatial', 'ortho', 'temporal_ortho',
+#                  'spatial_ortho', 'spatiotemporal', 'spatiotemporal_ortho',
+#                  'four_factor', 'temporal_weight', 'spatial_weight',
+#                  'spatiotemporal_weight', 'temporal_decay', 'spatial_decay', 
+#                  'spatiotemporal_decay')
+
+models <- c(temporal,
             asym_temporal, spatial, ortho, temporal_ortho,
             spatial_ortho, spatiotemporal, spatiotemporal_ortho,
             four_factor, temporal_ortho_weight, spatial_ortho_weight,
             spatiotemporal_ortho_weight, temporal_ortho_decay, spatial_ortho_decay,
             spatiotemporal_ortho_decay)
 
-model_names <- c('flat_intrusion', 'flat_gamma1', 'flat_gamma2', 'temporal',
+model_names <- c('temporal',
                  'asym_temporal', 'spatial', 'ortho', 'temporal_ortho',
                  'spatial_ortho', 'spatiotemporal', 'spatiotemporal_ortho',
                  'four_factor', 'temporal_weight', 'spatial_weight',
-                 'spatiotemporal_weight', 'temporal_decay', 'spatial_decay', 
+                 'spatiotemporal_weight', 'temporal_decay', 'spatial_decay',
                  'spatiotemporal_decay')
 
 fit_model <- function(data, model, model_name){
@@ -138,6 +152,7 @@ for(i in 1:length(models)){
 }
 
 recentered_data <- recenter.data(data)
+recentered_data$model <- 'data'
 recentered_sim_data <- rbind(recentered_sim_data, recentered_data)
 
 # Bundle everything up and save output
