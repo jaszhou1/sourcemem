@@ -60,7 +60,7 @@ ortho <- function(data){
   # Boundaries for estimated parameters. DEoptim will sample uniformly between these bounds
   #          prec1, prec2, beta1, beta2, gamma1, gamma2, iota1
   lower <- c(1,  1,  0.1, 0.1, 0, 0, 0)
-  upper <- c(20, 15, 0.8, 0.8, 0.7, 0.7, 20)
+  upper <- c(30, 25, 0.8, 0.8, 0.7, 0.7, 20)
   
   # Optimise
   this_fit <- DEoptim(intrusion_cond_model_x, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)

@@ -1,10 +1,10 @@
 library(ggplot2)
 library(ggpubr)
 
-load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-23_fits.RData")
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-26_fits.RData")
 # Load simulated datasets
-load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-13_sim_data.RData")
-load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/recentered_sim_data.RData")
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-26_sim_data.RData")
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-26_simulated_recenter.RData")
 load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/recentered_data.RData")
 data <- read.csv("~/git/sourcemem/EXPINT/data/EXPINT_data.csv")
 data <- data[data$block != -1,]
@@ -26,7 +26,7 @@ plot.response.error <- function(data, model, model_list, participant){
   }
   ggplot() +
     geom_histogram(data = data, aes(x = source_error, y = ..density..), colour = 1, fill = 'white', bins = 30) +
-    geom_density(data = model, aes(x = simulated_error, color = model), adjust = 1) +
+    geom_density(data = model, aes(x = simulated_error, color = model_name), adjust = 1) +
     facet_wrap(~condition)
   filename <- sprintf('response_error_%s.png', participant)
   ggsave(filename, plot = last_plot(), width = 80, height = 60, units = "cm")
