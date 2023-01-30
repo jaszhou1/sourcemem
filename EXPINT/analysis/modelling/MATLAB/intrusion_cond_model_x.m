@@ -11,7 +11,7 @@ errmg4 = 'Negative trial weight, exiting...';
 
 %% Global variables
 
-np = 39; % Number of parameters
+np = 34; % Number of parameters
 epsx = 1e-9; % Small values to substitute for zeroes
 cden = 0.05;  % Contaminant density.
 tmax = 5.1; % Maximum response time
@@ -92,7 +92,7 @@ lambda_f2 = P(26);
 zeta1 = P(27); %precision for Shepard similarity function (perceived spatial distance)
 zeta2 = P(28);
 
-% Orthographic gradient 
+% Orthographic gradient
 iota1 = P(29); % Ortho decay, Low
 iota2 = P(30); % Ortho decay, High
 
@@ -152,7 +152,7 @@ if isnan(lambda_b2)
 end
 
 if isnan(lambda_f2)
-    lambda_f1 = lambda_f2;
+    lambda_f2 = lambda_f1;
 end
 
 if isnan(zeta2)
@@ -267,27 +267,19 @@ for cond = 1:3
     P_targ = [v1_targ, v2_targ, eta1_targ, eta2_targ, sigma, a_targ];
     [t, Gt_target, theta] = vdcircle3x(P_targ, nw, h, tmax, badix);
 
-    %% Guess 
+    %% Guess
     P_guess = [0, 0, 0, 0, sigma, a_guess];
     [~, Gt_guess, ~] = vdcircle3x(P_guess, nw, h, tmax, badix);
     %% Intrusion
 
-    % Raw temporal similarity values from the lags -9 to 9, skipping 0 (in a
-    % list of 10)
-    backwards_similarity = (1-tau)*exp(-lambda_b*(abs(-num_intrusions:-1)));
-    forwards_similarity = tau*exp(-lambda_f*(abs(1:num_intrusions)));
-
-    % Concatenate, and normalise
-    temporal_similarity_values = [backwards_similarity, forwards_similarity];
-    temporal_similarity_values = (temporal_similarity_values/sum(temporal_similarity_values))';
-
     % Replace all raw lags with the corresponding normalised temporal
     % similarity
-    lags = this_data(:,13:19);
-    [lag_val, ~, lag_index] = unique(lags);
+    lags = this_data(:,13:19)/7;
 
-    temporal_similarities = temporal_similarity_values(lag_index);
-    temporal_similarities = reshape(temporal_similarities, size(lags));
+    lags(lags > 0) = tau * shepard(lags(lags > 0), lambda_f);
+    lags(lags < 0) = (1 - tau) * shepard(lags(lags < 0), lambda_b);
+
+    temporal_similarities = lags;
 
     % Spatial similarity
     spatial_distances = this_data(:,20:26)./max(this_data(:,20:26));
@@ -316,6 +308,8 @@ for cond = 1:3
 
     target_weights = 1- sum(intrusion_similarities,2);
     weights = horzcat(target_weights, intrusion_similarities) * (1-beta);
+    weights(weights < 0) = epsx;
+
     guess_weights = 1- sum(weights,2);
     weights = horzcat(weights, guess_weights);
 
@@ -432,5 +426,5 @@ aic = 2 * ll + 2 * sum(Sel);
 end
 
 function [similarity] = shepard(distance, k)
-similarity = exp(-k * distance);
+similarity = exp(-k * abs(distance));
 end

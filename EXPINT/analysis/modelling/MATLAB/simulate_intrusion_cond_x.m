@@ -1,4 +1,4 @@
-function[simulated_data] = simulate_full_model(data, pest, participant)
+function[simulated_data] = simulate_intrusion_cond_x(data, pest, participant)
 %% Error Messages
 name = 'SIMULATE_FULL_MODEL: ';
 errmg1 = 'Incorrect number of parameters, exiting...';
@@ -229,6 +229,8 @@ for cond = 1:3
 
     target_weights = 1- sum(intrusion_similarities,2);
     weights = horzcat(target_weights, intrusion_similarities) * (1-beta);
+    weights(weights < 0) = 1e-9;
+
     guess_weights = 1- sum(weights,2);
     weights = horzcat(weights, guess_weights);
 
