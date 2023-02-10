@@ -35,18 +35,18 @@ simulate_data <- function(P){# Load in and filter the data
 }
 
 # Specify some parameter values
-kappa1 <- 12.6
-kappa2 <- 10.76
+kappa1 <- 18
+kappa2 <- 17.76
 beta1 <- 0.4
 beta2 <- NA
 beta3 <- NA
-gamma1 <- 0.2
-gamma2 <- 0.12
+gamma1 <- 0.3
+gamma2 <- 0.13
 gamma3 <- NA
 # intrusion weights
 
-chi1 <- 0.45 # Item weight
-chi2 <- 0.45
+chi1 <- 0.38 # Item weight
+chi2 <- 0.35
 chi3 <- NA
 
 phi1 <- 0 # Space weight
@@ -62,7 +62,7 @@ tau1 <- 0.5 # Temporal asymmetry (tau >0.5 means forwards are more similar)
 tau2 <- NA
 tau3 <- NA
 
-lambda_b1 <- 1.74 # Similarity decay of backwards temporal lag
+lambda_b1 <- 1.6 # Similarity decay of backwards temporal lag
 lambda_f1 <- NA # Similarity decay of forwards temporal lag
 
 lambda_b2 <- NA # Similarity decay of backwards temporal lag
@@ -71,11 +71,11 @@ lambda_f2 <- NA # Similarity decay of forwards temporal lag
 lambda_b3 <- NA # Similarity decay of backwards temporal lag
 lambda_f3 <- NA # Similarity decay of forwards temporal lag
 
-zeta1 <- 0 # Similarity decay of spatial similarity
+zeta1 <- 2 # Similarity decay of spatial similarity
 zeta2 <- NA
 zeta3 <- NA
 
-iota1 <- 5.75 # Similarity decay of orthographic component unrelated
+iota1 <- 9.5 # Similarity decay of orthographic component unrelated
 iota2 <- NA # Decay for orthography orthographic
 iota3 <- NA
 
