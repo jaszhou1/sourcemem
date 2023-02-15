@@ -25,10 +25,10 @@ a_guess = 0.5; %10
 
 % Component Proportions
 beta1 = 0.4; % 11
-beta2 = NaN; % 12
+beta2 = 0.4; % 12
 
-gamma1 = 0.2; % 13
-gamma2 = 0.3; % 14
+gamma1 = 0.1; % 13
+gamma2 = 0.1; % 14
 
 % Intrusion similarity rating weights
 chi1 = 1; % 15

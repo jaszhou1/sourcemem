@@ -25,7 +25,7 @@ a_guess = 0.5; %10
 
 % Component Proportions
 beta1 = 0.4; % 11
-beta2 = NaN; % 12
+beta2 = 0.4; % 12
 
 gamma1 = 0.2; % 13
 gamma2 = 0.3; % 14

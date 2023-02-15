@@ -166,11 +166,42 @@ parfor (i = 1:n_participants, num_workers)
         end
     end
 end
+filename = [datestr(now,'yyyy_mm_dd_HH'),'_temp'];
+save(filename)
+
+%% Some models without orthography component, just a difference between conditions in guess
+%Spatioemporal (Weight)
+spatiotemp = cell(n_participants,4);
+
+parfor (i = 1:n_participants, num_workers)
+    % Initial log likelihood value, very large. 
+    ll = 1e7;
+    % Run each participant nrun times
+    this_fit = cell(1,4);
+    for j = 1:n_runs
+        this_participant_data = data(i,:);
+        [ll_new, aic, pest, pest_penalty] = fit_spatiotemporal_weight_model(this_participant_data);
+        % If this ll is better than the last one, replace it in the saved
+        % structure
+        if (ll_new < ll)
+            % Double fit, call fminsearch again, but use the best parameter
+            % estimates as starting points
+            [ll_new, aic, pest, pest_penalty] = fit_spatiotemporal_weight_model(this_participant_data, pest);
+            ll = ll_new;
+            this_fit{1} = ll;
+            this_fit{2} = aic;
+            this_fit{3} = pest;
+            this_fit{4} = pest_penalty;
+            spatiotemp(i,:) = this_fit;
+        end
+    end
+end
+
 filename = [datestr(now,'yyyy_mm_dd_HH'),'_fits'];
 save(filename)
 
 %% Simulation of the fitted models.
-header_line = 'participant, model_name, AIC, v1t_1, v2t_1,  v1i_1,  v2i_1,  v1t_2, v2t_2,  v1i_2,  v2i_2, v1t_3, v2t_3,  v1i_3,  v2i_3,         eta1_t, eta2_t, eta1_i, eta2_i,       at,  ag,    beta1,  beta2,  beta3,      gamma1, gamma2,  gamma3,     tau,  l_b,   l_f,   zeta,  rho,   chi1,     chi2,      psi1,   psi2,    iota1,  iota2,  upsilon1,   upsilon2,     Ter,    st';
+header_line = 'participant, model_name, AIC, v1_targ, v2_targ, v1_int, v2_int, eta1_targ, eta2_targ, eta1_int, eta2_int, a_targ, a_guess, beta1, beta2, gamma1, gamma2, chi1, chi2, phi1, phi2, psi1, psi2, tau1, tau2,  lambda_b1, lambda_f1, lambda_b2, lambda_f2, zeta1, zeta2, iota1, iota2, uspsilon1, upsilon2,  ter, st';
 
 sim_ortho = [];
  for i = 1:10
@@ -221,4 +252,14 @@ sim_spatiotemp_ortho_d = [];
 
 filename = [datestr(now,'yyyy_mm_dd_HH'),'_pest_spatiotemp_ortho_d.csv'];
 param_to_csv(filename, 1:n_participants, spatiotemp_ortho_d, 'Spatiotemporal-Orthographic-Decay', header_line);
+
+sim_spatiotemp = [];
+ for i = 1:10
+     this_sim = simulate_intrusion_cond_x(data(i,:), spatiotemp{i,3}, i);
+     sim_spatiotemp = vertcat(sim_spatiotemp, this_sim);
+ end
+ csvwrite('sim_spatiotemp.csv', sim_spatiotemp)
+
+filename = [datestr(now,'yyyy_mm_dd_HH'),'_pest_spatiotemp.csv'];
+param_to_csv(filename, 1:n_participants, spatiotemp, 'Spatiotemporal', header_line);
 

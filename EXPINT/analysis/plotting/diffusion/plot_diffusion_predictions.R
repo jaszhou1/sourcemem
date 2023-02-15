@@ -41,10 +41,16 @@ participants <- unique(data$participant)
 conds <- unique(data$condition)
 
 ## Read in simulated data
-saturated <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_saturated.csv")
-spatiotemporal <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_spatiotemporal.csv")
-saturated[,50] <- 'saturated'
-spatiotemporal[,50] <- 'spatiotemporal'
+ortho <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/sim_ortho.csv")
+temp_w <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/sim_temp_ortho_w.csv")
+temp_d <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/sim_temp_ortho_d.csv")
+spatiotemp_w <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/sim_spatiotemp_ortho_w.csv")
+spatiotemp_d <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/sim_spatiotemp_ortho_d.csv")
+ortho[,50] <- 'ortho'
+temp_w[,50] <- 'temp_w'
+temp_d[,50] <- 'temp_d'
+spatiotemp_w[,50] <- 'spatiotemp_w'
+spatiotemp_d[,50] <- 'spatiotemp_d'
 
 col.names <- c('error', 'rt', 'resp_angle', 'targ_angle', 'trial_number',
                'offset_1', 'offset_2', 'offset_3', 'offset_4', 'offset_5',
@@ -61,10 +67,13 @@ col.names <- c('error', 'rt', 'resp_angle', 'targ_angle', 'trial_number',
                'angle_6', 'angle_7',
                'cond', 'participant', 'model')
 
-colnames(saturated) <- col.names
-colnames(spatiotemporal) <- col.names
+colnames(ortho) <- col.names
+colnames(temp_w) <- col.names
+colnames(temp_d) <- col.names
+colnames(spatiotemp_w) <- col.names
+colnames(spatiotemp_d) <- col.names
 
-models <- rbind(saturated, spatiotemporal)
+models <- rbind(ortho, temp_w, temp_d, spatiotemp_w, spatiotemp_d)
 
 # Plotting
 setwd("~/git/sourcemem/EXPINT/analysis/plotting/output/diffusion")
@@ -103,152 +112,152 @@ plot_marginal <- function(){
 # Joint Quantiles
 
 # Recentered on Non-
-load("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/recentered_diffusion.RData")
-
-recentered_models <- rbind(recentered_spatiotemporal, recentered_saturated)
-
-recentered_models[recentered_models$cond==1, 'cond'] <- 'unrelated'
-recentered_models[recentered_models$cond==2, 'cond'] <- 'orthographic'
-recentered_models[recentered_models$cond==3, 'cond'] <- 'semantic'
-
-plot.orthographic.recenter <- function(data, model, participant){
-  #If participant is not supplied, plot all the data at a group level
-  if (missing(participant)){
-    participant <- 'Group'
-  } else {
-    data = data[data$participant == participant,]
-    model = model[model$participant == participant,]
-  }
-  p1 <- ggplot() + 
-    geom_histogram(data = data[data$cond == 'orthographic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
-    geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.5) + 
-    facet_grid(~orthographic) +
-    ggtitle(sprintf('%s Condition, Recentered on orthographic', 'orth'))
-  
-  p2 <- ggplot() + 
-    geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
-    geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.5) + 
-    facet_grid(~orthographic) +
-    ggtitle(sprintf('%s Condition, Recentered on orthographic', 'unrelated'))
-  
-  p3 <- ggplot() + 
-    geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
-    geom_density(data = model, aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.5) + 
-    facet_grid(~orthographic)  +
-    ggtitle(sprintf('%s Condition, Recentered on orthographic', 'overall'))
-  
-  plot <- ggarrange(p1, p2, p3, ncol = 1, nrow = 3, heights = c(1, 1, 1))
-  filename <- sprintf('%s_recenter_orthographic.png', participant)
-  ggsave(filename, plot = last_plot(), width = 40, height = 45, units = "cm")
-}
-
-plot.semantic.recenter <- function(data, model, participant){
-  if (missing(participant)){
-    participant <- 'Group'
-  } else {
-    data = data[data$participant == participant,]
-    model = model[model$participant == participant,]
-  }
-  p1 <- ggplot() + 
-    geom_histogram(data = data[data$cond == 'semantic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
-    geom_density(data = model[model$cond == 'semantic', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.5) + 
-    facet_grid(~semantic_bin) +
-    ggtitle(sprintf('%s Condition, Recentered on semantic', 'semantic'))
-  
-  p2 <- ggplot() + 
-    geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
-    geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.5) + 
-    facet_grid(~semantic_bin) +
-    ggtitle(sprintf('%s Condition, Recentered on semantic', 'unrelated'))
-  
-  p3 <- ggplot() + 
-    geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
-    geom_density(data = model, aes(x = offset,  color = model), adjust = 1) +
-    ylim(0, 0.5) + 
-    facet_grid(~semantic_bin)  +
-    ggtitle(sprintf('%s Condition, Recentered on semantic', 'overall'))
-  
-  plot <- ggarrange(p1, p2, p3, ncol = 1, nrow = 3, heights = c(1, 1, 1))
-  filename <- sprintf('%s_recenter_semantic.png', participant)
-  ggsave(filename, plot = last_plot(), width = 40, height = 45, units = "cm")
-}
-
-plot.spatial.recenter <- function(data, model, participant){
-  if (missing(participant)){
-    participant <- 'Group'
-  } else {
-    data = data[data$participant == participant,]
-    model = model[model$participant == participant,]
-  }
-  p1 <- ggplot() + 
-    geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
-    geom_density(data = model, aes(x = offset,  color = model), adjust = 1) +
-    ylim(0, 0.7) + 
-    facet_grid(~spatial_bin)  +
-    ggtitle(sprintf('%s Condition, Recentered on spatial bin', 'overall'))
-  
-  plot <- ggarrange(p1, ncol = 1, nrow = 1, heights = c(1, 1, 1))
-  filename <- sprintf('%s_recenter_spatial.png', participant)
-  ggsave(filename, plot = last_plot(), width = 40, height = 15, units = "cm")
-}
-
-plot.temporal.recenter <- function(data, model, participant){
-  data$lag <- abs(data$lag)
-  model$lag <- abs(model$lag)
-  if (missing(participant)){
-    participant <- 'Group'
-  } else {
-    data = data[data$participant == participant,]
-    model = model[model$participant == participant,]
-  }
-  p1 <- ggplot() + 
-    geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
-    geom_density(data = model, aes(x = offset,  color = model), adjust = 1) +
-    ylim(0, 0.5) + 
-    facet_grid(~lag)  +
-    ggtitle('Recentered on lag')
-  
-  plot <- ggarrange(p1, ncol = 1, nrow = 1, heights = c(1, 1, 1))
-  filename <- sprintf('%s_recenter_temporal.png', participant)
-  ggsave(filename, plot = last_plot(), width = 40, height = 15, units = "cm")
-}
-
-plot.asymm.recenter <- function(data, model, participant){
-  if (missing(participant)){
-    participant <- 'Group'
-  } else {
-    data = data[data$participant == participant,]
-    model = model[model$participant == participant,]
-  }
-  p1 <- ggplot() + 
-    geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
-    geom_density(data = model, aes(x = offset,  color = model), adjust = 1) +
-    ylim(0, 0.5) + 
-    facet_wrap(~lag, ncol = 7)  +
-    ggtitle('Recentered on lag')
-  
-  plot <- ggarrange(p1, ncol = 1, nrow = 1, heights = c(1, 1, 1))
-  filename <- sprintf('%s_recenter_asymm_temporal.png', participant)
-  ggsave(filename, plot = last_plot(), width = 40, height = 20, units = "cm")
-}
-
-plot.all.individual <- function(){
-  setwd("~/git/sourcemem/EXPINT/analysis/plotting/output/diffusion/recenter")
-  for(i in participants){
-    plot.temporal.recenter(recentered_data, recentered_models, i)
-    plot.asymm.recenter(recentered_data, recentered_models,i)
-    plot.spatial.recenter(recentered_data, recentered_models, i)
-    plot.orthographic.recenter(recentered_data, recentered_models, i)
-    plot.semantic.recenter(recentered_data, recentered_models, i)
-  }
-  plot.temporal.recenter(recentered_data, recentered_models)
-  plot.asymm.recenter(recentered_data, recentered_models)
-  plot.spatial.recenter(recentered_data, recentered_models)
-  plot.orthographic.recenter(recentered_data, recentered_models)
-  plot.semantic.recenter(recentered_data, recentered_models)
-}
+# load("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/recentered_diffusion.RData")
+# 
+# recentered_models <- rbind(recentered_spatiotemporal, recentered_saturated)
+# 
+# recentered_models[recentered_models$cond==1, 'cond'] <- 'unrelated'
+# recentered_models[recentered_models$cond==2, 'cond'] <- 'orthographic'
+# recentered_models[recentered_models$cond==3, 'cond'] <- 'semantic'
+# 
+# plot.orthographic.recenter <- function(data, model, participant){
+#   #If participant is not supplied, plot all the data at a group level
+#   if (missing(participant)){
+#     participant <- 'Group'
+#   } else {
+#     data = data[data$participant == participant,]
+#     model = model[model$participant == participant,]
+#   }
+#   p1 <- ggplot() + 
+#     geom_histogram(data = data[data$cond == 'orthographic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
+#     geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset,  color = model), adjust = 1.2) +
+#     ylim(0, 0.5) + 
+#     facet_grid(~orthographic) +
+#     ggtitle(sprintf('%s Condition, Recentered on orthographic', 'orth'))
+#   
+#   p2 <- ggplot() + 
+#     geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
+#     geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset,  color = model), adjust = 1.2) +
+#     ylim(0, 0.5) + 
+#     facet_grid(~orthographic) +
+#     ggtitle(sprintf('%s Condition, Recentered on orthographic', 'unrelated'))
+#   
+#   p3 <- ggplot() + 
+#     geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
+#     geom_density(data = model, aes(x = offset,  color = model), adjust = 1.2) +
+#     ylim(0, 0.5) + 
+#     facet_grid(~orthographic)  +
+#     ggtitle(sprintf('%s Condition, Recentered on orthographic', 'overall'))
+#   
+#   plot <- ggarrange(p1, p2, p3, ncol = 1, nrow = 3, heights = c(1, 1, 1))
+#   filename <- sprintf('%s_recenter_orthographic.png', participant)
+#   ggsave(filename, plot = last_plot(), width = 40, height = 45, units = "cm")
+# }
+# 
+# plot.semantic.recenter <- function(data, model, participant){
+#   if (missing(participant)){
+#     participant <- 'Group'
+#   } else {
+#     data = data[data$participant == participant,]
+#     model = model[model$participant == participant,]
+#   }
+#   p1 <- ggplot() + 
+#     geom_histogram(data = data[data$cond == 'semantic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
+#     geom_density(data = model[model$cond == 'semantic', ], aes(x = offset,  color = model), adjust = 1.2) +
+#     ylim(0, 0.5) + 
+#     facet_grid(~semantic_bin) +
+#     ggtitle(sprintf('%s Condition, Recentered on semantic', 'semantic'))
+#   
+#   p2 <- ggplot() + 
+#     geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
+#     geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset,  color = model), adjust = 1.2) +
+#     ylim(0, 0.5) + 
+#     facet_grid(~semantic_bin) +
+#     ggtitle(sprintf('%s Condition, Recentered on semantic', 'unrelated'))
+#   
+#   p3 <- ggplot() + 
+#     geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
+#     geom_density(data = model, aes(x = offset,  color = model), adjust = 1) +
+#     ylim(0, 0.5) + 
+#     facet_grid(~semantic_bin)  +
+#     ggtitle(sprintf('%s Condition, Recentered on semantic', 'overall'))
+#   
+#   plot <- ggarrange(p1, p2, p3, ncol = 1, nrow = 3, heights = c(1, 1, 1))
+#   filename <- sprintf('%s_recenter_semantic.png', participant)
+#   ggsave(filename, plot = last_plot(), width = 40, height = 45, units = "cm")
+# }
+# 
+# plot.spatial.recenter <- function(data, model, participant){
+#   if (missing(participant)){
+#     participant <- 'Group'
+#   } else {
+#     data = data[data$participant == participant,]
+#     model = model[model$participant == participant,]
+#   }
+#   p1 <- ggplot() + 
+#     geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
+#     geom_density(data = model, aes(x = offset,  color = model), adjust = 1) +
+#     ylim(0, 0.7) + 
+#     facet_grid(~spatial_bin)  +
+#     ggtitle(sprintf('%s Condition, Recentered on spatial bin', 'overall'))
+#   
+#   plot <- ggarrange(p1, ncol = 1, nrow = 1, heights = c(1, 1, 1))
+#   filename <- sprintf('%s_recenter_spatial.png', participant)
+#   ggsave(filename, plot = last_plot(), width = 40, height = 15, units = "cm")
+# }
+# 
+# plot.temporal.recenter <- function(data, model, participant){
+#   data$lag <- abs(data$lag)
+#   model$lag <- abs(model$lag)
+#   if (missing(participant)){
+#     participant <- 'Group'
+#   } else {
+#     data = data[data$participant == participant,]
+#     model = model[model$participant == participant,]
+#   }
+#   p1 <- ggplot() + 
+#     geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
+#     geom_density(data = model, aes(x = offset,  color = model), adjust = 1) +
+#     ylim(0, 0.5) + 
+#     facet_grid(~lag)  +
+#     ggtitle('Recentered on lag')
+#   
+#   plot <- ggarrange(p1, ncol = 1, nrow = 1, heights = c(1, 1, 1))
+#   filename <- sprintf('%s_recenter_temporal.png', participant)
+#   ggsave(filename, plot = last_plot(), width = 40, height = 15, units = "cm")
+# }
+# 
+# plot.asymm.recenter <- function(data, model, participant){
+#   if (missing(participant)){
+#     participant <- 'Group'
+#   } else {
+#     data = data[data$participant == participant,]
+#     model = model[model$participant == participant,]
+#   }
+#   p1 <- ggplot() + 
+#     geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
+#     geom_density(data = model, aes(x = offset,  color = model), adjust = 1) +
+#     ylim(0, 0.5) + 
+#     facet_wrap(~lag, ncol = 7)  +
+#     ggtitle('Recentered on lag')
+#   
+#   plot <- ggarrange(p1, ncol = 1, nrow = 1, heights = c(1, 1, 1))
+#   filename <- sprintf('%s_recenter_asymm_temporal.png', participant)
+#   ggsave(filename, plot = last_plot(), width = 40, height = 20, units = "cm")
+# }
+# 
+# plot.all.individual <- function(){
+#   setwd("~/git/sourcemem/EXPINT/analysis/plotting/output/diffusion/recenter")
+#   for(i in participants){
+#     plot.temporal.recenter(recentered_data, recentered_models, i)
+#     plot.asymm.recenter(recentered_data, recentered_models,i)
+#     plot.spatial.recenter(recentered_data, recentered_models, i)
+#     plot.orthographic.recenter(recentered_data, recentered_models, i)
+#     plot.semantic.recenter(recentered_data, recentered_models, i)
+#   }
+#   plot.temporal.recenter(recentered_data, recentered_models)
+#   plot.asymm.recenter(recentered_data, recentered_models)
+#   plot.spatial.recenter(recentered_data, recentered_models)
+#   plot.orthographic.recenter(recentered_data, recentered_models)
+#   plot.semantic.recenter(recentered_data, recentered_models)
+# }
