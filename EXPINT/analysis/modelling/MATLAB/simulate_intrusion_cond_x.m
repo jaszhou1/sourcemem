@@ -227,12 +227,10 @@ for cond = 1:3
     % scaling parameter
     intrusion_similarities = intrusion_similarities * gamma;
 
-    target_weights = 1- sum(intrusion_similarities,2);
-    weights = horzcat(target_weights, intrusion_similarities) * (1-beta);
-    weights(weights < 0) = 1e-9;
-
-    guess_weights = 1- sum(weights,2);
-    weights = horzcat(weights, guess_weights);
+    weights = horzcat(ones(length(intrusion_similarities),1), intrusion_similarities);
+    target_weights = (weights ./ sum(weights, 2)) .* (1-beta);
+    guess_weights = 1- sum(target_weights,2);
+    weights = horzcat(target_weights, guess_weights);
 
     % Now that weights are done, simulate each trial n times
     n_trials = size(this_data, 1);
