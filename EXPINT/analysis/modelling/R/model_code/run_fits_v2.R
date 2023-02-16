@@ -27,7 +27,7 @@ data <- data[data$is_stimulus, ]
 data <- data[data$valid_RT, ]
 
 # Source core model function
-source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/intrusion_cond_model_x.R")
+source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/intrusion_cond_model_x2.R")
 
 # Define some things to iterate through
 participants <- unique(data$participant)
@@ -86,6 +86,7 @@ source('x18_spatiotemporal_decay.R')
 #                  'spatiotemporal_weight', 'temporal_decay', 'spatial_decay', 
 #                  'spatiotemporal_decay')
 
+setwd("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models")
 models <- c(flat_intrusion, flat_gamma1, flat_gamma2, temporal,
             asym_temporal, spatial, ortho, temporal_ortho,
             spatial_ortho, spatiotemporal, spatiotemporal_ortho,
