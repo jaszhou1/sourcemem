@@ -86,14 +86,14 @@ source('x18_spatiotemporal_decay.R')
 #                  'spatiotemporal_weight', 'temporal_decay', 'spatial_decay', 
 #                  'spatiotemporal_decay')
 
-models <- c(temporal,
+models <- c(flat_intrusion, flat_gamma1, flat_gamma2, temporal,
             asym_temporal, spatial, ortho, temporal_ortho,
             spatial_ortho, spatiotemporal, spatiotemporal_ortho,
             four_factor, temporal_ortho_weight, spatial_ortho_weight,
             spatiotemporal_ortho_weight, temporal_ortho_decay, spatial_ortho_decay,
             spatiotemporal_ortho_decay)
 
-model_names <- c('temporal',
+model_names <- c('flat_intrusion', 'flat_gamma1', 'flat_gamma2','temporal',
                  'asym_temporal', 'spatial', 'ortho', 'temporal_ortho',
                  'spatial_ortho', 'spatiotemporal', 'spatiotemporal_ortho',
                  'four_factor', 'temporal_weight', 'spatial_weight',
