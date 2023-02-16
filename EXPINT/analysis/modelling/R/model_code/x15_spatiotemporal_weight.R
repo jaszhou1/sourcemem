@@ -58,7 +58,7 @@ spatiotemporal_ortho_weight <- function(data){
   upper <- c(40,    35,    0.8,   0.8,    1,      1 ,     1,    1,   1,        20,         20,     40)
   
   # Optimise
-  this_fit <- DEoptim(intrusion_cond_model_x, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
+  this_fit <- DEoptim(intrusion_cond_model_x2, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
   
   # Calculate aic
   aic <- get_aic(this_fit$optim$bestval, length(upper))

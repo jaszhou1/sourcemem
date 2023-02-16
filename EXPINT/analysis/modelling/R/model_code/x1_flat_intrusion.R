@@ -64,7 +64,7 @@ flat_intrusion <- function(data){
   upper <- c(20, 15, 0.8, 0.14) #Gamma does a different job when all the similarity factors are weighted 0
   
   # Optimise
-  this_fit <- DEoptim(intrusion_cond_model_x, lower, upper, control = DEoptim.control(itermax = 200), data, Pfix, Sel)
+  this_fit <- DEoptim(intrusion_cond_model_x2, lower, upper, control = DEoptim.control(itermax = 200), data, Pfix, Sel)
   
   # Calculate aic
   aic <- get_aic(this_fit$optim$bestval, length(upper))

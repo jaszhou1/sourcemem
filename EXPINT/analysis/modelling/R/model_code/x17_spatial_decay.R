@@ -59,7 +59,7 @@ spatial_ortho_decay <- function(data){
   
   
   # Optimise
-  this_fit <- DEoptim(intrusion_cond_model_x, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
+  this_fit <- DEoptim(intrusion_cond_model_x2, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
   
   # Calculate aic
   aic <- get_aic(this_fit$optim$bestval, length(upper))

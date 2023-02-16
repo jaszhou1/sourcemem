@@ -65,7 +65,7 @@ flat_gamma2 <- function(data){
   upper <- c(20, 15, 0.8, 0.8, 0.14, 0.14)
   
   # Optimise
-  this_fit <- DEoptim(intrusion_cond_model_x, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
+  this_fit <- DEoptim(intrusion_cond_model_x2, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
   
   # Calculate aic
   aic <- get_aic(this_fit$optim$bestval, length(upper))
