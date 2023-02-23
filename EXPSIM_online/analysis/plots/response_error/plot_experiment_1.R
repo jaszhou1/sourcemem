@@ -109,7 +109,7 @@ plot_response_error <- function(model_list, data, filename){
          col=color_wheel[model_list], lty=2, lwd = 2, bty = "n",cex=AXIS.CEX, title="Models")
   
   # Close the plotting device
-  dev.off()
+  #dev.off()
 }
 
 
