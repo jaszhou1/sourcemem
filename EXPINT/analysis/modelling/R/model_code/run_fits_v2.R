@@ -135,7 +135,7 @@ for(i in 1:length(model_fits)){
 }
 AICs[11,] <- colSums(AICs)
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/AIC_weight.R") 
-wAIC <- AIC_weight(AICs, 'wAIC.csv')
+wAIC <- AIC_weight(AICs, paste(toString(Sys.Date()), '_AIC.csv', sep =""))
 
 # Simulate model predictions from the estimated parameters (big job because recentering)
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/resp_recenter_data.R")
