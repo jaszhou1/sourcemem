@@ -32,6 +32,7 @@ data <- data[data$block != -1,]
 
 # Get rid of foil data, and data with invalid RT
 data <- data[(data$valid_RT) & (data$is_stimulus),]
+data <- data[data$recog_rating %in% c(0,8,9),]
 
 # Express RTs in seconds, not ms
 data$source_RT <- data$source_RT/1000
@@ -46,11 +47,13 @@ temp_w <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/sim_temp_or
 temp_d <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/sim_temp_ortho_d.csv")
 spatiotemp_w <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/sim_spatiotemp_ortho_w.csv")
 spatiotemp_d <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/sim_spatiotemp_ortho_d.csv")
+spatiotemp <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/sim_spatiotemp.csv")
 ortho[,50] <- 'ortho'
 temp_w[,50] <- 'temp_w'
 temp_d[,50] <- 'temp_d'
 spatiotemp_w[,50] <- 'spatiotemp_w'
 spatiotemp_d[,50] <- 'spatiotemp_d'
+spatiotemp[,50] <- 'spatiotemp'
 
 col.names <- c('error', 'rt', 'resp_angle', 'targ_angle', 'trial_number',
                'offset_1', 'offset_2', 'offset_3', 'offset_4', 'offset_5',
@@ -72,9 +75,17 @@ colnames(temp_w) <- col.names
 colnames(temp_d) <- col.names
 colnames(spatiotemp_w) <- col.names
 colnames(spatiotemp_d) <- col.names
+colnames(spatiotemp) <- col.names
 
-models <- rbind(ortho, temp_w, temp_d, spatiotemp_w, spatiotemp_d)
+models <- rbind(ortho, temp_w, temp_d, spatiotemp_w, spatiotemp_d, spatiotemp)
 
+models$condition[models$cond==1] <- "unrelated"
+models$condition[models$cond==2] <- "orthographic"
+models$condition[models$cond==3] <- "semantic"
+
+# Convert the column to a factor
+models$condition <- factor(models$condition, levels = c('unrelated', 'semantic', 'orthographic'))
+data$condition <- factor(data$condition, levels = c('unrelated', 'semantic', 'orthographic'))
 # Plotting
 setwd("~/git/sourcemem/EXPINT/analysis/plotting/output/diffusion")
 
