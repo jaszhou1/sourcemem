@@ -1,10 +1,10 @@
 library(ggplot2)
 library(ggpubr)
 
-load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-26_fits.RData")
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models/2023-02-17_fits.RData")
 # Load simulated datasets
-load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-26_sim_data.RData")
-load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/2023-01-26_simulated_recenter.RData")
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models/2023-02-18_sim_data.RData")
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models/2023-02-18_simulated_recenter.RData")
 load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/recentered_data.RData")
 data <- read.csv("~/git/sourcemem/EXPINT/data/EXPINT_data.csv")
 data <- data[data$block != -1,]
@@ -90,23 +90,23 @@ plot.orthographic.recenter <- function(data, model, participant){
     model = model[model$participant == participant,]
   }
   p1 <- ggplot() + 
-    geom_histogram(data = data[data$cond == 'orthographic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
+    geom_histogram(data = data[data$cond == 'orthographic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 20) +
     geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.5) + 
+    ylim(0, 0.4) + 
     facet_grid(~orthographic) +
     ggtitle(sprintf('%s Condition, Recentered on orthographic', 'orth'))
   
   p2 <- ggplot() + 
-    geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
+    geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 20) +
     geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.5) + 
+    ylim(0, 0.4) + 
     facet_grid(~orthographic) +
     ggtitle(sprintf('%s Condition, Recentered on orthographic', 'unrelated'))
   
   p3 <- ggplot() + 
-    geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 30) +
+    geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 20) +
     geom_density(data = model, aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.5) + 
+    ylim(0, 0.4) + 
     facet_grid(~orthographic)  +
     ggtitle(sprintf('%s Condition, Recentered on orthographic', 'overall'))
   
@@ -158,21 +158,21 @@ plot.spatial.recenter <- function(data, model, participant){
   p1 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'orthographic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 50) +
     geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.5) + 
+    ylim(0, 0.25) + 
     facet_grid(~spatial_bin) +
     ggtitle('orthographic')
   
   p2 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'semantic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 50) +
     geom_density(data = model[model$cond == 'semantic', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.5) + 
+    ylim(0, 0.25) + 
     facet_grid(~spatial_bin) +
     ggtitle('semantic')
   
   p3 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 50) +
     geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.5) + 
+    ylim(0, 0.25) + 
     facet_grid(~spatial_bin) +
     ggtitle('unrelated')
   
@@ -205,28 +205,28 @@ plot.temporal.recenter <- function(data, model, participant){
   p1 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'orthographic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 50) +
     geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.3) + 
+    ylim(0, 0.25) + 
     facet_grid(~abs_lag) +
     ggtitle('orthographic')
   
   p2 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'semantic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 50) +
     geom_density(data = model[model$cond == 'semantic', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.3) + 
+    ylim(0, 0.25) + 
     facet_grid(~abs_lag) +
     ggtitle('semantic')
   
   p3 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 50) +
     geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.3) + 
+    ylim(0, 0.25) + 
     facet_grid(~abs_lag) +
     ggtitle('unrelated')
   
   p4 <- ggplot() + 
     geom_histogram(data = data, aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 50) +
     geom_density(data = model, aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.3) + 
+    ylim(0, 0.25) + 
     facet_grid(~abs_lag) +
     ggtitle('overall')
   
@@ -248,28 +248,28 @@ plot.asymm.recenter <- function(data, model, participant){
   p1 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'orthographic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 50) +
     geom_density(data = model[model$cond == 'orthographic', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.3) + 
+    ylim(0, 0.25) + 
     facet_grid(~lag) +
     ggtitle('orthographic')
   
   p2 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'semantic', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 50) +
     geom_density(data = model[model$cond == 'semantic', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.3) + 
+    ylim(0, 0.25) + 
     facet_grid(~lag) +
     ggtitle('semantic')
   
   p3 <- ggplot() + 
     geom_histogram(data = data[data$cond == 'unrelated', ], aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 50) +
     geom_density(data = model[model$cond == 'unrelated', ], aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.3) + 
+    ylim(0, 0.25) + 
     facet_grid(~lag) +
     ggtitle('unrelated')
   
   p4 <- ggplot() + 
-    geom_histogram(data = data, aes(x = offset, y = ..density..), fill = 'white', bins = 50) +
+    geom_histogram(data = data, aes(x = offset, y = ..density..), color = 1, fill = 'white', bins = 50) +
     geom_density(data = model, aes(x = offset,  color = model), adjust = 1.2) +
-    ylim(0, 0.3) + 
+    ylim(0, 0.25) + 
     facet_grid(~lag) +
     ggtitle('overall')
   plot <- ggarrange(p1,p2,p3,p4, ncol = 1,  common.legend = TRUE, legend="bottom")
