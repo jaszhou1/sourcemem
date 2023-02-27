@@ -167,17 +167,6 @@ if isnan(upsilon2)
     upsilon2 = upsilon1;
 end
 
-% Check that the weights make sense for conditions
-% i.e., I expect the weight for semantic similarity to be higher in the
-% semantic condition, so I will constrain the psi2 > psi1.
-if v1_int > v1_targ
-    ll = 1e7;
-    aic = 0;
-    penalty = 1e7;
-    pest_penalty(1,:) = P;
-    [name, errmg3], return;
-end
-
 sigma = 1.0;
 
 % If a condition-dependant parameter is missing, set it to the default
