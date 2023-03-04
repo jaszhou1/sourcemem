@@ -15,6 +15,9 @@ data <- data[data$valid_RT, ]
 
 data <- data[data$recog_rating %in% c(0,8,9),]
 
+sim_data$present_trial <- sim_data$target_position
+data$present_trial <- data$present_trial + 1
+
 participants <- unique(data$participant)
 
 model_names <- unique(sim_data$model)
@@ -41,9 +44,20 @@ plot.error.all <- function(data, sim_data, model_list){
   for(i in participants){
     plot.response.error(data, sim_data, model_list, i)
   }
-
+  
   plot.response.error(data, sim_data, model_list)
 }
+
+# The orthographic condition has less of a serial position effect than the other conditions.
+# Does the weight of the temporal_weight model help there?
+cond_serial_pos <- function(data, model, model_list){
+  model <- model[model$model_name %in% model_names[model_list],]
+  plot <- ggplot(data) + 
+    geom_histogram(aes(x = source_error, y = ..density..), colour = 1, fill = 'white', bins = 50) +
+    geom_density(data = model, aes(x = simulated_error, colour = model_name), size = 1.2) +
+    facet_wrap(~condition + present_trial, ncol = 8) #+ 
+}
+
 
 setwd("~/git/sourcemem/EXPINT/analysis/plotting/output/resp_error")
 source("~/git/sourcemem/EXPINT/analysis/plotting/response_error/resp_recenter_data.R")
@@ -189,7 +203,7 @@ plot.spatial.recenter <- function(data, model, participant){
   plot <- ggarrange(p1,p2,p3,p4, ncol = 1, common.legend = TRUE, legend="bottom")
   plot <- annotate_figure(plot, top = text_grob("Spatial Recenter", 
                                                 color = "black", face = "bold", size = 16))
-
+  
   filename <- sprintf('recenter_spatial_%s.png', participant)
   ggsave(filename, plot = last_plot(), width = 40, height = 60, units = "cm")
 }

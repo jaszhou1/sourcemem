@@ -14,7 +14,7 @@ library(R.utils)
 library(statip)
 library(ggpubr)
 # Source the model code
-source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/intrusion_cond_model_x.R")
+source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/intrusion_cond_model_x2.R")
 source("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/resp_recenter_data.R")
 source("~/git/sourcemem/EXPINT/analysis/plot_recentered_data.R")
 load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/recentered_data.RData")
@@ -35,21 +35,21 @@ simulate_data <- function(P){# Load in and filter the data
 }
 
 # Specify some parameter values
-kappa1 <- 18
-kappa2 <- 17.76
-beta1 <- 0.4
+kappa1 <- 20
+kappa2 <- NA
+beta1 <- 0.40
 beta2 <- NA
 beta3 <- NA
-gamma1 <- 0.3
-gamma2 <- 0.13
+gamma1 <- 0.37
+gamma2 <- 0.46
 gamma3 <- NA
 # intrusion weights
 
-chi1 <- 0.38 # Item weight
-chi2 <- 0.35
+chi1 <- 0.44 # Item weight
+chi2 <- NA
 chi3 <- NA
 
-phi1 <- 0 # Space weight
+phi1 <- 0.41 # Space weight
 phi2 <- NA
 phi3 <- NA
 
@@ -62,7 +62,7 @@ tau1 <- 0.5 # Temporal asymmetry (tau >0.5 means forwards are more similar)
 tau2 <- NA
 tau3 <- NA
 
-lambda_b1 <- 1.6 # Similarity decay of backwards temporal lag
+lambda_b1 <- 5.5 # Similarity decay of backwards temporal lag
 lambda_f1 <- NA # Similarity decay of forwards temporal lag
 
 lambda_b2 <- NA # Similarity decay of backwards temporal lag
@@ -71,11 +71,11 @@ lambda_f2 <- NA # Similarity decay of forwards temporal lag
 lambda_b3 <- NA # Similarity decay of backwards temporal lag
 lambda_f3 <- NA # Similarity decay of forwards temporal lag
 
-zeta1 <- 2 # Similarity decay of spatial similarity
+zeta1 <- 5.3 # Similarity decay of spatial similarity
 zeta2 <- NA
 zeta3 <- NA
 
-iota1 <- 9.5 # Similarity decay of orthographic component unrelated
+iota1 <- 8.5 # Similarity decay of orthographic component unrelated
 iota2 <- NA # Decay for orthography orthographic
 iota3 <- NA
 
@@ -89,14 +89,61 @@ P = c(kappa1, kappa2, beta1, beta2, beta3, gamma1, gamma2, gamma3, chi1, chi2, c
        lambda_b1, lambda_f1, lambda_b2, lambda_f2, lambda_b3, lambda_f3, zeta1,
        zeta2, zeta3, iota1, iota2, iota3, upsilon1, upsilon2, upsilon3) 
 
-sim1 <- simulate_data(P)
+sim <- simulate_data(P)
 
+# Get the indexing of the trial position consistent
+data$target_position <- data$present_trial + 1
+
+response_error <- plot.response.error(data, sim$sim_data)
+recentered_error <- plot.condition.recenter(recentered_data, sim$recentered_sim_data)
+
+# Plot 1 shows the response error and recentered error split by experimental condition
+plot1 <- ggarrange(response_error, recentered_error, ncol = 1, nrow = 2, heights = c(1, 1))
+
+# Plot 3 shows the recentered histograms conditioned on levels of similarity to show off the gradients
+plot2 <- plot.response.error.position(data, sim$sim_data)
+
+orth <- plot.orthographic.recenter(recentered_data, sim$recentered_sim_data)
+sem <- plot.semantic.recenter(recentered_data, sim$recentered_sim_data)
+temp <- plot.temporal.recenter(recentered_data, sim$recentered_sim_data)
+space <- plot.spatial.recenter(recentered_data, sim$recentered_sim_data)
+
+plot1
+plot2
+orth
+sem
+temp
+space
 ## Plotting functions
 
 plot.response.error <- function(data, model){
   plot <- ggplot() +
     geom_histogram(data = data, aes(x = source_error, y = ..density..), colour = 1, fill = 'white', bins = 50) +
-    geom_histogram(data = model, aes(x = simulated_error, y = ..density..), fill = 'red', bins = 50, alpha = 0.2)
+    geom_histogram(data = model, aes(x = simulated_error, y = ..density..), fill = 'red', bins = 50, alpha = 0.2) +
+    geom_density(data = model, aes(x = simulated_error), color = 'red') +
+    facet_grid(~condition)
+  return(plot)
+}
+
+plot.response.error.position <- function(data, model){
+  plot <- ggplot() +
+    geom_histogram(data = data, aes(x = source_error, y = ..density..), colour = 1, fill = 'white', bins = 50) +
+    geom_histogram(data = model, aes(x = simulated_error, y = ..density..), fill = 'red', bins = 50, alpha = 0.2) +
+    geom_density(data = model, aes(x = simulated_error), color = 'red') +
+    facet_grid(condition~target_position)
+  return(plot)
+}
+
+plot.condition.recenter <- function(data, model){
+  plot <- ggplot() +
+    geom_histogram(data = data, 
+                   aes(x = offset, y = ..density..), colour = 1, fill = 'white', bins = 50) +
+    geom_histogram(data = model, 
+                   aes(x = offset, y = ..density..), fill = 'red', bins = 50, alpha = 0.2) +
+    geom_density(data = model,
+                 aes(x = offset), color = 'red') +
+    ylim(0, 0.25) + 
+    facet_grid(~cond)
   return(plot)
 }
 

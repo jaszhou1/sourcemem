@@ -119,6 +119,16 @@ plot_marginal <- function(){
 }
 
 
+# The orthographic condition has less of a serial position effect than the other conditions.
+# Does the weight of the temporal_weight model help there?
+cond_serial_pos <- function(data, models, model_list){
+  ggplot(data) + 
+    geom_histogram(aes(x = source_error, y = ..density..), colour = 1, fill = 'white', bins = 50) +
+    geom_density(data = models, aes(x = error, colour = model), size = 1.2) +
+    facet_wrap(~present_trial + condition, ncol = 10) #+ 
+    #ggsave('group_error.png', plot = last_plot(), width = 40, height = 35, units = "cm")
+}
+
 
 # Joint Quantiles
 
