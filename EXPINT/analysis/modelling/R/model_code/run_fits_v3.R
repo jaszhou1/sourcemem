@@ -51,14 +51,19 @@ angle_diff <- function(a,b){
 }
 
 ## Load in the model variants
-source('x19_spatiotemporal_ortho_gamma.R')
-source('x20_spatiotemporal_ortho_beta.R')
-source('x21_fourfactor_gamma.R')
+source('1_spatiotemporal_base.R')
+source('2_fourfactor.R')
+source('3_threefactor.R')
+source('4_spatiotemporal_ortho_gamma.R')
+source('5_fourfactor_gamma.R')
+source('6_spatiotemporal_ortho_weight.R')
 
 setwd("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models")
-models <- c(spatiotemporal_ortho_gamma, spatiotemporal_ortho_beta, fourfactor_gamma)
+models <- c(spatiotemporal, four_factor, three_factor, spatiotemporal_ortho_gamma,
+            fourfactor_gamma, spatiotemporal_ortho_weight)
 
-model_names <- c('spatiotemporal_gamma', 'spatiotemporal_beta', 'fourfactor_gamma')
+model_names <- c('spatiotemporal', 'four_factor', 'three_factor', 'spatiotemporal_ortho_gamma',
+                 'fourfactor_gamma', 'spatiotemporal_ortho_weight')
 
 fit_model <- function(data, model, model_name){
   cl <- makeForkCluster((detectCores() - 1))

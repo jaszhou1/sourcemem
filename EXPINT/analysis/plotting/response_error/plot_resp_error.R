@@ -1,10 +1,10 @@
 library(ggplot2)
 library(ggpubr)
 
-load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models/2023-02-25_fits.RData")
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models/2023-03-04_fits.RData")
 # Load simulated datasets
-load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models/2023-02-25_sim_data.RData")
-load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models/2023-02-25_simulated_recenter.RData")
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models/2023-03-04_sim_data.RData")
+load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models/2023-03-04_simulated_recenter.RData")
 load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/recentered_data.RData")
 data <- read.csv("~/git/sourcemem/EXPINT/data/EXPINT_data.csv")
 data <- data[data$block != -1,]

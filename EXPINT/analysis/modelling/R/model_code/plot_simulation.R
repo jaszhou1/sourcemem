@@ -25,7 +25,7 @@ data <- data[data$is_stimulus, ]
 data <- data[data$valid_RT, ]
 data <- data[data$recognised == 1,]
 
-simulate_data <- function(P){# Load in and filter the data
+simulate_data <- function(P, data){# Load in and filter the data
   sim_data <- simulate_intrusion_cond_model_x(99, data, P, 'test')
   recentered_sim_data <- recenter.model2(sim_data)
   res <- c()

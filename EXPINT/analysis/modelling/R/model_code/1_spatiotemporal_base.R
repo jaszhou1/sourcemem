@@ -1,24 +1,22 @@
-# Model 19
+# Model 1, "Spatiotemporal"
+# Assumes there is no difference between the conditions at all, there is no role for
+# orthography or semantics.
 
-# First of the v3 models, which reintroduce three different gamma parameters, after 
-# the observation of big individual variability in the effect of the semantic list maniupulation
-# sometimes its actually better than unrelated. Should be able to capture this by letting gamma3< gamma1
-
-# Also, estimated prec seems not to vary, so just make them a single parameter
-# Give the temporal component the asymmtery back
-spatiotemporal_ortho_gamma <- function(data){
+spatiotemporal <- function(data){
   # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.
   #       prec.  guess      intrus.   context w     w.space    w.sem    time asym   d.time              d.space    d.orth    d.sem
-  Sel = c(1, 0,  1, 0, 0,   1, 1, 1,  1, 0, 0,   1, 0, 0,  0, 0, 0,  1, 0, 0,   1, 1, 0, 0, 0, 0,   1, 0, 0,  1, 0, 0,  0, 0, 0)
+  Sel = c(1, 0,  1, 0, 0,   1, 0, 0,  0, 0, 0,   1, 0, 0,  0, 0, 0,  1, 0, 0,   1, 1, 0, 0, 0, 0,   1, 0, 0,  0, 0, 0,  0, 0, 0)
   
   
   # For the fixed parameters (P[Sel == 0], what value should parameter be fixed at? NA will be treated as "same as unrelated condition")
-  prec2 <- NA
-  
   beta2 <- NA
   beta3 <- NA
   
+  gamma2 <- NA
+  gamma3 <- NA
+  
   # intrusion weights
+  chi1 <- 0
   chi2 <- NA
   chi3 <- NA
   
@@ -30,7 +28,6 @@ spatiotemporal_ortho_gamma <- function(data){
   psi3 <- NA
   
   # intrusion similarity decays
-  #tau1 <- 0.5 # Temporal asymmetry (tau >0.5 means forwards are more similar)
   tau2 <- NA
   tau3 <- NA
   
@@ -43,6 +40,7 @@ spatiotemporal_ortho_gamma <- function(data){
   zeta2 <- NA
   zeta3 <- NA
   
+  iota1 <- 0
   iota2 <- NA # Decay for orthography orthographic
   iota3 <- NA
   
@@ -50,15 +48,15 @@ spatiotemporal_ortho_gamma <- function(data){
   upsilon2 <- NA # Decay for semantic orth
   upsilon3 <- NA
   
-  Pfix = c(prec2, beta2, beta3, chi2, chi3, phi2, phi3,
+  Pfix = c(beta2, beta3, gamma2, gamma3, chi1, chi2, chi3, phi2, phi3,
            psi1, psi2, psi3, tau2, tau3,
            lambda_b2, lambda_f2, lambda_b3, lambda_f3,
-           zeta2, zeta3, iota2, iota3, upsilon1, upsilon2, upsilon3)
+           zeta2, zeta3, iota1, iota2, iota3, upsilon1, upsilon2, upsilon3)
   
   # Boundaries for estimated parameters. DEoptim will sample uniformly between these bounds
-  #       prec1,  beta1, gamma1, gamma2, gamma3, chi1, phi1, tau1, l_b1, l_f11, zeta1, iota1
-  lower <- c(5,     0,   0,      0,      0,      0,    0,   0.45, 0,     0,    0,      0)
-  upper <- c(35,    1,   0.9,    0.9,    0.9,    1,    1,   1,   20,    20,   20,    20)
+  #          prec1, beta1, gamma1,phi1, tau1, lambda_b1, lambda_f1, zeta1
+  lower <- c(1,     0,     0,     0.1,    0.4,    0,      0,        0)
+  upper <- c(30,    1,     2,     0.8,    1,      10,     10,       10)
   
   # Optimise
   this_fit <- DEoptim(intrusion_cond_model_x2, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
