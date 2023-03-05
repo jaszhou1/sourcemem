@@ -9,6 +9,8 @@ spatiotemporal <- function(data){
   
   
   # For the fixed parameters (P[Sel == 0], what value should parameter be fixed at? NA will be treated as "same as unrelated condition")
+  prec2 <- NA
+  
   beta2 <- NA
   beta3 <- NA
   
@@ -48,7 +50,7 @@ spatiotemporal <- function(data){
   upsilon2 <- NA # Decay for semantic orth
   upsilon3 <- NA
   
-  Pfix = c(beta2, beta3, gamma2, gamma3, chi1, chi2, chi3, phi2, phi3,
+  Pfix = c(prec2, beta2, beta3, gamma2, gamma3, chi1, chi2, chi3, phi2, phi3,
            psi1, psi2, psi3, tau2, tau3,
            lambda_b2, lambda_f2, lambda_b3, lambda_f3,
            zeta2, zeta3, iota1, iota2, iota3, upsilon1, upsilon2, upsilon3)
