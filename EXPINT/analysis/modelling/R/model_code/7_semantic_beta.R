@@ -6,7 +6,7 @@
 
 # However, the semantic condition is associated with a separate beta parameter which
 # may be higher or lower based on the the participant, compared to the others.
-spatiotemporal_ortho_gamma <- function(data){
+semantic_beta <- function(data){
   # Sel vector: defines which parameters are freed, and which are fixed, in the optimisation process.
   #       prec.  guess      intrus.   context w     w.space    w.sem    time asym   d.time              d.space    d.orth    d.sem
   Sel = c(1, 0,  1, 0, 1,   1, 0, 0,  1, 0, 0,   1, 0, 0,  0, 0, 0,  1, 0, 0,   1, 1, 0, 0, 0, 0,   1, 0, 0,  1, 0, 0,  0, 0, 0)
