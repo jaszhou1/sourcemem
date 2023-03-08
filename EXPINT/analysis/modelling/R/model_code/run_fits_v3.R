@@ -58,13 +58,18 @@ source('4_spatiotemporal_ortho_gamma.R')
 source('5_fourfactor_gamma.R')
 source('6_spatiotemporal_ortho_weight.R')
 source('7_semantic_beta.R')
+source('8_temp_ortho.R')
+source('9_sym_temp_ortho.R')
+source('10_sym_temp_ortho_beta.R')
 
 setwd("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models")
 models <- c(spatiotemporal, four_factor, three_factor, spatiotemporal_ortho_gamma,
-            fourfactor_gamma, spatiotemporal_ortho_weight, semantic_beta)
+            fourfactor_gamma, spatiotemporal_ortho_weight, semantic_beta,
+            temp_ortho, sym_temp_ortho, sym_temp_ortho_beta)
 
 model_names <- c('spatiotemporal', 'four_factor', 'three_factor', 'spatiotemporal_ortho_gamma',
-                 'fourfactor_gamma', 'spatiotemporal_ortho_weight', 'semantic_beta')
+                 'fourfactor_gamma', 'spatiotemporal_ortho_weight', 'semantic_beta',
+                 'temp_ortho', 'sym_temp_ortho', 'sym_temp_ortho_beta')
 
 fit_model <- function(data, model, model_name){
   cl <- makeForkCluster((detectCores() - 1))
