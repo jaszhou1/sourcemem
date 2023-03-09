@@ -7,22 +7,6 @@ setwd("~/git/sourcemem/EXPINT/analysis/plotting/diffusion")
 
 ## Load dependencies
 library(circular)
-library(stringdist)
-library(rjson)
-library(lsa)
-library(psycho)
-library(ggplot2)
-library(grid)
-
-# Define plotting parameters
-AXIS.CEX <- 1
-AXIS.LABEL.CEX <- 1
-NUM.BINS <- 50
-X.RESP.LOW <- -pi - 0.01
-X.RESP.HI <- pi + 0.01
-Y.RESP.LOW <- 0.0
-Y.RESP.HI <- 0.8
-
 
 ## Read in and handle observed data
 data <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/EXPINT_data.csv")
@@ -32,6 +16,7 @@ data <- data[data$block != -1,]
 
 # Get rid of foil data, and data with invalid RT
 data <- data[(data$valid_RT) & (data$is_stimulus),]
+data <- data[data$recog_rating %in% c(0,8,9),]
 
 # Express RTs in seconds, not ms
 data$source_RT <- data$source_RT/1000
@@ -41,10 +26,15 @@ participants <- unique(data$participant)
 conds <- unique(data$condition)
 
 ## Read in simulated data
-saturated <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_saturated.csv")
-spatiotemporal <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_spatiotemporal.csv")
-saturated[,50] <- 'saturated'
+spatiotemporal <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_spatiotemp.csv")
+ortho <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_ortho.csv")
+# temp_w <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_temp_ortho_w.csv")
+# temp_d <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_temp_ortho_d.csv")
+spatiotemporal_w <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_spatiotemp_ortho_w.csv")
+
 spatiotemporal[,50] <- 'spatiotemporal'
+ortho[,50] <- 'orthographic'
+spatiotemporal_w[,50] <- 'spatiotemporal_ortho_weight'
 
 col.names <- c('error', 'rt', 'resp_angle', 'targ_angle', 'trial_number',
                'offset_1', 'offset_2', 'offset_3', 'offset_4', 'offset_5',
@@ -61,15 +51,17 @@ col.names <- c('error', 'rt', 'resp_angle', 'targ_angle', 'trial_number',
                'angle_6', 'angle_7',
                'cond', 'participant', 'model')
 
-colnames(saturated) <- col.names
 colnames(spatiotemporal) <- col.names
+colnames(ortho) <- col.names
+colnames(spatiotemporal_w) <- col.names
 
-models <- rbind(saturated, spatiotemporal)
+models <- rbind(spatiotemporal, ortho, spatiotemporal_w)
 
 # Recentered on Non-
 source('recenter_data.R')
 recentered_data <- recenter.data(data)
-recentered_saturated <- recenter.model(saturated)
 recentered_spatiotemporal <- recenter.model(spatiotemporal)
+recentered_orthographic <- recenter.model(orthographic)
+recentered_spatiotemporal_w <- recenter.model(spatiotemporal_w)
 
 save.image('recentered_diffusion.RData')
