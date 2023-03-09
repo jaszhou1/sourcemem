@@ -61,7 +61,7 @@ models <- rbind(spatiotemporal, ortho, spatiotemporal_w)
 source('recenter_data.R')
 recentered_data <- recenter.data(data)
 recentered_spatiotemporal <- recenter.model(spatiotemporal)
-recentered_orthographic <- recenter.model(orthographic)
+recentered_orthographic <- recenter.model(ortho)
 recentered_spatiotemporal_w <- recenter.model(spatiotemporal_w)
 
 save.image('recentered_diffusion.RData')

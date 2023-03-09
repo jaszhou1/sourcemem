@@ -98,7 +98,7 @@ iota3 = P(41);
 % Semantic gradient
 upsilon1 = P(42); % Semantic decay, Low
 upsilon2 = P(43); % Semantic decay, High
-upsilon = P(44);
+upsilon3 = P(44);
 
 % Nondecision Time
 ter = P(45);
@@ -117,6 +117,10 @@ st = P(46);
 % in the model code like Philip usually does is so I can set the lowerbound
 % to 0 when I want parameters to be equal across conditions, but be higher
 % in the freer version of the model.
+if isnan(a_int)
+    a_int = a_targ;
+end
+
 if isnan(beta2)
     beta2 = beta1;
     %beta3 = beta1;
