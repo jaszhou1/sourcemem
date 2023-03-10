@@ -1,4 +1,4 @@
-function [ll, aic, P, penalty] = fit_spatiotemporal_model(data, badix)
+function [ll, aic, P, penalty] = fit_fourfactor_model(data, badix)
 % Same intrusion scaling and guessing across conditions, just change the
 % relative distribution of weight across the different kinds of similarity
 % when calculating intrusion likelihood
@@ -34,15 +34,15 @@ gamma2 = NaN; % 16
 gamma3 = NaN; % 17
 
 % Intrusion similarity rating weights
-chi1 = 0; % 18
+chi1 = 0.4; % 18
 chi2 = NaN; % 19
 chi3 = NaN; % 20
 
-phi1 = 0.5; % 21
+phi1 = 0.2; % 21
 phi2 = NaN; % 22
 phi3 = NaN; %23
 
-psi1 = 0; % 24
+psi1 = 0.2; % 24
 psi2 = NaN; % 25
 psi3 = NaN; % 26
 
@@ -66,12 +66,12 @@ zeta2 = NaN; % 37
 zeta3 = NaN; % 38
 
 % Orthographic gradient 
-iota1 = 0; % 39 Ortho decay, Low
+iota1 = 10; % 39 Ortho decay, Low
 iota2 = NaN; % 40 Ortho decay, High
 iota3 = NaN; % 41
 
 % Semantic gradient
-upsilon1 = 0; % 42 Semantic decay, Low
+upsilon1 = 10; % 42 Semantic decay, Low
 upsilon2 = NaN; % 43 Semantic decay, High
 upsilon3 = NaN; % 44
 
@@ -92,7 +92,7 @@ P = [v1_targ, v2_targ v1_int, v2_int, eta1_targ, eta2_targ, eta1_int, eta2_int,.
 %      1           2        3      4              5      6        7          8             9           10      11             12    13      14              15     16       17         18    19     20       21   22     23         24     25    26         27       28     29          30             31         32          33       34           35          36   37     38       39     40     41       42        43          44      45  46
 % [v1_targ, v2_targ   v1_int, v2_int,     eta1_targ, eta2_targ, eta1_int, eta2_int,       a_targ,     a_int,   a_guess        beta1, beta2, beta3           gamma1, gamma2, gamma3     chi1, chi2,  chi3    phi1, phi2, phi3,       psi1, psi2,  psi3,      tau1,    tau2,  tau3        lambda_b1, lambda_f1, lambda_b2, lambda_f2,  lambda_b2, lambda_f2,   zeta1, zeta2, zeta3    iota1, iota2, iota3,  upsilon1, upsilon2, upsilon3,  ter, st]
 % ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Sel= [1,    0,      1,      0,                  1,      0,     1,     0,                     1,      0,         1,            1,       0,       0,          1,      0,      0,          0,     0,    0,     1,    0,     0,         0,      0,     0,       1,      0,       0          1,          1,        0,        0,            0,        0,            1,    0,      0,      0,      0,     0,       0,      0,         0,       1,     0];
+Sel= [1,    0,      1,      0,                  1,      0,     1,     0,                     1,      0,         1,            1,       0,       0,          1,      0,      0,          1,     0,    0,     1,    0,     0,         1,      0,     0,       1,      0,       0          1,          1,        0,        0,            0,        0,            1,    0,      0,      1,      0,     0,       1,      0,         0,       1,     0];
 Ub= [ 10,   0.5,    8,      0.5                 2,      2,     1,     0.5,                   6,      4,         4,            0.8,     0.8,     0.8,        0.85,   0.85,   0.85,       1,     1,    1,     1,    1,     1,         1,      1,     1,       0.8,    0.8,     0.8,       20,         20,       20,       20,           20,       20,           20,   20,     20,     20,     20,    20,      20,     20,        20,      0.4,   0];
 Lb= [ 2.5,  0,      2,      0,                  0,      0,     0,     0,                     0.5,    0.2,       0.2,          0.05,    0.05,    0.05,       0.1,    0.1,    0.1,        0,     0,    0,     0,    0,     0,         0,      0,     0,       0.45,   0.45,    0.45,      0,          0,        0,        0,            0,        0,            0,    0,      0,      0,      0,     0,       0,      0,         0,       0,     0];
 Pub=[ 9,    0.9,    7,      0.9,                1.5,    1,     1.5,   1,                     5.5,     3,        3,            0.75,    0.75,    0.75        0.8,    0.8,    0.8,        0.8,   0.8,  0.8,   0.75, 0.75,  0.75,      0.8,    0.8,   0.8,     0.75,   0.75,    0.75,      15,         15,       15,       15,           15,       15,           15,   15,     15,     15,    15,     15,      15,     15,        15,      0.35,  0];

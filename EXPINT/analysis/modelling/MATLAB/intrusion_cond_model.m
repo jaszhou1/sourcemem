@@ -452,7 +452,7 @@ for cond = 1:3
 
         % Create mesh for interpolation
         [angle,time]=meshgrid(this_t, theta);
-        like(im) = interp2(angle, time, Gt, this_rt, this_phi, 'linear');
+        like(i) = interp2(angle, time, Gt, this_rt, this_phi, 'linear');
     end
 
     % Out of range values returned as NaN's. Treat as contaminants - set small.

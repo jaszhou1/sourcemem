@@ -1,4 +1,4 @@
-function[simulated_data] = simulate_intrusion_cond(data, pest, participant)
+function[simulated_data] = simulate_intrusion_cond(data, pest, participant, model_string)
 %% Error Messages
 name = 'SIMULATE_FULL_MODEL: ';
 errmg1 = 'Incorrect number of parameters, exiting...';
@@ -308,7 +308,7 @@ for cond = 1:3
 
     % This is the data structure that will contain the simulated
     % observations for this participant
-    this_cond_data = zeros(n_trials*n_sims, 49);
+    this_cond_data = zeros(n_trials*n_sims, 50);
     idx = 1;
 
     for i = 1:n_trials
@@ -393,6 +393,7 @@ for cond = 1:3
             this_cond_data(idx, 41:47) = this_data(i, 41:47); % Intrusion Angles
             this_cond_data(idx, 48) = cond;
             this_cond_data(idx, 49) = participant;
+            this_cond_data(idx, 50) = model_string;
             % Add one to index
             idx = idx + 1;
         end
