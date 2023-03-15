@@ -1,4 +1,4 @@
-function[simulated_data] = simulate_intrusion_cond(data, pest, participant)
+function[simulated_data] = simulate_intrusion_cond(data, pest, participant, model_string)
 %% Error Messages
 name = 'SIMULATE_FULL_MODEL: ';
 errmg1 = 'Incorrect number of parameters, exiting...';
@@ -98,7 +98,7 @@ iota3 = P(41);
 % Semantic gradient
 upsilon1 = P(42); % Semantic decay, Low
 upsilon2 = P(43); % Semantic decay, High
-upsilon = P(44);
+upsilon3 = P(44);
 
 % Nondecision Time
 ter = P(45);
@@ -117,6 +117,10 @@ st = P(46);
 % in the model code like Philip usually does is so I can set the lowerbound
 % to 0 when I want parameters to be equal across conditions, but be higher
 % in the freer version of the model.
+if isnan(a_int)
+    a_int = a_targ;
+end
+
 if isnan(beta2)
     beta2 = beta1;
     %beta3 = beta1;
@@ -304,7 +308,7 @@ for cond = 1:3
 
     % This is the data structure that will contain the simulated
     % observations for this participant
-    this_cond_data = zeros(n_trials*n_sims, 49);
+    this_cond_data = zeros(n_trials*n_sims, 50);
     idx = 1;
 
     for i = 1:n_trials
@@ -389,6 +393,7 @@ for cond = 1:3
             this_cond_data(idx, 41:47) = this_data(i, 41:47); % Intrusion Angles
             this_cond_data(idx, 48) = cond;
             this_cond_data(idx, 49) = participant;
+            this_cond_data(idx, 50) = model_string;
             % Add one to index
             idx = idx + 1;
         end
