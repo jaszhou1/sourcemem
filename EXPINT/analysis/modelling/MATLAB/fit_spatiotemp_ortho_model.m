@@ -9,36 +9,36 @@ if nargin < 2
     badix = 5;
 end
 
-v1_targ = 8; %1
+v1_targ = 2.5; %1
 v2_targ = 0; %2
-v1_int = 6; %3
+v1_int = 2; %3
 v2_int = 0; %4
 
-eta1_targ = 1; %5
+eta1_targ = 1.5; %5
 eta2_targ = 0; %6
-eta1_int = 1; %7
+eta1_int = 0.8; %7
 eta2_int = 0; %8
 
 % Decision Criteria
-a_targ = 2; %9
+a_targ = 3.35; %9
 a_int = NaN; %10
 a_guess = 0.5; %11
 
 % Component Proportions
-beta1 = 0.4; % 11
+beta1 = 0.2; % 11
 beta2 = NaN; % 12
 beta3 = NaN; %13
 
-gamma1 = 0.2; % 15
+gamma1 = 0.1; % 15
 gamma2 = NaN; % 16
 gamma3 = NaN; % 17
 
 % Intrusion similarity rating weights
-chi1 = 0.4; % 18
+chi1 = 0.1; % 18
 chi2 = NaN; % 19
 chi3 = NaN; % 20
 
-phi1 = 0.2; % 21
+phi1 = 0.7; % 21
 phi2 = NaN; % 22
 phi3 = NaN; %23
 
@@ -51,8 +51,8 @@ tau1 = 0.5; % 27 Weight forwards vs backwards intrusion decay slope
 tau2 = NaN; % 28
 tau3 = NaN; % 29
 
-lambda_b1 = 1.74; % 30
-lambda_f1 = 1.1; % 31
+lambda_b1 = 2.1; % 30
+lambda_f1 = 0.8; % 31
 
 lambda_b2 = NaN; % 32
 lambda_f2 = NaN; % 33
@@ -76,7 +76,7 @@ upsilon2 = NaN; % 43 Semantic decay, High
 upsilon3 = NaN; % 44
 
 % Nondecision Time
-ter = 0.15; % 45
+ter = 0.2; % 45
 st = 0; % 46
 
 P = [v1_targ, v2_targ v1_int, v2_int, eta1_targ, eta2_targ, eta1_int, eta2_int,...

@@ -23,11 +23,6 @@ end
 
 P = pest;
 
-% Assemble parameter vector.
-P = zeros(1,np);
-P(Sel==1) = Pvar;
-P(Sel==0) = Pfix;
-
 % Save on each iteration
 % Ptemp = P;
 % save Ptemp
