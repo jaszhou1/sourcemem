@@ -26,15 +26,13 @@ participants <- unique(data$participant)
 conds <- unique(data$condition)
 
 ## Read in simulated data
-spatiotemporal <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_spatiotemp.csv")
-ortho <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_ortho.csv")
-# temp_w <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_temp_ortho_w.csv")
-# temp_d <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_temp_ortho_d.csv")
-spatiotemporal_w <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_spatiotemp_ortho_w.csv")
+spatiotemporal <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_spatiotemp.csv")
+fourfactor <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_fourfactor.csv")
+spatiotemporal_ortho <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_spatiotemp_ortho.csv")
 
 spatiotemporal[,50] <- 'spatiotemporal'
-ortho[,50] <- 'orthographic'
-spatiotemporal_w[,50] <- 'spatiotemporal_ortho_weight'
+fourfactor[,50] <- 'fourfactor'
+spatiotemporal_ortho[,50] <- 'spatiotemporal_ortho'
 
 col.names <- c('error', 'rt', 'resp_angle', 'targ_angle', 'trial_number',
                'offset_1', 'offset_2', 'offset_3', 'offset_4', 'offset_5',
@@ -52,16 +50,16 @@ col.names <- c('error', 'rt', 'resp_angle', 'targ_angle', 'trial_number',
                'cond', 'participant', 'model')
 
 colnames(spatiotemporal) <- col.names
-colnames(ortho) <- col.names
-colnames(spatiotemporal_w) <- col.names
+colnames(fourfactor) <- col.names
+colnames(spatiotemporal_ortho) <- col.names
 
-models <- rbind(spatiotemporal, ortho, spatiotemporal_w)
+models <- rbind(spatiotemporal, fourfactor, spatiotemporal_ortho)
 
 # Recentered on Non-
 source('recenter_data.R')
 recentered_data <- recenter.data(data)
 recentered_spatiotemporal <- recenter.model(spatiotemporal)
-recentered_orthographic <- recenter.model(ortho)
-recentered_spatiotemporal_w <- recenter.model(spatiotemporal_w)
+recentered_orthographic <- recenter.model(fourfactor)
+recentered_spatiotemporal_w <- recenter.model(spatiotemporal_ortho)
 
 save.image('recentered_diffusion.RData')
