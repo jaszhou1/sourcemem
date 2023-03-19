@@ -3,7 +3,7 @@
 load('EXPINT_data_recognised.mat')
 
 n_participants = length(data);
-n_runs = 3;
+n_runs = 1;
 num_workers = maxNumCompThreads/2; % Maximum number of workers
 
 %% Model without orthography component, just a difference between conditions in guess
@@ -154,7 +154,7 @@ parfor (i = 1:n_participants, num_workers)
     end
 end
 
-filename = [datestr(now,'yyyy_mm_dd_HH'),'_temp'];
+filename = [datestr(now,'yyyy_mm_dd_HH'),'_sto_criterion'];
 save(filename)
 
 % STO_criterion
@@ -184,7 +184,7 @@ parfor (i = 1:n_participants, num_workers)
     end
 end
 
-filename = [datestr(now,'yyyy_mm_dd_HH'),'_temp'];
+filename = [datestr(now,'yyyy_mm_dd_HH'),'_sto_gamma'];
 save(filename)
 
 % Gamma is different between orth/unrelated, and beta is different for sem/unrelated
@@ -214,7 +214,7 @@ parfor (i = 1:n_participants, num_workers)
     end
 end
 
-filename = [datestr(now,'yyyy_mm_dd_HH'),'_temp'];
+filename = [datestr(now,'yyyy_mm_dd_HH'),'_semantic_beta'];
 save(filename)
 
 % Semantic_beta, with different chi weighting across conditions
@@ -243,7 +243,8 @@ parfor (i = 1:n_participants, num_workers)
         end
     end
 end
-
+filename = [datestr(now,'yyyy_mm_dd_HH'),'_sto_weight'];
+save(filename)
 
 %%
 filename = [datestr(now,'yyyy_mm_dd_HH'),'_fits'];
@@ -254,56 +255,56 @@ header_line = 'participant, model_name, AIC, v1_targ, v2_targ, v1_int, v2_int, e
 
 sim_spatiotemp = [];
  for i = 1:10
-     this_sim = simulate_intrusion_cond(data(i,:), spatiotemp{i,3}, i, 'spatiotemp');
+     this_sim = simulate_intrusion_cond(data(i,:), spatiotemp{i,3}, i, 1);
      sim_spatiotemp = vertcat(sim_spatiotemp, this_sim);
  end
  csvwrite('sim_spatiotemp.csv', sim_spatiotemp)
 
  sim_fourfactor = [];
  for i = 1:10
-     this_sim = simulate_intrusion_cond(data(i,:), fourfactor{i,3}, i, 'fourfactor');
+     this_sim = simulate_intrusion_cond(data(i,:), fourfactor{i,3}, i, 2);
      sim_fourfactor = vertcat(sim_fourfactor, this_sim);
  end
  csvwrite('sim_fourfactor.csv', sim_fourfactor)
 
  sim_sto = [];
  for i = 1:10
-     this_sim = simulate_intrusion_cond(data(i,:), sto{i,3}, i, 'spatiotemp-ortho');
+     this_sim = simulate_intrusion_cond(data(i,:), sto{i,3}, i, 3);
      sim_sto = vertcat(sim_sto, this_sim);
  end
  csvwrite('sim_spatiotemp_ortho.csv', sim_sto)
 
 sim_temporal_ortho = [];
  for i = 1:10
-     this_sim = simulate_intrusion_cond(data(i,:), temporal_ortho{i,3}, i, 'temp-ortho');
+     this_sim = simulate_intrusion_cond(data(i,:), temporal_ortho{i,3}, i, 4);
      sim_temporal_ortho = vertcat(sim_temporal_ortho, this_sim);
  end
  csvwrite('sim_temporal_ortho.csv', sim_temporal_ortho)
 
 sim_sto_criterion = [];
  for i = 1:10
-     this_sim = simulate_intrusion_cond(data(i,:), sto_criterion{i,3}, i, 'spatiotemp-ortho-criterion');
+     this_sim = simulate_intrusion_cond(data(i,:), sto_criterion{i,3}, i, 5);
      sim_sto_criterion = vertcat(sim_sto_criterion, this_sim);
  end
  csvwrite('sim_sto_criterion.csv', sim_sto_criterion)
 
  sim_sto_gamma = [];
  for i = 1:10
-     this_sim = simulate_intrusion_cond(data(i,:), sto_gamma{i,3}, i, 'spatiotemp-ortho-gamma');
+     this_sim = simulate_intrusion_cond(data(i,:), sto_gamma{i,3}, i, 6);
      sim_sto_gamma = vertcat(sim_sto_gamma, this_sim);
  end
  csvwrite('sim_sto_gamma.csv', sim_sto_gamma)
 
 sim_sto_semantic_beta = [];
  for i = 1:10
-     this_sim = simulate_intrusion_cond(data(i,:), sto_semantic_beta{i,3}, i, 'spatiotemp-ortho-semantic-beta');
+     this_sim = simulate_intrusion_cond(data(i,:), sto_semantic_beta{i,3}, i, 7);
      sim_sto_semantic_beta = vertcat(sim_sto_semantic_beta, this_sim);
  end
  csvwrite('sim_sto_semantic_beta.csv', sim_sto_semantic_beta)
 
  sim_sto_weight = [];
  for i = 1:10
-     this_sim = simulate_intrusion_cond(data(i,:), sto_weight{i,3}, i, 'spatiotemp-ortho-weight');
+     this_sim = simulate_intrusion_cond(data(i,:), sto_weight{i,3}, i, 8);
      sim_sto_weight = vertcat(sim_sto_weight, this_sim);
  end
  csvwrite('sim_sto_weight.csv', sim_sto_weight)
