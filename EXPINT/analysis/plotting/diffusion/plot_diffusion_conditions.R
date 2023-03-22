@@ -18,15 +18,19 @@ participants <- unique(data$participant)
 conds <- unique(data$condition)
 
 # Load in models
-spatiotemp <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_spatiotemp.csv")
-ortho <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_ortho.csv")
-# temp_w <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_temp_ortho_w.csv")
-# temp_d <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_temp_ortho_d.csv")
-spatiotemp_w <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/v2/sim_spatiotemp_ortho_w.csv")
+spatiotemp <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_spatiotemp.csv")
+fourfactor <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_fourfactor.csv")
+sto <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_spatiotemp_ortho.csv")
+sto_gamma <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_sto_gamma.csv")
+sto_weight <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_sto_weight.csv")
+sto_criterion <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_sto_criterion.csv")
 
 spatiotemp[,50] <- 'spatiotemporal'
-ortho[,50] <- 'orthographic'
-spatiotemp_w[,50] <- 'spatiotemporal-orthographic-weight'
+fourfactor[,50] <- 'fourfactor'
+sto[,50] <- 'spatiotemporal-orthographic'
+sto_gamma[,50] <- 'sto_gamma'
+sto_weight[,50] <- 'sto_weight'
+sto_criterion[,50] <- 'sto_criterion'
 
 
 col.names <- c('error', 'rt', 'resp_angle', 'targ_angle', 'trial_number',
@@ -45,15 +49,19 @@ col.names <- c('error', 'rt', 'resp_angle', 'targ_angle', 'trial_number',
                'cond', 'participant', 'model')
 
 colnames(spatiotemp) <- col.names
-colnames(ortho) <- col.names
-colnames(spatiotemp_w) <- col.names
+colnames(fourfactor) <- col.names
+colnames(sto) <- col.names
+colnames(sto_gamma) <- col.names
+colnames(sto_weight) <- col.names
+colnames(sto_criterion) <- col.names
 
-models <- rbind(spatiotemp, ortho, spatiotemp_w)
+models <- rbind(spatiotemp, fourfactor, sto, sto_gamma, sto_weight, sto_criterion)
 
 models$condition[models$cond==1] <- "unrelated"
 models$condition[models$cond==2] <- "orthographic"
 models$condition[models$cond==3] <- "semantic"
 
+model_names <- unique(models$model)
 # Convert the column to a factor
 models$condition <- factor(models$condition, levels = c('orthographic', 'semantic', 'unrelated'))
 data$condition <- factor(data$condition, levels = c('orthographic', 'semantic', 'unrelated'))
@@ -65,11 +73,11 @@ plot.all <- function(model_list){
   for(i in unique(data$participant)){
     this_plot <- plot.participant(i, model_list)
     filename <- sprintf('%s_diffusion_plot.png', i)
-    ggsave(filename, plot = this_plot, width = 40, height = 35, units = "cm")
+    ggsave(filename, plot = this_plot, width = 40, height = 30, units = "cm")
   }
   this_plot <- plot.participant(model_list = model_list)
   filename <- 'group_diffusion_plot.png'
-  ggsave(filename, plot = this_plot, width = 40, height = 35, units = "cm")
+  ggsave(filename, plot = this_plot, width = 40, height = 30, units = "cm")
 }
 
 ############################### LEVEL 2 ########################################
