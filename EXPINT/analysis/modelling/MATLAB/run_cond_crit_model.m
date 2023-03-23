@@ -32,7 +32,7 @@ parfor (i = 1:n_participants, num_workers)
     end
 end
 
-filename = [datestr(now,'yyyy_mm_dd_HH'),'_temp'];
+filename = [datestr(now,'yyyy_mm_dd_HH'),'_cond_crit'];
 save(filename)
 header_line = 'participant, model_name, AIC, v1_targ, v2_targ, v1_int, v2_int, eta1_targ, eta2_targ, eta1_int, eta2_int, a_targ_1, a_targ_2, a_targ_3, a_guess, beta1, beta2, gamma1, gamma2, chi1, chi2, phi1, phi2, psi1, psi2, tau1, tau2,  lambda_b1, lambda_f1, lambda_b2, lambda_f2, zeta1, zeta2, iota1, iota2, uspsilon1, upsilon2,  ter, st';
 
@@ -41,7 +41,7 @@ sim_crit_cond = [];
      this_sim = simulate_intrusion_cond(data(i,:), crit_cond{i,3}, i, 1);
      sim_crit_cond = vertcat(sim_crit_cond, this_sim);
  end
- csvwrite('sim_spatiotemp.csv', sim_crit_cond)
+ csvwrite('sim_cond_crit.csv', sim_crit_cond)
 
 function [ll, aic, P, penalty] = fit_intrusion_cond_crit_model(data, badix)
 % Same intrusion scaling and guessing across conditions, just change the
