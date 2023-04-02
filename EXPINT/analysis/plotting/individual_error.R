@@ -4,6 +4,7 @@ data <- data[data$block != -1,]
 data <- data[data$is_stimulus, ]
 # Exclude data with inalid RT
 data <- data[data$valid_RT, ]
+data <- data[data$recog_rating %in% c(0, 8, 9),]
 participants <- unique(data$participant)
 setwd("~/git/sourcemem/EXPINT/analysis/plotting/output/publication")
 condition.figure <- function(data, filename="") {
@@ -18,7 +19,7 @@ condition.figure <- function(data, filename="") {
   
   
   ## Overall charting parameters.
-  NUM.BINS <- 50
+  NUM.BINS <- 30
   X.AXIS.CEX <- 1.5
   Y.AXIS.CEX <- 1.5
   
@@ -26,7 +27,7 @@ condition.figure <- function(data, filename="") {
   ## Get the summary variables from the data.
   PARTICIPANTS <- unique(data$participant)
   NUM.PARTICIPANTS <- length(PARTICIPANTS)
-  PARTICIPANTS.PER.ROW <- 1
+  PARTICIPANTS.PER.ROW <- 2
   
   CONDITIONS <- unique(data$condition)
   
@@ -58,7 +59,7 @@ condition.figure <- function(data, filename="") {
       this.data <- p.data[p.data$condition == cond, ]
       
       ## Plot marginal response proportion for participant.
-      par(mar=c(0.1, 0.1, 0.1, 0.5))
+      par(mar=c(0.1, 0.1, 0.1, 3))
       plot.new()
       plot.window(xlim=c(X.RESP.LOW, X.RESP.HI),
                   ylim=c(Y.RESP.LOW, Y.RESP.HI))

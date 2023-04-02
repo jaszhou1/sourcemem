@@ -35,6 +35,7 @@ end
 filename = [datestr(now,'yyyy_mm_dd_HH'),'_cond_crit'];
 save(filename)
 header_line = 'participant, model_name, AIC, v1_targ, v2_targ, v1_int, v2_int, eta1_targ, eta2_targ, eta1_int, eta2_int, a_targ_1, a_targ_2, a_targ_3, a_guess, beta1, beta2, gamma1, gamma2, chi1, chi2, phi1, phi2, psi1, psi2, tau1, tau2,  lambda_b1, lambda_f1, lambda_b2, lambda_f2, zeta1, zeta2, iota1, iota2, uspsilon1, upsilon2,  ter, st';
+pest_to_csv(crit_cond, 'crit_cond.csv', header_line)
 
 sim_crit_cond = [];
  for i = 1:10

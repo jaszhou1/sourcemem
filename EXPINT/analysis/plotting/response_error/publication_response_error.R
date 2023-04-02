@@ -42,7 +42,7 @@ plot.all <- function(model_list){
 cond_serial_pos <- function(data, sim_data, model_list){
   sim_data <- sim_data[sim_data$model_name %in% model_names[model_list],]
   plot <- ggplot(data) + 
-    geom_histogram(aes(x = source_error, y = ..density..), colour = 1, fill = 'white', bins = 50) +
+    geom_histogram(aes(x = source_error, y = ..density..), colour = 'grey80', fill = 'grey80', bins = 50) +
     geom_density(data = sim_data, aes(x = simulated_error, colour = model_name), size = 1.2) +
     facet_wrap(~condition + present_trial, ncol = 8) +
     xlab("Source Error") + ylab("Density") +
@@ -80,15 +80,15 @@ plot.participant <- function(p, model_list){
   plot <- ggarrange(response_error,
                     recentered,
                     ncol = 1, nrow = 2, heights = c(1, 1))
-  plot <- annotate_figure(plot, top = text_grob(as.character(p), 
-                                        color = "red", face = "bold", size = 14))
+  plot <- annotate_figure(plot, left = text_grob(sprintf('P%s', as.character(1)), 
+                                        color = "black", face = "bold", size = 14))
   return(plot)
 }
 
 ################################## LEVEL 3 #####################################
 plot.response.error <- function(data, model){
   plot <- ggplot() +
-    geom_histogram(data = data, aes(x = source_error, y = ..density..), colour = 1, fill = 'grey70', bins = 50) +
+    geom_histogram(data = data, aes(x = source_error, y = ..density..), colour = 'grey80', fill = 'grey80', bins = 50) +
     # geom_histogram(data = model, aes(x = simulated_error, y = ..density.., fill = model_name), bins = 50, alpha = 0.2) +
     stat_density(data = model, aes(x = simulated_error, color = model_name), kernel = 'epanechnikov', adjust = 1,
                  position="identity",geom="line", linewidth = 1.2, bounds = c(-3.14, 3.14)) +
@@ -110,7 +110,7 @@ plot.response.error <- function(data, model){
 
 plot.recenter <- function(recentered_data, recentered_sim_data){
   plot <- ggplot() +
-    geom_histogram(data = recentered_data, aes(x = offset, y = ..density..), colour = 1, fill = 'grey70', bins = 50) +
+    geom_histogram(data = recentered_data, aes(x = offset, y = ..density..), colour = 'grey80', fill = 'grey80', bins = 50) +
     # geom_histogram(data = model, aes(x = simulated_error, y = ..density.., fill = model_name), bins = 50, alpha = 0.2) +
     stat_density(data = recentered_sim_data, aes(x = offset, color = model), kernel = 'epanechnikov', adjust = 1,
                  position="identity",geom="line", linewidth = 1.2, bounds = c(-3.14, 3.14)) +

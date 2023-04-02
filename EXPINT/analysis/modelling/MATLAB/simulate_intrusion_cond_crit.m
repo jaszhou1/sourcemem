@@ -15,7 +15,7 @@ n_sims = 5; % The number of times to simulate each trial
 num_intrusions = 7;
 
 % Expected number of parameters
-n_params = 48;
+n_params = 52;
 % Check the length of the parameter vector
 if length(pest) ~= n_params
     [name, errmg1], length(pest), return;
@@ -34,72 +34,79 @@ v1_int = P(3);
 v2_int = P(4);
 
 % Trial-trial drift variability
-eta1_targ = P(5);
-eta2_targ = P(6);
-eta1_int = P(7);
-eta2_int = P(8);
+eta1_targ1 = P(5);
+eta2_targ1 = P(6);
+
+eta1_targ2 = P(7);
+eta2_targ2 = P(8);
+
+eta1_targ3 = P(9);
+eta2_targ3 = P(10);
+
+eta1_int = P(11);
+eta2_int = P(12);
 
 % Decision Criteria
-a_targ_1 = P(9);
-a_targ_2 = P(10);
-a_targ_3 = P(11);
-a_int = P(12);
-a_guess = P(13);
+a_targ_1 = P(13);
+a_targ_2 = P(14);
+a_targ_3 = P(15);
+a_int = P(16);
+a_guess = P(17);
 
 % Component Proportions
-beta1 = P(14);
-beta2 = P(15);
-beta3 = P(16);
+beta1 = P(18);
+beta2 = P(19);
+beta3 = P(20);
 
-gamma1 = P(17);
-gamma2 = P(18);
-gamma3 = P(19);
+gamma1 = P(21);
+gamma2 = P(22);
+gamma3 = P(23);
 
 % Intrusion similarity rating weights
-chi1 = P(20);
-chi2 = P(21);
-chi3 = P(22);
+chi1 = P(24);
+chi2 = P(25);
+chi3 = P(26);
 
-phi1 = P(23);
-phi2 = P(24);
-phi3 = P(25);
+phi1 = P(27);
+phi2 = P(28);
+phi3 = P(29);
 
-psi1 = P(26);
-psi2 = P(27);
-psi3 = P(28);
+psi1 = P(30);
+psi2 = P(31);
+psi3 = P(32);
 
 % Temporal Gradient
-tau1 = P(29); %Weight forwards vs backwards intrusion decay slope
-tau2 = P(30);
-tau3 = P(31);
+tau1 = P(33); %Weight forwards vs backwards intrusion decay slope
+tau2 = P(34);
+tau3 = P(35);
 
-lambda_b1 = P(32);
-lambda_f1 = P(33);
+lambda_b1 = P(36);
+lambda_f1 = P(37);
 
-lambda_b2 = P(34);
-lambda_f2 = P(35);
+lambda_b2 = P(38);
+lambda_f2 = P(39);
 
-lambda_b3 = P(36);
-lambda_f3 = P(37);
+lambda_b3 = P(40);
+lambda_f3 = P(41);
 
 % Spatial gradient
-zeta1 = P(38); %precision for Shepard similarity function (perceived spatial distance)
-zeta2 = P(39);
-zeta3 = P(40);
+zeta1 = P(42); %precision for Shepard similarity function (perceived spatial distance)
+zeta2 = P(43);
+zeta3 = P(44);
 
 % Orthographic gradient
-iota1 = P(41); % Ortho decay, Low
-iota2 = P(42); % Ortho decay, High
-iota3 = P(43);
+iota1 = P(45); % Ortho decay, Low
+iota2 = P(46); % Ortho decay, High
+iota3 = P(47);
 
 % Semantic gradient
-upsilon1 = P(44); % Semantic decay, Low
-upsilon2 = P(45); % Semantic decay, High
-upsilon3 = P(46);
+upsilon1 = P(48); % Semantic decay, Low
+upsilon2 = P(49); % Semantic decay, High
+upsilon3 = P(50);
 
 % Nondecision Time
-ter = P(47);
-st = P(48);
+ter = P(51);
+st = P(52);
 
 
 % If certain parameters are fed in as 0, assume I intend for them to be
@@ -115,9 +122,6 @@ st = P(48);
 % in the model code like Philip usually does is so I can set the lowerbound
 % to 0 when I want parameters to be equal across conditions, but be higher
 % in the freer version of the model.
-if isnan(a_int)
-    a_int = a_targ;
-end
 
 if isnan(beta2)
     beta2 = beta1;
@@ -225,6 +229,7 @@ for cond = 1:3
 
     if cond == 1 % All parameters base value
         a_targ = a_targ_1;
+        a_int = a_targ;
         beta = beta1;
         gamma = gamma1;
         chi = chi1;
@@ -236,8 +241,12 @@ for cond = 1:3
         zeta = zeta1;
         iota = iota1;
         upsilon = upsilon1;
+
+        eta1_targ = eta1_targ1;
+        eta2_targ = eta2_targ1;
     elseif cond == 2 % ORTHOGRAPHIC CONDITION
         a_targ = a_targ_2;
+        a_int = a_targ;
         beta = beta2;
         gamma = gamma2;
         chi = chi2;
@@ -249,8 +258,12 @@ for cond = 1:3
         zeta = zeta2;
         iota = iota2;
         upsilon = upsilon2;
+
+        eta1_targ = eta1_targ2;
+        eta2_targ = eta2_targ2;
     elseif cond == 3 % SEMANTIC CONDITION <-  Assume this is the same as unrelated, based on response error models.
         a_targ = a_targ_3;
+        a_int = a_targ;
         beta = beta3;
         gamma = gamma3;
         chi = chi3;
@@ -262,6 +275,9 @@ for cond = 1:3
         zeta = zeta3;
         iota = iota3;
         upsilon = upsilon3;
+
+        eta1_targ = eta1_targ3;
+        eta2_targ = eta2_targ3;
     end
 
     % Raw temporal similarity values from the lags -9 to 9, skipping 0 (in a
