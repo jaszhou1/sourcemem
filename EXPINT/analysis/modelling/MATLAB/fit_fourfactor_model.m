@@ -9,9 +9,9 @@ if nargin < 2
     badix = 5;
 end
 
-v1_targ = 8; %1
+v1_targ = 2; %1
 v2_targ = 0; %2
-v1_int = 6; %3
+v1_int = 2; %3
 v2_int = 0; %4
 
 eta1_targ = 1; %5
@@ -42,7 +42,7 @@ phi1 = 0.2; % 21
 phi2 = NaN; % 22
 phi3 = NaN; %23
 
-psi1 = 0.2; % 24
+psi1 = 0.1; % 24
 psi2 = NaN; % 25
 psi3 = NaN; % 26
 

@@ -9,9 +9,9 @@ if nargin < 2
     badix = 5;
 end
 
-v1_targ = 2.5; %1
+v1_targ = 5; %1
 v2_targ = 0; %2
-v1_int = 2; %3
+v1_int = 4; %3
 v2_int = 0; %4
 
 eta1_targ = 1.5; %5
