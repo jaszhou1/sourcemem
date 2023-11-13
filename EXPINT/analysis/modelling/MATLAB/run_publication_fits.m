@@ -94,6 +94,22 @@ parfor (i = 1:n_participants, num_workers)
     end
 end
 
+for i = [1,3, 6, 8, 10]
+    ll = sto{i,1};
+    this_fit = cell(1,4);
+    this_participant_data = data(i, :);
+    [ll_new, aic, pest, pest_penalty] = fit_spatiotemp_ortho_model(this_participant_data);
+    if(ll_new < ll)
+        ll = ll_new;
+        this_fit{1} = ll;
+        this_fit{2} = aic;
+        this_fit{3} = pest;
+        this_fit{4} = pest_penalty;
+        sto(i, :) = this_fit;
+    end
+
+end
+
 filename = [datestr(now,'yyyy_mm_dd_HH'),'_temp'];
 save(filename)
 

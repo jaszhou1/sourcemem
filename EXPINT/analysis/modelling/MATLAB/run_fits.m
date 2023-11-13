@@ -53,7 +53,7 @@ parfor (i = 1:n_participants, num_workers)
         if (ll_new < ll)
             % Double fit, call fminsearch again, but use the best parameter
             % estimates as starting points
-            [ll_new, aic, pest, pest_penalty] = fit_fourfactor_model(this_participant_data, pest);
+%             [ll_new, aic, pest, pest_penalty] = fit_fourfactor_model(this_participant_data, pest);
             ll = ll_new;
             this_fit{1} = ll;
             this_fit{2} = aic;

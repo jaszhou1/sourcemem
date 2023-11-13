@@ -50,4 +50,4 @@ sem.similarities <- ggplot(data = sem.data, aes(x = value)) +
 
 setwd("~/git/sourcemem/EXPINT/analysis/plotting/output")
 plot <- ggarrange(orthographic.similarities, NULL, sem.similarities, ncol = 1, heights = c(1, 0.1, 1), common.legend = TRUE, legend="none")
-ggsave('list_comparison_v2.png', plot = last_plot(), width = 25, height = 20, units = "cm")
+#ggsave('list_comparison_v2.png', plot = last_plot(), width = 25, height = 20, units = "cm")

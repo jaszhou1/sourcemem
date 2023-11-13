@@ -1,4 +1,8 @@
 # plot_diffusion_conditions
+library(stringr)
+library(ggplot2)
+library(ggpubr)
+library(dplyr)
 # Produce a 4x3 panel plot that shows a few facets of the data for one participant (or group)
 ## Read in and handle observed data
 data <- read.csv("~/git/sourcemem/EXPINT/analysis/modelling/MATLAB/EXPINT_data.csv")
@@ -25,12 +29,12 @@ sto_gamma <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_st
 sto_weight <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_sto_weight.csv")
 sto_criterion <- read.csv("~/git/sourcemem/EXPINT/analysis/plotting/diffusion/sim_sto_criterion.csv")
 
-spatiotemp[,50] <- 'spatiotemporal'
-fourfactor[,50] <- 'fourfactor'
-sto[,50] <- 'spatiotemporal-orthographic'
-sto_gamma[,50] <- 'sto_gamma'
-sto_weight[,50] <- 'sto_weight'
-sto_criterion[,50] <- 'sto_criterion'
+spatiotemp[,50] <- 'Spatiotemporal'
+fourfactor[,50] <- 'Four Factor'
+sto[,50] <- 'Spatiotemporal-Orthographic'
+sto_gamma[,50] <- 'Spatiotemporal-Orthographic Gamma'
+sto_weight[,50] <- 'Spatiotemporal-Orthographic Weight'
+sto_criterion[,50] <- 'Spatiotemporal-Orthographic Criterion'
 
 
 col.names <- c('error', 'rt', 'resp_angle', 'targ_angle', 'trial_number',
@@ -56,18 +60,25 @@ colnames(sto_weight) <- col.names
 colnames(sto_criterion) <- col.names
 
 models <- rbind(spatiotemp, fourfactor, sto, sto_gamma, sto_weight, sto_criterion)
+models[,50] <- factor(models[,50], levels = c('Spatiotemporal', 'Four Factor',
+                                              'Spatiotemporal-Orthographic',
+                                              'Spatiotemporal-Orthographic Gamma',
+                                              'Spatiotemporal-Orthographic Weight',
+                                              'Spatiotemporal-Orthographic Criterion'))
 
-models$condition[models$cond==1] <- "unrelated"
-models$condition[models$cond==2] <- "orthographic"
-models$condition[models$cond==3] <- "semantic"
+models$condition[models$cond==1] <- "Unrelated"
+models$condition[models$cond==2] <- "Orthographic"
+models$condition[models$cond==3] <- "Semantic"
 
 model_names <- unique(models$model)
 # Convert the column to a factor
-models$condition <- factor(models$condition, levels = c('orthographic', 'semantic', 'unrelated'))
-data$condition <- factor(data$condition, levels = c('orthographic', 'semantic', 'unrelated'))
+models$condition <- factor(models$condition, levels = c('Unrelated', 'Semantic', 'Orthographic'))
+data$condition <- factor(str_to_title(data$condition), levels = c('Unrelated', 'Semantic', 'Orthographic'))
 # Plotting
 setwd("~/git/sourcemem/EXPINT/analysis/plotting/output/diffusion")
 
+colours <- c('#e6194B', '#f032e6', '#4363d8', '#f58231', '#42d4f4', '#e6194B')
+line.types <- c('solid', 'dotted', 'longdash', 'twodash', 'dotted', 'dotted')
 
 plot.all <- function(model_list){
   for(i in unique(data$participant)){
@@ -94,35 +105,60 @@ plot.participant <- function(p, model_list){
     #recentered_sim_data <- recentered_sim_data[recentered_sim_data$participant == p,]
   }
   
-  response_error <- plot.response.error(data, models)
-  response_times <- plot.RT(data, models)
-  qq <- plot.qq(data, models)
+  response_error <- plot.response.error(data, models, model_list)
+  response_times <- plot.RT(data, models, model_list)
+  #qq <- plot.qq(data, models, model_list)
   #recentered_error <- plot.condition.recenter(recentered_data, recentered_sim_data)
+  plot <- ggarrange(response_error,
+                    NULL,
+                    response_times,
+                    #recentered_error,
+                    ncol = 1, nrow = 3, heights = c(1, 0.1, 1))
   
   # Plot 1 shows the response error and recentered error split by experimental condition
-  plot <- ggarrange(response_error,
-                    response_times,
-                    qq,
-                    #recentered_error, 
-                    ncol = 1, nrow = 3, heights = c(1, 1, 2))
-  annotate_figure(plot, top = text_grob(as.character(p), 
-                                        color = "red", face = "bold", size = 14))
+  # plot <- ggarrange(response_error,
+  #                   NULL,
+  #                   response_times,
+  #                   NULL,
+  #                   qq,
+  #                   #recentered_error, 
+  #                   ncol = 1, nrow = 5, heights = c(1, 0.1, 1, 0.1, 2))
+  # annotate_figure(plot, top = text_grob(as.character(p), 
+  #                                       color = "red", face = "bold", size = 14))
   return(plot)
 }
 
 ################################## LEVEL 3 #####################################
-plot.response.error <- function(data, model){
+plot.response.error <- function(data, model, model_list){
   plot <- ggplot() +
-    geom_histogram(data = data, aes(x = source_error, y = ..density..), colour = 1, fill = 'grey70', bins = 50) +
+    geom_histogram(data = data, aes(x = source_error, y = ..density..), colour = 'grey80', fill = 'grey80', boundary = 0, binwidth = 1/5) +
     # geom_histogram(data = model, aes(x = simulated_error, y = ..density.., fill = model_name), bins = 50, alpha = 0.2) +
-    stat_density(data = model, aes(x = error, color = model), kernel = 'epanechnikov', adjust = 1,
-                 position="identity",geom="line", linewidth = 1.2, bounds = c(-3.14, 3.14)) +
+    stat_density(data = model, aes(x = error, 
+                                   color = factor(model, levels = c('Spatiotemporal', 'Four Factor',
+                                                                         'Spatiotemporal-Orthographic',
+                                                                         'Spatiotemporal-Orthographic Gamma',
+                                                                         'Spatiotemporal-Orthographic Weight',
+                                                                         'Spatiotemporal-Orthographic Criterion'
+                                                                         )), 
+                                   lty = factor(model, levels = c('Spatiotemporal', 'Four Factor',
+                                                                       'Spatiotemporal-Orthographic',
+                                                                       'Spatiotemporal-Orthographic Gamma',
+                                                                       'Spatiotemporal-Orthographic Weight',
+                                                                       'Spatiotemporal-Orthographic Criterion'
+                                   ))), 
+                 kernel = 'epanechnikov', adjust = 0.65,
+                 position="identity",geom="line", linewidth = 0.8, bounds = c(-3.14, 3.14)) +
     facet_grid(~condition) +
-    xlab("Source Error") + ylab("Density") +
-    theme(strip.text.x = element_text(size = 12),
+    scale_x_continuous(name = 'Source Error', breaks = c(-3.14, 0, 3.14), labels = c(expression(-pi), "0", expression(pi))) +
+    scale_y_continuous(name = 'Density', breaks = c(0, 0.75), labels = (c('0', '0.75'))) + 
+    scale_color_manual(values = colours[c(model_list)]) +
+    scale_linetype_manual(values = line.types[c(model_list)]) +
+    ylab("Density") +
+    theme(text = element_text(size=14),
           strip.background = element_blank(),
-          plot.title = element_text(face = "bold", size = 12),
+          plot.title = element_text(face = "bold", size = 11),
           legend.position = "none",
+          legend.title = element_blank(),
           axis.ticks = element_line(colour = "grey70", size = 0.2),
           axis.line.x = element_line(color="black", size = 0.2),
           axis.line.y = element_line(color="black", size = 0.2),
@@ -132,19 +168,37 @@ plot.response.error <- function(data, model){
   return(plot)
 }
 
-plot.RT <- function(data, model){
+plot.RT <- function(data, model, model_list){
   plot <- ggplot() +
-    geom_histogram(data = data, aes(x = source_RT, y = ..density..), colour = 1, fill = 'grey70', bins = 50) +
+    geom_histogram(data = data, aes(x = source_RT, y = ..density..), colour = 'grey80', fill = 'grey80', boundary = 0, binwidth = 1/7) +
     # geom_histogram(data = model, aes(x = simulated_error, y = ..density.., fill = model_name), bins = 50, alpha = 0.2) +
-    stat_density(data = model, aes(x = rt, color = model), kernel = 'epanechnikov', adjust = 1,
-                 position="identity",geom="line", linewidth = 1.2, bounds = c(0, 7)) +
+    stat_density(data = model, aes(x = rt, 
+                                   color = factor(model, levels = c('Spatiotemporal', 'Four Factor',
+                                                                    'Spatiotemporal-Orthographic',
+                                                                    'Spatiotemporal-Orthographic Gamma',
+                                                                    'Spatiotemporal-Orthographic Weight',
+                                                                    'Spatiotemporal-Orthographic Criterion'
+                                   )), 
+                                   lty = factor(model, levels = c('Spatiotemporal', 'Four Factor',
+                                                                  'Spatiotemporal-Orthographic',
+                                                                  'Spatiotemporal-Orthographic Gamma',
+                                                                  'Spatiotemporal-Orthographic Weight',
+                                                                  'Spatiotemporal-Orthographic Criterion'
+                                   ))), 
+                 kernel = 'epanechnikov', adjust = 1,
+                 position="identity",geom="line", linewidth = 0.8, bounds = c(0, 5)) +
     facet_grid(~condition) +
-    xlab("Source Error") + ylab("Density") +
-    xlim(0,7) +
-    theme(strip.text.x = element_text(size = 12),
+    scale_x_continuous(name = 'Source RT', limits = c(0, 5), breaks = c(0, 5), labels = c('0','5')) +
+    scale_y_continuous(name = 'Density', limits = c(0, 1.5), breaks = c(0, 1.5), labels = (c('0', '1.5'))) + 
+    scale_color_manual(values = colours[c(model_list)]) +
+    scale_linetype_manual(values = line.types[c(model_list)]) +
+    ylab("Density") +
+    theme(text = element_text(size=14),
           strip.background = element_blank(),
-          plot.title = element_text(face = "bold", size = 12),
+          strip.text = element_blank(),
+          plot.title = element_text(face = "bold", size = 11),
           legend.position = "none",
+          legend.title = element_blank(),
           axis.ticks = element_line(colour = "grey70", size = 0.2),
           axis.line.x = element_line(color="black", size = 0.2),
           axis.line.y = element_line(color="black", size = 0.2),
@@ -154,7 +208,7 @@ plot.RT <- function(data, model){
   return(plot)
 }
 
-plot.qq <- function(data, model){
+plot.qq <- function(data, model, model_list){
   data_qq <- qxq.cond(data, c(0.1, 0.3, 0.5, 0.9), c(0.1, 0.5, 0.9), 'data')
   model_names <- unique(model$model)
   model_qq <- data.frame()
@@ -167,32 +221,32 @@ plot.qq <- function(data, model){
   }
   plot <- ggplot() +
     geom_point(data=data_qq, size = 3, aes(x= theta, y = rt, shape = factor(rt_q))) +
-    geom_segment(data = data_qq, linetype = "solid", size = 1, alpha = 0.4, 
-                 aes(x = theta, xend = theta, y = rt_lower, yend = rt_upper, group = rt_q)) +
-    geom_point(data=model_qq, size = 3, alpha = 0.5, aes(x= theta, y = rt, shape = factor(rt_q), color = model)) +
-    geom_line(data = model_qq, linetype="dashed", alpha = 0.5, size = 1, aes(x = theta, y = rt,
-                                                                             color = model, group = interaction(model, rt_q))) +
-    facet_grid(~cond) +
+    # geom_segment(data = data_qq, linetype = "solid", size = 1, alpha = 0.4, 
+    #              aes(x = theta, xend = theta, y = rt_lower, yend = rt_upper, group = rt_q)) +
+    geom_point(data=model_qq, size = 3, alpha = 0.7, aes(x= theta, y = rt, shape = factor(rt_q), color = model)) +
+    geom_line(data = model_qq, alpha = 0.7, size = 1, aes(x = theta, y = rt,
+                                                                             color = model, linetype = model, group = interaction(model, rt_q))) +
+    facet_grid(~factor(cond, levels = c('Unrelated', 'Semantic', 'Orthographic'))) +
     scale_x_continuous(name = 'Absolute Error (rad)', breaks = c(0, pi), limits = c(0, pi),
                        labels = c(0, expression(pi))) +
-    scale_y_continuous(name = 'Response Time (s)', breaks = c(0.5, 1.0, 1.5, 2.0)) +
+    scale_y_continuous(name = 'Response Time (s)', limits = c(0, 3), breaks = c(0.5, 1.5, 3.0)) +
+    scale_color_manual(values = colours[c(model_list)]) +
+    scale_linetype_manual(values = line.types[c(model_list)]) +
+    scale_shape_manual(values = c(15, 16, 17, 18)) +
     guides(size = "none",
            color= guide_legend(title="Model"),
+           linetype = guide_legend(title = "Model"),
            shape= guide_legend(title="Response Time Quantile")) +
     theme(
-      strip.text.x = element_text(size = 12),
+      text = element_text(size=14),
+      strip.text.x = element_blank(),
       strip.background = element_blank(),
-      axis.text.x = element_text(color="black", size = 14),
-      axis.text.y = element_text(color="black", size = 14),
       plot.title = element_blank(),
-      axis.title.x = element_text(color="black", size=16),
-      axis.title.y = element_text(color="black", size=16),
       plot.background = element_rect(fill = "white"),
       panel.grid.major = element_blank(), 
       panel.grid.minor = element_blank(),
       panel.background = element_blank(),
       legend.key = element_rect(colour = "transparent", fill = "white"),
-      legend.text=element_text(size= 14),
       legend.position = 'bottom',
       legend.box="vertical",
       legend.justification = "left",

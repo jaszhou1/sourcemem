@@ -25,6 +25,10 @@ load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models/2023-
 load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models/2023-03-16_sim_data.RData")
 load("~/git/sourcemem/EXPINT/analysis/modelling/R/model_code/fitted_models/2023-03-16_simulated_recenter.RData")
 
+sim_data <- sim_data[!(sim_data$model_name %in% c('fourfactor_gamma', 'spatiotemporal_ortho_weight')),]
+
+recentered_sim_data <- recentered_sim_data[!(recentered_sim_data$model %in% c('fourfactor_gamma', 'spatiotemporal_ortho_weight')),]
+
 participants <- unique(data$participant)
 conds <- unique(data$condition)
 
@@ -152,9 +156,9 @@ plot.recenter <- function(recentered_data, recentered_sim_data, model_list){
   return(plot)
 }
 
-# this_plot <- plot.participant(model_list = c(1,3))
-# filename <- 'fig4.png'
-# ggsave(filename, plot = this_plot, width = 20, height = 15, units = "cm")
+this_plot <- plot.participant(model_list = c(1,3))
+filename <- 'fig4.png'
+ggsave(filename, plot = this_plot, width = 20, height = 15, units = "cm")
 
 ########################################################################################################
 recenter_semantic <- function(recentered_data, recentered_sim_data, model_list){
@@ -241,14 +245,14 @@ recenter_orthographic <- function(recentered_data, recentered_sim_data, model_li
   return(plot)
 }
 
-plot.recenter <- function(model_list){
+plot.recenter.cond <- function(recentered_data, recentered_sim_data, model_list){
  p1 <- recenter_semantic(recentered_data, recentered_sim_data, model_list)
  p2 <- recenter_orthographic(recentered_data, recentered_sim_data, model_list)
  this.plot <- ggarrange(p1, p2, ncol = 1, nrow = 2, heights = c(1, 1.2))
  return(this.plot)
 }
 
-this_plot <- plot.recenter(c(2,3))
+this_plot <- plot.recenter(recentered_data, recentered_sim_data, c(2,3))
 filename <- 'fig5.png'
 ggsave(filename, plot = this_plot, width = 20, height = 15, units = "cm")
 
@@ -258,7 +262,7 @@ ggsave(filename, plot = this_plot, width = 20, height = 15, units = "cm")
 plot.super.error <- function(data, model, model_list, superparticipant){
   model <- model[model$model %in% model_names[model_list],]
   plot <- ggplot() +
-    geom_histogram(data = data, aes(x = source_error, y = ..density..), colour = 'grey80', fill = 'grey80', boundary = 0, binwidth = 1/7) +
+    geom_histogram(data = data, aes(x = source_error, y = ..density..), colour = 'grey80', fill = 'grey80', boundary = 0, binwidth = 1/5) +
     # geom_histogram(data = model, aes(x = simulated_error, y = ..density.., fill = model_name), bins = 50, alpha = 0.2) +
     stat_density(data = model, aes(x = simulated_error, 
                                    color = factor(model_name, levels = c('Spatiotemporal', 'Four Factor','Spatiotemporal-Orthographic',
@@ -295,24 +299,36 @@ plot.super.error <- function(data, model, model_list, superparticipant){
   return(plot)
 }
 
+plot.super.recenter <- function(sp, recentered_data, recentered_sim_data, model_list){
+  this_recentered_data <- recentered_data[recentered_data$participant %in% sp,]
+  this_recentered_sim_data <- recentered_sim_data[recentered_sim_data$participant %in% sp,]
+  plot <- plot.recenter(this_recentered_data, this_recentered_sim_data, model_list)
+  return(plot)
+}
+
 plot.superparticipants <- function(model_list){
-  sp1_data <- data[data$participant %in% c(1, 2, 5, 6),] 
-  sp1_model <- sim_data[sim_data$participant %in% c(1, 2, 4, 5, 6),] 
+  sp1 <- c(1, 2, 5, 6, 8, 9)
+  sp2 <- c(3,4)
+  sp3 <- c(7, 10)
   
-  sp2_data <- data[data$participant %in% c(3, 4, 9),] 
-  sp2_model <- sim_data[sim_data$participant %in% c(4, 3, 9),]
+  sp1_data <- data[data$participant %in% sp1,]
+  sp1_model <- sim_data[sim_data$participant %in% sp1,]
+
+  sp2_data <- data[data$participant %in% sp2, ]
+  sp2_model <- sim_data[sim_data$participant %in% sp2, ]
+
+  sp3_data <- data[data$participant %in% sp3,]
+  sp3_model <- sim_data[sim_data$participant %in% sp3,]
+
   
-  sp3_data <- data[data$participant %in% c(7, 8, 10),] 
-  sp3_model <- sim_data[sim_data$participant %in% c(7, 8, 10),] 
-  
-  p1 <- plot.super.error(sp1_data, sp1_model, model_list, 'Semantics ≈ Unrelated (1, 2, 5, 6)')
-  p2 <- plot.super.error(sp2_data, sp2_model, model_list, 'Semantics > Unrelated (3, 4, 9)')
-  p3 <- plot.super.error(sp3_data, sp3_model, model_list, 'Semantics < Unrelated (7, 8, 10)')
+  p1 <- plot.super.error(sp1_data, sp1_model, model_list, 'Semantics ≈ Unrelated (1, 2, 5, 6, 8, 9)')
+  p2 <- plot.super.error(sp2_data, sp2_model, model_list, 'Semantics > Unrelated (3, 4)')
+  p3 <- plot.super.error(sp3_data, sp3_model, model_list, 'Semantics < Unrelated (7, 10)')
   
   plot <- ggarrange(p1, p2, p3, ncol = 1, nrow = 3, heights = c(1, 1, 1), common.legend = TRUE, legend = 'bottom')
   return(plot)
 }
 
 super_plot <- plot.superparticipants(c(3,4))
-filename <- 'fig6.png'
+filename <- 'fig6_b.png'
 ggsave(filename, plot = super_plot, width = 20, height = 22, units = "cm")
