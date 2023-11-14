@@ -52,9 +52,15 @@ fourfactor_gamma <- function(data){
   Pfix = c(beta2, beta3)
   
   # Boundaries for estimated parameters. DEoptim will sample uniformly between these bounds
-  #       prec1, prec2,  beta1, gamma1, gamma2, gamma3, chi1, phi1, psi, tau1, l_b1, l_f11, zeta1, iota1, upsilon
-  lower <- c(5,   5,     0,   0,      0,      0,      0,    0,   0,    0.45, 0,     0,    0,      0, 0)
-  upper <- c(35,  35,    1,   0.7,    0.7,    0.7,    1,    1,   1,    1,   20,    20,   20,    20, 20)
+  #       prec1, prec2,  beta1, gamma1, gamma2, gamma3, chi1, chi2, chi3,   phi1, phi2, phi3,  
+  #         psi1, psi2, psi3, tau1, tau2, tau3,  l_b1, lb2, lb3, l_f11, lf2, lf3, 
+  #          zeta1, zeta2, zeta3, iota1, iota2, iota3, upsilon1, upsilon2, upsilon3
+  lower <- c(5,   5,     0,   0,      0,      0,         0,   0,  0,       0,   0,     0,     
+             0,    0,    0,   0.45,  0.45, 0.45,  0,     0,   0,  0,    0,   0,  
+             0,    0,       0,     0,    0,    0,        0,       0,       0)
+  upper <- c(35,  35,    1,   0.7,    0.7,    0.7,       1,   1,  1,       1,   1,     1,     
+             1,   1,     1,   1,      1,    1,    5,     5,   5,  5,    5,   5,   
+             20,   20,     20,    20,    20,   20,       20,      20,      20)
   
   # Optimise
   this_fit <- DEoptim(intrusion_cond_model_x2, lower, upper, control = DEoptim.control(itermax = 500), data, Pfix, Sel)
